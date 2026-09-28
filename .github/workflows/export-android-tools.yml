@@ -1,0 +1,33 @@
+name: Export Android Tools
+
+on:
+  push:
+    paths:
+      - '.github/workflows/export-android-tools.yml'
+  workflow_dispatch:
+
+jobs:
+  export-tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+
+      - name: Install build tools
+        run: sdkmanager "build-tools;35.0.0"
+
+      - name: Collect tools
+        run: |
+          set -e
+          mkdir -p android-tools/lib
+          BT="$ANDROID_HOME/build-tools/35.0.0"
+          cp "$BT/apksigner" android-tools/
+          cp "$BT/zipalign" android-tools/
+          cp "$BT/lib/apksigner.jar" android-tools/lib/
+          chmod +x android-tools/apksigner android-tools/zipalign
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-signing-tools-35
+          path: android-tools
