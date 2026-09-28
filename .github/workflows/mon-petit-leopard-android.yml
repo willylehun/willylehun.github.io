@@ -34,15 +34,15 @@ jobs:
         run: |
           set -e
           mkdir -p mon-petit-leopard/app/src/main/res/drawable
+          base64 --decode mon-petit-leopard/assets/leopard_cub.png.b64 > mon-petit-leopard/app/src/main/res/drawable/leopard_cub.png
           base64 --decode mon-petit-leopard/assets/leopard_teen.png.b64 > mon-petit-leopard/app/src/main/res/drawable/leopard_teen.png
-          cp mon-petit-leopard/app/src/main/res/drawable/leopard_teen.png mon-petit-leopard/app/src/main/res/drawable/leopard_cub.png
-          cp mon-petit-leopard/app/src/main/res/drawable/leopard_teen.png mon-petit-leopard/app/src/main/res/drawable/leopard_adult.png
-          cp mon-petit-leopard/app/src/main/res/drawable/leopard_teen.png mon-petit-leopard/app/src/main/res/drawable/leopard_old.png
+          base64 --decode mon-petit-leopard/assets/leopard_adult.png.b64 > mon-petit-leopard/app/src/main/res/drawable/leopard_adult.png
+          base64 --decode mon-petit-leopard/assets/leopard_old.png.b64 > mon-petit-leopard/app/src/main/res/drawable/leopard_old.png
 
+          base64 --decode mon-petit-leopard/assets/room_living.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable/room_living.jpg
           base64 --decode mon-petit-leopard/assets/room_kitchen.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable/room_kitchen.jpg
+          base64 --decode mon-petit-leopard/assets/room_bathroom.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable/room_bathroom.jpg
           base64 --decode mon-petit-leopard/assets/room_garden.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable/room_garden.jpg
-          cp mon-petit-leopard/app/src/main/res/drawable/room_kitchen.jpg mon-petit-leopard/app/src/main/res/drawable/room_living.jpg
-          cp mon-petit-leopard/app/src/main/res/drawable/room_kitchen.jpg mon-petit-leopard/app/src/main/res/drawable/room_bathroom.jpg
 
       - name: Ensure Android SDK 35
         run: |
