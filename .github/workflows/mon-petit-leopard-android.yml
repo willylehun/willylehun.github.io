@@ -42,6 +42,21 @@ jobs:
       - name: Build APK
         run: gradle -p mon-petit-leopard assembleDebug
 
+      - name: Prepare downloadable APK
+        run: |
+          mkdir -p downloads
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
+
+      - name: Publish GitHub Release APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v0.1.0 >/dev/null 2>&1; then
+            gh release upload v0.1.0 downloads/mon-petit-leopard.apk --clobber
+          else
+            gh release create v0.1.0 downloads/mon-petit-leopard.apk --title "Mon Petit Léopard v0.1.0" --notes "Première version Android installable hors Play Store."
+          fi
+
       - name: Publish direct-download APK
         run: |
           mkdir -p downloads
