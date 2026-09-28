@@ -249,9 +249,9 @@ public class MainActivity extends Activity {
         petView=new ImageView(this);
         petView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         petView.setAdjustViewBounds(true);
-        FrameLayout.LayoutParams petParams=new FrameLayout.LayoutParams(dp(150),dp(150));
+        FrameLayout.LayoutParams petParams=new FrameLayout.LayoutParams(dp(230),dp(230));
         petParams.gravity=Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
-        petParams.bottomMargin=dp(12);
+        petParams.bottomMargin=dp(8);
         scene.addView(petView,petParams);
         petView.setOnClickListener(v->petLeopard());
 
