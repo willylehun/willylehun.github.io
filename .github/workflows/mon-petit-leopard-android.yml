@@ -50,11 +50,21 @@ jobs:
           sudo apt-get install -y imagemagick
           for f in mon-petit-leopard/app/src/main/res/drawable-nodpi/leopard_*.png; do
             [ -f "$f" ] || continue
-            convert "$f" -trim +repage -filter Lanczos -resize 560x560 -gravity center -background none -extent 640x640 "$f"
+            if convert "$f" -trim +repage -filter Lanczos -resize 560x560 -gravity center -background none -extent 640x640 "$f.tmp"; then
+              mv "$f.tmp" "$f"
+            else
+              rm -f "$f.tmp"
+              echo "Asset non retraité, conservation de la source: $f"
+            fi
           done
           for f in mon-petit-leopard/app/src/main/res/drawable-nodpi/room_*.jpg; do
             [ -f "$f" ] || continue
-            convert "$f" -filter Lanczos -resize '1280x960^' -gravity center -extent 1280x960 -unsharp 0x0.65+0.65+0.02 "$f"
+            if convert "$f" -filter Lanczos -resize '1280x960^' -gravity center -extent 1280x960 -unsharp 0x0.65+0.65+0.02 "$f.tmp"; then
+              mv "$f.tmp" "$f"
+            else
+              rm -f "$f.tmp"
+              echo "Décor non retraité, conservation de la source: $f"
+            fi
           done
 
       - name: Ensure Android SDK 35
