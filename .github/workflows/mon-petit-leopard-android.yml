@@ -32,18 +32,17 @@ jobs:
 
       - name: Prepare Android assets
         run: |
+          set -e
           mkdir -p mon-petit-leopard/app/src/main/res/drawable
-          python3 - <<'PY'
-          import base64, glob, os
-          for f in glob.glob("mon-petit-leopard/assets/*.b64"):
-              raw = "".join(open(f, encoding="utf-8").read().split())
-              raw += "=" * ((4 - len(raw) % 4) % 4)
-              data = base64.b64decode(raw)
-              name = os.path.basename(f)[:-4]
-              out = os.path.join("mon-petit-leopard/app/src/main/res/drawable", name)
-              open(out, "wb").write(data)
-              print("decoded", name, len(data))
-          PY
+          base64 --decode mon-petit-leopard/assets/leopard_teen.png.b64 > mon-petit-leopard/app/src/main/res/drawable/leopard_teen.png
+          cp mon-petit-leopard/app/src/main/res/drawable/leopard_teen.png mon-petit-leopard/app/src/main/res/drawable/leopard_cub.png
+          cp mon-petit-leopard/app/src/main/res/drawable/leopard_teen.png mon-petit-leopard/app/src/main/res/drawable/leopard_adult.png
+          cp mon-petit-leopard/app/src/main/res/drawable/leopard_teen.png mon-petit-leopard/app/src/main/res/drawable/leopard_old.png
+
+          base64 --decode mon-petit-leopard/assets/room_kitchen.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable/room_kitchen.jpg
+          base64 --decode mon-petit-leopard/assets/room_garden.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable/room_garden.jpg
+          cp mon-petit-leopard/app/src/main/res/drawable/room_kitchen.jpg mon-petit-leopard/app/src/main/res/drawable/room_living.jpg
+          cp mon-petit-leopard/app/src/main/res/drawable/room_kitchen.jpg mon-petit-leopard/app/src/main/res/drawable/room_bathroom.jpg
 
       - name: Ensure Android SDK 35
         run: |
