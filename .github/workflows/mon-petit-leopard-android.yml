@@ -29,10 +29,17 @@ jobs:
       - name: Prepare Android assets
         run: |
           mkdir -p mon-petit-leopard/app/src/main/res/drawable
-          for f in mon-petit-leopard/assets/*.b64; do
-            name="$(basename "$f" .b64)"
-            base64 -d "$f" > "mon-petit-leopard/app/src/main/res/drawable/$name"
-          done
+          python3 - <<'PY'
+          import base64, glob, os
+          out = "mon-petit-leopard/app/src/main/res/drawable"
+          for path in glob.glob("mon-petit-leopard/assets/*.b64"):
+              data = open(path, "r", encoding="utf-8").read().strip()
+              data += "=" * ((4 - len(data) % 4) % 4)
+              raw = base64.b64decode(data)
+              name = os.path.basename(path)[:-4]
+              open(os.path.join(out, name), "wb").write(raw)
+              print("decoded", name, len(raw))
+          PY
 
       - name: Ensure Android SDK 35
         run: |
