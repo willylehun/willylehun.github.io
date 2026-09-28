@@ -401,72 +401,41 @@ public class MainActivity extends Activity {
                R.drawable.leopard_old;
     }
 
-    void ensureSprites(){
-        if(petView.getDrawable()==null)petView.setImageResource(petRes());
+    int ageDrawable(){
+        Stage s=stage();
+        if(s==Stage.ENDED)s=Stage.OLD;
+        return s==Stage.CUB?R.drawable.leopard_cub:
+               s==Stage.TEEN?R.drawable.leopard_teen:
+               s==Stage.ADULT?R.drawable.leopard_adult:
+               R.drawable.leopard_old;
     }
 
-    Bitmap[] slice(Bitmap strip){
-        return new Bitmap[0];
-    }
+    void ensureSprites(){}
 
-    void recycleFrames(Bitmap[] f){
-    }
+    Bitmap[] slice(Bitmap strip){return new Bitmap[0];}
+
+    void recycleFrames(Bitmap[] f){}
 
     void showState(int idx){
-        petView.setImageResource(petRes());
+        petView.setImageResource(ageDrawable());
         petView.setAlpha(1f);
-        petView.setScaleY(1f);
-        petView.setTranslationY(0f);
         petView.setRotation(0f);
-
-        switch(idx){
-            case 2:
-                petView.setRotation(-5f);
-                petView.setScaleY(1.03f);
-                break;
-            case 3:
-                petView.setAlpha(.88f);
-                petView.setScaleY(.92f);
-                petView.setTranslationY(dp(7));
-                break;
-            case 4:
-                petView.setRotation((idleTick%2==0)?-4f:4f);
-                break;
-            case 5:
-            case 9:
-                petView.setRotation(4f);
-                petView.setScaleY(.82f);
-                petView.setTranslationY(dp(18));
-                break;
-            case 6:
-                petView.setRotation((idleTick%2==0)?-2f:2f);
-                break;
-            case 7:
-                petView.setScaleY(.94f);
-                petView.setTranslationY(dp(6));
-                break;
-            case 10:
-                petView.setScaleY(1.08f);
-                petView.setTranslationY(-dp(9));
-                petView.setRotation((idleTick%2==0)?-3f:3f);
-                break;
-            case 11:
-            case 12:
-                petView.setScaleY(1.06f);
-                petView.setTranslationY(-dp(4));
-                break;
-            default:
-                if(idleTick%4==0)petView.setTranslationY(-dp(3));
-                break;
-        }
+        petView.setScaleY(1f);
+        float sx=petView.getScaleX()<0?-1f:1f;
+        float mag=1f;
+        if(idx==3){petView.setAlpha(.82f);petView.setRotation(-4f);}
+        else if(idx==5||idx==9){petView.setRotation(7f);petView.setScaleY(.88f);}
+        else if(idx==10){mag=1.08f;petView.setRotation((idleTick%2==0)?-5f:5f);}
+        else if(idx==11||idx==12){mag=1.06f;}
+        else if(idx==2){petView.setRotation((idleTick%2==0)?-3f:3f);}
+        petView.setScaleX(sx*mag);
     }
 
     void showWalk(){
-        petView.setImageResource(petRes());
+        petView.setImageResource(ageDrawable());
         petView.setAlpha(1f);
+        petView.setRotation((walkFrame%2==0)?-2.5f:2.5f);
         petView.setScaleY((walkFrame%2==0)?1.02f:.98f);
-        petView.setTranslationY((walkFrame%2==0)?-dp(5):0);
-        petView.setRotation((walkFrame%2==0)?-2f:2f);
         walkFrame++;
     }
 
