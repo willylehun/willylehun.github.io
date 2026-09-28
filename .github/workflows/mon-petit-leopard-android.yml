@@ -26,6 +26,8 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - uses: android-actions/setup-android@v3
+
       - name: Prepare Android assets
         run: |
           mkdir -p mon-petit-leopard/app/src/main/res/drawable
