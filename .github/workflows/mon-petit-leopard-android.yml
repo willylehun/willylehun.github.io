@@ -51,10 +51,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if gh release view v0.1.0 >/dev/null 2>&1; then
-            gh release upload v0.1.0 downloads/mon-petit-leopard.apk --clobber
+          if gh release view v0.2.0 >/dev/null 2>&1; then
+            gh release upload v0.2.0 downloads/mon-petit-leopard.apk --clobber
           else
-            gh release create v0.1.0 downloads/mon-petit-leopard.apk --title "Mon Petit Léopard v0.1.0" --notes "Première version Android installable hors Play Store."
+            gh release create v0.2.0 downloads/mon-petit-leopard.apk --title "Mon Petit Léopard v0.2.0" --notes "Version Android avec besoins, humeurs, compétences, bêtises, punition et déplacements autonomes."
           fi
 
       - name: Publish direct-download APK
