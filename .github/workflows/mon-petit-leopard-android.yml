@@ -26,22 +26,13 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Prepare v0.2 source
-        run: |
-          cat mon-petit-leopard/source-v02/MainActivity.java.gz.b64.part* | tr -d '\r\n ' | base64 -d | gunzip > mon-petit-leopard/app/src/main/java/com/byw/monpetitleopard/MainActivity.java
-
       - name: Prepare Android assets
         run: |
-          set -e
           mkdir -p mon-petit-leopard/app/src/main/res/drawable
-          for name in leopard_cub_strip.webp leopard_teen_strip.webp leopard_adult_strip.webp room_living.jpg room_bathroom.jpg; do
-            tr -d '\r\n ' < "mon-petit-leopard/assets-v02/$name.b64" | base64 -d > "mon-petit-leopard/app/src/main/res/drawable/$name"
+          for f in mon-petit-leopard/assets/*.b64; do
+            name="$(basename "$f" .b64)"
+            base64 -d "$f" > "mon-petit-leopard/app/src/main/res/drawable/$name"
           done
-          cat mon-petit-leopard/assets-v02/leopard_old_strip.webp.b64.part* | tr -d '\r\n ' | base64 -d > mon-petit-leopard/app/src/main/res/drawable/leopard_old_strip.webp
-          for name in room_kitchen.jpg room_garden.jpg; do
-            tr -d '\r\n ' < "mon-petit-leopard/assets/$name.b64" | base64 -d > "mon-petit-leopard/app/src/main/res/drawable/$name"
-          done
-          file mon-petit-leopard/app/src/main/res/drawable/*
 
       - name: Ensure Android SDK 35
         run: |
@@ -63,12 +54,11 @@ jobs:
           if gh release view v0.2.0 >/dev/null 2>&1; then
             gh release upload v0.2.0 downloads/mon-petit-leopard.apk --clobber
           else
-            gh release create v0.2.0 downloads/mon-petit-leopard.apk --title "Mon Petit Léopard v0.2.0" --notes "Léopard autonome, besoins, humeurs, bêtises, discipline et compétences."
+            gh release create v0.2.0 downloads/mon-petit-leopard.apk --title "Mon Petit Léopard v0.2.0" --notes "Version Android avec besoins, humeurs, compétences, bêtises, punition et déplacements autonomes."
           fi
 
       - name: Publish direct-download APK
         run: |
-          git pull --rebase
           mkdir -p downloads
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
           git config user.name "github-actions[bot]"
@@ -77,6 +67,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard APK v0.2.0 [skip ci]"
+            git commit -m "Publie Mon Petit Leopard APK [skip ci]"
             git push
           fi
