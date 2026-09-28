@@ -26,7 +26,8 @@ public class MainActivity extends Activity {
     ProgressBar[] bars=new ProgressBar[6];
     TextView[] vals=new TextView[6];
     ImageView bg,petView;
-    FrameLayout scene;
+    FrameLayout scene,objectLayer;
+    ObjectSystem objects;
     Button actionBtn,punishBtn;
 
     Bitmap[] stateFrames=null,walkFrames=null;
@@ -40,6 +41,7 @@ public class MainActivity extends Activity {
         super.onCreate(b);
         sp=getSharedPreferences("pet",MODE_PRIVATE);
         load();
+        objects=new ObjectSystem(this);
         build();
         tickNeeds();
         refresh();
@@ -228,6 +230,9 @@ public class MainActivity extends Activity {
         bg.setScaleType(ImageView.ScaleType.CENTER_CROP);
         scene.addView(bg,new FrameLayout.LayoutParams(-1,-1));
 
+        objectLayer=new FrameLayout(this);
+        scene.addView(objectLayer,new FrameLayout.LayoutParams(-1,-1));
+
         petView=new ImageView(this);
         petView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         FrameLayout.LayoutParams petParams=new FrameLayout.LayoutParams(dp(230),dp(230));
@@ -352,7 +357,8 @@ public class MainActivity extends Activity {
               room.equals("jardin")?R.drawable.room_garden:
               R.drawable.room_living;
         bg.setImageResource(r);
-        actionBtn.setText("Actions • "+(
+        if(objects!=null)objects.render(objectLayer);
+        actionBtn.setText("Objets • "+(
             room.equals("cuisine")?"Cuisine":
             room.equals("bain")?"Salle de bain":
             room.equals("jardin")?"Jardin":"Salon"
@@ -543,12 +549,7 @@ public class MainActivity extends Activity {
     }
 
     String randomIncident(){
-        String[] salon={"a griffé le canapé","a renversé les coussins","a fait tomber un objet"};
-        String[] cuisine={"a renversé sa gamelle","a fouillé la poubelle","a fait tomber un pot"};
-        String[] bain={"a déroulé le papier toilette","a éclaboussé partout","a renversé les serviettes"};
-        String[] jardin={"a déterré des fleurs","a renversé l'arrosoir","a cassé une petite branche"};
-        String[] a=room.equals("cuisine")?cuisine:room.equals("bain")?bain:room.equals("jardin")?jardin:salon;
-        return a[rnd.nextInt(a.length)];
+        return objects!=null?objects.mischief():"a fait une bêtise";
     }
 
     void punish(){
@@ -582,10 +583,7 @@ public class MainActivity extends Activity {
 
     void actions(){
         if(stage()==Stage.ENDED){endLife();return;}
-        if(room.equals("cuisine"))kitchen();
-        else if(room.equals("bain"))bath();
-        else if(room.equals("jardin"))garden();
-        else living();
+        if(objects!=null)objects.menu();
     }
 
     void kitchen(){
