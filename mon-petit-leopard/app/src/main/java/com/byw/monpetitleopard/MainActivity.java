@@ -391,55 +391,82 @@ public class MainActivity extends Activity {
         return (idleTick%5==0)?6:0;
     }
 
-    void ensureSprites(){
+
+    int petRes(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(spriteStage==s&&stateFrames!=null&&walkFrames!=null)return;
+        return s==Stage.CUB?R.drawable.leopard_cub:
+               s==Stage.TEEN?R.drawable.leopard_teen:
+               s==Stage.ADULT?R.drawable.leopard_adult:
+               R.drawable.leopard_old;
+    }
 
-        recycleFrames(stateFrames);recycleFrames(walkFrames);
-        stateFrames=null;walkFrames=null;
-        spriteStage=s;
-
-        int stateRes=s==Stage.CUB?R.drawable.leopard_cub_state_strip:
-                     s==Stage.TEEN?R.drawable.leopard_teen_state_strip:
-                     s==Stage.ADULT?R.drawable.leopard_adult_state_strip:
-                     R.drawable.leopard_old_state_strip;
-        int walkRes=s==Stage.CUB?R.drawable.leopard_cub_walk_strip:
-                    s==Stage.TEEN?R.drawable.leopard_teen_walk_strip:
-                    s==Stage.ADULT?R.drawable.leopard_adult_walk_strip:
-                    R.drawable.leopard_old_walk_strip;
-
-        stateFrames=slice(BitmapFactory.decodeResource(getResources(),stateRes));
-        walkFrames=slice(BitmapFactory.decodeResource(getResources(),walkRes));
+    void ensureSprites(){
+        if(petView.getDrawable()==null)petView.setImageResource(petRes());
     }
 
     Bitmap[] slice(Bitmap strip){
-        if(strip==null)return new Bitmap[0];
-        int h=strip.getHeight();
-        int count=Math.max(1,strip.getWidth()/Math.max(1,h));
-        Bitmap[] out=new Bitmap[count];
-        int w=strip.getWidth()/count;
-        for(int i=0;i<count;i++)out[i]=Bitmap.createBitmap(strip,i*w,0,w,strip.getHeight());
-        strip.recycle();
-        return out;
+        return new Bitmap[0];
     }
 
     void recycleFrames(Bitmap[] f){
-        if(f==null)return;
-        for(Bitmap b:f)if(b!=null&&!b.isRecycled())b.recycle();
     }
 
     void showState(int idx){
-        ensureSprites();
-        if(stateFrames==null||stateFrames.length==0)return;
-        idx=Math.max(0,Math.min(idx,stateFrames.length-1));
-        petView.setImageBitmap(stateFrames[idx]);
+        petView.setImageResource(petRes());
+        petView.setAlpha(1f);
+        petView.setScaleY(1f);
+        petView.setTranslationY(0f);
+        petView.setRotation(0f);
+
+        switch(idx){
+            case 2:
+                petView.setRotation(-5f);
+                petView.setScaleY(1.03f);
+                break;
+            case 3:
+                petView.setAlpha(.88f);
+                petView.setScaleY(.92f);
+                petView.setTranslationY(dp(7));
+                break;
+            case 4:
+                petView.setRotation((idleTick%2==0)?-4f:4f);
+                break;
+            case 5:
+            case 9:
+                petView.setRotation(4f);
+                petView.setScaleY(.82f);
+                petView.setTranslationY(dp(18));
+                break;
+            case 6:
+                petView.setRotation((idleTick%2==0)?-2f:2f);
+                break;
+            case 7:
+                petView.setScaleY(.94f);
+                petView.setTranslationY(dp(6));
+                break;
+            case 10:
+                petView.setScaleY(1.08f);
+                petView.setTranslationY(-dp(9));
+                petView.setRotation((idleTick%2==0)?-3f:3f);
+                break;
+            case 11:
+            case 12:
+                petView.setScaleY(1.06f);
+                petView.setTranslationY(-dp(4));
+                break;
+            default:
+                if(idleTick%4==0)petView.setTranslationY(-dp(3));
+                break;
+        }
     }
 
     void showWalk(){
-        ensureSprites();
-        if(walkFrames==null||walkFrames.length==0){showState(0);return;}
-        petView.setImageBitmap(walkFrames[walkFrame%walkFrames.length]);
+        petView.setImageResource(petRes());
+        petView.setAlpha(1f);
+        petView.setScaleY((walkFrame%2==0)?1.02f:.98f);
+        petView.setTranslationY((walkFrame%2==0)?-dp(5):0);
+        petView.setRotation((walkFrame%2==0)?-2f:2f);
         walkFrame++;
     }
 
@@ -447,7 +474,6 @@ public class MainActivity extends Activity {
         manualFrame=frame;
         manualUntil=System.currentTimeMillis()+durationMs;
         walkSteps=0;
-        petView.setScaleX(1f);
         showState(frame);
     }
 
@@ -457,28 +483,48 @@ public class MainActivity extends Activity {
         long now=System.currentTimeMillis();
         idleTick++;
 
-        if(now<manualUntil){showState(manualFrame);return;}
-        if(stage()==Stage.ENDED){walkSteps=0;showState(9);return;}
-        if(energy<12){walkSteps=0;showState(9);return;}
-        if(!incident.isEmpty()){walkSteps=0;showState(7);return;}
+        if(now<manualUntil){
+            showState(manualFrame);
+            return;
+        }
+
+        if(stage()==Stage.ENDED){
+            walkSteps=0;
+            showState(9);
+            return;
+        }
+
+        if(energy<12){
+            walkSteps=0;
+            showState(9);
+            return;
+        }
+
+        if(!incident.isEmpty()){
+            walkSteps=0;
+            showState(7);
+            return;
+        }
 
         if(walkSteps>0){
-            showWalk();movePet();walkSteps--;
+            showWalk();
+            movePet();
+            walkSteps--;
             if(walkSteps==0)nextWalkAt=now+1800+rnd.nextInt(3500);
             return;
         }
 
         showState(moodFrame());
 
-        if(nextWalkAt==0)nextWalkAt=now+1500+rnd.nextInt(2500);
+        if(nextWalkAt==0)nextWalkAt=now+1200+rnd.nextInt(2200);
         if(now>=nextWalkAt&&energy>24){
-            int chance=stage()==Stage.OLD?25:45;
+            int chance=stage()==Stage.OLD?28:62;
             if(rnd.nextInt(100)<chance){
-                walkSteps=7+rnd.nextInt(stage()==Stage.OLD?6:13);
+                walkSteps=8+rnd.nextInt(stage()==Stage.OLD?6:15);
                 if(Math.abs(petView.getTranslationX())<dp(20))walkDir=rnd.nextBoolean()?1:-1;
-                nextWalkAt=now+2500;
+                nextWalkAt=now+2200;
             }else{
-                nextWalkAt=now+1800+rnd.nextInt(3200);
+                nextWalkAt=now+1400+rnd.nextInt(2600);
             }
         }
     }
