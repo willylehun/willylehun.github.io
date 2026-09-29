@@ -703,9 +703,10 @@ public class MainActivity extends Activity {
      */
     float[][] roomNodes(){
         if(room.equals("cuisine")){
+            // L'îlot central occupe le milieu : couloirs de marche uniquement à gauche/droite.
             return new float[][]{
-                {.12f,.94f},{.32f,.95f},{.68f,.95f},{.88f,.94f},
-                {.10f,.80f},{.90f,.80f}
+                {.09f,.93f},{.10f,.83f},{.12f,.73f},
+                {.91f,.93f},{.90f,.83f},{.88f,.73f}
             };
         }
         if(room.equals("bain")){
@@ -730,7 +731,8 @@ public class MainActivity extends Activity {
     int[][] roomLinks(){
         if(room.equals("cuisine")){
             return new int[][]{
-                {1,4},{0,2},{1,3},{2,5},{0},{3}
+                {1},{0,2},{1},
+                {4},{3,5},{4}
             };
         }
         if(room.equals("bain")){
@@ -751,7 +753,7 @@ public class MainActivity extends Activity {
     }
 
     int defaultRoomNode(){
-        if(room.equals("cuisine"))return 1;
+        if(room.equals("cuisine"))return rnd.nextBoolean()?1:4;
         if(room.equals("bain"))return 1;
         if(room.equals("jardin"))return 0;
         return 2;
@@ -816,9 +818,9 @@ public class MainActivity extends Activity {
         petView.setY(top);
 
         float s=depthScale();
-        // Les frames source regardent vers la gauche.
-        // Gauche = image native ; droite = miroir horizontal.
-        float sign=walkDir<0?1f:-1f;
+        // Les sprites face/dos restent dans leur orientation native.
+        // Seule la marche latérale est miroir pour aller à droite.
+        float sign=(walking && walkMode==0)?(walkDir<0?1f:-1f):1f;
         petView.setScaleX(sign*s);
         petView.setScaleY(s);
         petView.setAlpha(1f);
