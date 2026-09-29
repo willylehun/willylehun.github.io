@@ -31,13 +31,14 @@ public class MainActivity extends Activity {
     TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView;
     ProgressBar[] bars=new ProgressBar[6];
     TextView[] vals=new TextView[6];
-    ImageView bg,petView;
+    ImageView bgFill,bg,petView;
     FrameLayout scene;
     LinearLayout root,bottomBar;
     Space flexibleSpace,footerSpace;
     Button roomsBtn,objectsBtn,actionsBtn,menuBtn;
 
     int walkDir=-1,walkTick=0,idleTick=0,currentPetRes=0,manualFrame=0,walkFrameIndex=0;
+    int petNodeIndex=-1,targetNodeIndex=-1;
     enum Stage {CUB,TEEN,ADULT,OLD,ENDED}
 
     @Override public void onCreate(Bundle b){
@@ -290,10 +291,24 @@ public class MainActivity extends Activity {
         scene.setBackground(sceneBg);
         scene.setClipToOutline(true);
 
+        // Remplissage décoratif derrière l'image complète : évite les bandes claires
+        // sans jamais rogner ni déformer l'image principale.
+        bgFill=new ImageView(this);
+        bgFill.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        bgFill.setAdjustViewBounds(false);
+        bgFill.setAlpha(.34f);
+        if(Build.VERSION.SDK_INT>=31){
+            bgFill.setRenderEffect(android.graphics.RenderEffect.createBlurEffect(
+                22f,22f,android.graphics.Shader.TileMode.CLAMP));
+        }
+        scene.addView(bgFill,new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+
         bg=new ImageView(this);
         bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
         bg.setAdjustViewBounds(false);
-        scene.addView(bg,new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+        scene.addView(bg,new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
 
         petView=new ImageView(this);
         petView.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -466,6 +481,7 @@ public class MainActivity extends Activity {
         int res=room.equals("cuisine")?R.drawable.room_kitchen_hd:
                 room.equals("bain")?R.drawable.room_bathroom_hd:
                 room.equals("jardin")?R.drawable.room_garden_hd:R.drawable.room_living_hd;
+        bgFill.setImageResource(res);
         bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
         bg.setImageResource(res);
         ensurePetImage();
@@ -592,45 +608,76 @@ public class MainActivity extends Activity {
         incidentView.setLayoutParams(incidentLp);
     }
 
-    float roomMinY(){
-        if(room.equals("jardin"))return .48f;
-        if(room.equals("cuisine"))return .915f;
-        if(room.equals("bain"))return .835f;
-        return .775f;
-    }
-
-    float roomMaxY(){
-        if(room.equals("jardin"))return .94f;
-        if(room.equals("cuisine"))return .965f;
-        if(room.equals("bain"))return .955f;
-        return .945f;
-    }
-
-    float roomMinX(float y){
-        if(room.equals("jardin")){
-            float t=clamp01((y-.48f)/(.94f-.48f));
-            return .27f+.09f*t;
-        }
-        if(room.equals("cuisine"))return .18f;
-        if(room.equals("bain"))return .19f;
-        return .13f;
-    }
-
-    float roomMaxX(float y){
-        if(room.equals("jardin")){
-            float t=clamp01((y-.48f)/(.94f-.48f));
-            return .73f-.07f*t;
-        }
-        if(room.equals("cuisine"))return .82f;
-        if(room.equals("bain"))return .81f;
-        return .87f;
-    }
-
     float clamp01(float v){return Math.max(0f,Math.min(1f,v));}
 
+    /**
+     * Points de marche analysés pièce par pièce.
+     * Chaque point correspond à une zone de sol réellement dégagée dans l'image.
+     * Les connexions ci-dessous empêchent les trajets de traverser canapé,
+     * îlot de cuisine, baignoire, toilettes, bancs et massifs.
+     */
+    float[][] roomNodes(){
+        if(room.equals("cuisine")){
+            return new float[][]{
+                {.12f,.94f},{.32f,.95f},{.68f,.95f},{.88f,.94f},
+                {.10f,.80f},{.90f,.80f}
+            };
+        }
+        if(room.equals("bain")){
+            return new float[][]{
+                {.18f,.93f},{.40f,.95f},{.62f,.95f},{.80f,.92f},
+                {.18f,.82f},{.78f,.82f}
+            };
+        }
+        if(room.equals("jardin")){
+            return new float[][]{
+                {.50f,.90f},{.43f,.79f},{.56f,.70f},{.48f,.61f},
+                {.51f,.51f},{.26f,.76f},{.74f,.75f},{.28f,.88f},{.72f,.88f}
+            };
+        }
+        // Salon : grande zone libre devant le canapé.
+        return new float[][]{
+            {.16f,.91f},{.34f,.93f},{.52f,.94f},{.70f,.93f},{.85f,.91f},
+            {.20f,.80f},{.50f,.81f},{.80f,.80f}
+        };
+    }
+
+    int[][] roomLinks(){
+        if(room.equals("cuisine")){
+            return new int[][]{
+                {1,4},{0,2},{1,3},{2,5},{0},{3}
+            };
+        }
+        if(room.equals("bain")){
+            return new int[][]{
+                {1,4},{0,2},{1,3},{2,5},{0},{3}
+            };
+        }
+        if(room.equals("jardin")){
+            return new int[][]{
+                {1,7,8},{0,2,5},{1,3,6},{2,4},{3},
+                {1,7},{2,8},{0,5},{0,6}
+            };
+        }
+        return new int[][]{
+            {1,5},{0,2,5,6},{1,3,6},{2,4,6,7},{3,7},
+            {0,1,6},{1,2,3,5,7},{3,4,6}
+        };
+    }
+
+    int defaultRoomNode(){
+        if(room.equals("cuisine"))return 1;
+        if(room.equals("bain"))return 1;
+        if(room.equals("jardin"))return 0;
+        return 2;
+    }
+
     void resetPetForRoom(boolean animate){
-        petNY=room.equals("jardin")?.72f:(roomMinY()+roomMaxY())/2f;
-        petNX=.50f;
+        float[][] nodes=roomNodes();
+        petNodeIndex=Math.min(defaultRoomNode(),nodes.length-1);
+        targetNodeIndex=petNodeIndex;
+        petNX=nodes[petNodeIndex][0];
+        petNY=nodes[petNodeIndex][1];
         targetNX=petNX;
         targetNY=petNY;
         walking=false;
@@ -642,18 +689,30 @@ public class MainActivity extends Activity {
     }
 
     void chooseWalkTarget(){
-        float minY=roomMinY(),maxY=roomMaxY();
-        targetNY=minY+rnd.nextFloat()*(maxY-minY);
-        float minX=roomMinX(targetNY),maxX=roomMaxX(targetNY);
-        float margin=.045f;
-        targetNX=(minX+margin)+rnd.nextFloat()*Math.max(.02f,(maxX-minX)-margin*2f);
+        float[][] nodes=roomNodes();
+        int[][] links=roomLinks();
+
+        if(petNodeIndex<0||petNodeIndex>=nodes.length)petNodeIndex=defaultRoomNode();
+        int[] choices=links[Math.min(petNodeIndex,links.length-1)];
+        if(choices.length==0)return;
+
+        targetNodeIndex=choices[rnd.nextInt(choices.length)];
+        targetNX=nodes[targetNodeIndex][0];
+        targetNY=nodes[targetNodeIndex][1];
         walking=true;
         walkFrameIndex=0;
     }
 
     float depthScale(){
-        float t=clamp01((petNY-roomMinY())/Math.max(.01f,roomMaxY()-roomMinY()));
-        return .78f+.22f*t;
+        float[][] nodes=roomNodes();
+        float minY=1f,maxY=0f;
+        for(float[] n:nodes){
+            minY=Math.min(minY,n[1]);
+            maxY=Math.max(maxY,n[1]);
+        }
+        float t=clamp01((petNY-minY)/Math.max(.01f,maxY-minY));
+        // L'animal est naturellement plus petit au fond et plus grand au premier plan.
+        return .76f+.28f*t;
     }
 
     void updatePetPosition(){
@@ -661,9 +720,8 @@ public class MainActivity extends Activity {
         float[] r=imageRect();
         if(r[2]<=0||r[3]<=0)return;
 
-        float minX=roomMinX(petNY),maxX=roomMaxX(petNY);
-        petNX=Math.max(minX,Math.min(maxX,petNX));
-        petNY=Math.max(roomMinY(),Math.min(roomMaxY(),petNY));
+        petNX=clamp01(petNX);
+        petNY=clamp01(petNY);
 
         float left=r[0]+petNX*r[2]-petView.getWidth()/2f;
         float feet=r[1]+petNY*r[3];
@@ -673,7 +731,9 @@ public class MainActivity extends Activity {
         petView.setY(top);
 
         float s=depthScale();
-        float sign=walkDir<0?1f:-1f; // source walk sprites face left
+        // Les frames source regardent vers la gauche.
+        // Gauche = image native ; droite = miroir horizontal.
+        float sign=walkDir<0?1f:-1f;
         petView.setScaleX(sign*s);
         petView.setScaleY(s);
         petView.setAlpha(1f);
@@ -916,6 +976,7 @@ public class MainActivity extends Activity {
             if(dist<.012f){
                 petNX=targetNX;
                 petNY=targetNY;
+                if(targetNodeIndex>=0)petNodeIndex=targetNodeIndex;
                 walking=false;
                 currentPetRes=0;
                 ensurePetImage();
@@ -1195,11 +1256,20 @@ public class MainActivity extends Activity {
     void recordAdoption(String name){
         List<String> list=splitLog(adoptedLog);
         String prefix="G"+generation+" — ";
-        for(String s:list)if(s.startsWith(prefix))return;
-        list.add(prefix+name);
+        boolean updated=false;
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).startsWith(prefix)){
+                list.set(i,prefix+name);
+                updated=true;
+                break;
+            }
+        }
+        if(!updated){
+            list.add(prefix+name);
+            addHistory("Adoption de "+name+" (génération "+generation+").");
+        }
         while(list.size()>10)list.remove(0);
         adoptedLog=joinLog(list);
-        addHistory("Adoption de "+name+" (génération "+generation+").");
     }
 
     void ensureCurrentAdoptionRecorded(){
