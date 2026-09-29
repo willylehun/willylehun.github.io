@@ -88,7 +88,7 @@ public class MainActivity extends Activity {
     final Runnable animator=new Runnable(){
         @Override public void run(){
             animateAuto();
-            handler.postDelayed(this,320);
+            handler.postDelayed(this,220);
         }
     };
 
@@ -250,8 +250,8 @@ public class MainActivity extends Activity {
 
         LinearLayout names=new LinearLayout(this);
         names.setOrientation(LinearLayout.VERTICAL);
-        title=text(19,true);
-        subTitle=text(10,false);
+        title=text(17,true);
+        subTitle=text(9,false);
         names.addView(title);
         names.addView(subTitle);
         header.addView(names,new LinearLayout.LayoutParams(0,ViewGroup.LayoutParams.WRAP_CONTENT,1));
@@ -265,9 +265,9 @@ public class MainActivity extends Activity {
         header.addView(starTxt,starParams);
 
         menuBtn=button("⋮");
-        menuBtn.setTextSize(20);
+        menuBtn.setTextSize(18);
         menuBtn.setPadding(0,0,0,0);
-        LinearLayout.LayoutParams menuParams=new LinearLayout.LayoutParams(dp(40),dp(38));
+        LinearLayout.LayoutParams menuParams=new LinearLayout.LayoutParams(dp(36),dp(34));
         menuParams.setMargins(dp(4),0,0,0);
         header.addView(menuBtn,menuParams);
         menuBtn.setOnClickListener(v->showTopMenu());
@@ -286,7 +286,7 @@ public class MainActivity extends Activity {
         root.addView(needRow1);
         root.addView(needRow2);
 
-        skillTxt=text(9,false);
+        skillTxt=text(8,false);
         skillTxt.setGravity(Gravity.CENTER);
         skillTxt.setPadding(dp(4),0,dp(4),dp(2));
         root.addView(skillTxt);
@@ -378,7 +378,7 @@ public class MainActivity extends Activity {
         root.addView(bottomBar);
 
         footerSpace=new Space(this);
-        root.addView(footerSpace,new LinearLayout.LayoutParams(1,dp(18)));
+        root.addView(footerSpace,new LinearLayout.LayoutParams(1,dp(12)));
 
         setContentView(root);
         root.post(()->{
@@ -392,23 +392,23 @@ public class MainActivity extends Activity {
         box.setOrientation(LinearLayout.VERTICAL);
         box.setPadding(dp(2),0,dp(2),0);
 
-        TextView t=text(9,false);
+        TextView t=text(8,false);
         t.setGravity(Gravity.CENTER);
         t.setText(label);
         box.addView(t);
 
         bars[index]=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);
         bars[index].setMax(100);
-        box.addView(bars[index],new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(6)));
+        box.addView(bars[index],new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(5)));
 
-        vals[index]=text(8,false);
+        vals[index]=text(7,false);
         vals[index].setGravity(Gravity.CENTER);
         box.addView(vals[index]);
         return box;
     }
 
     LinearLayout.LayoutParams buttonParams(){
-        LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(0,dp(46),1);
+        LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(0,dp(42),1);
         p.setMargins(dp(2),dp(4),dp(2),0);
         return p;
     }
@@ -491,6 +491,8 @@ public class MainActivity extends Activity {
                 room.equals("jardin")?R.drawable.room_garden_hd:R.drawable.room_living_hd;
         bgFill.setImageResource(res);
         bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        bg.setScaleX(1.06f);
+        bg.setScaleY(1.06f);
         bg.setImageResource(res);
         ensurePetImage();
         scene.post(this::fitSceneAndPet);
@@ -522,43 +524,44 @@ public class MainActivity extends Activity {
     int idleDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_idle;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_idle;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_idle;
-        return R.drawable.leopard_old_idle;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_idle_v2;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_idle_v2;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_idle_v2;
+        return R.drawable.leopard_old_idle_v2;
     }
 
     int happyDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_happy;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_happy;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_happy;
-        return R.drawable.leopard_old_happy;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_happy_v2;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_happy_v2;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_happy_v2;
+        return R.drawable.leopard_old_happy_v2;
     }
 
     int tiredDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_tired;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_tired;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_tired;
-        return R.drawable.leopard_old_tired;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_tired_v2;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_tired_v2;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_tired_v2;
+        return R.drawable.leopard_old_tired_v2;
     }
 
     int sleepDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_sleep;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_sleep;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_sleep;
-        return R.drawable.leopard_old_sleep;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_sleep_v2;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_sleep_v2;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_sleep_v2;
+        return R.drawable.leopard_old_sleep_v2;
     }
 
     int emotionDrawable(){
         if(sleeping)return sleepDrawable();
         if(energy<24 || hunger<18 || thirst<18 || clean<18 || happy<28)return tiredDrawable();
-        if(!strongEmotion() && happy>=70 && affection>=60)return happyDrawable();
+        // Le sprite "happy" est volontairement réservé aux réactions ponctuelles
+        // (caresse / action) afin que chaque cycle garde son apparence de référence.
         return idleDrawable();
     }
 
@@ -567,23 +570,23 @@ public class MainActivity extends Activity {
         if(s==Stage.ENDED)s=Stage.OLD;
 
         if(s==Stage.CUB){
-            if(mode==1)return R.drawable.leopard_cub_walk_front;
-            if(mode==2)return R.drawable.leopard_cub_walk_back;
-            return R.drawable.leopard_cub_walk_side;
+            if(mode==1)return R.drawable.leopard_cub_walk_front_v2;
+            if(mode==2)return R.drawable.leopard_cub_walk_back_v2;
+            return R.drawable.leopard_cub_walk_side_v2;
         }
         if(s==Stage.TEEN){
-            if(mode==1)return R.drawable.leopard_teen_walk_front;
-            if(mode==2)return R.drawable.leopard_teen_walk_back;
-            return R.drawable.leopard_teen_walk_side;
+            if(mode==1)return R.drawable.leopard_teen_walk_front_v2;
+            if(mode==2)return R.drawable.leopard_teen_walk_back_v2;
+            return R.drawable.leopard_teen_walk_side_v2;
         }
         if(s==Stage.ADULT){
-            if(mode==1)return R.drawable.leopard_adult_walk_front;
-            if(mode==2)return R.drawable.leopard_adult_walk_back;
-            return R.drawable.leopard_adult_walk_side;
+            if(mode==1)return R.drawable.leopard_adult_walk_front_v2;
+            if(mode==2)return R.drawable.leopard_adult_walk_back_v2;
+            return R.drawable.leopard_adult_walk_side_v2;
         }
-        if(mode==1)return R.drawable.leopard_old_walk_front;
-        if(mode==2)return R.drawable.leopard_old_walk_back;
-        return R.drawable.leopard_old_walk_side;
+        if(mode==1)return R.drawable.leopard_old_walk_front_v2;
+        if(mode==2)return R.drawable.leopard_old_walk_back_v2;
+        return R.drawable.leopard_old_walk_side_v2;
     }
 
     void releaseWalkFrames(){
@@ -620,8 +623,8 @@ public class MainActivity extends Activity {
     void showWalkFrame(int mode){
         loadWalkFrames(walkStripDrawable(mode));
         if(currentWalkFrames==null||currentWalkFrames.length==0)return;
-        walkFrameIndex=(walkFrameIndex+1)%currentWalkFrames.length;
         petView.setImageBitmap(currentWalkFrames[walkFrameIndex]);
+        walkFrameIndex=(walkFrameIndex+1)%currentWalkFrames.length;
         currentPetRes=0;
     }
 
@@ -658,7 +661,7 @@ public class MainActivity extends Activity {
     float[] imageRect(){
         float sw=scene.getWidth(), sh=scene.getHeight();
         if(sw<=0||sh<=0)return new float[]{0,0,0,0};
-        float scale=Math.min(sw/1536f,sh/1152f);
+        float scale=Math.min(sw/1536f,sh/1152f)*1.06f;
         float iw=1536f*scale;
         float ih=1152f*scale;
         float left=(sw-iw)/2f;
@@ -789,6 +792,18 @@ public class MainActivity extends Activity {
         targetNodeIndex=choices[rnd.nextInt(choices.length)];
         targetNX=nodes[targetNodeIndex][0];
         targetNY=nodes[targetNodeIndex][1];
+
+        float dx=targetNX-petNX;
+        float dy=targetNY-petNY;
+        // Mode figé pendant tout le segment pour éviter les changements
+        // d'animation en plein mouvement.
+        if(Math.abs(dy)>Math.abs(dx)*.70f){
+            walkMode=dy>0?1:2; // 1=face vers le joueur, 2=dos vers le fond
+        }else{
+            walkMode=0;        // profil
+            if(Math.abs(dx)>.003f)walkDir=dx<0?-1:1;
+        }
+
         walking=true;
         walkFrameIndex=0;
     }
@@ -1076,18 +1091,9 @@ public class MainActivity extends Activity {
                 return;
             }
 
-            float speed=stage()==Stage.OLD?.007f:stage()==Stage.CUB?.010f:.0115f;
+            float speed=stage()==Stage.OLD?.0048f:stage()==Stage.CUB?.0066f:.0075f;
             petNX+=dx/dist*speed;
             petNY+=dy/dist*speed;
-
-            // Utilise une vraie animation adaptée au sens de déplacement.
-            // 0 = côté, 1 = face (vers le bas), 2 = dos (vers le fond).
-            if(Math.abs(dy)>Math.abs(dx)*.70f){
-                walkMode=dy>0?1:2;
-            }else{
-                walkMode=0;
-                if(Math.abs(dx)>.003f)walkDir=dx<0?-1:1;
-            }
 
             showWalkFrame(walkMode);
             updatePetPosition();
@@ -1283,8 +1289,15 @@ public class MainActivity extends Activity {
 
         if(!incident.isEmpty() || now<manualUntil || walking)return;
 
+        // Fatigue forte : sommeil immédiat.
+        if(energy<=35){
+            beginAutoSleep();
+            return;
+        }
+
+        // Sinon le léopard peut choisir de dormir de lui-même.
         if(now>=nextAutoSleepAt){
-            if(energy<88){
+            if(energy<82){
                 beginAutoSleep();
             }else{
                 nextAutoSleepAt=now+90000L+rnd.nextInt(90000);
