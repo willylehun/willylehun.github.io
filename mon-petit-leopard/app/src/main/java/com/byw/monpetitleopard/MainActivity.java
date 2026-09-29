@@ -525,37 +525,37 @@ public class MainActivity extends Activity {
     int idleDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_idle_v2;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_idle_v2;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_idle_v2;
-        return R.drawable.leopard_old_idle_v2;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_idle;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_idle;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_idle;
+        return R.drawable.leopard_old_idle;
     }
 
     int happyDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_happy_v2;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_happy_v2;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_happy_v2;
-        return R.drawable.leopard_old_happy_v2;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_happy;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_happy;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_happy;
+        return R.drawable.leopard_old_happy;
     }
 
     int tiredDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_tired_v2;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_tired_v2;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_tired_v2;
-        return R.drawable.leopard_old_tired_v2;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_tired;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_tired;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_tired;
+        return R.drawable.leopard_old_tired;
     }
 
     int sleepDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_sleep_v2;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_sleep_v2;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_sleep_v2;
-        return R.drawable.leopard_old_sleep_v2;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_sleep;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_sleep;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_sleep;
+        return R.drawable.leopard_old_sleep;
     }
 
     int emotionDrawable(){
@@ -571,23 +571,23 @@ public class MainActivity extends Activity {
         if(s==Stage.ENDED)s=Stage.OLD;
 
         if(s==Stage.CUB){
-            if(mode==1)return R.drawable.leopard_cub_walk_front_v2;
-            if(mode==2)return R.drawable.leopard_cub_walk_back_v2;
-            return R.drawable.leopard_cub_walk_side_v2;
+            if(mode==1)return R.drawable.leopard_cub_walk_front;
+            if(mode==2)return R.drawable.leopard_cub_walk_back;
+            return R.drawable.leopard_cub_walk_side;
         }
         if(s==Stage.TEEN){
-            if(mode==1)return R.drawable.leopard_teen_walk_front_v2;
-            if(mode==2)return R.drawable.leopard_teen_walk_back_v2;
-            return R.drawable.leopard_teen_walk_side_v2;
+            if(mode==1)return R.drawable.leopard_teen_walk_front;
+            if(mode==2)return R.drawable.leopard_teen_walk_back;
+            return R.drawable.leopard_teen_walk_side;
         }
         if(s==Stage.ADULT){
-            if(mode==1)return R.drawable.leopard_adult_walk_front_v2;
-            if(mode==2)return R.drawable.leopard_adult_walk_back_v2;
-            return R.drawable.leopard_adult_walk_side_v2;
+            if(mode==1)return R.drawable.leopard_adult_walk_front;
+            if(mode==2)return R.drawable.leopard_adult_walk_back;
+            return R.drawable.leopard_adult_walk_side;
         }
-        if(mode==1)return R.drawable.leopard_old_walk_front_v2;
-        if(mode==2)return R.drawable.leopard_old_walk_back_v2;
-        return R.drawable.leopard_old_walk_side_v2;
+        if(mode==1)return R.drawable.leopard_old_walk_front;
+        if(mode==2)return R.drawable.leopard_old_walk_back;
+        return R.drawable.leopard_old_walk_side;
     }
 
     void releaseWalkFrames(){
