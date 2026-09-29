@@ -18,13 +18,15 @@ public class MainActivity extends Activity {
     SharedPreferences sp;
     ObjectSystem objects;
 
-    long born,last,nextMischiefAt=0,nextWalkAt=0,manualUntil=0;
+    long born,last,nextMischiefAt=0,nextWalkAt=0,manualUntil=0,sleepEndAt=0,nextAutoSleepAt=0;
     float hunger=85,thirst=85,clean=90,affection=90,happy=90,energy=90;
     float skillClean=5,skillObedience=5,skillCare=5;
     int stars=0,generation=1;
     String pet="Léo",room="salon",incident="";
-    boolean endShown=false,cleaningMode=false;
+    String historyLog="",adoptedLog="";
+    boolean endShown=false,cleaningMode=false,sleeping=false,walking=false;
     float cleanProgress=0,lastRubX=0,lastRubY=0;
+    float petNX=.50f,petNY=.90f,targetNX=.50f,targetNY=.90f;
 
     TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView;
     ProgressBar[] bars=new ProgressBar[6];
@@ -32,16 +34,17 @@ public class MainActivity extends Activity {
     ImageView bg,petView;
     FrameLayout scene;
     LinearLayout root,bottomBar;
-    Space flexibleSpace;
-    Button roomsBtn,objectsBtn,actionsBtn;
+    Space flexibleSpace,footerSpace;
+    Button roomsBtn,objectsBtn,actionsBtn,menuBtn;
 
-    int walkDir=1,walkSteps=0,walkTick=0,idleTick=0,currentPetRes=0,manualFrame=0;
+    int walkDir=-1,walkTick=0,idleTick=0,currentPetRes=0,manualFrame=0,walkFrameIndex=0;
     enum Stage {CUB,TEEN,ADULT,OLD,ENDED}
 
     @Override public void onCreate(Bundle b){
         super.onCreate(b);
         sp=getSharedPreferences("pet",MODE_PRIVATE);
         load();
+        ensureCurrentAdoptionRecorded();
         objects=new ObjectSystem(this);
         build();
         tickNeeds();
@@ -69,6 +72,7 @@ public class MainActivity extends Activity {
     final Runnable ticker=new Runnable(){
         @Override public void run(){
             tickNeeds();
+            maybeAutoSleep();
             maybeMischief();
             refresh();
             handler.postDelayed(this,1000);
@@ -101,6 +105,19 @@ public class MainActivity extends Activity {
         room=sp.getString("room","salon");
         incident=sp.getString("incident","");
         nextMischiefAt=sp.getLong("nextMischiefAt",0);
+        sleeping=sp.getBoolean("sleeping",false);
+        sleepEndAt=sp.getLong("sleepEndAt",0);
+        nextAutoSleepAt=sp.getLong("nextAutoSleepAt",0);
+        historyLog=sp.getString("historyLog","");
+        adoptedLog=sp.getString("adoptedLog","");
+
+        if(sleeping && (sleepEndAt<=n || sleepEndAt==0)){
+            sleeping=false;
+            sleepEndAt=0;
+        }
+        if(nextAutoSleepAt==0){
+            nextAutoSleepAt=n+(4+rnd.nextInt(4))*60000L;
+        }
         if(!sp.contains("born"))save();
     }
 
@@ -117,6 +134,11 @@ public class MainActivity extends Activity {
           .putString("name",pet).putString("room",room)
           .putString("incident",incident)
           .putLong("nextMischiefAt",nextMischiefAt)
+          .putBoolean("sleeping",sleeping)
+          .putLong("sleepEndAt",sleepEndAt)
+          .putLong("nextAutoSleepAt",nextAutoSleepAt)
+          .putString("historyLog",historyLog)
+          .putString("adoptedLog",adoptedLog)
           .apply();
     }
 
@@ -124,33 +146,62 @@ public class MainActivity extends Activity {
 
     void tickNeeds(){
         long n=System.currentTimeMillis();
-        long d=Math.max(0,n-last);
-        float m=d/60000f;
-        if(m>0 && stage()!=Stage.ENDED){
-            float learnedClean=1f-(0.38f*skillClean/100f);
-            hunger-=.34f*m;
-            thirst-=.42f*m;
-            clean-=.12f*m*learnedClean;
-            affection-=.13f*m;
-            happy-=.10f*m;
-            energy-=.20f*m;
+        long start=last;
+        long d=Math.max(0,n-start);
+        if(d==0){last=n;return;}
 
-            if(!incident.isEmpty()){
-                clean-=.09f*m;
-                happy-=.04f*m;
+        long sleepMs=0;
+        if(sleeping){
+            sleepMs=Math.max(0,Math.min(n,sleepEndAt)-start);
+        }
+        long awakeMs=Math.max(0,d-sleepMs);
+
+        if(stage()!=Stage.ENDED){
+            if(sleepMs>0){
+                float sm=sleepMs/60000f;
+                hunger-=.15f*sm;
+                thirst-=.20f*sm;
+                clean-=.04f*sm;
+                affection-=.02f*sm;
+                energy+=15.0f*sm;
             }
 
-            hunger=clamp(hunger);thirst=clamp(thirst);clean=clamp(clean);
-            affection=clamp(affection);energy=clamp(energy);
+            if(awakeMs>0){
+                float m=awakeMs/60000f;
+                float learnedClean=1f-(0.38f*skillClean/100f);
+                hunger-=.34f*m;
+                thirst-=.42f*m;
+                clean-=.12f*m*learnedClean;
+                affection-=.13f*m;
+                happy-=.10f*m;
+                energy-=.20f*m;
 
-            int critical=0;
-            if(hunger<22)critical++;
-            if(thirst<22)critical++;
-            if(clean<20)critical++;
-            if(affection<20)critical++;
-            if(energy<16)critical++;
-            happy=clamp(happy-critical*.08f*m);
+                if(!incident.isEmpty()){
+                    clean-=.09f*m;
+                    happy-=.04f*m;
+                }
+
+                int critical=0;
+                if(hunger<22)critical++;
+                if(thirst<22)critical++;
+                if(clean<20)critical++;
+                if(affection<20)critical++;
+                if(energy<16)critical++;
+                happy-=critical*.08f*m;
+            }
         }
+
+        hunger=clamp(hunger);thirst=clamp(thirst);clean=clamp(clean);
+        affection=clamp(affection);happy=clamp(happy);energy=clamp(energy);
+
+        if(sleeping && n>=sleepEndAt){
+            sleeping=false;
+            sleepEndAt=0;
+            currentPetRes=0;
+            addHistory(pet+" s'est réveillé naturellement.");
+            nextAutoSleepAt=n+(4+rnd.nextInt(4))*60000L;
+        }
+
         last=n;
     }
 
@@ -185,16 +236,16 @@ public class MainActivity extends Activity {
     void build(){
         root=new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(dp(10),dp(8),dp(10),dp(8));
-        root.setBackgroundColor(Color.rgb(246,239,221));
+        root.setPadding(dp(4),dp(3),dp(4),0);
+        root.setBackgroundColor(Color.rgb(242,232,210));
 
         LinearLayout header=new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
 
         LinearLayout names=new LinearLayout(this);
         names.setOrientation(LinearLayout.VERTICAL);
-        title=text(22,true);
-        subTitle=text(12,false);
+        title=text(19,true);
+        subTitle=text(10,false);
         names.addView(title);
         names.addView(subTitle);
         header.addView(names,new LinearLayout.LayoutParams(0,ViewGroup.LayoutParams.WRAP_CONTENT,1));
@@ -202,9 +253,19 @@ public class MainActivity extends Activity {
         timer=pill();
         starTxt=pill();
         header.addView(timer);
+
         LinearLayout.LayoutParams starParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        starParams.setMargins(dp(6),0,0,0);
+        starParams.setMargins(dp(4),0,0,0);
         header.addView(starTxt,starParams);
+
+        menuBtn=button("⋮");
+        menuBtn.setTextSize(20);
+        menuBtn.setPadding(0,0,0,0);
+        LinearLayout.LayoutParams menuParams=new LinearLayout.LayoutParams(dp(40),dp(38));
+        menuParams.setMargins(dp(4),0,0,0);
+        header.addView(menuBtn,menuParams);
+        menuBtn.setOnClickListener(v->showTopMenu());
+
         root.addView(header);
 
         LinearLayout needRow1=new LinearLayout(this);
@@ -217,15 +278,15 @@ public class MainActivity extends Activity {
         root.addView(needRow1);
         root.addView(needRow2);
 
-        skillTxt=text(11,false);
+        skillTxt=text(9,false);
         skillTxt.setGravity(Gravity.CENTER);
-        skillTxt.setPadding(0,dp(2),0,dp(5));
+        skillTxt.setPadding(0,0,0,dp(2));
         root.addView(skillTxt);
 
         scene=new FrameLayout(this);
         GradientDrawable sceneBg=new GradientDrawable();
-        sceneBg.setColor(Color.rgb(239,230,209));
-        sceneBg.setCornerRadius(dp(18));
+        sceneBg.setColor(Color.rgb(204,181,145));
+        sceneBg.setCornerRadius(dp(14));
         scene.setBackground(sceneBg);
         scene.setClipToOutline(true);
 
@@ -234,10 +295,23 @@ public class MainActivity extends Activity {
         bg.setAdjustViewBounds(false);
         scene.addView(bg,new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
 
+        petView=new ImageView(this);
+        petView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        petView.setAdjustViewBounds(false);
+        petView.setVisibility(View.VISIBLE);
+        petView.setAlpha(1f);
+        petView.setElevation(dp(4));
+        petView.setPivotX(0);
+        petView.setPivotY(0);
+        FrameLayout.LayoutParams petParams=new FrameLayout.LayoutParams(dp(120),dp(120));
+        petParams.gravity=Gravity.TOP|Gravity.LEFT;
+        scene.addView(petView,petParams);
+        petView.setOnClickListener(v->petLeopard());
+
         moodLabel=overlay();
         FrameLayout.LayoutParams moodParams=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         moodParams.gravity=Gravity.TOP|Gravity.LEFT;
-        moodParams.setMargins(dp(8),dp(8),0,0);
+        moodParams.setMargins(dp(7),dp(7),0,0);
         scene.addView(moodLabel,moodParams);
 
         cleanHint=overlay();
@@ -245,20 +319,8 @@ public class MainActivity extends Activity {
         cleanHint.setVisibility(View.GONE);
         FrameLayout.LayoutParams hintParams=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         hintParams.gravity=Gravity.TOP|Gravity.CENTER_HORIZONTAL;
-        hintParams.setMargins(dp(8),dp(48),dp(8),0);
+        hintParams.setMargins(dp(6),dp(44),dp(6),0);
         scene.addView(cleanHint,hintParams);
-
-        petView=new ImageView(this);
-        petView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        petView.setAdjustViewBounds(false);
-        petView.setVisibility(View.VISIBLE);
-        petView.setAlpha(1f);
-        petView.setElevation(dp(4));
-        FrameLayout.LayoutParams petParams=new FrameLayout.LayoutParams(dp(120),dp(120));
-        petParams.gravity=Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
-        petParams.bottomMargin=dp(8);
-        scene.addView(petView,petParams);
-        petView.setOnClickListener(v->petLeopard());
 
         incidentView=new TextView(this);
         incidentView.setTextSize(30);
@@ -266,20 +328,17 @@ public class MainActivity extends Activity {
         incidentView.setVisibility(View.GONE);
         GradientDrawable incidentBg=new GradientDrawable();
         incidentBg.setColor(Color.argb(210,255,249,230));
-        incidentBg.setCornerRadius(dp(20));
-        incidentBg.setStroke(dp(2),Color.argb(100,90,60,30));
+        incidentBg.setCornerRadius(dp(18));
+        incidentBg.setStroke(dp(1),Color.argb(100,90,60,30));
         incidentView.setBackground(incidentBg);
         incidentView.setElevation(dp(8));
-        FrameLayout.LayoutParams incidentParams=new FrameLayout.LayoutParams(dp(54),dp(54));
+        FrameLayout.LayoutParams incidentParams=new FrameLayout.LayoutParams(dp(52),dp(52));
         incidentParams.gravity=Gravity.TOP|Gravity.RIGHT;
-        incidentParams.setMargins(0,dp(58),dp(12),0);
+        incidentParams.setMargins(0,dp(54),dp(10),0);
         scene.addView(incidentView,incidentParams);
         incidentView.setOnTouchListener((v,e)->handleRub(e));
 
-        root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(320),0));
-
-        flexibleSpace=new Space(this);
-        root.addView(flexibleSpace,new LinearLayout.LayoutParams(1,0,1));
+        root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(360),0));
 
         bottomBar=new LinearLayout(this);
         roomsBtn=button("🏠 Pièces");
@@ -295,33 +354,39 @@ public class MainActivity extends Activity {
         bottomBar.addView(actionsBtn,buttonParams());
         root.addView(bottomBar);
 
+        footerSpace=new Space(this);
+        root.addView(footerSpace,new LinearLayout.LayoutParams(1,dp(24)));
+
         setContentView(root);
-        root.post(this::fitSceneAndPet);
+        root.post(()->{
+            fitSceneAndPet();
+            resetPetForRoom(false);
+        });
     }
 
     LinearLayout needBox(String label,int index){
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
-        box.setPadding(dp(3),dp(2),dp(3),dp(2));
+        box.setPadding(dp(2),0,dp(2),0);
 
-        TextView t=text(10,false);
+        TextView t=text(9,false);
         t.setGravity(Gravity.CENTER);
         t.setText(label);
         box.addView(t);
 
         bars[index]=new ProgressBar(this,null,android.R.attr.progressBarStyleHorizontal);
         bars[index].setMax(100);
-        box.addView(bars[index],new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(8)));
+        box.addView(bars[index],new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(6)));
 
-        vals[index]=text(9,false);
+        vals[index]=text(8,false);
         vals[index].setGravity(Gravity.CENTER);
         box.addView(vals[index]);
         return box;
     }
 
     LinearLayout.LayoutParams buttonParams(){
-        LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(0,dp(50),1);
-        p.setMargins(dp(2),dp(6),dp(2),0);
+        LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(0,dp(46),1);
+        p.setMargins(dp(2),dp(4),dp(2),0);
         return p;
     }
 
@@ -408,20 +473,26 @@ public class MainActivity extends Activity {
     }
 
     void ensurePetImage(){
-        int res=ageDrawable();
-        if(res!=currentPetRes){
-            currentPetRes=res;
-            petView.setImageResource(res);
-            petView.setAlpha(1f);
-            petView.setScaleX(1f);
-            petView.setScaleY(1f);
-            petView.setRotation(0f);
-            petView.setVisibility(View.VISIBLE);
-            petView.bringToFront();
-            incidentView.bringToFront();
-            moodLabel.bringToFront();
-            cleanHint.bringToFront();
+        if(sleeping){
+            int res=sleepDrawable();
+            if(res!=currentPetRes){
+                currentPetRes=res;
+                petView.setImageResource(res);
+            }
+        } else if(!walking) {
+            int res=ageDrawable();
+            if(res!=currentPetRes){
+                currentPetRes=res;
+                petView.setImageResource(res);
+            }
         }
+        petView.setAlpha(1f);
+        petView.setVisibility(View.VISIBLE);
+        petView.bringToFront();
+        incidentView.bringToFront();
+        moodLabel.bringToFront();
+        cleanHint.bringToFront();
+        updatePetPosition();
     }
 
     int ageDrawable(){
@@ -433,15 +504,31 @@ public class MainActivity extends Activity {
         return R.drawable.leopard_old_hd;
     }
 
+    int sleepDrawable(){
+        Stage s=stage();
+        if(s==Stage.ENDED)s=Stage.OLD;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_sleep;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_sleep;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_sleep;
+        return R.drawable.leopard_old_sleep;
+    }
+
+    int[] walkDrawables(){
+        Stage s=stage();
+        if(s==Stage.ENDED)s=Stage.OLD;
+        if(s==Stage.CUB)return new int[]{R.drawable.leopard_cub_walk_0,R.drawable.leopard_cub_walk_1,R.drawable.leopard_cub_walk_2};
+        if(s==Stage.TEEN)return new int[]{R.drawable.leopard_teen_walk_0,R.drawable.leopard_teen_walk_1,R.drawable.leopard_teen_walk_2};
+        if(s==Stage.ADULT)return new int[]{R.drawable.leopard_adult_walk_0,R.drawable.leopard_adult_walk_1,R.drawable.leopard_adult_walk_2};
+        return new int[]{R.drawable.leopard_old_walk_0,R.drawable.leopard_old_walk_1,R.drawable.leopard_old_walk_2};
+    }
+
     void fitSceneAndPet(){
         if(root==null||scene==null||root.getWidth()<=0||root.getHeight()<=0)return;
 
-        int sceneWidth=root.getWidth()-root.getPaddingLeft()-root.getPaddingRight();
         int fixedHeight=root.getPaddingTop()+root.getPaddingBottom();
-
         for(int i=0;i<root.getChildCount();i++){
             View child=root.getChildAt(i);
-            if(child==scene||child==flexibleSpace)continue;
+            if(child==scene)continue;
             if(child.getVisibility()==View.GONE)continue;
             ViewGroup.LayoutParams raw=child.getLayoutParams();
             int margins=0;
@@ -452,48 +539,145 @@ public class MainActivity extends Activity {
             fixedHeight+=child.getMeasuredHeight()+margins;
         }
 
-        int available=Math.max(dp(220),root.getHeight()-fixedHeight);
-        int desired=Math.round(sceneWidth*3f/4f);
-        int sceneHeight=Math.min(desired,available);
-
+        int available=Math.max(dp(300),root.getHeight()-fixedHeight);
         LinearLayout.LayoutParams sceneLp=(LinearLayout.LayoutParams)scene.getLayoutParams();
         sceneLp.width=ViewGroup.LayoutParams.MATCH_PARENT;
-        sceneLp.height=sceneHeight;
+        sceneLp.height=available;
         sceneLp.weight=0;
         scene.setLayoutParams(sceneLp);
 
-        scene.post(this::resizePetForScene);
+        scene.post(()->{
+            resizePetForScene();
+            updatePetPosition();
+        });
+    }
+
+    float[] imageRect(){
+        float sw=scene.getWidth(), sh=scene.getHeight();
+        if(sw<=0||sh<=0)return new float[]{0,0,0,0};
+        float scale=Math.min(sw/1536f,sh/1152f);
+        float iw=1536f*scale;
+        float ih=1152f*scale;
+        float left=(sw-iw)/2f;
+        float top=(sh-ih)/2f;
+        return new float[]{left,top,iw,ih};
     }
 
     void resizePetForScene(){
-        if(scene.getWidth()<=0||scene.getHeight()<=0)return;
+        float[] r=imageRect();
+        if(r[2]<=0||r[3]<=0)return;
 
-        float ratio=stage()==Stage.CUB?.28f:
-                    stage()==Stage.TEEN?.30f:
-                    stage()==Stage.ADULT?.32f:.31f;
+        float ratio=stage()==Stage.CUB?.26f:
+                    stage()==Stage.TEEN?.285f:
+                    stage()==Stage.ADULT?.31f:.295f;
 
-        int size=Math.round(scene.getWidth()*ratio);
-        size=Math.min(size,Math.round(scene.getHeight()*.58f));
-        size=Math.max(size,dp(92));
+        int size=Math.round(r[2]*ratio);
+        size=Math.max(size,dp(88));
 
         FrameLayout.LayoutParams lp=(FrameLayout.LayoutParams)petView.getLayoutParams();
         lp.width=size;
         lp.height=size;
-        lp.gravity=Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
-        lp.bottomMargin=Math.max(dp(6),Math.round(scene.getHeight()*.025f));
+        lp.gravity=Gravity.TOP|Gravity.LEFT;
         petView.setLayoutParams(lp);
-        petView.setVisibility(View.VISIBLE);
-        petView.setAlpha(1f);
+        petView.setPivotX(size/2f);
+        petView.setPivotY(size);
 
         FrameLayout.LayoutParams incidentLp=(FrameLayout.LayoutParams)incidentView.getLayoutParams();
-        int incidentSize=Math.max(dp(42),Math.round(scene.getWidth()*.105f));
+        int incidentSize=Math.max(dp(40),Math.round(r[2]*.09f));
         incidentLp.width=incidentSize;
         incidentLp.height=incidentSize;
         incidentLp.gravity=Gravity.TOP|Gravity.RIGHT;
-        incidentLp.topMargin=Math.max(dp(46),Math.round(scene.getHeight()*.12f));
-        incidentLp.rightMargin=dp(10);
+        incidentLp.topMargin=Math.max(dp(44),Math.round(scene.getHeight()*.09f));
+        incidentLp.rightMargin=dp(8);
         incidentView.setLayoutParams(incidentLp);
+    }
 
+    float roomMinY(){
+        if(room.equals("jardin"))return .48f;
+        if(room.equals("cuisine"))return .915f;
+        if(room.equals("bain"))return .835f;
+        return .775f;
+    }
+
+    float roomMaxY(){
+        if(room.equals("jardin"))return .94f;
+        if(room.equals("cuisine"))return .965f;
+        if(room.equals("bain"))return .955f;
+        return .945f;
+    }
+
+    float roomMinX(float y){
+        if(room.equals("jardin")){
+            float t=clamp01((y-.48f)/(.94f-.48f));
+            return .27f+.09f*t;
+        }
+        if(room.equals("cuisine"))return .18f;
+        if(room.equals("bain"))return .19f;
+        return .13f;
+    }
+
+    float roomMaxX(float y){
+        if(room.equals("jardin")){
+            float t=clamp01((y-.48f)/(.94f-.48f));
+            return .73f-.07f*t;
+        }
+        if(room.equals("cuisine"))return .82f;
+        if(room.equals("bain"))return .81f;
+        return .87f;
+    }
+
+    float clamp01(float v){return Math.max(0f,Math.min(1f,v));}
+
+    void resetPetForRoom(boolean animate){
+        petNY=room.equals("jardin")?.72f:(roomMinY()+roomMaxY())/2f;
+        petNX=.50f;
+        targetNX=petNX;
+        targetNY=petNY;
+        walking=false;
+        walkFrameIndex=0;
+        currentPetRes=0;
+        if(!sleeping)ensurePetImage();
+        updatePetPosition();
+        nextWalkAt=System.currentTimeMillis()+(animate?700:1300)+rnd.nextInt(1800);
+    }
+
+    void chooseWalkTarget(){
+        float minY=roomMinY(),maxY=roomMaxY();
+        targetNY=minY+rnd.nextFloat()*(maxY-minY);
+        float minX=roomMinX(targetNY),maxX=roomMaxX(targetNY);
+        float margin=.045f;
+        targetNX=(minX+margin)+rnd.nextFloat()*Math.max(.02f,(maxX-minX)-margin*2f);
+        walking=true;
+        walkFrameIndex=0;
+    }
+
+    float depthScale(){
+        float t=clamp01((petNY-roomMinY())/Math.max(.01f,roomMaxY()-roomMinY()));
+        return .78f+.22f*t;
+    }
+
+    void updatePetPosition(){
+        if(petView==null||scene==null||petView.getWidth()<=0)return;
+        float[] r=imageRect();
+        if(r[2]<=0||r[3]<=0)return;
+
+        float minX=roomMinX(petNY),maxX=roomMaxX(petNY);
+        petNX=Math.max(minX,Math.min(maxX,petNX));
+        petNY=Math.max(roomMinY(),Math.min(roomMaxY(),petNY));
+
+        float left=r[0]+petNX*r[2]-petView.getWidth()/2f;
+        float feet=r[1]+petNY*r[3];
+        float top=feet-petView.getHeight();
+
+        petView.setX(left);
+        petView.setY(top);
+
+        float s=depthScale();
+        float sign=walkDir<0?1f:-1f; // source walk sprites face left
+        petView.setScaleX(sign*s);
+        petView.setScaleY(s);
+        petView.setAlpha(1f);
+        petView.setVisibility(View.VISIBLE);
         petView.bringToFront();
         incidentView.bringToFront();
         moodLabel.bringToFront();
@@ -502,6 +686,7 @@ public class MainActivity extends Activity {
 
     String moodText(){
         if(stage()==Stage.ENDED)return "Paisible";
+        if(sleeping)return "Endormi";
         if(!incident.isEmpty())return "Inquiet";
         if(energy<18)return "Épuisé";
         if(hunger<18)return "Affamé";
@@ -521,6 +706,12 @@ public class MainActivity extends Activity {
 
     void petLeopard(){
         if(stage()==Stage.ENDED)return;
+
+        if(sleeping){
+            wakeUp("Réveillé par le joueur",true);
+            return;
+        }
+
         affection=clamp(affection+12);
         happy=clamp(happy+6);
 
@@ -530,6 +721,7 @@ public class MainActivity extends Activity {
         } else {
             toast("🤍 "+pet+" apprécie la caresse, mais "+moodText().toLowerCase(Locale.ROOT)+".");
         }
+        addHistory("Caresse donnée à "+pet+".");
         save();
         refresh();
     }
@@ -537,10 +729,10 @@ public class MainActivity extends Activity {
     void roomsMenu(){
         String[] rooms={"🛋️ Salon","🍽️ Cuisine","🛁 Salle de bain","🌿 Jardin"};
         new AlertDialog.Builder(this).setTitle("Choisir une pièce").setItems(rooms,(d,w)->{
+            wakeForAction();
             room=w==1?"cuisine":w==2?"bain":w==3?"jardin":"salon";
-            petView.setTranslationX(0);
-            walkSteps=0;
-            nextWalkAt=0;
+            addHistory("Déplacement vers : "+roomName()+".");
+            resetPetForRoom(true);
             save();
             refresh();
         }).show();
@@ -606,6 +798,7 @@ public class MainActivity extends Activity {
         refreshIncident();
         refresh();
         toast("✨ Bêtise nettoyée ! +1 ★");
+        addHistory("Bêtise nettoyée : "+old+".");
     }
 
     void refreshIncident(){
@@ -626,6 +819,7 @@ public class MainActivity extends Activity {
 
     void punish(){
         if(stage()==Stage.ENDED)return;
+        wakeForAction();
         if(!incident.isEmpty()){
             skillObedience=clamp(skillObedience+4);
             skillCare=clamp(skillCare+1);
@@ -633,19 +827,21 @@ public class MainActivity extends Activity {
             affection=clamp(affection-2);
             showAction(3,1800);
             toast("⚠ La punition est justifiée. La bêtise doit encore être nettoyée.");
+            addHistory("Punition justifiée après une bêtise.");
         } else {
             happy=clamp(happy-20);
             affection=clamp(affection-14);
             skillObedience=clamp(skillObedience-1);
             showAction(3,2600);
             toast("😢 Punition injuste : son bonheur et ses câlins baissent.");
+            addHistory("Punition injuste.");
         }
         save();
         refresh();
     }
 
     void maybeMischief(){
-        if(stage()==Stage.ENDED || !incident.isEmpty())return;
+        if(stage()==Stage.ENDED || !incident.isEmpty() || sleeping)return;
 
         long now=System.currentTimeMillis();
         if(nextMischiefAt==0){
@@ -669,6 +865,7 @@ public class MainActivity extends Activity {
             happy=clamp(happy-2);
             showAction(3,1200);
             toast("⚠ "+pet+" "+incident+" !");
+            addHistory(pet+" "+incident+".");
             refreshIncident();
         } else {
             skillObedience=clamp(skillObedience+.15f);
@@ -679,8 +876,15 @@ public class MainActivity extends Activity {
 
     void animateAuto(){
         if(scene==null||petView==null)return;
-        ensurePetImage();
         idleTick++;
+
+        if(sleeping){
+            currentPetRes=sleepDrawable();
+            petView.setImageResource(currentPetRes);
+            walking=false;
+            updatePetPosition();
+            return;
+        }
 
         if(System.currentTimeMillis()<manualUntil){
             applyPose(manualFrame);
@@ -703,72 +907,105 @@ public class MainActivity extends Activity {
         }
 
         long now=System.currentTimeMillis();
-        if(walkSteps>0){
-            walkTick++;
-            petView.setRotation((walkTick%2==0)?-2f:2f);
-            petView.setScaleY((walkTick%2==0)?1.015f:.985f);
-            movePet();
-            walkSteps--;
+
+        if(walking){
+            float dx=targetNX-petNX;
+            float dy=targetNY-petNY;
+            float dist=(float)Math.sqrt(dx*dx+dy*dy);
+
+            if(dist<.012f){
+                petNX=targetNX;
+                petNY=targetNY;
+                walking=false;
+                currentPetRes=0;
+                ensurePetImage();
+                updatePetPosition();
+                nextWalkAt=now+1200+rnd.nextInt(3000);
+                return;
+            }
+
+            float speed=stage()==Stage.OLD?.007f:stage()==Stage.CUB?.010f:.0115f;
+            petNX+=dx/dist*speed;
+            petNY+=dy/dist*speed;
+
+            if(Math.abs(dx)>.004f)walkDir=dx<0?-1:1;
+
+            int[] frames=walkDrawables();
+            walkFrameIndex=(walkFrameIndex+1)%frames.length;
+            currentPetRes=frames[walkFrameIndex];
+            petView.setImageResource(currentPetRes);
+            updatePetPosition();
             return;
         }
 
-        applyPose(0);
+        currentPetRes=0;
+        ensurePetImage();
+        updatePetPosition();
 
-        if(nextWalkAt==0)nextWalkAt=now+1200+rnd.nextInt(2200);
-        if(now>=nextWalkAt && energy>24){
-            int chance=stage()==Stage.OLD?30:70;
+        if(nextWalkAt==0)nextWalkAt=now+1000+rnd.nextInt(1800);
+        if(now>=nextWalkAt && energy>22){
+            int chance=stage()==Stage.OLD?35:75;
             if(rnd.nextInt(100)<chance){
-                walkSteps=8+rnd.nextInt(stage()==Stage.OLD?6:16);
-                if(Math.abs(petView.getTranslationX())<dp(20))walkDir=rnd.nextBoolean()?1:-1;
+                chooseWalkTarget();
+            }else{
+                nextWalkAt=now+1200+rnd.nextInt(2200);
             }
-            nextWalkAt=now+1800+rnd.nextInt(3000);
         }
-    }
-
-    void movePet(){
-        if(scene.getWidth()<=0||petView.getWidth()<=0)return;
-        float max=Math.max(0,(scene.getWidth()-petView.getWidth())/2f-dp(14));
-        float step=dp(stage()==Stage.OLD?5:9);
-        float nx=petView.getTranslationX()+walkDir*step;
-        if(nx>=max){nx=max;walkDir=-1;}
-        if(nx<=-max){nx=-max;walkDir=1;}
-        petView.setTranslationX(nx);
-        petView.setScaleX(walkDir<0?-1f:1f);
     }
 
     void applyPose(int frame){
-        float direction=petView.getScaleX()<0?-1f:1f;
+        if(sleeping){
+            currentPetRes=sleepDrawable();
+            petView.setImageResource(currentPetRes);
+            updatePetPosition();
+            return;
+        }
+
+        if(currentPetRes==0 || walking){
+            currentPetRes=ageDrawable();
+            petView.setImageResource(currentPetRes);
+        }
+
+        updatePetPosition();
+
+        float base=depthScale();
+        float sign=walkDir<0?1f:-1f;
+        float sx=sign*base;
+        float sy=base;
+
         petView.setAlpha(1f);
         petView.setRotation(0f);
-        petView.setScaleY(1f);
-        petView.setScaleX(direction);
 
         if(frame==3){
             petView.setAlpha(.88f);
-            petView.setScaleY(.94f);
+            sy*=.94f;
         } else if(frame==9){
-            petView.setRotation(5f);
-            petView.setScaleY(.86f);
+            currentPetRes=sleepDrawable();
+            petView.setImageResource(currentPetRes);
+            sy*=.96f;
         } else if(frame==10){
-            petView.setScaleX(direction*1.05f);
-            petView.setScaleY(1.05f);
+            sx*=1.05f; sy*=1.05f;
             petView.setRotation((idleTick%2==0)?-3f:3f);
         } else if(frame==11){
-            petView.setScaleX(direction*1.06f);
-            petView.setScaleY(1.06f);
+            sx*=1.06f; sy*=1.06f;
         } else if(idleTick%5==0){
             petView.setRotation((idleTick%2==0)?-1.5f:1.5f);
         }
+
+        petView.setScaleX(sx);
+        petView.setScaleY(sy);
     }
 
     void showAction(int frame,int duration){
         manualFrame=frame;
         manualUntil=System.currentTimeMillis()+duration;
-        walkSteps=0;
+        walking=false;
+        currentPetRes=0;
         applyPose(frame);
     }
 
     void act(String msg,int frame,float h,float w,float c,float af,float joy,float e,int gainStars){
+        wakeForAction();
         hunger=clamp(hunger+h);
         thirst=clamp(thirst+w);
         clean=clamp(clean+c);
@@ -780,9 +1017,11 @@ public class MainActivity extends Activity {
         save();
         refresh();
         toast(msg);
+        addHistory("Action : "+msg+".");
     }
 
     void competition(){
+        wakeForAction();
         if(stage()!=Stage.ADULT){
             toast("Les concours sont réservés à l’adulte.");
             return;
@@ -800,6 +1039,7 @@ public class MainActivity extends Activity {
         showAction(10,2400);
         save();
         refresh();
+        addHistory("Concours : "+score+"/100, +"+reward+" ★.");
         new AlertDialog.Builder(this).setTitle("Concours")
             .setMessage("Score : "+score+"/100\nRécompense : +"+reward+" ★")
             .setPositiveButton("OK",null).show();
@@ -817,6 +1057,7 @@ public class MainActivity extends Activity {
                 String n=e.getText().toString().trim();
                 pet=n.isEmpty()?"Léo":n;
                 sp.edit().putBoolean("named",true).apply();
+                if(first)recordAdoption(pet);
                 save();
                 refresh();
             })
@@ -824,6 +1065,7 @@ public class MainActivity extends Activity {
                 if(first){
                     pet="Léo";
                     sp.edit().putBoolean("named",true).apply();
+                    recordAdoption(pet);
                     save();
                     refresh();
                 }
@@ -858,14 +1100,146 @@ public class MainActivity extends Activity {
         nextMischiefAt=0;
         room="salon";
         currentPetRes=0;
-        petView.setTranslationX(0);
-        petView.setScaleX(1f);
+        sleeping=false;
+        sleepEndAt=0;
+        nextAutoSleepAt=n+(4+rnd.nextInt(4))*60000L;
+        walking=false;
         roomsBtn.setEnabled(true);
         objectsBtn.setEnabled(true);
         actionsBtn.setEnabled(true);
+        resetPetForRoom(false);
         save();
         refresh();
         rename(true);
+    }
+
+    void maybeAutoSleep(){
+        if(stage()==Stage.ENDED)return;
+        long now=System.currentTimeMillis();
+
+        if(sleeping){
+            if(now>=sleepEndAt)wakeUp("Réveil naturel",false);
+            return;
+        }
+
+        if(!incident.isEmpty() || now<manualUntil || walking)return;
+
+        if(now>=nextAutoSleepAt){
+            if(energy<88){
+                beginAutoSleep();
+            }else{
+                nextAutoSleepAt=now+90000L+rnd.nextInt(90000);
+            }
+        }
+    }
+
+    void beginAutoSleep(){
+        if(sleeping||stage()==Stage.ENDED)return;
+        sleeping=true;
+        walking=false;
+        manualUntil=0;
+        sleepEndAt=System.currentTimeMillis()+90000L;
+        currentPetRes=sleepDrawable();
+        petView.setImageResource(currentPetRes);
+        addHistory(pet+" s'est endormi pour 1 min 30.");
+        save();
+        refresh();
+    }
+
+    void wakeUp(String reason,boolean notify){
+        if(!sleeping)return;
+        sleeping=false;
+        sleepEndAt=0;
+        nextAutoSleepAt=System.currentTimeMillis()+(4+rnd.nextInt(4))*60000L;
+        currentPetRes=0;
+        addHistory(reason+".");
+        ensurePetImage();
+        if(notify)toast("😺 "+pet+" se réveille.");
+        save();
+        refresh();
+    }
+
+    void wakeForAction(){
+        if(sleeping)wakeUp("Réveillé par une action",false);
+    }
+
+    List<String> splitLog(String raw){
+        ArrayList<String> out=new ArrayList<>();
+        if(raw==null||raw.isEmpty())return out;
+        for(String s:raw.split("\u001E")){
+            if(s!=null&&!s.trim().isEmpty())out.add(s);
+        }
+        return out;
+    }
+
+    String joinLog(List<String> list){
+        StringBuilder b=new StringBuilder();
+        for(String s:list){
+            if(b.length()>0)b.append('\u001E');
+            b.append(s.replace("\u001E"," "));
+        }
+        return b.toString();
+    }
+
+    String historyTime(){
+        return new java.text.SimpleDateFormat("HH:mm",Locale.FRANCE).format(new Date());
+    }
+
+    void addHistory(String event){
+        List<String> list=splitLog(historyLog);
+        list.add(historyTime()+" — "+event);
+        while(list.size()>60)list.remove(0);
+        historyLog=joinLog(list);
+    }
+
+    void recordAdoption(String name){
+        List<String> list=splitLog(adoptedLog);
+        String prefix="G"+generation+" — ";
+        for(String s:list)if(s.startsWith(prefix))return;
+        list.add(prefix+name);
+        while(list.size()>10)list.remove(0);
+        adoptedLog=joinLog(list);
+        addHistory("Adoption de "+name+" (génération "+generation+").");
+    }
+
+    void ensureCurrentAdoptionRecorded(){
+        recordAdoption(pet);
+        save();
+    }
+
+    void showTopMenu(){
+        String[] entries={"📜 Historique"};
+        new AlertDialog.Builder(this).setTitle("Menu").setItems(entries,(d,w)->showHistory()).show();
+    }
+
+    void showHistory(){
+        List<String> adopted=splitLog(adoptedLog);
+        List<String> events=splitLog(historyLog);
+
+        StringBuilder b=new StringBuilder();
+        b.append("Léopards adoptés (").append(adopted.size()).append("/10)\n");
+        if(adopted.isEmpty())b.append("Aucun\n");
+        else for(int i=adopted.size()-1;i>=0;i--)b.append("• ").append(adopted.get(i)).append("\n");
+
+        b.append("\nHistorique récent\n");
+        if(events.isEmpty())b.append("Aucun événement.");
+        else{
+            int start=Math.max(0,events.size()-30);
+            for(int i=events.size()-1;i>=start;i--)b.append("• ").append(events.get(i)).append("\n");
+        }
+
+        TextView t=text(14,false);
+        t.setText(b.toString());
+        t.setPadding(dp(18),dp(12),dp(18),dp(12));
+
+        ScrollView scroll=new ScrollView(this);
+        scroll.addView(t);
+
+        new AlertDialog.Builder(this)
+            .setTitle("Historique")
+            .setView(scroll)
+            .setPositiveButton("Fermer",null)
+            .show();
     }
 
     String format(long ms){
