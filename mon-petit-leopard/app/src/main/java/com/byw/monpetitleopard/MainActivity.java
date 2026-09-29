@@ -40,11 +40,18 @@ public class MainActivity extends Activity {
     Button roomsBtn,objectsBtn,actionsBtn,menuBtn;
 
     int walkDir=-1,walkTick=0,idleTick=0,currentPetRes=0,manualFrame=0,walkFrameIndex=0;
-    int petNodeIndex=-1,targetNodeIndex=-1,walkMode=0;
+    int petNodeIndex=-1,targetNodeIndex=-1;
+    WalkMode walkMode=WalkMode.SIDE;
     int currentWalkStripRes=0;
     Bitmap currentWalkStrip=null;
     Bitmap[] currentWalkFrames=null;
+    final Set<Integer> invalidCharacterAssets=new HashSet<>();
+    boolean assetErrorShown=false;
+
     enum Stage {CUB,TEEN,ADULT,OLD,ENDED}
+    enum PetStage {CUB,TEEN,ADULT,OLD}
+    enum PetMood {IDLE,HAPPY,TIRED,SLEEP}
+    enum WalkMode {SIDE,FRONT,BACK}
 
     @Override public void onCreate(Bundle b){
         super.onCreate(b);
@@ -500,19 +507,22 @@ public class MainActivity extends Activity {
     }
 
     void ensurePetImage(){
-        if(sleeping){
-            int res=sleepDrawable();
-            if(res!=currentPetRes){
-                currentPetRes=res;
-                petView.setImageResource(res);
+        int res=0;
+        if(sleeping)res=sleepDrawable();
+        else if(!walking)res=emotionDrawable();
+
+        if(res!=0){
+            if(invalidCharacterAssets.contains(res)){
+                petView.setVisibility(View.INVISIBLE);
+                showAssetErrorOnce();
+                return;
             }
-        } else if(!walking) {
-            int res=emotionDrawable();
             if(res!=currentPetRes){
+                if(!setPetDrawableSafely(res))return;
                 currentPetRes=res;
-                petView.setImageResource(res);
             }
         }
+
         petView.setAlpha(1f);
         petView.setVisibility(View.VISIBLE);
         petView.bringToFront();
@@ -522,72 +532,101 @@ public class MainActivity extends Activity {
         updatePetPosition();
     }
 
-    int idleDrawable(){
+    PetStage petStage(){
         Stage s=stage();
-        if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_idle;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_idle;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_idle;
-        return R.drawable.leopard_old_idle;
+        if(s==Stage.CUB)return PetStage.CUB;
+        if(s==Stage.TEEN)return PetStage.TEEN;
+        if(s==Stage.ADULT)return PetStage.ADULT;
+        // Fin de cycle : l'animal conserve son apparence OLD. Ce n'est pas un fallback d'asset.
+        return PetStage.OLD;
     }
 
-    int happyDrawable(){
-        Stage s=stage();
-        if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_happy;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_happy;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_happy;
-        return R.drawable.leopard_old_happy;
+    int getMoodDrawable(PetStage stage,PetMood mood){
+        switch(stage){
+            case CUB:
+                switch(mood){
+                    case HAPPY:return R.drawable.leopard_cub_happy;
+                    case TIRED:return R.drawable.leopard_cub_tired;
+                    case SLEEP:return R.drawable.leopard_cub_sleep;
+                    case IDLE:return R.drawable.leopard_cub_idle;
+                }
+                break;
+            case TEEN:
+                switch(mood){
+                    case HAPPY:return R.drawable.leopard_teen_happy;
+                    case TIRED:return R.drawable.leopard_teen_tired;
+                    case SLEEP:return R.drawable.leopard_teen_sleep;
+                    case IDLE:return R.drawable.leopard_teen_idle;
+                }
+                break;
+            case ADULT:
+                switch(mood){
+                    case HAPPY:return R.drawable.leopard_adult_happy;
+                    case TIRED:return R.drawable.leopard_adult_tired;
+                    case SLEEP:return R.drawable.leopard_adult_sleep;
+                    case IDLE:return R.drawable.leopard_adult_idle;
+                }
+                break;
+            case OLD:
+                switch(mood){
+                    case HAPPY:return R.drawable.leopard_old_happy;
+                    case TIRED:return R.drawable.leopard_old_tired;
+                    case SLEEP:return R.drawable.leopard_old_sleep;
+                    case IDLE:return R.drawable.leopard_old_idle;
+                }
+                break;
+        }
+        throw new IllegalStateException("Couple âge/humeur non pris en charge : "+stage+"/"+mood);
     }
 
-    int tiredDrawable(){
-        Stage s=stage();
-        if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_tired;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_tired;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_tired;
-        return R.drawable.leopard_old_tired;
+    int getWalkStrip(PetStage stage,WalkMode mode){
+        switch(stage){
+            case CUB:
+                switch(mode){
+                    case FRONT:return R.drawable.leopard_cub_walk_front;
+                    case BACK:return R.drawable.leopard_cub_walk_back;
+                    case SIDE:return R.drawable.leopard_cub_walk_side;
+                }
+                break;
+            case TEEN:
+                switch(mode){
+                    case FRONT:return R.drawable.leopard_teen_walk_front;
+                    case BACK:return R.drawable.leopard_teen_walk_back;
+                    case SIDE:return R.drawable.leopard_teen_walk_side;
+                }
+                break;
+            case ADULT:
+                switch(mode){
+                    case FRONT:return R.drawable.leopard_adult_walk_front;
+                    case BACK:return R.drawable.leopard_adult_walk_back;
+                    case SIDE:return R.drawable.leopard_adult_walk_side;
+                }
+                break;
+            case OLD:
+                switch(mode){
+                    case FRONT:return R.drawable.leopard_old_walk_front;
+                    case BACK:return R.drawable.leopard_old_walk_back;
+                    case SIDE:return R.drawable.leopard_old_walk_side;
+                }
+                break;
+        }
+        throw new IllegalStateException("Couple âge/marche non pris en charge : "+stage+"/"+mode);
     }
 
-    int sleepDrawable(){
-        Stage s=stage();
-        if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_sleep;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_sleep;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_sleep;
-        return R.drawable.leopard_old_sleep;
-    }
+    int idleDrawable(){return getMoodDrawable(petStage(),PetMood.IDLE);}
+    int happyDrawable(){return getMoodDrawable(petStage(),PetMood.HAPPY);}
+    int tiredDrawable(){return getMoodDrawable(petStage(),PetMood.TIRED);}
+    int sleepDrawable(){return getMoodDrawable(petStage(),PetMood.SLEEP);}
 
     int emotionDrawable(){
         if(sleeping)return sleepDrawable();
         if(energy<24 || hunger<18 || thirst<18 || clean<18 || happy<28)return tiredDrawable();
-        // Le sprite "happy" est volontairement réservé aux réactions ponctuelles
-        // (caresse / action) afin que chaque cycle garde son apparence de référence.
+        // Le sprite "happy" est volontairement réservé aux réactions ponctuelles.
         return idleDrawable();
     }
 
-    int walkStripDrawable(int mode){
-        Stage s=stage();
-        if(s==Stage.ENDED)s=Stage.OLD;
-
-        if(s==Stage.CUB){
-            if(mode==1)return R.drawable.leopard_cub_walk_front;
-            if(mode==2)return R.drawable.leopard_cub_walk_back;
-            return R.drawable.leopard_cub_walk_side;
-        }
-        if(s==Stage.TEEN){
-            if(mode==1)return R.drawable.leopard_teen_walk_front;
-            if(mode==2)return R.drawable.leopard_teen_walk_back;
-            return R.drawable.leopard_teen_walk_side;
-        }
-        if(s==Stage.ADULT){
-            if(mode==1)return R.drawable.leopard_adult_walk_front;
-            if(mode==2)return R.drawable.leopard_adult_walk_back;
-            return R.drawable.leopard_adult_walk_side;
-        }
-        if(mode==1)return R.drawable.leopard_old_walk_front;
-        if(mode==2)return R.drawable.leopard_old_walk_back;
-        return R.drawable.leopard_old_walk_side;
+    int walkStripDrawable(WalkMode mode){
+        return getWalkStrip(petStage(),mode);
     }
 
     void releaseWalkFrames(){
@@ -602,29 +641,64 @@ public class MainActivity extends Activity {
         currentWalkStripRes=0;
     }
 
-    void loadWalkFrames(int res){
-        if(currentWalkStripRes==res && currentWalkFrames!=null && currentWalkFrames.length>0)return;
-        releaseWalkFrames();
-        currentWalkStrip=BitmapFactory.decodeResource(getResources(),res);
-        if(currentWalkStrip==null)return;
-
-        int h=currentWalkStrip.getHeight();
-        int count=Math.max(1,Math.round(currentWalkStrip.getWidth()/(float)Math.max(1,h)));
-        int frameW=currentWalkStrip.getWidth()/count;
-        currentWalkFrames=new Bitmap[count];
-
-        for(int i=0;i<count;i++){
-            currentWalkFrames[i]=Bitmap.createBitmap(
-                currentWalkStrip,i*frameW,0,frameW,currentWalkStrip.getHeight());
+    boolean loadWalkFrames(int res){
+        if(invalidCharacterAssets.contains(res)){
+            showAssetErrorOnce();
+            return false;
         }
+        if(currentWalkStripRes==res && currentWalkFrames!=null && currentWalkFrames.length>0)return true;
+
+        releaseWalkFrames();
+
+        Bitmap strip=null;
+        try{
+            strip=BitmapFactory.decodeResource(getResources(),res);
+        }catch(Throwable ignored){}
+
+        if(strip==null){
+            markCharacterAssetInvalid(res,"strip de marche","ressource illisible");
+            showAssetErrorOnce();
+            return false;
+        }
+
+        int w=strip.getWidth();
+        int h=strip.getHeight();
+        if(h<=0 || w<h || w%h!=0){
+            strip.recycle();
+            markCharacterAssetInvalid(res,"strip de marche",w+"x"+h+" : frames non carrées");
+            showAssetErrorOnce();
+            return false;
+        }
+
+        int count=w/h;
+        currentWalkStrip=strip;
+        currentWalkFrames=new Bitmap[count];
+        try{
+            for(int i=0;i<count;i++){
+                currentWalkFrames[i]=Bitmap.createBitmap(currentWalkStrip,i*h,0,h,h);
+            }
+        }catch(Throwable err){
+            releaseWalkFrames();
+            markCharacterAssetInvalid(res,"strip de marche","découpage impossible");
+            showAssetErrorOnce();
+            return false;
+        }
+
         currentWalkStripRes=res;
         walkFrameIndex=0;
+        return true;
     }
 
-    void showWalkFrame(int mode){
-        loadWalkFrames(walkStripDrawable(mode));
-        if(currentWalkFrames==null||currentWalkFrames.length==0)return;
+    void showWalkFrame(WalkMode mode){
+        int res=walkStripDrawable(mode);
+        if(!loadWalkFrames(res)){
+            walking=false;
+            currentPetRes=0;
+            ensurePetImage();
+            return;
+        }
         petView.setImageBitmap(currentWalkFrames[walkFrameIndex]);
+        petView.setVisibility(View.VISIBLE);
         walkFrameIndex=(walkFrameIndex+1)%currentWalkFrames.length;
         currentPetRes=0;
     }
@@ -774,7 +848,7 @@ public class MainActivity extends Activity {
         targetNX=petNX;
         targetNY=petNY;
         walking=false;
-        walkMode=0;
+        walkMode=WalkMode.SIDE;
         walkFrameIndex=0;
         currentPetRes=0;
         if(!sleeping)ensurePetImage();
@@ -799,9 +873,9 @@ public class MainActivity extends Activity {
         // Mode figé pendant tout le segment pour éviter les changements
         // d'animation en plein mouvement.
         if(Math.abs(dy)>Math.abs(dx)*.70f){
-            walkMode=dy>0?1:2; // 1=face vers le joueur, 2=dos vers le fond
+            walkMode=dy>0?WalkMode.FRONT:WalkMode.BACK; // face vers le joueur / dos vers le fond
         }else{
-            walkMode=0;        // profil
+            walkMode=WalkMode.SIDE;        // profil
             if(Math.abs(dx)>.003f)walkDir=dx<0?-1:1;
         }
 
@@ -839,7 +913,7 @@ public class MainActivity extends Activity {
         float s=depthScale();
         // Les sprites face/dos restent dans leur orientation native.
         // Seule la marche latérale est miroir pour aller à droite.
-        float sign=(walking && walkMode==0)?(walkDir<0?1f:-1f):1f;
+        float sign=(walking && walkMode==WalkMode.SIDE)?(walkDir<0?1f:-1f):1f;
         petView.setScaleX(sign*s);
         petView.setScaleY(s);
         petView.setAlpha(1f);
@@ -1046,7 +1120,7 @@ public class MainActivity extends Activity {
 
         if(sleeping){
             currentPetRes=sleepDrawable();
-            petView.setImageResource(currentPetRes);
+            if(!setPetDrawableSafely(currentPetRes))return;
             walking=false;
             updatePetPosition();
             return;
@@ -1084,7 +1158,7 @@ public class MainActivity extends Activity {
                 petNY=targetNY;
                 if(targetNodeIndex>=0)petNodeIndex=targetNodeIndex;
                 walking=false;
-                walkMode=0;
+                walkMode=WalkMode.SIDE;
                 currentPetRes=0;
                 ensurePetImage();
                 updatePetPosition();
@@ -1119,7 +1193,7 @@ public class MainActivity extends Activity {
     void applyPose(int frame){
         if(sleeping){
             currentPetRes=sleepDrawable();
-            petView.setImageResource(currentPetRes);
+            if(!setPetDrawableSafely(currentPetRes))return;
             updatePetPosition();
             return;
         }
@@ -1131,7 +1205,7 @@ public class MainActivity extends Activity {
         else staticRes=emotionDrawable();
 
         currentPetRes=staticRes;
-        petView.setImageResource(staticRes);
+        if(!setPetDrawableSafely(staticRes))return;
         updatePetPosition();
 
         float base=depthScale();
@@ -1163,7 +1237,7 @@ public class MainActivity extends Activity {
         manualFrame=frame;
         manualUntil=System.currentTimeMillis()+duration;
         walking=false;
-        walkMode=0;
+        walkMode=WalkMode.SIDE;
         currentPetRes=0;
         applyPose(frame);
     }
@@ -1267,7 +1341,7 @@ public class MainActivity extends Activity {
         releaseWalkFrames();
         sleeping=false;
         sleepEndAt=0;
-        walkMode=0;
+        walkMode=WalkMode.SIDE;
         nextAutoSleepAt=n+(4+rnd.nextInt(4))*60000L;
         walking=false;
         roomsBtn.setEnabled(true);
@@ -1310,11 +1384,11 @@ public class MainActivity extends Activity {
         if(sleeping||stage()==Stage.ENDED)return;
         sleeping=true;
         walking=false;
-        walkMode=0;
+        walkMode=WalkMode.SIDE;
         manualUntil=0;
         sleepEndAt=System.currentTimeMillis()+90000L;
         currentPetRes=sleepDrawable();
-        petView.setImageResource(currentPetRes);
+        if(!setPetDrawableSafely(currentPetRes))return;
         addHistory(pet+" s'est endormi pour 1 min 30.");
         save();
         refresh();
@@ -1324,7 +1398,7 @@ public class MainActivity extends Activity {
         if(!sleeping)return;
         sleeping=false;
         sleepEndAt=0;
-        walkMode=0;
+        walkMode=WalkMode.SIDE;
         nextAutoSleepAt=System.currentTimeMillis()+(4+rnd.nextInt(4))*60000L;
         currentPetRes=0;
         addHistory(reason+".");
@@ -1426,22 +1500,82 @@ public class MainActivity extends Activity {
             .show();
     }
 
+    void markCharacterAssetInvalid(int res,String label,String reason){
+        invalidCharacterAssets.add(res);
+        addHistory("ERREUR asset personnage ["+label+"] : "+reason+".");
+    }
+
+    void showAssetErrorOnce(){
+        if(assetErrorShown)return;
+        assetErrorShown=true;
+        toast("⚠ Asset du léopard invalide : animation désactivée, aucun autre âge ne sera utilisé.");
+    }
+
+    boolean setPetDrawableSafely(int res){
+        if(invalidCharacterAssets.contains(res)){
+            petView.setVisibility(View.INVISIBLE);
+            showAssetErrorOnce();
+            return false;
+        }
+        try{
+            petView.setImageResource(res);
+            petView.setVisibility(View.VISIBLE);
+            return true;
+        }catch(Throwable err){
+            markCharacterAssetInvalid(res,"pose","chargement impossible");
+            petView.setVisibility(View.INVISIBLE);
+            showAssetErrorOnce();
+            return false;
+        }
+    }
+
     void validateCharacterAssets(){
-        int[] staticRes={
-            R.drawable.leopard_cub_idle,R.drawable.leopard_cub_happy,R.drawable.leopard_cub_tired,R.drawable.leopard_cub_sleep,
-            R.drawable.leopard_teen_idle,R.drawable.leopard_teen_happy,R.drawable.leopard_teen_tired,R.drawable.leopard_teen_sleep,
-            R.drawable.leopard_adult_idle,R.drawable.leopard_adult_happy,R.drawable.leopard_adult_tired,R.drawable.leopard_adult_sleep,
-            R.drawable.leopard_old_idle,R.drawable.leopard_old_happy,R.drawable.leopard_old_tired,R.drawable.leopard_old_sleep
-        };
-        for(int res:staticRes){
-            Bitmap b=BitmapFactory.decodeResource(getResources(),res);
-            if(b!=null){
-                if(b.getWidth()!=640 || b.getHeight()!=640){
-                    addHistory("Alerte asset personnage : "+b.getWidth()+"x"+b.getHeight()+".");
+        invalidCharacterAssets.clear();
+        assetErrorShown=false;
+
+        for(PetStage stage:PetStage.values()){
+            int poseW=-1,poseH=-1;
+            for(PetMood mood:PetMood.values()){
+                int res=getMoodDrawable(stage,mood);
+                Bitmap b=null;
+                try{b=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
+                if(b==null){
+                    markCharacterAssetInvalid(res,stage+" "+mood,"ressource manquante ou illisible");
+                    continue;
+                }
+
+                int w=b.getWidth(),h=b.getHeight();
+                if(poseW<0){poseW=w;poseH=h;}
+                if(w!=poseW || h!=poseH || w!=640 || h!=640){
+                    markCharacterAssetInvalid(res,stage+" "+mood,
+                        w+"x"+h+" au lieu du canevas commun 640x640");
+                }
+                b.recycle();
+            }
+
+            int stripH=-1;
+            for(WalkMode mode:WalkMode.values()){
+                int res=getWalkStrip(stage,mode);
+                Bitmap b=null;
+                try{b=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
+                if(b==null){
+                    markCharacterAssetInvalid(res,stage+" "+mode,"strip manquant ou illisible");
+                    continue;
+                }
+
+                int w=b.getWidth(),h=b.getHeight();
+                if(stripH<0)stripH=h;
+                boolean badHeight=h!=stripH || h!=640;
+                boolean badFrames=h<=0 || w<h || w%h!=0;
+                if(badHeight || badFrames){
+                    markCharacterAssetInvalid(res,stage+" "+mode,
+                        w+"x"+h+" : attendu hauteur 640 et frames carrées de 640x640");
                 }
                 b.recycle();
             }
         }
+
+        if(!invalidCharacterAssets.isEmpty())showAssetErrorOnce();
     }
 
     String format(long ms){
