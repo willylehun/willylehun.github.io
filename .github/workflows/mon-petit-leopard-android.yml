@@ -2,7 +2,7 @@ name: Build Mon Petit Leopard APK
 
 on:
   push:
-    branches: [ main, mon-petit-leopard-v010 ]
+    branches: [ main ]
     paths:
       - 'mon-petit-leopard/**'
       - '.github/workflows/mon-petit-leopard-android.yml'
@@ -30,43 +30,6 @@ jobs:
         with:
           packages: platform-tools
 
-      - name: Prepare Android assets
-        run: |
-          set -e
-          mkdir -p mon-petit-leopard/app/src/main/res/drawable-nodpi
-          base64 --decode mon-petit-leopard/assets/leopard_cub.png.b64 > mon-petit-leopard/app/src/main/res/drawable-nodpi/leopard_cub.png
-          base64 --decode mon-petit-leopard/assets/leopard_teen.png.b64 > mon-petit-leopard/app/src/main/res/drawable-nodpi/leopard_teen.png
-          base64 --decode mon-petit-leopard/assets/leopard_adult.png.b64 > mon-petit-leopard/app/src/main/res/drawable-nodpi/leopard_adult.png
-          base64 --decode mon-petit-leopard/assets/leopard_old.png.b64 > mon-petit-leopard/app/src/main/res/drawable-nodpi/leopard_old.png
-
-          base64 --decode mon-petit-leopard/assets/room_living.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable-nodpi/room_living.jpg
-          base64 --decode mon-petit-leopard/assets/room_kitchen.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable-nodpi/room_kitchen.jpg
-          base64 --decode mon-petit-leopard/assets/room_bathroom.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable-nodpi/room_bathroom.jpg
-          base64 --decode mon-petit-leopard/assets/room_garden.jpg.b64 > mon-petit-leopard/app/src/main/res/drawable-nodpi/room_garden.jpg
-
-      - name: Normalize visual assets for sharp portrait rendering
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y imagemagick
-          for f in mon-petit-leopard/app/src/main/res/drawable-nodpi/leopard_*.png; do
-            [ -f "$f" ] || continue
-            if convert "$f" -trim +repage -filter Lanczos -resize 560x560 -gravity center -background none -extent 640x640 "$f.tmp"; then
-              mv "$f.tmp" "$f"
-            else
-              rm -f "$f.tmp"
-              echo "Asset non retraité, conservation de la source: $f"
-            fi
-          done
-          for f in mon-petit-leopard/app/src/main/res/drawable-nodpi/room_*.jpg; do
-            [ -f "$f" ] || continue
-            if convert "$f" -filter Lanczos -resize '1280x960^' -gravity center -extent 1280x960 -unsharp 0x0.65+0.65+0.02 "$f.tmp"; then
-              mv "$f.tmp" "$f"
-            else
-              rm -f "$f.tmp"
-              echo "Décor non retraité, conservation de la source: $f"
-            fi
-          done
-
       - name: Ensure Android SDK 35
         run: |
           yes | sdkmanager --licenses >/dev/null || true
@@ -78,7 +41,7 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.4.2
+          name: mon-petit-leopard-v0.4.3
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Prepare downloadable APK
@@ -92,13 +55,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.4.2"
+          TAG="mon-petit-leopard-v0.4.3"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.4.2" \
-              --notes "Version Android installable hors Play Store : interface portrait, nouveau logo léopardeau, affichage du léopard corrigé, rendu visuel renforcé, menus Pièces/Objets/Actions, caresse tactile et nettoyage par frottement."
+              --title "Mon Petit Léopard v0.4.3" \
+              --notes "Correctif visuel : décors HD d’origine affichés en entier sans crop, sprites HD transparents sans fond blanc, échelle du léopard recalculée selon la scène et contrôles anti-chevauchement."
           fi
 
       - name: Publish direct-download APK
@@ -110,6 +73,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.4.2 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.4.3 APK [skip ci]"
             git push
           fi
