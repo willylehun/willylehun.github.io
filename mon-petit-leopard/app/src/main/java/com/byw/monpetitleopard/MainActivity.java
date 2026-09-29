@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
         super.onCreate(b);
         sp=getSharedPreferences("pet",MODE_PRIVATE);
         load();
-        ensureCurrentAdoptionRecorded();
+        if(sp.getBoolean("named",false))ensureCurrentAdoptionRecorded();
         objects=new ObjectSystem(this);
         build();
         tickNeeds();
