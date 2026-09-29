@@ -35,13 +35,18 @@ jobs:
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
+      - name: Prepare clean character assets
+        run: |
+          python3 -m pip install --quiet Pillow
+          python3 mon-petit-leopard/tools/prepare_sprite_assets.py
+
       - name: Build APK
         run: gradle -p mon-petit-leopard assembleDebug
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.4.6
+          name: mon-petit-leopard-v0.4.7
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Prepare downloadable APK
@@ -55,13 +60,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.4.6"
+          TAG="mon-petit-leopard-v0.4.7"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.4.6" \
-              --notes "Correctif animation : bon personnage pour chaque cycle, oreilles complètes, marche multi-images gauche/droite/face/dos, humeurs de face, scène maximisée sans déformation, profondeur sécurisée par pièce et sommeil autonome de 1 min 30 rechargeant la jauge de sommeil."
+              --title "Mon Petit Léopard v0.4.7" \
+              --notes "Correctif complet : génération 1 verrouillée sur le vrai léopardeau, assets nettoyés et remarginés sans oreilles coupées, marche multi-images stable gauche/droite/face/dos, scène agrandie sans déformation, humeurs de face et sommeil autonome de 1 min 30 rechargeant réellement la jauge Sommeil."
           fi
 
       - name: Publish direct-download APK
@@ -73,6 +78,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.4.6 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.4.7 APK [skip ci]"
             git push
           fi
