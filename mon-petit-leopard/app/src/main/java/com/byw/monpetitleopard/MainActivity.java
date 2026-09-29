@@ -45,6 +45,9 @@ public class MainActivity extends Activity {
     int currentWalkStripRes=0;
     Bitmap currentWalkStrip=null;
     Bitmap[] currentWalkFrames=null;
+    PetStage visualStage=null;
+    PetStage loadedWalkStage=null;
+    WalkMode loadedWalkMode=null;
     final Set<Integer> invalidCharacterAssets=new HashSet<>();
     boolean assetErrorShown=false;
 
@@ -465,6 +468,7 @@ public class MainActivity extends Activity {
     }
 
     void refresh(){
+        syncVisualStage();
         title.setText(pet+" • génération "+generation);
         subTitle.setText(stageName()+" • "+roomName());
         timer.setText(stage()==Stage.ENDED?"Terminé":format(remain()));
@@ -518,7 +522,7 @@ public class MainActivity extends Activity {
                 return;
             }
             if(res!=currentPetRes){
-                if(!setPetDrawableSafely(res))return;
+                if(!setPetDrawableSafely(petStage(),res))return;
                 currentPetRes=res;
             }
         }
@@ -530,6 +534,27 @@ public class MainActivity extends Activity {
         moodLabel.bringToFront();
         cleanHint.bringToFront();
         updatePetPosition();
+    }
+
+    void syncVisualStage(){
+        PetStage now=petStage();
+        if(visualStage==now)return;
+
+        PetStage previous=visualStage;
+        visualStage=now;
+
+        // Un changement d'âge invalide immédiatement toute image/animation
+        // déjà chargée. Ainsi aucun frame de l'âge précédent ne peut rester
+        // affiché pendant le nouveau cycle.
+        walking=false;
+        walkMode=WalkMode.SIDE;
+        walkFrameIndex=0;
+        releaseWalkFrames();
+        currentPetRes=0;
+
+        if(previous!=null){
+            addHistory("Verrouillage visuel : "+previous+" → "+now+".");
+        }
     }
 
     PetStage petStage(){
@@ -639,14 +664,27 @@ public class MainActivity extends Activity {
         currentWalkFrames=null;
         currentWalkStrip=null;
         currentWalkStripRes=0;
+        loadedWalkStage=null;
+        loadedWalkMode=null;
     }
 
-    boolean loadWalkFrames(int res){
+    boolean loadWalkFrames(PetStage expectedStage,WalkMode expectedMode,int res){
+        // Verrou dur : une animation ne peut être chargée que si elle appartient
+        // exactement à l'âge et à la direction actuellement demandés.
+        if(expectedStage!=petStage() || res!=getWalkStrip(expectedStage,expectedMode)){
+            addHistory("ERREUR mélange d'âge bloqué avant chargement de marche.");
+            showAssetErrorOnce();
+            return false;
+        }
         if(invalidCharacterAssets.contains(res)){
             showAssetErrorOnce();
             return false;
         }
-        if(currentWalkStripRes==res && currentWalkFrames!=null && currentWalkFrames.length>0)return true;
+        if(currentWalkStripRes==res
+                && loadedWalkStage==expectedStage
+                && loadedWalkMode==expectedMode
+                && currentWalkFrames!=null
+                && currentWalkFrames.length>0)return true;
 
         releaseWalkFrames();
 
@@ -685,18 +723,35 @@ public class MainActivity extends Activity {
         }
 
         currentWalkStripRes=res;
+        loadedWalkStage=expectedStage;
+        loadedWalkMode=expectedMode;
         walkFrameIndex=0;
         return true;
     }
 
     void showWalkFrame(WalkMode mode){
-        int res=walkStripDrawable(mode);
-        if(!loadWalkFrames(res)){
+        PetStage expectedStage=petStage();
+        int res=getWalkStrip(expectedStage,mode);
+        if(!loadWalkFrames(expectedStage,mode,res)){
             walking=false;
             currentPetRes=0;
             ensurePetImage();
             return;
         }
+
+        // Deuxième garde juste avant l'affichage : même si l'âge changeait
+        // entre deux ticks, un bitmap de l'ancien pack ne peut pas être rendu.
+        if(expectedStage!=petStage()
+                || loadedWalkStage!=expectedStage
+                || loadedWalkMode!=mode
+                || currentWalkStripRes!=res){
+            walking=false;
+            releaseWalkFrames();
+            currentPetRes=0;
+            ensurePetImage();
+            return;
+        }
+
         petView.setImageBitmap(currentWalkFrames[walkFrameIndex]);
         petView.setVisibility(View.VISIBLE);
         walkFrameIndex=(walkFrameIndex+1)%currentWalkFrames.length;
@@ -1116,11 +1171,12 @@ public class MainActivity extends Activity {
 
     void animateAuto(){
         if(scene==null||petView==null)return;
+        syncVisualStage();
         idleTick++;
 
         if(sleeping){
             currentPetRes=sleepDrawable();
-            if(!setPetDrawableSafely(currentPetRes))return;
+            if(!setPetDrawableSafely(petStage(),currentPetRes))return;
             walking=false;
             updatePetPosition();
             return;
@@ -1193,7 +1249,7 @@ public class MainActivity extends Activity {
     void applyPose(int frame){
         if(sleeping){
             currentPetRes=sleepDrawable();
-            if(!setPetDrawableSafely(currentPetRes))return;
+            if(!setPetDrawableSafely(petStage(),currentPetRes))return;
             updatePetPosition();
             return;
         }
@@ -1205,7 +1261,7 @@ public class MainActivity extends Activity {
         else staticRes=emotionDrawable();
 
         currentPetRes=staticRes;
-        if(!setPetDrawableSafely(staticRes))return;
+        if(!setPetDrawableSafely(petStage(),staticRes))return;
         updatePetPosition();
 
         float base=depthScale();
@@ -1388,7 +1444,7 @@ public class MainActivity extends Activity {
         manualUntil=0;
         sleepEndAt=System.currentTimeMillis()+90000L;
         currentPetRes=sleepDrawable();
-        if(!setPetDrawableSafely(currentPetRes))return;
+        if(!setPetDrawableSafely(petStage(),currentPetRes))return;
         addHistory(pet+" s'est endormi pour 1 min 30.");
         save();
         refresh();
@@ -1511,7 +1567,20 @@ public class MainActivity extends Activity {
         toast("⚠ Asset du léopard invalide : animation désactivée, aucun autre âge ne sera utilisé.");
     }
 
-    boolean setPetDrawableSafely(int res){
+    boolean isMoodResourceForStage(PetStage stage,int res){
+        for(PetMood mood:PetMood.values()){
+            if(getMoodDrawable(stage,mood)==res)return true;
+        }
+        return false;
+    }
+
+    boolean setPetDrawableSafely(PetStage expectedStage,int res){
+        if(expectedStage!=petStage() || !isMoodResourceForStage(expectedStage,res)){
+            addHistory("ERREUR mélange d'âge bloqué sur une pose ("+expectedStage+").");
+            petView.setVisibility(View.INVISIBLE);
+            showAssetErrorOnce();
+            return false;
+        }
         if(invalidCharacterAssets.contains(res)){
             petView.setVisibility(View.INVISIBLE);
             showAssetErrorOnce();
