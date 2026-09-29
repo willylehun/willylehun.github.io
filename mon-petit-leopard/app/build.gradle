@@ -8,8 +8,8 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 14
-        versionName '0.4.9'
+        versionCode 15
+        versionName '0.5.0'
     }
 
     compileOptions {
@@ -18,4 +18,4 @@ android {
     }
 }
 
-// Character assets normalized per age for v0.4.9
+// Character assets normalized per age, direction and face moods for v0.5.0
