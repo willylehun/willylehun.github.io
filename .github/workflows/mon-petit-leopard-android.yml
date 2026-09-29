@@ -35,11 +35,6 @@ jobs:
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Prepare clean character assets
-        run: |
-          python3 -m pip install --quiet Pillow
-          python3 mon-petit-leopard/tools/prepare_sprite_assets.py
-
       - name: Build APK
         run: gradle -p mon-petit-leopard assembleDebug
 
