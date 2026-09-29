@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
         if(sp.getBoolean("named",false))ensureCurrentAdoptionRecorded();
         objects=new ObjectSystem(this);
         build();
+        validateCharacterAssets();
         tickNeeds();
         refresh();
         if(!sp.getBoolean("named",false))rename(true);
@@ -661,7 +662,7 @@ public class MainActivity extends Activity {
     float[] imageRect(){
         float sw=scene.getWidth(), sh=scene.getHeight();
         if(sw<=0||sh<=0)return new float[]{0,0,0,0};
-        float scale=Math.min(sw/1536f,sh/1152f)*1.06f;
+        float scale=Math.min(sw/1536f,sh/1152f);
         float iw=1536f*scale;
         float ih=1152f*scale;
         float left=(sw-iw)/2f;
@@ -1423,6 +1424,24 @@ public class MainActivity extends Activity {
             .setView(scroll)
             .setPositiveButton("Fermer",null)
             .show();
+    }
+
+    void validateCharacterAssets(){
+        int[] staticRes={
+            R.drawable.leopard_cub_idle,R.drawable.leopard_cub_happy,R.drawable.leopard_cub_tired,R.drawable.leopard_cub_sleep,
+            R.drawable.leopard_teen_idle,R.drawable.leopard_teen_happy,R.drawable.leopard_teen_tired,R.drawable.leopard_teen_sleep,
+            R.drawable.leopard_adult_idle,R.drawable.leopard_adult_happy,R.drawable.leopard_adult_tired,R.drawable.leopard_adult_sleep,
+            R.drawable.leopard_old_idle,R.drawable.leopard_old_happy,R.drawable.leopard_old_tired,R.drawable.leopard_old_sleep
+        };
+        for(int res:staticRes){
+            Bitmap b=BitmapFactory.decodeResource(getResources(),res);
+            if(b!=null){
+                if(b.getWidth()!=640 || b.getHeight()!=640){
+                    addHistory("Alerte asset personnage : "+b.getWidth()+"x"+b.getHeight()+".");
+                }
+                b.recycle();
+            }
+        }
     }
 
     String format(long ms){
