@@ -117,10 +117,8 @@ public class MainActivity extends Activity {
         historyLog=sp.getString("historyLog","");
         adoptedLog=sp.getString("adoptedLog","");
 
-        if(sleeping && (sleepEndAt<=n || sleepEndAt==0)){
-            sleeping=false;
-            sleepEndAt=0;
-        }
+        // Ne pas annuler ici un sommeil expiré : tickNeeds() calcule d'abord
+        // la portion réellement passée à dormir, même si l'app était fermée.
         if(nextAutoSleepAt==0){
             nextAutoSleepAt=n+(4+rnd.nextInt(4))*60000L;
         }
@@ -243,11 +241,12 @@ public class MainActivity extends Activity {
     void build(){
         root=new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(dp(4),dp(3),dp(4),0);
+        root.setPadding(0,dp(2),0,0);
         root.setBackgroundColor(Color.rgb(242,232,210));
 
         LinearLayout header=new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
+        header.setPadding(dp(6),0,dp(6),0);
 
         LinearLayout names=new LinearLayout(this);
         names.setOrientation(LinearLayout.VERTICAL);
@@ -277,6 +276,8 @@ public class MainActivity extends Activity {
 
         LinearLayout needRow1=new LinearLayout(this);
         LinearLayout needRow2=new LinearLayout(this);
+        needRow1.setPadding(dp(4),0,dp(4),0);
+        needRow2.setPadding(dp(4),0,dp(4),0);
         String[] namesNeeds={"Faim","Eau","Propreté","Câlins","Bonheur","Sommeil"};
         for(int i=0;i<6;i++){
             LinearLayout box=needBox(namesNeeds[i],i);
@@ -287,13 +288,13 @@ public class MainActivity extends Activity {
 
         skillTxt=text(9,false);
         skillTxt.setGravity(Gravity.CENTER);
-        skillTxt.setPadding(0,0,0,dp(2));
+        skillTxt.setPadding(dp(4),0,dp(4),dp(2));
         root.addView(skillTxt);
 
         scene=new FrameLayout(this);
         GradientDrawable sceneBg=new GradientDrawable();
         sceneBg.setColor(Color.rgb(204,181,145));
-        sceneBg.setCornerRadius(dp(14));
+        sceneBg.setCornerRadius(dp(10));
         scene.setBackground(sceneBg);
         scene.setClipToOutline(true);
 
@@ -362,6 +363,7 @@ public class MainActivity extends Activity {
         root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(360),0));
 
         bottomBar=new LinearLayout(this);
+        bottomBar.setPadding(dp(4),0,dp(4),0);
         roomsBtn=button("🏠 Pièces");
         objectsBtn=button("🎒 Objets");
         actionsBtn=button("⚙ Actions");
@@ -376,7 +378,7 @@ public class MainActivity extends Activity {
         root.addView(bottomBar);
 
         footerSpace=new Space(this);
-        root.addView(footerSpace,new LinearLayout.LayoutParams(1,dp(24)));
+        root.addView(footerSpace,new LinearLayout.LayoutParams(1,dp(18)));
 
         setContentView(root);
         root.post(()->{
