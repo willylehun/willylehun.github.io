@@ -17,3 +17,5 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 }
+
+// Character assets normalized per age for v0.4.7
