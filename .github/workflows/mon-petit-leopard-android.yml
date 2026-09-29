@@ -41,7 +41,7 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.4.4
+          name: mon-petit-leopard-v0.4.5
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Prepare downloadable APK
@@ -55,13 +55,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.4.4"
+          TAG="mon-petit-leopard-v0.4.5"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.4.4" \
-              --notes "Mise à jour gameplay : scène agrandie, marche directionnelle gauche/droite, profondeur par pièce avec zones sûres, sommeil autonome de 1 min 30 réveillable, menu Historique et conservation des 10 dernières adoptions."
+              --title "Mon Petit Léopard v0.4.5" \
+              --notes "Mise à jour gameplay : scène agrandie sans déformation avec fond étendu, marche directionnelle gauche/droite, chemins de profondeur sûrs analysés par pièce, sommeil autonome de 1 min 30 réveillable, menu Historique et conservation des 10 dernières adoptions."
           fi
 
       - name: Publish direct-download APK
@@ -73,6 +73,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.4.4 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.4.5 APK [skip ci]"
             git push
           fi
