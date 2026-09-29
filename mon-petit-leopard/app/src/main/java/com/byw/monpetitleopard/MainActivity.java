@@ -502,7 +502,7 @@ public class MainActivity extends Activity {
                 petView.setImageResource(res);
             }
         } else if(!walking) {
-            int res=ageDrawable();
+            int res=emotionDrawable();
             if(res!=currentPetRes){
                 currentPetRes=res;
                 petView.setImageResource(res);
@@ -517,13 +517,31 @@ public class MainActivity extends Activity {
         updatePetPosition();
     }
 
-    int ageDrawable(){
+    int idleDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub_hd;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen_hd;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult_hd;
-        return R.drawable.leopard_old_hd;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_idle;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_idle;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_idle;
+        return R.drawable.leopard_old_idle;
+    }
+
+    int happyDrawable(){
+        Stage s=stage();
+        if(s==Stage.ENDED)s=Stage.OLD;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_happy;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_happy;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_happy;
+        return R.drawable.leopard_old_happy;
+    }
+
+    int tiredDrawable(){
+        Stage s=stage();
+        if(s==Stage.ENDED)s=Stage.OLD;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_tired;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_tired;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_tired;
+        return R.drawable.leopard_old_tired;
     }
 
     int sleepDrawable(){
@@ -535,13 +553,74 @@ public class MainActivity extends Activity {
         return R.drawable.leopard_old_sleep;
     }
 
-    int[] walkDrawables(){
+    int emotionDrawable(){
+        if(sleeping)return sleepDrawable();
+        if(energy<24 || hunger<18 || thirst<18 || clean<18 || happy<28)return tiredDrawable();
+        if(!strongEmotion() && happy>=70 && affection>=60)return happyDrawable();
+        return idleDrawable();
+    }
+
+    int walkStripDrawable(int mode){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return new int[]{R.drawable.leopard_cub_walk_0,R.drawable.leopard_cub_walk_1,R.drawable.leopard_cub_walk_2};
-        if(s==Stage.TEEN)return new int[]{R.drawable.leopard_teen_walk_0,R.drawable.leopard_teen_walk_1,R.drawable.leopard_teen_walk_2};
-        if(s==Stage.ADULT)return new int[]{R.drawable.leopard_adult_walk_0,R.drawable.leopard_adult_walk_1,R.drawable.leopard_adult_walk_2};
-        return new int[]{R.drawable.leopard_old_walk_0,R.drawable.leopard_old_walk_1,R.drawable.leopard_old_walk_2};
+
+        if(s==Stage.CUB){
+            if(mode==1)return R.drawable.leopard_cub_walk_front;
+            if(mode==2)return R.drawable.leopard_cub_walk_back;
+            return R.drawable.leopard_cub_walk_side;
+        }
+        if(s==Stage.TEEN){
+            if(mode==1)return R.drawable.leopard_teen_walk_front;
+            if(mode==2)return R.drawable.leopard_teen_walk_back;
+            return R.drawable.leopard_teen_walk_side;
+        }
+        if(s==Stage.ADULT){
+            if(mode==1)return R.drawable.leopard_adult_walk_front;
+            if(mode==2)return R.drawable.leopard_adult_walk_back;
+            return R.drawable.leopard_adult_walk_side;
+        }
+        if(mode==1)return R.drawable.leopard_old_walk_front;
+        if(mode==2)return R.drawable.leopard_old_walk_back;
+        return R.drawable.leopard_old_walk_side;
+    }
+
+    void releaseWalkFrames(){
+        if(currentWalkFrames!=null){
+            for(Bitmap b:currentWalkFrames){
+                if(b!=null && !b.isRecycled())b.recycle();
+            }
+        }
+        if(currentWalkStrip!=null && !currentWalkStrip.isRecycled())currentWalkStrip.recycle();
+        currentWalkFrames=null;
+        currentWalkStrip=null;
+        currentWalkStripRes=0;
+    }
+
+    void loadWalkFrames(int res){
+        if(currentWalkStripRes==res && currentWalkFrames!=null && currentWalkFrames.length>0)return;
+        releaseWalkFrames();
+        currentWalkStrip=BitmapFactory.decodeResource(getResources(),res);
+        if(currentWalkStrip==null)return;
+
+        int h=currentWalkStrip.getHeight();
+        int count=Math.max(1,Math.round(currentWalkStrip.getWidth()/(float)Math.max(1,h)));
+        int frameW=currentWalkStrip.getWidth()/count;
+        currentWalkFrames=new Bitmap[count];
+
+        for(int i=0;i<count;i++){
+            currentWalkFrames[i]=Bitmap.createBitmap(
+                currentWalkStrip,i*frameW,0,frameW,currentWalkStrip.getHeight());
+        }
+        currentWalkStripRes=res;
+        walkFrameIndex=0;
+    }
+
+    void showWalkFrame(int mode){
+        loadWalkFrames(walkStripDrawable(mode));
+        if(currentWalkFrames==null||currentWalkFrames.length==0)return;
+        walkFrameIndex=(walkFrameIndex+1)%currentWalkFrames.length;
+        petView.setImageBitmap(currentWalkFrames[walkFrameIndex]);
+        currentPetRes=0;
     }
 
     void fitSceneAndPet(){
