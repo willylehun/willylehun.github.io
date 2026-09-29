@@ -31,6 +31,8 @@ public class MainActivity extends Activity {
     TextView[] vals=new TextView[6];
     ImageView bg,petView;
     FrameLayout scene;
+    LinearLayout root,bottomBar;
+    Space flexibleSpace;
     Button roomsBtn,objectsBtn,actionsBtn;
 
     int walkDir=1,walkSteps=0,walkTick=0,idleTick=0,currentPetRes=0,manualFrame=0;
@@ -181,7 +183,7 @@ public class MainActivity extends Activity {
     }
 
     void build(){
-        LinearLayout root=new LinearLayout(this);
+        root=new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setPadding(dp(10),dp(8),dp(10),dp(8));
         root.setBackgroundColor(Color.rgb(246,239,221));
@@ -222,13 +224,13 @@ public class MainActivity extends Activity {
 
         scene=new FrameLayout(this);
         GradientDrawable sceneBg=new GradientDrawable();
-        sceneBg.setColor(Color.WHITE);
+        sceneBg.setColor(Color.rgb(239,230,209));
         sceneBg.setCornerRadius(dp(18));
         scene.setBackground(sceneBg);
         scene.setClipToOutline(true);
 
         bg=new ImageView(this);
-        bg.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
         bg.setAdjustViewBounds(false);
         scene.addView(bg,new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
 
@@ -248,15 +250,18 @@ public class MainActivity extends Activity {
 
         petView=new ImageView(this);
         petView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        petView.setAdjustViewBounds(true);
-        FrameLayout.LayoutParams petParams=new FrameLayout.LayoutParams(dp(230),dp(230));
+        petView.setAdjustViewBounds(false);
+        petView.setVisibility(View.VISIBLE);
+        petView.setAlpha(1f);
+        petView.setElevation(dp(4));
+        FrameLayout.LayoutParams petParams=new FrameLayout.LayoutParams(dp(120),dp(120));
         petParams.gravity=Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
         petParams.bottomMargin=dp(8);
         scene.addView(petView,petParams);
         petView.setOnClickListener(v->petLeopard());
 
         incidentView=new TextView(this);
-        incidentView.setTextSize(54);
+        incidentView.setTextSize(30);
         incidentView.setGravity(Gravity.CENTER);
         incidentView.setVisibility(View.GONE);
         GradientDrawable incidentBg=new GradientDrawable();
@@ -265,15 +270,18 @@ public class MainActivity extends Activity {
         incidentBg.setStroke(dp(2),Color.argb(100,90,60,30));
         incidentView.setBackground(incidentBg);
         incidentView.setElevation(dp(8));
-        FrameLayout.LayoutParams incidentParams=new FrameLayout.LayoutParams(dp(86),dp(86));
-        incidentParams.gravity=Gravity.BOTTOM|Gravity.RIGHT;
-        incidentParams.setMargins(0,0,dp(18),dp(22));
+        FrameLayout.LayoutParams incidentParams=new FrameLayout.LayoutParams(dp(54),dp(54));
+        incidentParams.gravity=Gravity.TOP|Gravity.RIGHT;
+        incidentParams.setMargins(0,dp(58),dp(12),0);
         scene.addView(incidentView,incidentParams);
         incidentView.setOnTouchListener((v,e)->handleRub(e));
 
-        root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,1));
+        root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(320),0));
 
-        LinearLayout bottom=new LinearLayout(this);
+        flexibleSpace=new Space(this);
+        root.addView(flexibleSpace,new LinearLayout.LayoutParams(1,0,1));
+
+        bottomBar=new LinearLayout(this);
         roomsBtn=button("🏠 Pièces");
         objectsBtn=button("🎒 Objets");
         actionsBtn=button("⚙ Actions");
@@ -282,12 +290,13 @@ public class MainActivity extends Activity {
         objectsBtn.setOnClickListener(v->objects.openMenu());
         actionsBtn.setOnClickListener(v->actionsMenu());
 
-        bottom.addView(roomsBtn,buttonParams());
-        bottom.addView(objectsBtn,buttonParams());
-        bottom.addView(actionsBtn,buttonParams());
-        root.addView(bottom);
+        bottomBar.addView(roomsBtn,buttonParams());
+        bottomBar.addView(objectsBtn,buttonParams());
+        bottomBar.addView(actionsBtn,buttonParams());
+        root.addView(bottomBar);
 
         setContentView(root);
+        root.post(this::fitSceneAndPet);
     }
 
     LinearLayout needBox(String label,int index){
@@ -389,11 +398,13 @@ public class MainActivity extends Activity {
     }
 
     void refreshRoom(){
-        int res=room.equals("cuisine")?R.drawable.room_kitchen:
-                room.equals("bain")?R.drawable.room_bathroom:
-                room.equals("jardin")?R.drawable.room_garden:R.drawable.room_living;
+        int res=room.equals("cuisine")?R.drawable.room_kitchen_hd:
+                room.equals("bain")?R.drawable.room_bathroom_hd:
+                room.equals("jardin")?R.drawable.room_garden_hd:R.drawable.room_living_hd;
+        bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
         bg.setImageResource(res);
         ensurePetImage();
+        scene.post(this::fitSceneAndPet);
     }
 
     void ensurePetImage(){
@@ -405,16 +416,88 @@ public class MainActivity extends Activity {
             petView.setScaleX(1f);
             petView.setScaleY(1f);
             petView.setRotation(0f);
+            petView.setVisibility(View.VISIBLE);
+            petView.bringToFront();
+            incidentView.bringToFront();
+            moodLabel.bringToFront();
+            cleanHint.bringToFront();
         }
     }
 
     int ageDrawable(){
         Stage s=stage();
         if(s==Stage.ENDED)s=Stage.OLD;
-        if(s==Stage.CUB)return R.drawable.leopard_cub;
-        if(s==Stage.TEEN)return R.drawable.leopard_teen;
-        if(s==Stage.ADULT)return R.drawable.leopard_adult;
-        return R.drawable.leopard_old;
+        if(s==Stage.CUB)return R.drawable.leopard_cub_hd;
+        if(s==Stage.TEEN)return R.drawable.leopard_teen_hd;
+        if(s==Stage.ADULT)return R.drawable.leopard_adult_hd;
+        return R.drawable.leopard_old_hd;
+    }
+
+    void fitSceneAndPet(){
+        if(root==null||scene==null||root.getWidth()<=0||root.getHeight()<=0)return;
+
+        int sceneWidth=root.getWidth()-root.getPaddingLeft()-root.getPaddingRight();
+        int fixedHeight=root.getPaddingTop()+root.getPaddingBottom();
+
+        for(int i=0;i<root.getChildCount();i++){
+            View child=root.getChildAt(i);
+            if(child==scene||child==flexibleSpace)continue;
+            if(child.getVisibility()==View.GONE)continue;
+            ViewGroup.LayoutParams raw=child.getLayoutParams();
+            int margins=0;
+            if(raw instanceof LinearLayout.LayoutParams){
+                LinearLayout.LayoutParams lp=(LinearLayout.LayoutParams)raw;
+                margins=lp.topMargin+lp.bottomMargin;
+            }
+            fixedHeight+=child.getMeasuredHeight()+margins;
+        }
+
+        int available=Math.max(dp(220),root.getHeight()-fixedHeight);
+        int desired=Math.round(sceneWidth*3f/4f);
+        int sceneHeight=Math.min(desired,available);
+
+        LinearLayout.LayoutParams sceneLp=(LinearLayout.LayoutParams)scene.getLayoutParams();
+        sceneLp.width=ViewGroup.LayoutParams.MATCH_PARENT;
+        sceneLp.height=sceneHeight;
+        sceneLp.weight=0;
+        scene.setLayoutParams(sceneLp);
+
+        scene.post(this::resizePetForScene);
+    }
+
+    void resizePetForScene(){
+        if(scene.getWidth()<=0||scene.getHeight()<=0)return;
+
+        float ratio=stage()==Stage.CUB?.28f:
+                    stage()==Stage.TEEN?.30f:
+                    stage()==Stage.ADULT?.32f:.31f;
+
+        int size=Math.round(scene.getWidth()*ratio);
+        size=Math.min(size,Math.round(scene.getHeight()*.58f));
+        size=Math.max(size,dp(92));
+
+        FrameLayout.LayoutParams lp=(FrameLayout.LayoutParams)petView.getLayoutParams();
+        lp.width=size;
+        lp.height=size;
+        lp.gravity=Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL;
+        lp.bottomMargin=Math.max(dp(6),Math.round(scene.getHeight()*.025f));
+        petView.setLayoutParams(lp);
+        petView.setVisibility(View.VISIBLE);
+        petView.setAlpha(1f);
+
+        FrameLayout.LayoutParams incidentLp=(FrameLayout.LayoutParams)incidentView.getLayoutParams();
+        int incidentSize=Math.max(dp(42),Math.round(scene.getWidth()*.105f));
+        incidentLp.width=incidentSize;
+        incidentLp.height=incidentSize;
+        incidentLp.gravity=Gravity.TOP|Gravity.RIGHT;
+        incidentLp.topMargin=Math.max(dp(46),Math.round(scene.getHeight()*.12f));
+        incidentLp.rightMargin=dp(10);
+        incidentView.setLayoutParams(incidentLp);
+
+        petView.bringToFront();
+        incidentView.bringToFront();
+        moodLabel.bringToFront();
+        cleanHint.bringToFront();
     }
 
     String moodText(){
