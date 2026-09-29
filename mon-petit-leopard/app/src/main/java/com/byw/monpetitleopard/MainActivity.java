@@ -1257,8 +1257,10 @@ public class MainActivity extends Activity {
         nextMischiefAt=0;
         room="salon";
         currentPetRes=0;
+        releaseWalkFrames();
         sleeping=false;
         sleepEndAt=0;
+        walkMode=0;
         nextAutoSleepAt=n+(4+rnd.nextInt(4))*60000L;
         walking=false;
         roomsBtn.setEnabled(true);
@@ -1294,6 +1296,7 @@ public class MainActivity extends Activity {
         if(sleeping||stage()==Stage.ENDED)return;
         sleeping=true;
         walking=false;
+        walkMode=0;
         manualUntil=0;
         sleepEndAt=System.currentTimeMillis()+90000L;
         currentPetRes=sleepDrawable();
@@ -1307,6 +1310,7 @@ public class MainActivity extends Activity {
         if(!sleeping)return;
         sleeping=false;
         sleepEndAt=0;
+        walkMode=0;
         nextAutoSleepAt=System.currentTimeMillis()+(4+rnd.nextInt(4))*60000L;
         currentPetRes=0;
         addHistory(reason+".");
