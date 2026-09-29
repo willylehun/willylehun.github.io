@@ -3,6 +3,8 @@ package com.byw.monpetitleopard;
 import android.app.*;
 import android.content.*;
 import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
 import android.os.*;
 import android.view.*;
@@ -38,7 +40,10 @@ public class MainActivity extends Activity {
     Button roomsBtn,objectsBtn,actionsBtn,menuBtn;
 
     int walkDir=-1,walkTick=0,idleTick=0,currentPetRes=0,manualFrame=0,walkFrameIndex=0;
-    int petNodeIndex=-1,targetNodeIndex=-1;
+    int petNodeIndex=-1,targetNodeIndex=-1,walkMode=0;
+    int currentWalkStripRes=0;
+    Bitmap currentWalkStrip=null;
+    Bitmap[] currentWalkFrames=null;
     enum Stage {CUB,TEEN,ADULT,OLD,ENDED}
 
     @Override public void onCreate(Bundle b){
@@ -164,7 +169,8 @@ public class MainActivity extends Activity {
                 thirst-=.20f*sm;
                 clean-=.04f*sm;
                 affection-=.02f*sm;
-                energy+=15.0f*sm;
+                // 90 secondes de sommeil autonome peuvent recharger complètement la jauge.
+                energy+=(100f/1.5f)*sm;
             }
 
             if(awakeMs>0){
@@ -583,9 +589,9 @@ public class MainActivity extends Activity {
         float[] r=imageRect();
         if(r[2]<=0||r[3]<=0)return;
 
-        float ratio=stage()==Stage.CUB?.26f:
-                    stage()==Stage.TEEN?.285f:
-                    stage()==Stage.ADULT?.31f:.295f;
+        float ratio=stage()==Stage.CUB?.30f:
+                    stage()==Stage.TEEN?.325f:
+                    stage()==Stage.ADULT?.35f:.335f;
 
         int size=Math.round(r[2]*ratio);
         size=Math.max(size,dp(88));
