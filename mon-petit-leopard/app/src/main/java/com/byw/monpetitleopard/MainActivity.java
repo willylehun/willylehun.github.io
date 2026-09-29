@@ -768,6 +768,7 @@ public class MainActivity extends Activity {
         targetNX=petNX;
         targetNY=petNY;
         walking=false;
+        walkMode=0;
         walkFrameIndex=0;
         currentPetRes=0;
         if(!sleeping)ensurePetImage();
@@ -1065,6 +1066,7 @@ public class MainActivity extends Activity {
                 petNY=targetNY;
                 if(targetNodeIndex>=0)petNodeIndex=targetNodeIndex;
                 walking=false;
+                walkMode=0;
                 currentPetRes=0;
                 ensurePetImage();
                 updatePetPosition();
@@ -1076,12 +1078,16 @@ public class MainActivity extends Activity {
             petNX+=dx/dist*speed;
             petNY+=dy/dist*speed;
 
-            if(Math.abs(dx)>.004f)walkDir=dx<0?-1:1;
+            // Utilise une vraie animation adaptée au sens de déplacement.
+            // 0 = côté, 1 = face (vers le bas), 2 = dos (vers le fond).
+            if(Math.abs(dy)>Math.abs(dx)*.70f){
+                walkMode=dy>0?1:2;
+            }else{
+                walkMode=0;
+                if(Math.abs(dx)>.003f)walkDir=dx<0?-1:1;
+            }
 
-            int[] frames=walkDrawables();
-            walkFrameIndex=(walkFrameIndex+1)%frames.length;
-            currentPetRes=frames[walkFrameIndex];
-            petView.setImageResource(currentPetRes);
+            showWalkFrame(walkMode);
             updatePetPosition();
             return;
         }
@@ -1109,27 +1115,27 @@ public class MainActivity extends Activity {
             return;
         }
 
-        if(currentPetRes==0 || walking){
-            currentPetRes=ageDrawable();
-            petView.setImageResource(currentPetRes);
-        }
+        int staticRes;
+        if(frame==9)staticRes=sleepDrawable();
+        else if(frame==11)staticRes=happyDrawable();
+        else if(frame==3)staticRes=tiredDrawable();
+        else staticRes=emotionDrawable();
 
+        currentPetRes=staticRes;
+        petView.setImageResource(staticRes);
         updatePetPosition();
 
         float base=depthScale();
-        float sign=walkDir<0?1f:-1f;
-        float sx=sign*base;
+        float sx=base;
         float sy=base;
 
         petView.setAlpha(1f);
         petView.setRotation(0f);
 
         if(frame==3){
-            petView.setAlpha(.88f);
-            sy*=.94f;
+            petView.setAlpha(.92f);
+            sy*=.97f;
         } else if(frame==9){
-            currentPetRes=sleepDrawable();
-            petView.setImageResource(currentPetRes);
             sy*=.96f;
         } else if(frame==10){
             sx*=1.05f; sy*=1.05f;
@@ -1148,6 +1154,7 @@ public class MainActivity extends Activity {
         manualFrame=frame;
         manualUntil=System.currentTimeMillis()+duration;
         walking=false;
+        walkMode=0;
         currentPetRes=0;
         applyPose(frame);
     }
