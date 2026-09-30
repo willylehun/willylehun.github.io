@@ -62,7 +62,7 @@ def face_frame(im):
 
 def save_webp(im,path,quality=92):
     path.parent.mkdir(parents=True,exist_ok=True)
-    im.save(path,"WEBP",quality=quality,method=6,exact=True)
+    im.save(path,"WEBP",quality=quality,method=2,exact=True)
 
 def prepare_age(age):
     src=SRC/f"res-{age}"/"drawable-nodpi"
@@ -74,7 +74,7 @@ def prepare_age(age):
     for mood in ("idle","happy","tired","sleep"):
         name=f"leopard_{age}_{mood}.png"
         frame=pad_frame(Image.open(src/name))
-        frame.save(dst/name,"PNG",optimize=True)
+        frame.save(dst/name,"PNG",optimize=False)
         statics[mood]=frame
 
     # Marches : même taille, même ancrage des pieds, aucun mélange inter-âge.
@@ -111,7 +111,7 @@ def prepare_rooms():
     dst.mkdir(parents=True,exist_ok=True)
     # Salon : image source conservée ; la grille de déplacement évite totalement le guéridon.
     living=Image.open(SRC/"rooms"/"room_living_hd.webp").convert("RGB")
-    living.save(dst/"room_living_hd.webp","WEBP",quality=90,method=6)
+    living.save(dst/"room_living_hd.webp","WEBP",quality=90,method=2)
 
     # Jardin : recadrage avant la barrière de premier plan, puis remise au format 4:3.
     garden=Image.open(SRC/"rooms"/"room_garden_hd.webp").convert("RGB")
@@ -120,7 +120,7 @@ def prepare_rooms():
     crop_w=round(crop_h*4/3)
     left=(w-crop_w)//2
     garden=garden.crop((left,0,left+crop_w,crop_h)).resize((1536,1152),Image.Resampling.LANCZOS)
-    garden.save(dst/"room_garden_hd.webp","WEBP",quality=90,method=6)
+    garden.save(dst/"room_garden_hd.webp","WEBP",quality=90,method=2)
 
 def main():
     for age in AGES: prepare_age(age)
