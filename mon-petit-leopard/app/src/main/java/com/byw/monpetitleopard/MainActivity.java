@@ -840,15 +840,17 @@ public class MainActivity extends Activity {
 
         int w=strip.getWidth();
         int h=strip.getHeight();
-        if(h!=640 || w!=2560){
+        int count=CharacterSprites.forStage(expectedStage).frameCount(expectedMode);
+        int expectedWidth=640*count;
+        if(h!=640 || w!=expectedWidth){
             strip.recycle();
-            markCharacterAssetInvalid(res,"strip de marche",w+"x"+h+" : frames non carrées");
+            markCharacterAssetInvalid(res,"strip de marche",
+                w+"x"+h+" : attendu "+expectedWidth+"x640 pour "+count+" frames");
             showAssetErrorOnce();
             return false;
         }
 
         int sourceCount=w/h;
-        int count=CharacterSprites.forStage(expectedStage).frameCount(expectedMode);
         if(sourceCount!=count){
             strip.recycle();
             markCharacterAssetInvalid(res,"strip de marche",
