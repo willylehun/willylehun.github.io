@@ -782,13 +782,16 @@ public class MainActivity extends Activity {
 
         int sourceCount=w/h;
         int count=CharacterSprites.forStage(expectedStage).frameCount(expectedMode);
-        if(sourceCount!=count){
+        if(sourceCount<count){
             strip.recycle();
             markCharacterAssetInvalid(res,"strip de marche",
-                w+"x"+h+" : "+sourceCount+" frames trouvées, "+count+" attendues pour "+expectedStage+" "+expectedMode);
+                w+"x"+h+" : "+sourceCount+" frames trouvées, au moins "+count+
+                " requises pour "+expectedStage+" "+expectedMode);
             showAssetErrorOnce();
             return false;
         }
+        // Normalisation d'affichage : toutes les directions utilisent exactement
+        // les 'count' premières frames. SIDE ne change donc jamais de cadence.
         currentWalkStrip=strip;
         currentWalkFrames=new Bitmap[count];
         try{
@@ -1014,6 +1017,7 @@ public class MainActivity extends Activity {
         if(Math.abs(dy)>Math.abs(dx)*.70f){
             travelDirection=dy>0?TravelDirection.DOWN:TravelDirection.UP;
             walkMode=travelDirection==TravelDirection.DOWN?WalkMode.FRONT:WalkMode.BACK;
+            walkDir=0;
         }else{
             travelDirection=dx<0?TravelDirection.LEFT:TravelDirection.RIGHT;
             walkMode=WalkMode.SIDE;
@@ -1757,10 +1761,12 @@ public class MainActivity extends Activity {
 
                 int w=b.getWidth(),h=b.getHeight();
                 int expectedFrames=pack.frameCount(mode);
-                boolean invalid=h!=640 || w!=640*expectedFrames;
+                int sourceFrames=(h>0 && w%h==0)?w/h:0;
+                boolean invalid=h!=640 || w%640!=0 || sourceFrames<expectedFrames;
                 if(invalid){
                     markCharacterAssetInvalid(res,stage+" "+mode,
-                        w+"x"+h+" : attendu "+expectedFrames+" frames de 640x640");
+                        w+"x"+h+" : attendu au moins "+expectedFrames+
+                        " frames carrées de 640x640");
                 }
                 b.recycle();
             }

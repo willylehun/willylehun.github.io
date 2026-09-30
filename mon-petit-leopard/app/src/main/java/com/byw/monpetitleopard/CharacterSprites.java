@@ -93,7 +93,7 @@ final class CharacterSprites {
         R.drawable.leopard_cub_walk_front,
         R.drawable.leopard_cub_walk_back,
         R.drawable.leopard_cub_face_moods,80,12,
-        5,4,4
+        4,4,4
     );
 
     private static final Pack TEEN=new Pack(
@@ -106,7 +106,7 @@ final class CharacterSprites {
         R.drawable.leopard_teen_walk_front,
         R.drawable.leopard_teen_walk_back,
         0,0,0,
-        5,4,4
+        4,4,4
     );
 
     private static final Pack ADULT=new Pack(
@@ -119,7 +119,7 @@ final class CharacterSprites {
         R.drawable.leopard_adult_walk_front,
         R.drawable.leopard_adult_walk_back,
         0,0,0,
-        5,4,4
+        4,4,4
     );
 
     private static final Pack OLD=new Pack(
@@ -132,7 +132,7 @@ final class CharacterSprites {
         R.drawable.leopard_old_walk_front,
         R.drawable.leopard_old_walk_back,
         0,0,0,
-        5,4,4
+        4,4,4
     );
 
     static Pack forStage(MainActivity.PetStage stage){
