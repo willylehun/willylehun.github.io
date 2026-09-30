@@ -63,7 +63,8 @@ class ContractTest {
   // Les coordonnées de déplacement sont normalisées (0..1) : la direction
   // se décide dans ce même espace, sans biais lié au ratio largeur/hauteur de la pièce.
   check(SpriteMotion.direction(.1f,-.2f,600,450)==SpriteMotion.UP);
-  check(SpriteMotion.direction(.2f,-.1f,600,450)==SpriteMotion.RIGHT);
+  check(SpriteMotion.direction(.2f,-.1f,600,450)==SpriteMotion.UP);
+  check(SpriteMotion.direction(.30f,-.10f,600,450)==SpriteMotion.RIGHT);
   check(SpriteMotion.direction(.10f,-.11f,1000,300)==SpriteMotion.UP);
   check(SpriteMotion.direction(.11f,-.10f,300,1000)==SpriteMotion.UP);
   check(SpriteMotion.direction(.20f,-.05f,300,1000)==SpriteMotion.RIGHT);
