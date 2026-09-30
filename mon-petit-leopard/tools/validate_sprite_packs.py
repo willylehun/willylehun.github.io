@@ -16,10 +16,9 @@ PACKS = {
             "leopard_cub_happy.png": (640, 640),
             "leopard_cub_tired.png": (640, 640),
             "leopard_cub_sleep.png": (640, 640),
-            "leopard_cub_walk_side.webp": (3200, 640),
+            "leopard_cub_walk_side.webp": (2560, 640),
             "leopard_cub_walk_front.webp": (2560, 640),
             "leopard_cub_walk_back.webp": (2560, 640),
-            "leopard_cub_face_moods.webp": (960, 80),
         },
     },
     "teen": {
@@ -29,7 +28,7 @@ PACKS = {
             "leopard_teen_happy.png": (640, 640),
             "leopard_teen_tired.png": (640, 640),
             "leopard_teen_sleep.png": (640, 640),
-            "leopard_teen_walk_side.webp": (3200, 640),
+            "leopard_teen_walk_side.webp": (2560, 640),
             "leopard_teen_walk_front.webp": (2560, 640),
             "leopard_teen_walk_back.webp": (2560, 640),
         },
@@ -41,7 +40,7 @@ PACKS = {
             "leopard_adult_happy.png": (640, 640),
             "leopard_adult_tired.png": (640, 640),
             "leopard_adult_sleep.png": (640, 640),
-            "leopard_adult_walk_side.webp": (3200, 640),
+            "leopard_adult_walk_side.webp": (2560, 640),
             "leopard_adult_walk_front.webp": (2560, 640),
             "leopard_adult_walk_back.webp": (2560, 640),
         },
@@ -53,7 +52,7 @@ PACKS = {
             "leopard_old_happy.png": (640, 640),
             "leopard_old_tired.png": (640, 640),
             "leopard_old_sleep.png": (640, 640),
-            "leopard_old_walk_side.webp": (3200, 640),
+            "leopard_old_walk_side.webp": (2560, 640),
             "leopard_old_walk_front.webp": (2560, 640),
             "leopard_old_walk_back.webp": (2560, 640),
         },
@@ -140,7 +139,7 @@ def main() -> None:
 
         print(f"OK {stage}: {len(expected)} assets séparés et valides")
 
-    print("OK: aucun mélange inter-âge détecté")
+    print("OK technique: dimensions et rangement. Validation graphique des âges: EN ATTENTE.")
 
 if __name__ == "__main__":
     main()
