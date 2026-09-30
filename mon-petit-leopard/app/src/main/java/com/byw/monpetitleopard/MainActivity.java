@@ -900,6 +900,8 @@ public class MainActivity extends Activity {
         lp.height=size;
         lp.gravity=Gravity.TOP|Gravity.LEFT;
         petView.setLayoutParams(lp);
+        int earSafety=Math.max(dp(3),Math.round(size*.035f));
+        petView.setPadding(earSafety,earSafety,earSafety,Math.max(dp(1),earSafety/3));
         petView.setPivotX(size/2f);
         petView.setPivotY(size*(588f/640f));
 
@@ -937,14 +939,15 @@ public class MainActivity extends Activity {
         }
         if(room.equals("jardin")){
             return new float[][]{
-                {.50f,.90f},{.43f,.79f},{.56f,.70f},{.48f,.61f},
-                {.51f,.51f},{.26f,.76f},{.74f,.75f},{.28f,.88f},{.72f,.88f}
+                // Zone de pelouse ouverte : pas de déplacement sur les barrières du premier plan.
+                {.50f,.82f},{.40f,.75f},{.60f,.75f},{.48f,.67f},
+                {.52f,.59f},{.24f,.72f},{.76f,.72f},{.27f,.82f},{.73f,.82f}
             };
         }
-        // Salon : grande zone libre devant le canapé.
+        // Salon : uniquement le sol et le tapis. Aucun nœud sur le canapé/table/meuble.
         return new float[][]{
-            {.16f,.91f},{.34f,.93f},{.52f,.94f},{.70f,.93f},{.85f,.91f},
-            {.20f,.80f},{.50f,.81f},{.80f,.80f}
+            {.14f,.94f},{.32f,.95f},{.50f,.95f},{.68f,.95f},{.86f,.94f},
+            {.18f,.86f},{.38f,.85f},{.62f,.85f},{.82f,.86f}
         };
     }
 
@@ -1014,7 +1017,12 @@ public class MainActivity extends Activity {
         float dx=targetNX-petNX;
         float dy=targetNY-petNY;
         float[] rect=imageRect();
-        int direction=SpriteMotion.direction(dx,dy,rect[2],rect[3]);
+        int direction;
+        // Les trajets entre nœuds sont souvent diagonaux : dès qu'il y a un vrai
+        // déplacement vertical, l'orientation verticale a priorité.
+        if(dy<-.025f)direction=SpriteMotion.UP;
+        else if(dy>.025f)direction=SpriteMotion.DOWN;
+        else direction=dx<0?SpriteMotion.LEFT:SpriteMotion.RIGHT;
         travelDirection=TravelDirection.values()[direction];
         walkMode=direction==SpriteMotion.UP?WalkMode.BACK:
                 direction==SpriteMotion.DOWN?WalkMode.FRONT:WalkMode.SIDE;
