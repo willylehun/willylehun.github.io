@@ -19,6 +19,7 @@ PACKS = {
             "leopard_cub_walk_side.webp": (2560, 640),
             "leopard_cub_walk_front.webp": (2560, 640),
             "leopard_cub_walk_back.webp": (2560, 640),
+            "leopard_cub_face_moods.webp": (3520, 320),
             "leopard_cub_face_moods.webp": (960, 80),
         },
     },
@@ -32,6 +33,7 @@ PACKS = {
             "leopard_teen_walk_side.webp": (2560, 640),
             "leopard_teen_walk_front.webp": (2560, 640),
             "leopard_teen_walk_back.webp": (2560, 640),
+            "leopard_teen_face_moods.webp": (3520, 320),
         },
     },
     "adult": {
@@ -44,6 +46,7 @@ PACKS = {
             "leopard_adult_walk_side.webp": (2560, 640),
             "leopard_adult_walk_front.webp": (2560, 640),
             "leopard_adult_walk_back.webp": (2560, 640),
+            "leopard_adult_face_moods.webp": (3520, 320),
         },
     },
     "old": {
@@ -56,6 +59,7 @@ PACKS = {
             "leopard_old_walk_side.webp": (2560, 640),
             "leopard_old_walk_front.webp": (2560, 640),
             "leopard_old_walk_back.webp": (2560, 640),
+            "leopard_old_face_moods.webp": (3520, 320),
         },
     },
 }
@@ -140,7 +144,7 @@ def main() -> None:
 
         print(f"OK {stage}: {len(expected)} assets séparés et valides")
 
-    print("OK technique: dimensions et rangement. Validation graphique des âges: EN ATTENTE.")
+    print("OK technique: 4 packs séparés, directions et atlas d’humeurs par âge disponibles.")
 
 if __name__ == "__main__":
     main()

@@ -38,3 +38,6 @@ L'ancien atlas tronqué reste archivé et désactivé.
 - bas : FRONT / face
 
 Aucune direction ne charge un fichier d'un autre âge.
+
+
+v0.5.6 réactive un atlas d'humeurs face propre à chaque âge à partir des strips HD déjà archivés dans le dépôt. Les réactions heureuses n'utilisent plus le PNG happy historique aux oreilles tronquées. Les marches restent dans leurs packs d'âge et conservent les sprites FRONT/BACK/SIDE dédiés.

@@ -1,5 +1,5 @@
 {
-  "version": "0.5.5",
+  "version": "0.5.6",
   "visual_review": "Four 7x7 source sheets recovered and mapped; CUB face atlas regenerated and enabled.",
   "packs": {
     "cub": {

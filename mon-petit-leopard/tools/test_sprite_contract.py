@@ -6,6 +6,10 @@ JAVA=ROOT/'app/src/main/java/com/byw/monpetitleopard'
 main=(JAVA/'MainActivity.java').read_text()
 assert 'float step=Math.min(speed,dist);' in main
 assert 'enum TravelDirection {LEFT,RIGHT,UP,DOWN}' in main
+assert 'MIN_SLEEP_MS=90000L' in main
+assert 'MIN_FACE_SHARE=.70f' in main
+assert 'showFaceMoodNow' in main
+assert 'energy=100f' in main
 for name in ['releaseWalkFrames','releaseCubFaceMoodFrames']:
     block=main.split('void '+name+'(){',1)[1].split('\n    }',1)[0]
     assert '.recycle(' not in block, name
@@ -41,6 +45,7 @@ class ContractTest {
   for(MainActivity.PetStage age:MainActivity.PetStage.values()){
    CharacterSprites.Pack p=CharacterSprites.forStage(age);check(p.stage==age);
    for(int id:p.allResources())check(id!=0 && seen.add(id));
+   check(p.hasFaceMoods() && p.faceFrameSize==320 && p.faceFrameCount==11);
    for(MainActivity.WalkMode m:MainActivity.WalkMode.values())check(p.frameCount(m)==4);
    for(MainActivity.PetMood m:MainActivity.PetMood.values())check(p.ownsMood(p.mood(m)));
    if(age==MainActivity.PetStage.CUB){

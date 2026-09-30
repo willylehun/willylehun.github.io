@@ -32,3 +32,11 @@ Ces quatre planches 7×7 ont été comparées aux packs compilés. Aucun échang
 8. `CharacterSprites.java` est la source unique de vérité et les tests CI vérifient dimensions, séparation et directions.
 
 L'ancien atlas CUB tronqué reste archivé sous `archive/invalid-assets/` et n'est jamais compilé.
+
+
+## Comportement v0.5.6
+- Les quatre âges ont leur propre atlas d'humeurs face-joueur, rangé dans leur zone de ressources.
+- Le haut utilise **BACK (dos)** et le bas **FRONT (face)** ; gauche/droite partagent exactement le même SIDE.
+- Après une marche de dos ou de côté, le temps face au joueur est calculé pour garantir au moins **70 %** de temps face hors sommeil.
+- Le sommeil naturel dure **au minimum 1 min 30**. Une fin naturelle du cycle force la jauge Sommeil à **100 %** ; une interaction du joueur peut réveiller le léopard plus tôt.
+- Les réactions heureuses utilisent l'atlas face et n'affichent plus l'ancien PNG happy dont certaines oreilles étaient tronquées.
