@@ -113,7 +113,12 @@ def prepare_rooms():
     living.save(dst/"room_living_hd.webp","WEBP",quality=90,method=2)
 
     # Cuisine : suppression complète de l'îlot/table et des tabourets.
-    kitchen=Image.open(SRC/"rooms"/"room_kitchen_hd.webp").convert("RGB")
+    # La source v056 n'avait pas encore de copie dédiée de la cuisine :
+    # on utilise alors l'asset runtime présent dans le dépôt comme source.
+    kitchen_src=SRC/"rooms"/"room_kitchen_hd.webp"
+    if not kitchen_src.exists():
+        kitchen_src=dst/"room_kitchen_hd.webp"
+    kitchen=Image.open(kitchen_src).convert("RGB")
     kw,kh=kitchen.size
     cut=round(kh*.55)
     floor_src=kitchen.crop((0,round(kh*.84),kw,kh))
