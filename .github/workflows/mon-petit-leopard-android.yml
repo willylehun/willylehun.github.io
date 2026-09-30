@@ -35,43 +35,8 @@ jobs:
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
 
-      - name: Validate sprite pack separation
-        shell: bash
-        run: |
-          set -euo pipefail
-          ROOT="mon-petit-leopard/app/src/main"
-
-          check_pack() {
-            pack="$1"
-            expected="$2"
-            dir="$ROOT/res-$pack/drawable-nodpi"
-            test -d "$dir"
-
-            count="$(find "$dir" -maxdepth 1 -type f -name 'leopard_*' | wc -l | tr -d ' ')"
-            if [ "$count" -ne "$expected" ]; then
-              echo "Pack $pack: $count fichiers au lieu de $expected"
-              exit 1
-            fi
-
-            wrong="$(find "$dir" -maxdepth 1 -type f -name 'leopard_*' ! -name "leopard_${pack}_*" -print)"
-            if [ -n "$wrong" ]; then
-              echo "Sprites d'un autre âge trouvés dans $pack:"
-              echo "$wrong"
-              exit 1
-            fi
-          }
-
-          check_pack cub 8
-          check_pack teen 7
-          check_pack adult 7
-          check_pack old 7
-
-          mixed="$(find "$ROOT/res/drawable-nodpi" -maxdepth 1 -type f -name 'leopard_*' -print || true)"
-          if [ -n "$mixed" ]; then
-            echo "Sprites de personnage encore présents dans la zone commune:"
-            echo "$mixed"
-            exit 1
-          fi
+      - name: Validate sprite packs
+        run: python mon-petit-leopard/tools/validate_sprite_packs.py
 
       - name: Build APK
         run: gradle -p mon-petit-leopard assembleDebug
@@ -79,14 +44,14 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.5.1
+          name: mon-petit-leopard-v0.5.2
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
 
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.5.1.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.5.2.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
 
       - name: Publish GitHub Release APK
@@ -94,13 +59,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.5.1"
+          TAG="mon-petit-leopard-v0.5.2"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.5.1" \
-              --notes "Sprites réorganisés en quatre packs physiques indépendants (léopardeau, ado, adulte, vieux), catalogue Java unique sans fallback inter-âge, contrôle CI des dossiers, poses 640x640 vérifiées, SIDE gauche/droite issu du même strip par miroir, haut=dos, bas=face, et humeurs face-joueur du léopardeau confinées à son propre pack."
+              --title "Mon Petit Léopard v0.5.2" \
+              --notes "Organisation v0.5.2 : quatre packs de sprites totalement séparés par âge, validation binaire automatique des dimensions et du nombre de frames, détection des doublons entre âges, aucun fallback croisé, conservation uniquement d'une image déjà valide du même âge en cas d'asset défectueux, SIDE gauche/droite par miroir, haut=dos et bas=face."
           fi
 
       - name: Publish direct-download APK
@@ -108,10 +73,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.5.1.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.5.2.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.5.1 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.5.2 APK [skip ci]"
             git push
           fi

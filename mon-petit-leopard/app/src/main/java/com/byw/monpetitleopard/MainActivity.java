@@ -46,6 +46,7 @@ public class MainActivity extends Activity {
     Bitmap currentWalkStrip=null;
     Bitmap[] currentWalkFrames=null;
     PetStage visualStage=null;
+    PetStage displayedPetStage=null;
     PetStage loadedWalkStage=null;
     WalkMode loadedWalkMode=null;
     TravelDirection travelDirection=TravelDirection.LEFT;
@@ -528,6 +529,7 @@ public class MainActivity extends Activity {
         if(faceActive){
             if(loadCubFaceMoodFrames()){
                 petView.setImageBitmap(cubFaceMoodFrames[activeFaceMood]);
+                displayedPetStage=PetStage.CUB;
                 currentPetRes=0;
             }else{
                 faceActive=false;
@@ -544,7 +546,7 @@ public class MainActivity extends Activity {
 
         if(res!=0){
             if(invalidCharacterAssets.contains(res)){
-                petView.setVisibility(View.INVISIBLE);
+                keepCurrentImageIfSameStage(petStage());
                 showAssetErrorOnce();
                 return;
             }
@@ -583,6 +585,8 @@ public class MainActivity extends Activity {
         nextFaceMoodAt=0;
         activeFaceMood=-1;
         currentPetRes=0;
+        displayedPetStage=null;
+        petView.setImageDrawable(null);
 
         if(previous!=null){
             addHistory("Verrouillage visuel : "+previous+" → "+now+".");
@@ -777,13 +781,14 @@ public class MainActivity extends Activity {
         }
 
         int sourceCount=w/h;
-        if(sourceCount<4){
+        int count=CharacterSprites.forStage(expectedStage).frameCount(expectedMode);
+        if(sourceCount!=count){
             strip.recycle();
-            markCharacterAssetInvalid(res,"strip de marche",w+"x"+h+" : au moins 4 frames requises");
+            markCharacterAssetInvalid(res,"strip de marche",
+                w+"x"+h+" : "+sourceCount+" frames trouvées, "+count+" attendues pour "+expectedStage+" "+expectedMode);
             showAssetErrorOnce();
             return false;
         }
-        int count=4;
         currentWalkStrip=strip;
         currentWalkFrames=new Bitmap[count];
         try{
@@ -828,6 +833,7 @@ public class MainActivity extends Activity {
         }
 
         petView.setImageBitmap(currentWalkFrames[walkFrameIndex]);
+        displayedPetStage=expectedStage;
         petView.setVisibility(View.VISIBLE);
         walkFrameIndex=(walkFrameIndex+1)%currentWalkFrames.length;
         currentPetRes=0;
@@ -1671,25 +1677,32 @@ public class MainActivity extends Activity {
         return CharacterSprites.forStage(stage).ownsMood(res);
     }
 
+    boolean keepCurrentImageIfSameStage(PetStage expectedStage){
+        boolean safe=displayedPetStage==expectedStage && petView.getDrawable()!=null;
+        petView.setVisibility(safe?View.VISIBLE:View.INVISIBLE);
+        return safe;
+    }
+
     boolean setPetDrawableSafely(PetStage expectedStage,int res){
         if(expectedStage!=petStage() || !isMoodResourceForStage(expectedStage,res)){
             addHistory("ERREUR mélange d'âge bloqué sur une pose ("+expectedStage+").");
-            petView.setVisibility(View.INVISIBLE);
+            keepCurrentImageIfSameStage(expectedStage);
             showAssetErrorOnce();
             return false;
         }
         if(invalidCharacterAssets.contains(res)){
-            petView.setVisibility(View.INVISIBLE);
+            keepCurrentImageIfSameStage(expectedStage);
             showAssetErrorOnce();
             return false;
         }
         try{
             petView.setImageResource(res);
+            displayedPetStage=expectedStage;
             petView.setVisibility(View.VISIBLE);
             return true;
         }catch(Throwable err){
             markCharacterAssetInvalid(res,"pose","chargement impossible");
-            petView.setVisibility(View.INVISIBLE);
+            keepCurrentImageIfSameStage(expectedStage);
             showAssetErrorOnce();
             return false;
         }
