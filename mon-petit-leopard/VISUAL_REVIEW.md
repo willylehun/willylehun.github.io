@@ -17,4 +17,4 @@ Il est archivé hors des ressources Android et désactivé pour éviter qu'une e
 non vérifiée remplace le corps du léopard. Les réactions utilisent provisoirement
 les poses happy/tired du même pack.
 
-v0.5.4 corrige la mécanique de rendu, pas ces dessins manquants ou ambigus.
+v0.5.5 conserve l’isolation stricte des quatre âges et corrige aussi la décision haut/bas dans l’espace normalisé. Les dessins ambigus ou tronqués ne sont toujours pas permutés par supposition.

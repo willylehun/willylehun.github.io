@@ -49,36 +49,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.5.4
+          name: mon-petit-leopard-v0.5.5
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.5.4.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.5.5.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.5.4"
+          TAG="mon-petit-leopard-v0.5.5"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.5.4 — correctif technique" \
-              --notes "v0.5.4 : correctifs techniques des sprites, caches, ancrage et directions ; quatre packs isolés. Atlas de portraits tronqué archivé, réactions avec les poses du même âge. Validation graphique des âges et oreilles tronquées encore à terminer, voir VISUAL_REVIEW.md."
+              --title "Mon Petit Léopard v0.5.5 — packs et directions" \
+              --notes "v0.5.5 : quatre packs d’âge physiquement isolés et sans fallback, canevas 640x640 et marches 4x640 validés, gauche/droite issus du même SIDE par miroir, haut=BACK/dos, bas=FRONT/face. La direction est désormais calculée dans les coordonnées normalisées de la scène pour rester correcte quel que soit le ratio du téléphone."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.5.4.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.5.5.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.5.4 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.5.5 APK [skip ci]"
             git push
           fi

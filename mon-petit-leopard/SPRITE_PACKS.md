@@ -17,7 +17,7 @@ Les décors restent dans `app/src/main/res/drawable-nodpi/`. Aucun fichier `leop
 2. Les quatre poses statiques de chaque pack sont exactement en **640 × 640**.
 3. Les strips de marche ont une hauteur de **640 px**. Le moteur affiche **exactement 4 frames** pour SIDE, FRONT et BACK. Les strips SIDE, FRONT et BACK exportés contiennent chacun 4 frames : la cadence et la taille restent donc identiques dans les trois directions.
 4. Gauche et droite utilisent **strictement le même strip SIDE**. La droite est obtenue uniquement par miroir horizontal : aucun second sprite, aucune autre couleur et aucun autre âge ne peuvent être chargés.
-5. Vers le haut = **BACK (dos)**. Vers le bas = **FRONT (face)**.
+5. Vers le haut = **BACK (dos)**. Vers le bas = **FRONT (face)**. La décision de direction se fait dans les coordonnées normalisées de déplacement, sans dépendre du ratio d’écran.
 6. Les 12 humeurs face-joueur du léopardeau (images 1 à 11 + 13 de sa planche) appartiennent uniquement au pack CUB. Ado, adulte et vieux ne doivent jamais réutiliser cette planche.
 7. `CharacterSprites.java` est l'unique catalogue de ressources par âge.
 8. Le workflow GitHub vérifie la séparation physique avant chaque build.
