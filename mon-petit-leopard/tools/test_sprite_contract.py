@@ -10,7 +10,7 @@ assert 'MIN_SLEEP_MS=90000L' in main
 assert 'MIN_FACE_SHARE=.70f' in main
 assert 'showFaceMoodNow' in main
 assert 'energy=100f' in main
-for name in ['releaseWalkFrames','releaseCubFaceMoodFrames']:
+for name in ['releaseWalkFrames','releaseFaceMoodFrames']:
     block=main.split('void '+name+'(){',1)[1].split('\n    }',1)[0]
     assert '.recycle(' not in block, name
 assert 'manualUntil=0;' in main.split('void syncVisualStage(){',1)[1].split('PetStage petStage()',1)[0]
@@ -19,11 +19,11 @@ for age in ['cub','teen','adult','old']:
     for f in (ROOT/f'app/src/main/res-{age}/drawable-nodpi').glob('*'):
         with Image.open(f) as im:
             im.load()
-            if f.name == 'leopard_cub_face_moods.webp':
-                assert age == 'cub'
-                assert im.size == (960,80), f
-                for i in range(12):
-                    b=im.crop((80*i,0,80*(i+1),80)).getbbox()
+            if '_face_moods' in f.stem:
+                assert f.name == f'leopard_{age}_face_moods.webp', f
+                assert im.size == (3520,320), f
+                for i in range(11):
+                    b=im.crop((320*i,0,320*(i+1),320)).getbbox()
                     assert b, (f,i)
                 continue
             count=4 if '_walk_' in f.stem else 1
@@ -48,9 +48,9 @@ class ContractTest {
    check(p.hasFaceMoods() && p.faceFrameSize==320 && p.faceFrameCount==11);
    for(MainActivity.WalkMode m:MainActivity.WalkMode.values())check(p.frameCount(m)==4);
    for(MainActivity.PetMood m:MainActivity.PetMood.values())check(p.ownsMood(p.mood(m)));
-   if(age==MainActivity.PetStage.CUB){
-    check(p.hasFaceMoods()); check(p.faceFrameSize==80); check(p.faceFrameCount==12);
-   } else check(!p.hasFaceMoods());
+   check(p.hasFaceMoods());
+   check(p.faceFrameSize==320);
+   check(p.faceFrameCount==11);
   }
   check(CharacterSprites.FACE_ATLAS_REVIEWED);
   check(SpriteMotion.direction(0,-1,600,450)==SpriteMotion.UP);
