@@ -1,0 +1,67 @@
+name: Verify leopard sprite safety candidate
+on:
+  push:
+    branches: ['fix/leopard-sprite-safety-054']
+    paths:
+      - 'mon-petit-leopard/tools/repair_sprite_safety.py'
+      - '.github/workflows/leopard-sprite-safety-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/fix/leopard-sprite-safety-054'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Dependencies
+        run: |
+          python -m pip install Pillow==11.3.0
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Apply isolated repair
+        run: python mon-petit-leopard/tools/repair_sprite_safety.py
+      - name: Decode assets and test Java contracts
+        run: |
+          python mon-petit-leopard/tools/validate_sprite_packs.py
+          python mon-petit-leopard/tools/test_sprite_contract.py
+          git diff --check
+      - name: Compile Android APK
+        run: gradle -p mon-petit-leopard assembleDebug
+      - name: Commit tested sources on candidate branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mon-petit-leopard/app/src mon-petit-leopard/app/build.gradle mon-petit-leopard/tools mon-petit-leopard/archive mon-petit-leopard/sprite-manifest.json mon-petit-leopard/VISUAL_REVIEW.md mon-petit-leopard/SPRITE_PACKS.md mon-petit-leopard/index.html
+          git commit -m 'Corrige le rendu, normalise les 28 sprites et archive l’atlas tronqué [skip ci]'
+          git push origin HEAD:fix/leopard-sprite-safety-054
+      - name: Package tested snapshot
+        run: |
+          mkdir -p candidate
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk candidate/mon-petit-leopard-v0.5.4-candidate.apk
+          git rev-parse HEAD > candidate/REVISION.txt
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          with ZipFile('candidate/tested-sources.zip','w',ZIP_DEFLATED) as z:
+              root=Path('mon-petit-leopard')
+              for f in root.rglob('*'):
+                  if f.is_file() and 'build' not in f.relative_to(root).parts and '.gradle' not in f.parts:
+                      z.write(f)
+              z.write('.github/workflows/mon-petit-leopard-android.yml')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: leopard-sprite-safety-tested
+          path: candidate/
+          retention-days: 7
