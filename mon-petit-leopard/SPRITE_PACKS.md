@@ -34,9 +34,20 @@ Ces quatre planches 7×7 ont été comparées aux packs compilés. Aucun échang
 L'ancien atlas CUB tronqué reste archivé sous `archive/invalid-assets/` et n'est jamais compilé.
 
 
-## Comportement v0.5.6
+## Comportement v0.5.7
 - Les quatre âges ont leur propre atlas d'humeurs face-joueur, rangé dans leur zone de ressources.
 - Le haut utilise **BACK (dos)** et le bas **FRONT (face)** ; gauche/droite partagent exactement le même SIDE.
 - Après une marche de dos ou de côté, le temps face au joueur est calculé pour garantir au moins **70 %** de temps face hors sommeil.
 - Le sommeil naturel dure **au minimum 1 min 30**. Une fin naturelle du cycle force la jauge Sommeil à **100 %** ; une interaction du joueur peut réveiller le léopard plus tôt.
 - Les réactions heureuses utilisent l'atlas face et n'affichent plus l'ancien PNG happy dont certaines oreilles étaient tronquées.
+
+
+## Préparation runtime v0.5.7
+Les sources v0.5.6 sont figées sous `source-assets/v056/`. Avant chaque build, `tools/prepare_v057_runtime_assets.py` :
+- remargine toutes les poses et marches pour protéger les pointes d'oreilles ;
+- produit **5 phases CUB** pour SIDE / FRONT / BACK sans mélanger les orientations ;
+- nettoie et remargine les atlas d'humeurs face ;
+- conserve salon et jardin dans des zones de déplacement sans mobilier ;
+- recadre le jardin avant les barrières de premier plan.
+
+Dans le moteur : déplacement haut = BACK/dos, bas = FRONT/face, gauche/droite = même SIDE avec miroir.

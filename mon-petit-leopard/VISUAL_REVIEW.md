@@ -40,4 +40,7 @@ L'ancien atlas tronqué reste archivé et désactivé.
 Aucune direction ne charge un fichier d'un autre âge.
 
 
-v0.5.6 réactive un atlas d'humeurs face propre à chaque âge à partir des strips HD déjà archivés dans le dépôt. Les réactions heureuses n'utilisent plus le PNG happy historique aux oreilles tronquées. Les marches restent dans leurs packs d'âge et conservent les sprites FRONT/BACK/SIDE dédiés.
+v0.5.7 réactive un atlas d'humeurs face propre à chaque âge à partir des strips HD déjà archivés dans le dépôt. Les réactions heureuses n'utilisent plus le PNG happy historique aux oreilles tronquées. Les marches restent dans leurs packs d'âge et conservent les sprites FRONT/BACK/SIDE dédiés.
+
+
+v0.5.7 ne prétend pas recréer des pixels déjà absents d'une ancienne image tronquée : le moteur remargine les assets et les réactions utilisent prioritairement les atlas face nettoyés. Les zones salon/jardin ont également été revues pour empêcher le personnage de marcher sur du mobilier ou une barrière.

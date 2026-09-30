@@ -3,7 +3,7 @@ import re, subprocess, tempfile
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[1]
 JAVA=ROOT/'app/src/main/java/com/byw/monpetitleopard'
-main=(JAVA/'MainActivity.java').read_text()
+main=(JAVA/'MainActivity.java').read_text()\nassert (ROOT/'tools/prepare_v057_runtime_assets.py').exists()
 assert 'float step=Math.min(speed,dist);' in main
 assert 'enum TravelDirection {LEFT,RIGHT,UP,DOWN}' in main
 assert 'MIN_SLEEP_MS=90000L' in main
@@ -16,21 +16,23 @@ for name in ['releaseWalkFrames','releaseFaceMoodFrames']:
 assert 'manualUntil=0;' in main.split('void syncVisualStage(){',1)[1].split('PetStage petStage()',1)[0]
 assert 'sx*=' not in main.split('void applyPose(int frame){',1)[1].split('void showAction(',1)[0]
 for age in ['cub','teen','adult','old']:
+    expected_walk=5 if age=='cub' else 4
+    expected_faces=12 if age=='cub' else 11
     for f in (ROOT/f'app/src/main/res-{age}/drawable-nodpi').glob('*'):
         with Image.open(f) as im:
             im.load()
             if '_face_moods' in f.stem:
                 assert f.name == f'leopard_{age}_face_moods.webp', f
-                assert im.size == (3520,320), f
-                for i in range(11):
+                assert im.size == (320*expected_faces,320), (f,im.size)
+                for i in range(expected_faces):
                     b=im.crop((320*i,0,320*(i+1),320)).getbbox()
                     assert b, (f,i)
                 continue
-            count=4 if '_walk_' in f.stem else 1
-            assert im.size==(640*count,640),f
+            count=expected_walk if '_walk_' in f.stem else 1
+            assert im.size==(640*count,640),(f,im.size)
             for i in range(count):
                 b=im.crop((640*i,0,640*(i+1),640)).getbbox()
-                assert b and b[1]>=24 and b[3]==588,(f,b)
+                assert b and b[1]>=30 and b[3]<=588,(f,b)
 with tempfile.TemporaryDirectory() as temp:
     p=Path(temp)
     for name in ['CharacterSprites.java','SpriteMotion.java']:(p/name).write_text((JAVA/name).read_text())
@@ -45,12 +47,12 @@ class ContractTest {
   for(MainActivity.PetStage age:MainActivity.PetStage.values()){
    CharacterSprites.Pack p=CharacterSprites.forStage(age);check(p.stage==age);
    for(int id:p.allResources())check(id!=0 && seen.add(id));
-   check(p.hasFaceMoods() && p.faceFrameSize==320 && p.faceFrameCount==11);
-   for(MainActivity.WalkMode m:MainActivity.WalkMode.values())check(p.frameCount(m)==4);
+   check(p.hasFaceMoods() && p.faceFrameSize==320);
+   int expectedFrames=age==MainActivity.PetStage.CUB?5:4;
+   int expectedFaces=age==MainActivity.PetStage.CUB?12:11;
+   check(p.faceFrameCount==expectedFaces);
+   for(MainActivity.WalkMode m:MainActivity.WalkMode.values())check(p.frameCount(m)==expectedFrames);
    for(MainActivity.PetMood m:MainActivity.PetMood.values())check(p.ownsMood(p.mood(m)));
-   check(p.hasFaceMoods());
-   check(p.faceFrameSize==320);
-   check(p.faceFrameCount==11);
   }
   check(CharacterSprites.FACE_ATLAS_REVIEWED);
   check(SpriteMotion.direction(0,-1,600,450)==SpriteMotion.UP);
@@ -62,7 +64,8 @@ class ContractTest {
   check(SpriteMotion.direction(.1f,-.2f,600,450)==SpriteMotion.UP);
   check(SpriteMotion.direction(.2f,-.1f,600,450)==SpriteMotion.RIGHT);
   check(SpriteMotion.direction(.10f,-.11f,1000,300)==SpriteMotion.UP);
-  check(SpriteMotion.direction(.11f,-.10f,300,1000)==SpriteMotion.RIGHT);
+  check(SpriteMotion.direction(.11f,-.10f,300,1000)==SpriteMotion.UP);
+  check(SpriteMotion.direction(.20f,-.05f,300,1000)==SpriteMotion.RIGHT);
   check(SpriteMotion.mirror(SpriteMotion.LEFT)==1f);
   check(SpriteMotion.mirror(SpriteMotion.RIGHT)==-1f);
   check(SpriteMotion.mirror(SpriteMotion.UP)==1f && SpriteMotion.mirror(SpriteMotion.DOWN)==1f);

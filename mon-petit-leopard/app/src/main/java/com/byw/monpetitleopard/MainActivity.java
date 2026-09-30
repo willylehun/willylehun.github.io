@@ -900,8 +900,6 @@ public class MainActivity extends Activity {
         lp.height=size;
         lp.gravity=Gravity.TOP|Gravity.LEFT;
         petView.setLayoutParams(lp);
-        int earSafety=Math.max(dp(3),Math.round(size*.035f));
-        petView.setPadding(earSafety,earSafety,earSafety,Math.max(dp(1),earSafety/3));
         petView.setPivotX(size/2f);
         petView.setPivotY(size*(588f/640f));
 
@@ -938,16 +936,20 @@ public class MainActivity extends Activity {
             };
         }
         if(room.equals("jardin")){
+            // Jardin v0.5.7 : grille centrale ouverte, sans barrière de premier plan.
+            // Toutes les liaisons sont horizontales ou verticales.
             return new float[][]{
-                // Zone de pelouse ouverte : pas de déplacement sur les barrières du premier plan.
-                {.50f,.82f},{.40f,.75f},{.60f,.75f},{.48f,.67f},
-                {.52f,.59f},{.24f,.72f},{.76f,.72f},{.27f,.82f},{.73f,.82f}
+                {.34f,.90f},{.50f,.90f},{.66f,.90f},
+                {.34f,.74f},{.50f,.74f},{.66f,.74f},
+                {.34f,.58f},{.50f,.58f},{.66f,.58f}
             };
         }
-        // Salon : uniquement le sol et le tapis. Aucun nœud sur le canapé/table/meuble.
+        // Salon v0.5.7 : uniquement le tapis/sol libre devant le canapé.
+        // Le léopard ne peut plus atteindre le guéridon/table latérale.
         return new float[][]{
-            {.14f,.94f},{.32f,.95f},{.50f,.95f},{.68f,.95f},{.86f,.94f},
-            {.18f,.86f},{.38f,.85f},{.62f,.85f},{.82f,.86f}
+            {.30f,.92f},{.50f,.92f},{.70f,.92f},
+            {.30f,.83f},{.50f,.83f},{.70f,.83f},
+            {.30f,.74f},{.50f,.74f},{.70f,.74f}
         };
     }
 
@@ -965,13 +967,15 @@ public class MainActivity extends Activity {
         }
         if(room.equals("jardin")){
             return new int[][]{
-                {1,7,8},{0,2,5},{1,3,6},{2,4},{3},
-                {1,7},{2,8},{0,5},{0,6}
+                {1,3},{0,2,4},{1,5},
+                {0,4,6},{1,3,5,7},{2,4,8},
+                {3,7},{4,6,8},{5,7}
             };
         }
         return new int[][]{
-            {1,5},{0,2,5,6},{1,3,6},{2,4,6,7},{3,7},
-            {0,1,6},{1,2,3,5,7},{3,4,6}
+            {1,3},{0,2,4},{1,5},
+            {0,4,6},{1,3,5,7},{2,4,8},
+            {3,7},{4,6,8},{5,7}
         };
     }
 
@@ -1016,23 +1020,22 @@ public class MainActivity extends Activity {
 
         float dx=targetNX-petNX;
         float dy=targetNY-petNY;
-        float[] rect=imageRect();
-        int direction;
-        // Les trajets entre nœuds sont souvent diagonaux : dès qu'il y a un vrai
-        // déplacement vertical, l'orientation verticale a priorité.
-        if(dy<-.025f)direction=SpriteMotion.UP;
-        else if(dy>.025f)direction=SpriteMotion.DOWN;
-        else direction=dx<0?SpriteMotion.LEFT:SpriteMotion.RIGHT;
-        travelDirection=TravelDirection.values()[direction];
-        walkMode=direction==SpriteMotion.UP?WalkMode.BACK:
-                direction==SpriteMotion.DOWN?WalkMode.FRONT:WalkMode.SIDE;
-        walkDir=direction==SpriteMotion.LEFT?-1:direction==SpriteMotion.RIGHT?1:0;
+        updateTravelDirection(dx,dy);
 
         faceMoodUntil=0;
         activeFaceMood=-1;
         walking=true;
         walkStartedAt=System.currentTimeMillis();
         walkFrameIndex=0;
+    }
+
+    void updateTravelDirection(float dx,float dy){
+        int direction=SpriteMotion.direction(dx,dy,1f,1f);
+        travelDirection=TravelDirection.values()[direction];
+        // Règle stricte : vers le haut = dos, vers le bas = face.
+        walkMode=direction==SpriteMotion.UP?WalkMode.BACK:
+                direction==SpriteMotion.DOWN?WalkMode.FRONT:WalkMode.SIDE;
+        walkDir=direction==SpriteMotion.LEFT?-1:direction==SpriteMotion.RIGHT?1:0;
     }
 
     float depthScale(){
@@ -1339,6 +1342,7 @@ public class MainActivity extends Activity {
 
             float speed=stage()==Stage.OLD?.0048f:stage()==Stage.CUB?.0066f:.0075f;
             float step=Math.min(speed,dist);
+            updateTravelDirection(dx,dy);
             petNX+=dx/dist*step;
             petNY+=dy/dist*step;
 
@@ -1776,8 +1780,14 @@ public class MainActivity extends Activity {
                     opts.inJustDecodeBounds=true;
                     opts.inScaled=false;
                     BitmapFactory.decodeResource(getResources(),res,opts);
-                    int width=pack.ownsMood(res)?640:res==pack.faceMoods?pack.faceFrameSize*pack.faceFrameCount:2560;
+                    int width;
                     int height=res==pack.faceMoods?pack.faceFrameSize:640;
+                    if(pack.ownsMood(res))width=640;
+                    else if(res==pack.faceMoods)width=pack.faceFrameSize*pack.faceFrameCount;
+                    else if(res==pack.walkSide)width=640*pack.sideFrames;
+                    else if(res==pack.walkFront)width=640*pack.frontFrames;
+                    else if(res==pack.walkBack)width=640*pack.backFrames;
+                    else throw new IllegalArgumentException("ressource hors pack : "+name);
                     if(opts.outWidth!=width || opts.outHeight!=height)
                         throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+" au lieu de "+width+"x"+height);
                 }catch(RuntimeException error){

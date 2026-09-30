@@ -16,10 +16,10 @@ PACKS = {
             "leopard_cub_happy.png": (640, 640),
             "leopard_cub_tired.png": (640, 640),
             "leopard_cub_sleep.png": (640, 640),
-            "leopard_cub_walk_side.webp": (2560, 640),
-            "leopard_cub_walk_front.webp": (2560, 640),
-            "leopard_cub_walk_back.webp": (2560, 640),
-            "leopard_cub_face_moods.webp": (3520, 320),
+            "leopard_cub_walk_side.webp": (3200, 640),
+            "leopard_cub_walk_front.webp": (3200, 640),
+            "leopard_cub_walk_back.webp": (3200, 640),
+            "leopard_cub_face_moods.webp": (3840, 320),
         },
     },
     "teen": {
@@ -143,7 +143,7 @@ def main() -> None:
 
         print(f"OK {stage}: {len(expected)} assets séparés et valides")
 
-    print("OK technique: 4 packs séparés, directions et atlas d’humeurs par âge disponibles.")
+    print("OK v0.5.7: packs séparés, CUB 5 frames, oreilles remarginées, atlas face et directions validés.")
 
 if __name__ == "__main__":
     main()

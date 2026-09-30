@@ -46,7 +46,7 @@ final class CharacterSprites {
     private static final Pack CUB=new Pack(MainActivity.PetStage.CUB,"res-cub",
         R.drawable.leopard_cub_idle,R.drawable.leopard_cub_happy,R.drawable.leopard_cub_tired,R.drawable.leopard_cub_sleep,
         R.drawable.leopard_cub_walk_side,R.drawable.leopard_cub_walk_front,R.drawable.leopard_cub_walk_back,
-        R.drawable.leopard_cub_face_moods,320,11,4,4,4);
+        R.drawable.leopard_cub_face_moods,320,12,5,5,5);
     private static final Pack TEEN=new Pack(MainActivity.PetStage.TEEN,"res-teen",
         R.drawable.leopard_teen_idle,R.drawable.leopard_teen_happy,R.drawable.leopard_teen_tired,R.drawable.leopard_teen_sleep,
         R.drawable.leopard_teen_walk_side,R.drawable.leopard_teen_walk_front,R.drawable.leopard_teen_walk_back,
