@@ -8,8 +8,22 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 15
-        versionName '0.5.0'
+        versionCode 16
+        versionName '0.5.1'
+    }
+
+    sourceSets {
+        main {
+            // Quatre zones physiques indépendantes : aucun sprite de personnage
+            // ne reste dans res/drawable-nodpi.
+            res.srcDirs = [
+                'src/main/res',
+                'src/main/res-cub',
+                'src/main/res-teen',
+                'src/main/res-adult',
+                'src/main/res-old'
+            ]
+        }
     }
 
     compileOptions {
@@ -18,4 +32,4 @@ android {
     }
 }
 
-// Character assets normalized per age, direction and face moods for v0.5.0
+// Character sprite packs physically separated and validated for v0.5.1

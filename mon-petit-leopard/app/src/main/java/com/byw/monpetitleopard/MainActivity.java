@@ -599,75 +599,11 @@ public class MainActivity extends Activity {
     }
 
     int getMoodDrawable(PetStage stage,PetMood mood){
-        switch(stage){
-            case CUB:
-                switch(mood){
-                    case HAPPY:return R.drawable.leopard_cub_happy;
-                    case TIRED:return R.drawable.leopard_cub_tired;
-                    case SLEEP:return R.drawable.leopard_cub_sleep;
-                    case IDLE:return R.drawable.leopard_cub_idle;
-                }
-                break;
-            case TEEN:
-                switch(mood){
-                    case HAPPY:return R.drawable.leopard_teen_happy;
-                    case TIRED:return R.drawable.leopard_teen_tired;
-                    case SLEEP:return R.drawable.leopard_teen_sleep;
-                    case IDLE:return R.drawable.leopard_teen_idle;
-                }
-                break;
-            case ADULT:
-                switch(mood){
-                    case HAPPY:return R.drawable.leopard_adult_happy;
-                    case TIRED:return R.drawable.leopard_adult_tired;
-                    case SLEEP:return R.drawable.leopard_adult_sleep;
-                    case IDLE:return R.drawable.leopard_adult_idle;
-                }
-                break;
-            case OLD:
-                switch(mood){
-                    case HAPPY:return R.drawable.leopard_old_happy;
-                    case TIRED:return R.drawable.leopard_old_tired;
-                    case SLEEP:return R.drawable.leopard_old_sleep;
-                    case IDLE:return R.drawable.leopard_old_idle;
-                }
-                break;
-        }
-        throw new IllegalStateException("Couple âge/humeur non pris en charge : "+stage+"/"+mood);
+        return CharacterSprites.forStage(stage).mood(mood);
     }
 
     int getWalkStrip(PetStage stage,WalkMode mode){
-        switch(stage){
-            case CUB:
-                switch(mode){
-                    case FRONT:return R.drawable.leopard_cub_walk_front;
-                    case BACK:return R.drawable.leopard_cub_walk_back;
-                    case SIDE:return R.drawable.leopard_cub_walk_side;
-                }
-                break;
-            case TEEN:
-                switch(mode){
-                    case FRONT:return R.drawable.leopard_teen_walk_front;
-                    case BACK:return R.drawable.leopard_teen_walk_back;
-                    case SIDE:return R.drawable.leopard_teen_walk_side;
-                }
-                break;
-            case ADULT:
-                switch(mode){
-                    case FRONT:return R.drawable.leopard_adult_walk_front;
-                    case BACK:return R.drawable.leopard_adult_walk_back;
-                    case SIDE:return R.drawable.leopard_adult_walk_side;
-                }
-                break;
-            case OLD:
-                switch(mode){
-                    case FRONT:return R.drawable.leopard_old_walk_front;
-                    case BACK:return R.drawable.leopard_old_walk_back;
-                    case SIDE:return R.drawable.leopard_old_walk_side;
-                }
-                break;
-        }
-        throw new IllegalStateException("Couple âge/marche non pris en charge : "+stage+"/"+mode);
+        return CharacterSprites.forStage(stage).walk(mode);
     }
 
     int idleDrawable(){return getMoodDrawable(petStage(),PetMood.IDLE);}
@@ -686,7 +622,7 @@ public class MainActivity extends Activity {
         return getWalkStrip(petStage(),mode);
     }
 
-    int cubFaceMoodStripRes(){return R.drawable.leopard_cub_face_moods;}
+    int cubFaceMoodStripRes(){return CharacterSprites.forStage(PetStage.CUB).faceMoods;}
 
     void releaseCubFaceMoodFrames(){
         if(cubFaceMoodFrames!=null){
@@ -706,7 +642,8 @@ public class MainActivity extends Activity {
             showAssetErrorOnce();
             return false;
         }
-        if(cubFaceMoodFrames!=null && cubFaceMoodFrames.length==12)return true;
+        CharacterSprites.Pack pack=CharacterSprites.forStage(PetStage.CUB);
+        if(cubFaceMoodFrames!=null && cubFaceMoodFrames.length==pack.faceFrameCount)return true;
 
         releaseCubFaceMoodFrames();
 
@@ -718,8 +655,8 @@ public class MainActivity extends Activity {
             return false;
         }
 
-        final int frame=80;
-        final int count=12; // images 1 à 11 + image 13 de la planche léopardeau
+        final int frame=pack.faceFrameSize;
+        final int count=pack.faceFrameCount; // images 1 à 11 + image 13 de la planche léopardeau
         if(strip.getWidth()!=frame*count || strip.getHeight()!=frame){
             int w=strip.getWidth(),h=strip.getHeight();
             strip.recycle();
@@ -1727,14 +1664,11 @@ public class MainActivity extends Activity {
     void showAssetErrorOnce(){
         if(assetErrorShown)return;
         assetErrorShown=true;
-        toast("⚠ Asset du léopard invalide : animation désactivée, aucun autre âge ne sera utilisé.");
+        toast("⚠ Pack de sprites invalide : animation désactivée, aucun autre âge ne sera utilisé.");
     }
 
     boolean isMoodResourceForStage(PetStage stage,int res){
-        for(PetMood mood:PetMood.values()){
-            if(getMoodDrawable(stage,mood)==res)return true;
-        }
-        return false;
+        return CharacterSprites.forStage(stage).ownsMood(res);
     }
 
     boolean setPetDrawableSafely(PetStage expectedStage,int res){
@@ -1765,10 +1699,24 @@ public class MainActivity extends Activity {
         invalidCharacterAssets.clear();
         assetErrorShown=false;
 
+        HashMap<Integer,PetStage> owners=new HashMap<>();
+
         for(PetStage stage:PetStage.values()){
+            CharacterSprites.Pack pack=CharacterSprites.forStage(stage);
+
+            // Une ressource graphique ne peut appartenir qu'à un seul âge.
+            for(int res:pack.allResources()){
+                if(res==0)continue;
+                PetStage previous=owners.put(res,stage);
+                if(previous!=null && previous!=stage){
+                    markCharacterAssetInvalid(res,stage+" PACK",
+                        "ressource déjà attribuée à "+previous+" : partage inter-âge interdit");
+                }
+            }
+
             int poseW=-1,poseH=-1;
             for(PetMood mood:PetMood.values()){
-                int res=getMoodDrawable(stage,mood);
+                int res=pack.mood(mood);
                 Bitmap b=null;
                 try{b=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
                 if(b==null){
@@ -1785,9 +1733,8 @@ public class MainActivity extends Activity {
                 b.recycle();
             }
 
-            int stripH=-1;
             for(WalkMode mode:WalkMode.values()){
-                int res=getWalkStrip(stage,mode);
+                int res=pack.walk(mode);
                 Bitmap b=null;
                 try{b=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
                 if(b==null){
@@ -1796,29 +1743,34 @@ public class MainActivity extends Activity {
                 }
 
                 int w=b.getWidth(),h=b.getHeight();
-                if(stripH<0)stripH=h;
-                boolean badHeight=h!=stripH || h!=640;
-                boolean badFrames=h<=0 || w<h || w%h!=0 || (w/h)<4;
-                if(badHeight || badFrames){
+                int expectedFrames=pack.frameCount(mode);
+                boolean invalid=h!=640 || w!=640*expectedFrames;
+                if(invalid){
                     markCharacterAssetInvalid(res,stage+" "+mode,
-                        w+"x"+h+" : attendu hauteur 640 et frames carrées de 640x640");
+                        w+"x"+h+" : attendu "+expectedFrames+" frames de 640x640");
                 }
                 b.recycle();
             }
-        }
 
-        int faceRes=cubFaceMoodStripRes();
-        Bitmap face=null;
-        try{face=BitmapFactory.decodeResource(getResources(),faceRes);}catch(Throwable ignored){}
-        if(face==null){
-            markCharacterAssetInvalid(faceRes,"CUB FACE_MOODS","ressource manquante ou illisible");
-        }else{
-            int fw=face.getWidth(),fh=face.getHeight();
-            if(fw!=960 || fh!=80){
-                markCharacterAssetInvalid(faceRes,"CUB FACE_MOODS",
-                    fw+"x"+fh+" : attendu 12 frames de 80x80");
+            // Les humeurs face-joueur sont propres au pack qui les possède.
+            // Aucun âge ne peut emprunter la planche d'un autre.
+            if(pack.hasFaceMoods()){
+                Bitmap face=null;
+                try{face=BitmapFactory.decodeResource(getResources(),pack.faceMoods);}catch(Throwable ignored){}
+                if(face==null){
+                    markCharacterAssetInvalid(pack.faceMoods,stage+" FACE_MOODS",
+                        "ressource manquante ou illisible");
+                }else{
+                    int fw=face.getWidth(),fh=face.getHeight();
+                    int expectedW=pack.faceFrameSize*pack.faceFrameCount;
+                    if(fw!=expectedW || fh!=pack.faceFrameSize){
+                        markCharacterAssetInvalid(pack.faceMoods,stage+" FACE_MOODS",
+                            fw+"x"+fh+" : attendu "+pack.faceFrameCount+
+                            " frames de "+pack.faceFrameSize+"x"+pack.faceFrameSize);
+                    }
+                    face.recycle();
+                }
             }
-            face.recycle();
         }
 
         if(!invalidCharacterAssets.isEmpty())showAssetErrorOnce();
