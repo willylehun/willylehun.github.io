@@ -20,7 +20,6 @@ PACKS = {
             "leopard_cub_walk_front.webp": (2560, 640),
             "leopard_cub_walk_back.webp": (2560, 640),
             "leopard_cub_face_moods.webp": (3520, 320),
-            "leopard_cub_face_moods.webp": (960, 80),
         },
     },
     "teen": {
