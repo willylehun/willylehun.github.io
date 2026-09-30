@@ -3,7 +3,8 @@ import re, subprocess, tempfile
 from PIL import Image
 ROOT=Path(__file__).resolve().parents[1]
 JAVA=ROOT/'app/src/main/java/com/byw/monpetitleopard'
-main=(JAVA/'MainActivity.java').read_text()\nassert (ROOT/'tools/prepare_v057_runtime_assets.py').exists()
+main=(JAVA/'MainActivity.java').read_text()
+assert (ROOT/'tools/prepare_v057_runtime_assets.py').exists()
 assert 'float step=Math.min(speed,dist);' in main
 assert 'enum TravelDirection {LEFT,RIGHT,UP,DOWN}' in main
 assert 'MIN_SLEEP_MS=90000L' in main
