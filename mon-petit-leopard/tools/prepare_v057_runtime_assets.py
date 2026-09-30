@@ -2,6 +2,7 @@
 from pathlib import Path
 from collections import deque
 from PIL import Image, ImageFilter
+import numpy as np
 
 ROOT=Path(__file__).resolve().parents[1]
 SRC=ROOT/"source-assets"/"v056"
@@ -13,33 +14,25 @@ def white_to_alpha(im):
     a=im.getchannel("A")
     if a.getextrema()[0] < 250:
         return im
-    rgb=im.convert("RGB")
-    w,h=rgb.size
-    px=rgb.load()
-    cand=[[False]*w for _ in range(h)]
-    for y in range(h):
-        row=cand[y]
-        for x in range(w):
-            r,g,b=px[x,y]
-            row[x]=(min(r,g,b)>188 and max(r,g,b)-min(r,g,b)<40) or min(r,g,b)>235
-    bg=[[False]*w for _ in range(h)]
+    rgb=np.asarray(im.convert("RGB"))
+    h,w,_=rgb.shape
+    mn=rgb.min(axis=2); mx=rgb.max(axis=2)
+    cand=((mn>188)&((mx-mn)<40)) | (mn>235)
+    bg=np.zeros((h,w),dtype=np.bool_)
     q=deque()
     for x in range(w):
-        for y in (0,h-1):
-            if cand[y][x] and not bg[y][x]: bg[y][x]=True;q.append((x,y))
+        if cand[0,x]: bg[0,x]=True;q.append((x,0))
+        if cand[h-1,x] and not bg[h-1,x]: bg[h-1,x]=True;q.append((x,h-1))
     for y in range(h):
-        for x in (0,w-1):
-            if cand[y][x] and not bg[y][x]: bg[y][x]=True;q.append((x,y))
+        if cand[y,0] and not bg[y,0]: bg[y,0]=True;q.append((0,y))
+        if cand[y,w-1] and not bg[y,w-1]: bg[y,w-1]=True;q.append((w-1,y))
     while q:
         x,y=q.popleft()
-        for xx,yy in ((x-1,y),(x+1,y),(x,y-1),(x,y+1)):
-            if 0<=xx<w and 0<=yy<h and cand[yy][xx] and not bg[yy][xx]:
-                bg[yy][xx]=True;q.append((xx,yy))
-    alpha=Image.new("L",(w,h),255); ap=alpha.load()
-    for y in range(h):
-        for x in range(w):
-            if bg[y][x]: ap[x,y]=0
-    alpha=alpha.filter(ImageFilter.GaussianBlur(.7))
+        if x>0 and cand[y,x-1] and not bg[y,x-1]: bg[y,x-1]=True;q.append((x-1,y))
+        if x+1<w and cand[y,x+1] and not bg[y,x+1]: bg[y,x+1]=True;q.append((x+1,y))
+        if y>0 and cand[y-1,x] and not bg[y-1,x]: bg[y-1,x]=True;q.append((x,y-1))
+        if y+1<h and cand[y+1,x] and not bg[y+1,x]: bg[y+1,x]=True;q.append((x,y+1))
+    alpha=Image.fromarray(np.where(bg,0,255).astype("uint8"),"L").filter(ImageFilter.GaussianBlur(.7))
     im.putalpha(alpha)
     return im
 
