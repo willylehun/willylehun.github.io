@@ -1,20 +1,40 @@
-# Revue visuelle à terminer — ne pas déclarer les dessins validés
+# Revue visuelle — sprites
 
-La planche utilisateur 1000006717.png est une grille de **7 colonnes × 7 lignes**.
-L'ancienne annotation cub_annotated.png en 8×8 est erronée et ne doit pas servir au découpage.
-Numérotation correcte, ligne par ligne : humeurs 1–11 +13, idle 13, tired 15,
-sleep 42, happy 48, walk_front 23–26, walk_back 27–30, walk_side 31–34.
-Les références originales ado/adulte/vieux ne sont pas présentes dans cette reprise.
-La ressemblance entre la planche CUB fournie et certains fichiers TEEN doit être résolue
-à partir des planches originales : ne pas permuter les deux packs par supposition.
+## Sources confirmées
 
-Certaines oreilles sont déjà tronquées dans les images happy et side existantes.
-Une marge de transparence ne reconstitue pas ces pixels. Les sprites gardent leur âge
-actuellement attribué en attendant validation graphique. Aucun échange entre packs.
-L'ancien atlas de portraits CUB de 80px est tronqué : 14955 octets présents pour
-30542 octets annoncés par RIFF. Échec confirmé par Pillow et ImageMagick.
-Il est archivé hors des ressources Android et désactivé pour éviter qu'une extraction
-non vérifiée remplace le corps du léopard. Les réactions utilisent provisoirement
-les poses happy/tired du même pack.
+Les quatre planches originales 7×7 ont été retrouvées et comparées aux packs Android :
 
-v0.5.5 conserve l’isolation stricte des quatre âges et corrige aussi la décision haut/bas dans l’espace normalisé. Les dessins ambigus ou tronqués ne sont toujours pas permutés par supposition.
+- `1000006717.png` → **Léopardeau / CUB**
+- `1000006719.png` → **Ado / TEEN**
+- `1000006718.png` → **Adulte / ADULT**
+- `1000006720.png` → **Vieux / OLD**
+
+La précédente annotation 8×8 était incorrecte et n'est plus utilisée.
+
+## Mapping de la planche CUB
+
+Numérotation ligne par ligne sur la grille 7×7 :
+
+- humeurs face joueur : **1 à 11 + 13**
+- idle : **13**
+- tired : **15**
+- walk_front : **23–26**
+- walk_back : **27–30**
+- walk_side : **31–34**
+- sleep : **42**
+- happy : **48**
+
+Le nouvel atlas `leopard_cub_face_moods.webp` a été régénéré directement depuis les images 1–11 +13 de la source CUB, en 12 frames de 80×80 (960×80 au total). Son SHA-256 attendu est :
+
+`f658bd06425abe67ab06475c8f84399db01e9230b430623f9bdde52ebe577083`
+
+L'ancien atlas tronqué reste archivé et désactivé.
+
+## Directions
+
+- gauche : SIDE natif
+- droite : miroir horizontal du même SIDE
+- haut : BACK / dos
+- bas : FRONT / face
+
+Aucune direction ne charge un fichier d'un autre âge.

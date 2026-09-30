@@ -15,6 +15,13 @@ for age in ['cub','teen','adult','old']:
     for f in (ROOT/f'app/src/main/res-{age}/drawable-nodpi').glob('*'):
         with Image.open(f) as im:
             im.load()
+            if f.name == 'leopard_cub_face_moods.webp':
+                assert age == 'cub'
+                assert im.size == (960,80), f
+                for i in range(12):
+                    b=im.crop((80*i,0,80*(i+1),80)).getbbox()
+                    assert b, (f,i)
+                continue
             count=4 if '_walk_' in f.stem else 1
             assert im.size==(640*count,640),f
             for i in range(count):
@@ -36,7 +43,11 @@ class ContractTest {
    for(int id:p.allResources())check(id!=0 && seen.add(id));
    for(MainActivity.WalkMode m:MainActivity.WalkMode.values())check(p.frameCount(m)==4);
    for(MainActivity.PetMood m:MainActivity.PetMood.values())check(p.ownsMood(p.mood(m)));
+   if(age==MainActivity.PetStage.CUB){
+    check(p.hasFaceMoods()); check(p.faceFrameSize==80); check(p.faceFrameCount==12);
+   } else check(!p.hasFaceMoods());
   }
+  check(CharacterSprites.FACE_ATLAS_REVIEWED);
   check(SpriteMotion.direction(0,-1,600,450)==SpriteMotion.UP);
   check(SpriteMotion.direction(0,1,600,450)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(-1,0,600,450)==SpriteMotion.LEFT);

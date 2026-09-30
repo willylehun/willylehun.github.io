@@ -1,6 +1,6 @@
 # Packs de sprites — Mon Petit Léopard
 
-Les sprites du personnage sont maintenant séparés physiquement et logiquement par âge.
+Les sprites du personnage sont séparés physiquement et logiquement par âge.
 
 ## Zones Android
 
@@ -9,20 +9,26 @@ Les sprites du personnage sont maintenant séparés physiquement et logiquement 
 - `app/src/main/res-adult/drawable-nodpi/` — **Adulte**
 - `app/src/main/res-old/drawable-nodpi/` — **Vieux**
 
-Les décors restent dans `app/src/main/res/drawable-nodpi/`. Aucun fichier `leopard_*` ne doit rester dans cette zone commune.
+Les décors restent dans `app/src/main/res/drawable-nodpi/`. Aucun `leopard_*` ne doit rester dans cette zone commune.
 
-## Règles
+## Références visuelles retrouvées
 
-1. Aucun fallback inter-âge. Si un asset d'un âge est absent ou invalide, l'animation est bloquée au lieu d'utiliser un autre âge.
-2. Les quatre poses statiques de chaque pack sont exactement en **640 × 640**.
-3. Les strips de marche ont une hauteur de **640 px**. Le moteur affiche **exactement 4 frames** pour SIDE, FRONT et BACK. Les strips SIDE, FRONT et BACK exportés contiennent chacun 4 frames : la cadence et la taille restent donc identiques dans les trois directions.
-4. Gauche et droite utilisent **strictement le même strip SIDE**. La droite est obtenue uniquement par miroir horizontal : aucun second sprite, aucune autre couleur et aucun autre âge ne peuvent être chargés.
-5. Vers le haut = **BACK (dos)**. Vers le bas = **FRONT (face)**. La décision de direction se fait dans les coordonnées normalisées de déplacement, sans dépendre du ratio d’écran.
-6. Les 12 humeurs face-joueur du léopardeau (images 1 à 11 + 13 de sa planche) appartiennent uniquement au pack CUB. Ado, adulte et vieux ne doivent jamais réutiliser cette planche.
-7. `CharacterSprites.java` est l'unique catalogue de ressources par âge.
-8. Le workflow GitHub vérifie la séparation physique avant chaque build.
+- CUB / Léopardeau : `1000006717.png`
+- TEEN / Ado : `1000006719.png`
+- ADULT / Adulte : `1000006718.png`
+- OLD / Vieux : `1000006720.png`
 
-Les anciens dossiers de travail sont conservés sous `archive/legacy-assets/` afin qu'ils ne puissent plus être confondus avec les ressources réellement compilées.
+Ces quatre planches 7×7 ont été comparées aux packs compilés. Aucun échange de ressources entre âges n'est autorisé.
 
-## Limites de validation
-Voir VISUAL_REVIEW.md : seuls les contrôles techniques sont validés. L’atlas de portraits est archivé car tronqué, non utilisé.
+## Contrat
+
+1. Aucun fallback inter-âge. Une ressource absente/invalide bloque l'animation au lieu de prendre un autre âge.
+2. Les poses statiques font **640×640**.
+3. SIDE, FRONT et BACK font **4×640×640**, soit **2560×640**.
+4. Gauche et droite utilisent le **même SIDE** ; la droite est seulement son miroir horizontal.
+5. Haut = **BACK / dos**. Bas = **FRONT / face**. La direction est calculée dans les coordonnées normalisées de la scène.
+6. Le CUB possède en plus `leopard_cub_face_moods.webp` : **12 vues de face 80×80**, issues des images **1–11 + 13** de `1000006717.png`.
+7. Cette planche d'humeurs appartient exclusivement au CUB. TEEN, ADULT et OLD ne peuvent pas la charger.
+8. `CharacterSprites.java` est la source unique de vérité et les tests CI vérifient dimensions, séparation et directions.
+
+L'ancien atlas CUB tronqué reste archivé sous `archive/invalid-assets/` et n'est jamais compilé.

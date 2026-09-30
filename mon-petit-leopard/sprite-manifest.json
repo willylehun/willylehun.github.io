@@ -1,6 +1,6 @@
 {
   "version": "0.5.5",
-  "visual_review": "PENDING; dimensions do not establish age or repair clipped ears",
+  "visual_review": "Four 7x7 source sheets recovered and mapped; CUB face atlas regenerated and enabled.",
   "packs": {
     "cub": {
       "leopard_cub_happy.png": {
@@ -203,6 +203,20 @@
             588
           ]
         ]
+      },
+      "leopard_cub_face_moods.webp": {
+        "source": "1000006717.png cells 1-11 + 13",
+        "sha256": "f658bd06425abe67ab06475c8f84399db01e9230b430623f9bdde52ebe577083",
+        "size": [
+          960,
+          80
+        ],
+        "frame_count": 12,
+        "frame_size": [
+          80,
+          80
+        ],
+        "reviewed": true
       }
     },
     "teen": {
@@ -814,5 +828,11 @@
         ]
       }
     }
+  },
+  "source_sheets": {
+    "cub": "1000006717.png",
+    "teen": "1000006719.png",
+    "adult": "1000006718.png",
+    "old": "1000006720.png"
   }
 }

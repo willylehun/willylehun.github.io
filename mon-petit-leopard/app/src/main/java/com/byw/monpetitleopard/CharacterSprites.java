@@ -7,9 +7,10 @@ package com.byw.monpetitleopard;
  * Aucun fallback vers un autre âge n'existe ici.
  */
 final class CharacterSprites {
-    // 7x7 user reference; previous 8x8 annotations are invalid.
-    // Truncated portrait atlas archived, never borrowed by another age.
-    static final boolean FACE_ATLAS_REVIEWED=false;
+    // Référence CUB utilisateur confirmée : grille 7x7.
+    // L'ancien atlas tronqué reste archivé ; celui utilisé ci-dessous a été
+    // régénéré depuis les cellules 1 à 11 + 13 puis validé en 12 x 80x80.
+    static final boolean FACE_ATLAS_REVIEWED=true;
     static final class Pack {
         final MainActivity.PetStage stage;
         final String zone;
@@ -95,7 +96,7 @@ final class CharacterSprites {
         R.drawable.leopard_cub_walk_side,
         R.drawable.leopard_cub_walk_front,
         R.drawable.leopard_cub_walk_back,
-        0,0,0,
+        R.drawable.leopard_cub_face_moods,80,12,
         4,4,4
     );
 
