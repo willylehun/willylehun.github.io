@@ -520,6 +520,7 @@ public class MainActivity extends Activity {
     }
 
     void ensurePetImage(){
+        syncVisualStage();
         boolean faceActive=petStage()==PetStage.CUB
                 && !sleeping
                 && !walking
@@ -541,7 +542,8 @@ public class MainActivity extends Activity {
         int res=0;
         if(!faceActive){
             if(sleeping)res=sleepDrawable();
-            else if(!walking)res=emotionDrawable();
+            else if(!walking)res=System.currentTimeMillis()<manualUntil
+                    ?poseDrawableForFrame(manualFrame):emotionDrawable();
         }
 
         if(res!=0){
@@ -557,7 +559,8 @@ public class MainActivity extends Activity {
         }
 
         petView.setAlpha(1f);
-        petView.setVisibility(View.VISIBLE);
+        petView.setVisibility(displayedPetStage==petStage()
+                && petView.getDrawable()!=null?View.VISIBLE:View.INVISIBLE);
         petView.bringToFront();
         incidentView.bringToFront();
         moodLabel.bringToFront();
@@ -571,6 +574,14 @@ public class MainActivity extends Activity {
 
         PetStage previous=visualStage;
         visualStage=now;
+        manualUntil=0;
+        manualFrame=0;
+        if(petView!=null){
+            petView.setImageDrawable(null);
+            petView.setRotation(0f);
+            petView.setScaleX(1f);
+            petView.setScaleY(1f);
+        }
 
         // Un changement d'âge invalide immédiatement toute image/animation
         // déjà chargée. Ainsi aucun frame de l'âge précédent ne peut rester
@@ -629,12 +640,6 @@ public class MainActivity extends Activity {
     int cubFaceMoodStripRes(){return CharacterSprites.forStage(PetStage.CUB).faceMoods;}
 
     void releaseCubFaceMoodFrames(){
-        if(cubFaceMoodFrames!=null){
-            for(Bitmap b:cubFaceMoodFrames){
-                if(b!=null && !b.isRecycled())b.recycle();
-            }
-        }
-        if(cubFaceMoodStrip!=null && !cubFaceMoodStrip.isRecycled())cubFaceMoodStrip.recycle();
         cubFaceMoodFrames=null;
         cubFaceMoodStrip=null;
     }
@@ -701,6 +706,7 @@ public class MainActivity extends Activity {
     }
 
     void maybeShowFaceMood(long now){
+        if(!CharacterSprites.FACE_ATLAS_REVIEWED)return;
         if(petStage()!=PetStage.CUB || sleeping || walking || now<manualUntil)return;
         if(nextFaceMoodAt==0){
             nextFaceMoodAt=now+2500L+rnd.nextInt(2501);
@@ -713,6 +719,10 @@ public class MainActivity extends Activity {
     }
 
     void showCubFaceMoodNow(int index,int duration){
+        if(!CharacterSprites.FACE_ATLAS_REVIEWED){
+            showAction(strongEmotion()?3:11,duration);
+            return;
+        }
         if(petStage()!=PetStage.CUB)return;
         walking=false;
         walkMode=WalkMode.SIDE;
@@ -727,12 +737,7 @@ public class MainActivity extends Activity {
     }
 
     void releaseWalkFrames(){
-        if(currentWalkFrames!=null){
-            for(Bitmap b:currentWalkFrames){
-                if(b!=null && !b.isRecycled())b.recycle();
-            }
-        }
-        if(currentWalkStrip!=null && !currentWalkStrip.isRecycled())currentWalkStrip.recycle();
+        // ImageView / RenderThread may still reference these bitmaps: let GC reclaim them.
         currentWalkFrames=null;
         currentWalkStrip=null;
         currentWalkStripRes=0;
@@ -773,7 +778,7 @@ public class MainActivity extends Activity {
 
         int w=strip.getWidth();
         int h=strip.getHeight();
-        if(h<=0 || w<h || w%h!=0){
+        if(h!=640 || w!=2560){
             strip.recycle();
             markCharacterAssetInvalid(res,"strip de marche",w+"x"+h+" : frames non carrées");
             showAssetErrorOnce();
@@ -782,7 +787,7 @@ public class MainActivity extends Activity {
 
         int sourceCount=w/h;
         int count=CharacterSprites.forStage(expectedStage).frameCount(expectedMode);
-        if(sourceCount<count){
+        if(sourceCount!=count){
             strip.recycle();
             markCharacterAssetInvalid(res,"strip de marche",
                 w+"x"+h+" : "+sourceCount+" frames trouvées, au moins "+count+
@@ -900,7 +905,7 @@ public class MainActivity extends Activity {
         lp.gravity=Gravity.TOP|Gravity.LEFT;
         petView.setLayoutParams(lp);
         petView.setPivotX(size/2f);
-        petView.setPivotY(size);
+        petView.setPivotY(size*(588f/640f));
 
         FrameLayout.LayoutParams incidentLp=(FrameLayout.LayoutParams)incidentView.getLayoutParams();
         int incidentSize=Math.max(dp(40),Math.round(r[2]*.09f));
@@ -1012,17 +1017,12 @@ public class MainActivity extends Activity {
 
         float dx=targetNX-petNX;
         float dy=targetNY-petNY;
-        // Mode figé pendant tout le segment pour éviter les changements
-        // d'animation en plein mouvement.
-        if(Math.abs(dy)>Math.abs(dx)*.70f){
-            travelDirection=dy>0?TravelDirection.DOWN:TravelDirection.UP;
-            walkMode=travelDirection==TravelDirection.DOWN?WalkMode.FRONT:WalkMode.BACK;
-            walkDir=0;
-        }else{
-            travelDirection=dx<0?TravelDirection.LEFT:TravelDirection.RIGHT;
-            walkMode=WalkMode.SIDE;
-            walkDir=travelDirection==TravelDirection.LEFT?-1:1;
-        }
+        float[] rect=imageRect();
+        int direction=SpriteMotion.direction(dx,dy,rect[2],rect[3]);
+        travelDirection=TravelDirection.values()[direction];
+        walkMode=direction==SpriteMotion.UP?WalkMode.BACK:
+                direction==SpriteMotion.DOWN?WalkMode.FRONT:WalkMode.SIDE;
+        walkDir=direction==SpriteMotion.LEFT?-1:direction==SpriteMotion.RIGHT?1:0;
 
         faceMoodUntil=0;
         activeFaceMood=-1;
@@ -1052,7 +1052,7 @@ public class MainActivity extends Activity {
 
         float left=r[0]+petNX*r[2]-petView.getWidth()/2f;
         float feet=r[1]+petNY*r[3];
-        float top=feet-petView.getHeight();
+        float top=feet-petView.getHeight()*(588f/640f);
 
         petView.setX(left);
         petView.setY(top);
@@ -1062,12 +1062,13 @@ public class MainActivity extends Activity {
         // Le déplacement vers la droite est uniquement un miroir horizontal.
         float sign=1f;
         if(walking && walkMode==WalkMode.SIDE){
-            sign=travelDirection==TravelDirection.RIGHT?-1f:1f;
+            sign=SpriteMotion.mirror(travelDirection.ordinal());
         }
         petView.setScaleX(sign*s);
         petView.setScaleY(s);
         petView.setAlpha(1f);
-        petView.setVisibility(View.VISIBLE);
+        petView.setVisibility(displayedPetStage==petStage()
+                && petView.getDrawable()!=null?View.VISIBLE:View.INVISIBLE);
         petView.bringToFront();
         incidentView.bringToFront();
         moodLabel.bringToFront();
@@ -1325,8 +1326,9 @@ public class MainActivity extends Activity {
             }
 
             float speed=stage()==Stage.OLD?.0048f:stage()==Stage.CUB?.0066f:.0075f;
-            petNX+=dx/dist*speed;
-            petNY+=dy/dist*speed;
+            float step=Math.min(speed,dist);
+            petNX+=dx/dist*step;
+            petNY+=dy/dist*step;
 
             showWalkFrame(walkMode);
             updatePetPosition();
@@ -1349,47 +1351,22 @@ public class MainActivity extends Activity {
         }
     }
 
+    int poseDrawableForFrame(int frame){
+        if(sleeping || (frame==9 && stage()==Stage.ENDED))return sleepDrawable();
+        if(frame==9 || frame==3)return tiredDrawable();
+        if(frame==11)return happyDrawable();
+        return emotionDrawable();
+    }
+
     void applyPose(int frame){
-        if(sleeping){
-            currentPetRes=sleepDrawable();
-            if(!setPetDrawableSafely(petStage(),currentPetRes))return;
-            updatePetPosition();
-            return;
-        }
-
-        int staticRes;
-        if(frame==9)staticRes=sleepDrawable();
-        else if(frame==11)staticRes=happyDrawable();
-        else if(frame==3)staticRes=tiredDrawable();
-        else staticRes=emotionDrawable();
-
-        currentPetRes=staticRes;
-        if(!setPetDrawableSafely(petStage(),staticRes))return;
-        updatePetPosition();
-
-        float base=depthScale();
-        float sx=base;
-        float sy=base;
-
-        petView.setAlpha(1f);
+        syncVisualStage();
+        walking=false;
+        walkMode=WalkMode.SIDE;
+        int res=poseDrawableForFrame(frame);
+        if(!setPetDrawableSafely(petStage(),res))return;
+        currentPetRes=res;
         petView.setRotation(0f);
-
-        if(frame==3){
-            petView.setAlpha(.92f);
-            sy*=.97f;
-        } else if(frame==9){
-            sy*=.96f;
-        } else if(frame==10){
-            sx*=1.05f; sy*=1.05f;
-            petView.setRotation((idleTick%2==0)?-3f:3f);
-        } else if(frame==11){
-            sx*=1.06f; sy*=1.06f;
-        } else if(idleTick%5==0){
-            petView.setRotation((idleTick%2==0)?-1.5f:1.5f);
-        }
-
-        petView.setScaleX(sx);
-        petView.setScaleY(sy);
+        updatePetPosition();
     }
 
     void showAction(int frame,int duration){
@@ -1632,8 +1609,56 @@ public class MainActivity extends Activity {
     }
 
     void showTopMenu(){
-        String[] entries={"📜 Historique"};
-        new AlertDialog.Builder(this).setTitle("Menu").setItems(entries,(d,w)->showHistory()).show();
+        String[] entries={"📜 Historique","🔎 Vérifier les quatre packs"};
+        new AlertDialog.Builder(this).setTitle("Menu").setItems(entries,(d,w)->{
+            if(w==0)showHistory(); else showSpritePackPicker();
+        }).show();
+    }
+
+    void showSpritePackPicker(){
+        String[] names={"Léopardeau / CUB","Ado / TEEN","Adulte / ADULT","Vieux / OLD"};
+        new AlertDialog.Builder(this).setTitle("Packs séparés — diagnostic")
+            .setItems(names,(d,w)->showSpritePack(PetStage.values()[w],0,0)).show();
+    }
+
+    void showSpritePack(PetStage age,int item,int frame){
+        CharacterSprites.Pack pack=CharacterSprites.forStage(age);
+        int[] ids={pack.idle,pack.happy,pack.tired,pack.sleep,
+            pack.walkSide,pack.walkFront,pack.walkBack};
+        String[] names={"idle","happy","tired","sleep","walk_side","walk_front","walk_back"};
+        int k=Math.floorMod(item,ids.length);
+        int f=Math.floorMod(frame,4);
+        LinearLayout box=new LinearLayout(this);
+        box.setOrientation(LinearLayout.VERTICAL);
+        TextView note=text(12,false);
+        note.setText("Version 0.5.4 • "+pack.zone+"\n"
+            +"Contrôle technique ≠ validation du dessin ou de son âge.\n"
+            +names[k]+(k>=4?" • frame "+(f+1)+"/4":""));
+        note.setPadding(dp(14),dp(8),dp(14),dp(8));
+        box.addView(note);
+        ImageView image=new ImageView(this);
+        image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        Bitmap b=BitmapFactory.decodeResource(getResources(),ids[k]);
+        if(b!=null && k>=4 && b.getWidth()==2560 && b.getHeight()==640)
+            b=Bitmap.createBitmap(b,f*640,0,640,640);
+        if(b!=null)image.setImageBitmap(b);
+        box.addView(image,new LinearLayout.LayoutParams(-1,dp(230)));
+        if(k>=4){
+            Button next=button("Frame suivante");
+            box.addView(next);
+            final AlertDialog[] dialog=new AlertDialog[1];
+            next.setOnClickListener(v->{dialog[0].dismiss();showSpritePack(age,k,f+1);});
+            dialog[0]=new AlertDialog.Builder(this).setTitle("Pack "+age)
+                .setView(box).setNegativeButton("Précédent",(d,w)->showSpritePack(age,k-1,0))
+                .setPositiveButton("Suivant",(d,w)->showSpritePack(age,k+1,0))
+                .setNeutralButton("Fermer",null).create();
+            dialog[0].show();
+        }else{
+            new AlertDialog.Builder(this).setTitle("Pack "+age).setView(box)
+                .setNegativeButton("Précédent",(d,w)->showSpritePack(age,k-1,0))
+                .setPositiveButton("Suivant",(d,w)->showSpritePack(age,k+1,0))
+                .setNeutralButton("Fermer",null).show();
+        }
     }
 
     void showHistory(){
@@ -1715,83 +1740,33 @@ public class MainActivity extends Activity {
     void validateCharacterAssets(){
         invalidCharacterAssets.clear();
         assetErrorShown=false;
-
         HashMap<Integer,PetStage> owners=new HashMap<>();
-
-        for(PetStage stage:PetStage.values()){
-            CharacterSprites.Pack pack=CharacterSprites.forStage(stage);
-
-            // Une ressource graphique ne peut appartenir qu'à un seul âge.
+        for(PetStage age:PetStage.values()){
+            CharacterSprites.Pack pack=CharacterSprites.forStage(age);
             for(int res:pack.allResources()){
                 if(res==0)continue;
-                PetStage previous=owners.put(res,stage);
-                if(previous!=null && previous!=stage){
-                    markCharacterAssetInvalid(res,stage+" PACK",
-                        "ressource déjà attribuée à "+previous+" : partage inter-âge interdit");
-                }
-            }
-
-            int poseW=-1,poseH=-1;
-            for(PetMood mood:PetMood.values()){
-                int res=pack.mood(mood);
-                Bitmap b=null;
-                try{b=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
-                if(b==null){
-                    markCharacterAssetInvalid(res,stage+" "+mood,"ressource manquante ou illisible");
+                PetStage other=owners.put(res,age);
+                if(other!=null && other!=age){
+                    markCharacterAssetInvalid(res,age+" PACK","partage inter-âge interdit");
                     continue;
                 }
-
-                int w=b.getWidth(),h=b.getHeight();
-                if(poseW<0){poseW=w;poseH=h;}
-                if(w!=poseW || h!=poseH || w!=640 || h!=640){
-                    markCharacterAssetInvalid(res,stage+" "+mood,
-                        w+"x"+h+" au lieu du canevas commun 640x640");
-                }
-                b.recycle();
-            }
-
-            for(WalkMode mode:WalkMode.values()){
-                int res=pack.walk(mode);
-                Bitmap b=null;
-                try{b=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
-                if(b==null){
-                    markCharacterAssetInvalid(res,stage+" "+mode,"strip manquant ou illisible");
-                    continue;
-                }
-
-                int w=b.getWidth(),h=b.getHeight();
-                int expectedFrames=pack.frameCount(mode);
-                int sourceFrames=(h>0 && w%h==0)?w/h:0;
-                boolean invalid=h!=640 || w%640!=0 || sourceFrames<expectedFrames;
-                if(invalid){
-                    markCharacterAssetInvalid(res,stage+" "+mode,
-                        w+"x"+h+" : attendu au moins "+expectedFrames+
-                        " frames carrées de 640x640");
-                }
-                b.recycle();
-            }
-
-            // Les humeurs face-joueur sont propres au pack qui les possède.
-            // Aucun âge ne peut emprunter la planche d'un autre.
-            if(pack.hasFaceMoods()){
-                Bitmap face=null;
-                try{face=BitmapFactory.decodeResource(getResources(),pack.faceMoods);}catch(Throwable ignored){}
-                if(face==null){
-                    markCharacterAssetInvalid(pack.faceMoods,stage+" FACE_MOODS",
-                        "ressource manquante ou illisible");
-                }else{
-                    int fw=face.getWidth(),fh=face.getHeight();
-                    int expectedW=pack.faceFrameSize*pack.faceFrameCount;
-                    if(fw!=expectedW || fh!=pack.faceFrameSize){
-                        markCharacterAssetInvalid(pack.faceMoods,stage+" FACE_MOODS",
-                            fw+"x"+fh+" : attendu "+pack.faceFrameCount+
-                            " frames de "+pack.faceFrameSize+"x"+pack.faceFrameSize);
-                    }
-                    face.recycle();
+                try{
+                    String name=getResources().getResourceEntryName(res);
+                    if(!name.startsWith("leopard_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                        throw new IllegalArgumentException("mauvais préfixe : "+name);
+                    BitmapFactory.Options opts=new BitmapFactory.Options();
+                    opts.inJustDecodeBounds=true;
+                    opts.inScaled=false;
+                    BitmapFactory.decodeResource(getResources(),res,opts);
+                    int width=pack.ownsMood(res)?640:res==pack.faceMoods?pack.faceFrameSize*pack.faceFrameCount:2560;
+                    int height=res==pack.faceMoods?pack.faceFrameSize:640;
+                    if(opts.outWidth!=width || opts.outHeight!=height)
+                        throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+" au lieu de "+width+"x"+height);
+                }catch(RuntimeException error){
+                    markCharacterAssetInvalid(res,age+" PACK",error.getMessage());
                 }
             }
         }
-
         if(!invalidCharacterAssets.isEmpty())showAssetErrorOnce();
     }
 

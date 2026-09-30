@@ -1,0 +1,818 @@
+{
+  "version": "0.5.4",
+  "visual_review": "PENDING; dimensions do not establish age or repair clipped ears",
+  "packs": {
+    "cub": {
+      "leopard_cub_happy.png": {
+        "source_sha256": "02ef0bef32e912a54c5ad4458ad4337cc298542a8d4261fdc3d89d83b3f227d8",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "17c8e28d07e0e20ff03173ceba2afcfe8160ee6232bd3d6efbc104887794269b",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            92,
+            188,
+            544,
+            588
+          ]
+        ]
+      },
+      "leopard_cub_idle.png": {
+        "source_sha256": "92d4d0023ea6bfc385567719c2f1b3882081cfd7609762a6299164009d280901",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "96765f281e307f4ce30b3bcfe43d295820443b7211515789453bd2d04090f202",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            121,
+            133,
+            524,
+            588
+          ]
+        ]
+      },
+      "leopard_cub_sleep.png": {
+        "source_sha256": "095af1c1a4f8f06ca2c3a4644c6b8138845926d43f10c402be981f402a00d664",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "189c48f4c2ea209fb96d733bcbffc811dff4955b11879eb37709e97110a6b6a5",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            89,
+            266,
+            548,
+            588
+          ]
+        ]
+      },
+      "leopard_cub_tired.png": {
+        "source_sha256": "c0ffec143877ae9a72a558286d48ff463b53d5893048d571e76ad46a4b7c7ed7",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "b01c309c9b07a1769e4371002000ca39ae0bad2cbc51fcb91dbaeeb53d37a41d",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            118,
+            135,
+            521,
+            588
+          ]
+        ]
+      },
+      "leopard_cub_walk_back.webp": {
+        "source_sha256": "b0af57e5d84e35d33e89b4c0a7a024aff66d95066068b2fc6a6c27f07031ac0f",
+        "source_size": [
+          2560,
+          640
+        ],
+        "sha256": "8285b684e643f841571763dab0756a2ac8f3c9c288205055498593da303c8562",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            160,
+            162,
+            480,
+            588
+          ],
+          [
+            159,
+            160,
+            481,
+            588
+          ],
+          [
+            160,
+            162,
+            480,
+            588
+          ],
+          [
+            159,
+            160,
+            481,
+            588
+          ]
+        ]
+      },
+      "leopard_cub_walk_front.webp": {
+        "source_sha256": "a8ed025112408fdf66071058a9dec84278ffbeb2d26c63986f74bc664b649183",
+        "source_size": [
+          2560,
+          640
+        ],
+        "sha256": "dc68238ef226165d3546246acc03bff520aa0893bf92f30e68dca79ceab3d836",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            145,
+            155,
+            495,
+            588
+          ],
+          [
+            144,
+            160,
+            496,
+            588
+          ],
+          [
+            146,
+            158,
+            494,
+            588
+          ],
+          [
+            141,
+            153,
+            498,
+            588
+          ]
+        ]
+      },
+      "leopard_cub_walk_side.webp": {
+        "source_sha256": "9e2b1bd540d3300afe06d3590fc607b42f5162cc45cb3cea3963643e002c3fc8",
+        "source_size": [
+          3200,
+          640
+        ],
+        "sha256": "46c88f967d4aa387c31e6e3e3363ca364571b889608a2ffb061e810a7ced347f",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            115,
+            181,
+            525,
+            588
+          ],
+          [
+            101,
+            197,
+            538,
+            588
+          ],
+          [
+            106,
+            183,
+            534,
+            588
+          ],
+          [
+            93,
+            201,
+            546,
+            588
+          ]
+        ]
+      }
+    },
+    "teen": {
+      "leopard_teen_happy.png": {
+        "source_sha256": "70b0ba8b93325da8a956e8c32157184c6db2be3e77830b7da956341c431bb9b5",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "4cdfda7585c7809c1ffc7303b802f9af51a254ce59911b35353610f221e5631f",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            111,
+            169,
+            528,
+            588
+          ]
+        ]
+      },
+      "leopard_teen_idle.png": {
+        "source_sha256": "8b263a5d252121e2f91bedadda18c7435c939644bac1ccc3c10cfe4790da07d0",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "f69e5ac366e244c251ca20820aa31927c83b59f296bff26a10a2ebd69b459d5e",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            132,
+            165,
+            516,
+            588
+          ]
+        ]
+      },
+      "leopard_teen_sleep.png": {
+        "source_sha256": "8c949b09437d5af57e46d06b517df9194b2e79653fddfedd0452e19ee33de5a6",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "71fde1a4bef3606fad536b71cdc0e0bff660583d26c6d9cd53174fb48bdb6d0b",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            95,
+            298,
+            544,
+            588
+          ]
+        ]
+      },
+      "leopard_teen_tired.png": {
+        "source_sha256": "f243a4f4ecca8e39df1e2310bf47cd573a377158aa3998a6feec670be06434dc",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "953198a0f0d77c93abe45f7847a20e607b3d3e25a936a38ae210a879cf6f527a",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            128,
+            156,
+            512,
+            588
+          ]
+        ]
+      },
+      "leopard_teen_walk_back.webp": {
+        "source_sha256": "a069830c083f2e1c8ff251f89e56bdd469b00b3673e51f95689c99adf49e4e19",
+        "source_size": [
+          2560,
+          640
+        ],
+        "sha256": "3fd1bf438a5c97c9fcde4cffcef618b431c3beb85cd5c77b1763fe04546f3a1f",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            161,
+            158,
+            479,
+            588
+          ],
+          [
+            159,
+            160,
+            481,
+            588
+          ],
+          [
+            161,
+            158,
+            479,
+            588
+          ],
+          [
+            159,
+            160,
+            481,
+            588
+          ]
+        ]
+      },
+      "leopard_teen_walk_front.webp": {
+        "source_sha256": "c58ec43ec722e1171d1c1e9bc4d2882f1ad1648a775a72ddee06e1c61a0a40a3",
+        "source_size": [
+          2560,
+          640
+        ],
+        "sha256": "915540efcdfff7532bc3f6b2da9eba0787fd4963b8340b09ff588958bbd0dae8",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            139,
+            151,
+            500,
+            588
+          ],
+          [
+            140,
+            144,
+            499,
+            588
+          ],
+          [
+            134,
+            155,
+            505,
+            588
+          ],
+          [
+            132,
+            144,
+            507,
+            588
+          ]
+        ]
+      },
+      "leopard_teen_walk_side.webp": {
+        "source_sha256": "da805adb8882345bc9e61c79833fce65366254d17a127f5cdc17d59fb7f574ed",
+        "source_size": [
+          3200,
+          640
+        ],
+        "sha256": "6d250bb7bc360bd7aab2f70f6db57a131837973d98384b495e067b0cdef17fa6",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            99,
+            186,
+            550,
+            588
+          ],
+          [
+            99,
+            185,
+            541,
+            588
+          ],
+          [
+            103,
+            185,
+            536,
+            588
+          ],
+          [
+            102,
+            192,
+            537,
+            588
+          ]
+        ]
+      }
+    },
+    "adult": {
+      "leopard_adult_happy.png": {
+        "source_sha256": "646e46c2c5e7c2f7b91fb2b8be9e4d4a00f527758a9409e7a50db600c769cd1a",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "7dc1ea56b5f597fb5c6b39f2d2232639d607e739eac05e8dcd609c7d3dc70b3e",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            122,
+            109,
+            518,
+            588
+          ]
+        ]
+      },
+      "leopard_adult_idle.png": {
+        "source_sha256": "3d83caa7d01680b7a46a2564c12c26c9174b378cb8981d25b492c5d9a3002229",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "6fd84a78d2e75c0a93a8ddf82dbbfe5e2944a577a30f81fb421de4dd52bc24be",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            140,
+            98,
+            508,
+            588
+          ]
+        ]
+      },
+      "leopard_adult_sleep.png": {
+        "source_sha256": "40739c99239d21194f1dd92046cb048d7c693d6b16db287c61f10695b543c26f",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "aba6027d9030c9bc9587c73a5e2fb3766c6e10fe8b301cb4474ab59909bd5990",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            83,
+            277,
+            557,
+            588
+          ]
+        ]
+      },
+      "leopard_adult_tired.png": {
+        "source_sha256": "d98a1d90ea9ca5e8479b3fa5e10023c2183e61f740ac17a2e336bc56aad392ca",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "19ee955a41fcf5c5a913c02a60509731c78d8890348570ebe13385209604ef40",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            132,
+            96,
+            516,
+            588
+          ]
+        ]
+      },
+      "leopard_adult_walk_back.webp": {
+        "source_sha256": "0fe48c20d8d95e5faf7269b45213e73e358ca78371f0fe479c82c1ed51a47710",
+        "source_size": [
+          2560,
+          640
+        ],
+        "sha256": "ce67b2667a17fc85e125949e5ff9c18d1a96b3ee9f95cd9d613d1ea2be0f8198",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            172,
+            119,
+            467,
+            588
+          ],
+          [
+            155,
+            121,
+            484,
+            588
+          ],
+          [
+            172,
+            119,
+            467,
+            588
+          ],
+          [
+            155,
+            121,
+            484,
+            588
+          ]
+        ]
+      },
+      "leopard_adult_walk_front.webp": {
+        "source_sha256": "573148da5fe9f79bc0e1cf3ae7e7b0478f7c06b1c3b67c605b85dfe02e46187b",
+        "source_size": [
+          2560,
+          640
+        ],
+        "sha256": "38f99e1078585eb9a67cb31e3505cd9e3f6ae175f69fa2bf9ce7c82eb43a7b2e",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            164,
+            116,
+            475,
+            588
+          ],
+          [
+            175,
+            114,
+            465,
+            588
+          ],
+          [
+            168,
+            130,
+            472,
+            588
+          ],
+          [
+            160,
+            116,
+            480,
+            588
+          ]
+        ]
+      },
+      "leopard_adult_walk_side.webp": {
+        "source_sha256": "b0b35698b04572392f6467f7ef936d6e87913b060aaf4a7b969c28e8ef4e68d4",
+        "source_size": [
+          3200,
+          640
+        ],
+        "sha256": "4bd6d7fa52c0be328eeb7d8f0df9d4f5e115ad7648287e76dffb86bff92b7e31",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            99,
+            162,
+            550,
+            588
+          ],
+          [
+            94,
+            167,
+            554,
+            588
+          ],
+          [
+            95,
+            165,
+            544,
+            588
+          ],
+          [
+            88,
+            172,
+            551,
+            588
+          ]
+        ]
+      }
+    },
+    "old": {
+      "leopard_old_happy.png": {
+        "source_sha256": "e3317f35b7003f021d9e18f6aa69b6a010e171ba5636069362b4378d3f9969f3",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "64c30af697c797ab85b0b928b44c119214e9ea95672549de00095693e819de33",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            119,
+            109,
+            520,
+            588
+          ]
+        ]
+      },
+      "leopard_old_idle.png": {
+        "source_sha256": "7cf6608b03613793c0e2391e0f952668e1bb4160bead118b239a60878d03f2cb",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "f1ea4da0e735cab0a5c300006e98975b4a334bd6dc6ecc7982668393158daede",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            139,
+            98,
+            509,
+            588
+          ]
+        ]
+      },
+      "leopard_old_sleep.png": {
+        "source_sha256": "8a13f5afc0e7fd125b46aab06f1ce38c431f55379fa40b3e7ead15a6b6b9ac1f",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "06bf87affdb4ab65eb431aaee1bf94bc3ce8473712485c5bf21c3ea5af67054f",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            83,
+            282,
+            557,
+            588
+          ]
+        ]
+      },
+      "leopard_old_tired.png": {
+        "source_sha256": "fca578d15cf77ddd97b2a4d3753600c241eddb2652cf5610041fef10b3eb1201",
+        "source_size": [
+          640,
+          640
+        ],
+        "sha256": "edf99b1ba90ea51219d1367f457f160386e201776d8623673092a7d0b6da898b",
+        "size": [
+          640,
+          640
+        ],
+        "frame_count": 1,
+        "frame_bounds": [
+          [
+            132,
+            98,
+            516,
+            588
+          ]
+        ]
+      },
+      "leopard_old_walk_back.webp": {
+        "source_sha256": "e1b0600fb973ad5f4e727a6fc6649c1766bc4eade6b4923e5292d701795afadd",
+        "source_size": [
+          2560,
+          640
+        ],
+        "sha256": "a5cd7a2416e10838cbe8666a9f853cad09f95a6c366c81dd13d19fd32e41526b",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            171,
+            119,
+            468,
+            588
+          ],
+          [
+            157,
+            121,
+            482,
+            588
+          ],
+          [
+            171,
+            119,
+            468,
+            588
+          ],
+          [
+            157,
+            121,
+            482,
+            588
+          ]
+        ]
+      },
+      "leopard_old_walk_front.webp": {
+        "source_sha256": "82ad3203c98fd07dd1ea7631b5090d51bdd3d0b25b724baf7866950198f63a77",
+        "source_size": [
+          2560,
+          640
+        ],
+        "sha256": "164035a38028e5393b3dcc80835d91cd82e5a8bc3e46a360082839a290ed6d09",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            159,
+            119,
+            481,
+            588
+          ],
+          [
+            169,
+            119,
+            471,
+            588
+          ],
+          [
+            163,
+            130,
+            476,
+            588
+          ],
+          [
+            152,
+            116,
+            488,
+            588
+          ]
+        ]
+      },
+      "leopard_old_walk_side.webp": {
+        "source_sha256": "4f649c01235449ee9fdb7185aa45da2080571155be1f493cff4baf68f3e9e70c",
+        "source_size": [
+          3200,
+          640
+        ],
+        "sha256": "9339130724b9bf2f5776517e9bd0fa107e5e1e597ff9e0da24476026b4034174",
+        "size": [
+          2560,
+          640
+        ],
+        "frame_count": 4,
+        "frame_bounds": [
+          [
+            98,
+            162,
+            551,
+            588
+          ],
+          [
+            93,
+            165,
+            555,
+            588
+          ],
+          [
+            95,
+            162,
+            547,
+            588
+          ],
+          [
+            88,
+            167,
+            551,
+            588
+          ]
+        ]
+      }
+    }
+  }
+}
