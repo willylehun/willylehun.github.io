@@ -56,6 +56,8 @@ public class MainActivity extends Activity {
     Bitmap faceMoodStrip=null;
     Bitmap[] faceMoodFrames=null;
     long faceMoodUntil=0,nextFaceMoodAt=0;
+    boolean moodApproach=false,moodExitUp=false;
+    int pendingFaceMood=-1;
     int activeFaceMood=-1;
 
     final Set<Integer> invalidCharacterAssets=new HashSet<>();
@@ -707,29 +709,93 @@ public class MainActivity extends Activity {
         if(!pack.hasFaceMoods() || sleeping || walking || now<manualUntil)return;
         if(activeFaceMood<0 || now>=faceMoodUntil){
             activeFaceMood=Math.max(0,Math.min(pack.faceFrameCount-1,chooseFaceMoodIndex()));
-            faceMoodUntil=now+4500L+rnd.nextInt(3501);
-            scheduleNextFaceMood(faceMoodUntil);
+            beginMoodApproach(Math.max(0,Math.min(pack.faceFrameCount-1,chooseFaceMoodIndex())));
+            return;
         }
     }
 
-    void showFaceMoodNow(int index,int duration){
-        CharacterSprites.Pack pack=CharacterSprites.forStage(petStage());
-        if(!CharacterSprites.FACE_ATLAS_REVIEWED || !pack.hasFaceMoods()){
-            manualFrame=strongEmotion()?3:0;
-            manualUntil=System.currentTimeMillis()+Math.max(250,duration);
-            applyPose(manualFrame);
-            return;
+    int foregroundNode(){
+        float[][] nodes=roomNodes();
+        int best=0;
+        for(int i=1;i<nodes.length;i++)if(nodes[i][1]>nodes[best][1])best=i;
+        return best;
+    }
+
+    int upwardNode(){
+        float[][] nodes=roomNodes();
+        int best=-1;
+        float bestScore=Float.MAX_VALUE;
+        for(int i=0;i<nodes.length;i++){
+            float dy=petNY-nodes[i][1];
+            if(dy<=.06f)continue;
+            float score=Math.abs(nodes[i][0]-petNX)-dy*.35f;
+            if(score<bestScore){bestScore=score;best=i;}
         }
+        if(best>=0)return best;
+        for(int i=0;i<nodes.length;i++)if(best<0||nodes[i][1]<nodes[best][1])best=i;
+        return Math.max(0,best);
+    }
+
+    void beginMoodApproach(int index){
+        if(sleeping||stage()==Stage.ENDED)return;
+        CharacterSprites.Pack pack=CharacterSprites.forStage(petStage());
+        pendingFaceMood=Math.max(0,Math.min(pack.faceFrameCount-1,index));
+        activeFaceMood=-1;
+        faceMoodUntil=0;
+        moodExitUp=false;
+        moodApproach=true;
+
+        float[][] nodes=roomNodes();
+        int target=foregroundNode();
+        targetNodeIndex=target;
+        targetNX=nodes[target][0];
+        targetNY=nodes[target][1];
+
+        // L'approche vers le joueur utilise toujours FRONT.
+        travelDirection=TravelDirection.DOWN;
+        walkMode=WalkMode.FRONT;
+        walkDir=0;
+        walking=true;
+        walkStartedAt=System.currentTimeMillis();
+        currentPetRes=0;
+    }
+
+    void startFacePresentation(){
+        moodApproach=false;
         walking=false;
-        walkMode=WalkMode.SIDE;
-        travelDirection=TravelDirection.LEFT;
+        walkMode=WalkMode.FRONT;
+        travelDirection=TravelDirection.DOWN;
         releaseWalkFrames();
-        activeFaceMood=Math.max(0,Math.min(pack.faceFrameCount-1,index));
-        faceMoodUntil=System.currentTimeMillis()+Math.max(250,duration);
-        scheduleNextFaceMood(faceMoodUntil);
+        activeFaceMood=pendingFaceMood>=0?pendingFaceMood:chooseFaceMoodIndex();
+        pendingFaceMood=-1;
+        faceMoodUntil=System.currentTimeMillis()+6000L;
+        nextFaceMoodAt=faceMoodUntil;
         currentPetRes=0;
         ensurePetImage();
         updatePetPosition();
+    }
+
+    void startMoodExitUp(){
+        activeFaceMood=-1;
+        faceMoodUntil=0;
+        moodExitUp=true;
+        int target=upwardNode();
+        float[][] nodes=roomNodes();
+        targetNodeIndex=target;
+        targetNX=nodes[target][0];
+        targetNY=nodes[target][1];
+        travelDirection=TravelDirection.UP;
+        walkMode=WalkMode.BACK;
+        walkDir=0;
+        walking=true;
+        walkStartedAt=System.currentTimeMillis();
+        currentPetRes=0;
+    }
+
+    void showFaceMoodNow(int index,int duration){
+        // Toutes les humeurs suivent le même scénario :
+        // approche naturelle -> face 6 s -> départ vers le haut de dos.
+        beginMoodApproach(index);
     }
 
     void releaseWalkFrames(){
@@ -923,10 +989,10 @@ public class MainActivity extends Activity {
      */
     float[][] roomNodes(){
         if(room.equals("cuisine")){
-            // L'îlot central occupe le milieu : couloirs de marche uniquement à gauche/droite.
+            // v0.5.8 : îlot retiré, grande zone de sol libre.
             return new float[][]{
-                {.09f,.93f},{.10f,.83f},{.12f,.73f},
-                {.91f,.93f},{.90f,.83f},{.88f,.73f}
+                {.16f,.93f},{.34f,.94f},{.52f,.94f},{.70f,.94f},{.86f,.93f},
+                {.20f,.82f},{.40f,.82f},{.60f,.82f},{.80f,.82f}
             };
         }
         if(room.equals("bain")){
@@ -956,8 +1022,8 @@ public class MainActivity extends Activity {
     int[][] roomLinks(){
         if(room.equals("cuisine")){
             return new int[][]{
-                {1},{0,2},{1},
-                {4},{3,5},{4}
+                {1,5},{0,2,5,6},{1,3,6},{2,4,6,7},{3,7},
+                {0,1,6},{1,2,3,5,7,8},{3,4,6,8},{6,7}
             };
         }
         if(room.equals("bain")){
@@ -980,7 +1046,7 @@ public class MainActivity extends Activity {
     }
 
     int defaultRoomNode(){
-        if(room.equals("cuisine"))return rnd.nextBoolean()?1:4;
+        if(room.equals("cuisine"))return 2;
         if(room.equals("bain"))return 1;
         if(room.equals("jardin"))return 0;
         return 2;
@@ -1000,6 +1066,9 @@ public class MainActivity extends Activity {
         walkFrameIndex=0;
         faceMoodUntil=0;
         activeFaceMood=-1;
+        moodApproach=false;
+        moodExitUp=false;
+        pendingFaceMood=-1;
         currentPetRes=0;
         if(!sleeping)ensurePetImage();
         updatePetPosition();
@@ -1115,10 +1184,10 @@ public class MainActivity extends Activity {
         happy=clamp(happy+6);
 
         if(!strongEmotion()){
-            showFaceMoodNow(rnd.nextBoolean()?1:10,2200);
+            showFaceMoodNow(rnd.nextBoolean()?1:10,6000);
             toast("❤️ "+pet+" adore la caresse !");
         } else {
-            showFaceMoodNow(chooseFaceMoodIndex(),1700);
+            showFaceMoodNow(chooseFaceMoodIndex(),6000);
             toast("🤍 "+pet+" apprécie la caresse, mais "+moodText().toLowerCase(Locale.ROOT)+".");
         }
         addHistory("Caresse donnée à "+pet+".");
@@ -1288,10 +1357,13 @@ public class MainActivity extends Activity {
             return;
         }
 
-        if(CharacterSprites.forStage(petStage()).hasFaceMoods() && activeFaceMood>=0 && now<faceMoodUntil){
-            ensurePetImage();
-            updatePetPosition();
-            return;
+        if(CharacterSprites.forStage(petStage()).hasFaceMoods() && activeFaceMood>=0){
+            if(now<faceMoodUntil){
+                ensurePetImage();
+                updatePetPosition();
+                return;
+            }
+            startMoodExitUp();
         }
 
         if(now<manualUntil){
@@ -1323,6 +1395,12 @@ public class MainActivity extends Activity {
                 petNX=targetNX;
                 petNY=targetNY;
                 if(targetNodeIndex>=0)petNodeIndex=targetNodeIndex;
+                if(moodApproach){
+                    startFacePresentation();
+                    return;
+                }
+                boolean finishedMoodExit=moodExitUp;
+                moodExitUp=false;
                 walking=false;
                 walkMode=WalkMode.SIDE;
                 currentPetRes=0;
@@ -1335,14 +1413,16 @@ public class MainActivity extends Activity {
                 long requiredFaceRest=nonFaceWalk
                         ?(long)Math.ceil(walkDuration*(MIN_FACE_SHARE/(1f-MIN_FACE_SHARE)))
                         :2500L;
-                nextWalkAt=now+Math.max(3000L,requiredFaceRest)+rnd.nextInt(1501);
+                nextWalkAt=finishedMoodExit
+                        ?now+3500L+rnd.nextInt(1501)
+                        :now+Math.max(3000L,requiredFaceRest)+rnd.nextInt(1501);
                 walkStartedAt=0;
                 return;
             }
 
             float speed=stage()==Stage.OLD?.0048f:stage()==Stage.CUB?.0066f:.0075f;
             float step=Math.min(speed,dist);
-            updateTravelDirection(dx,dy);
+            if(!moodApproach && !moodExitUp)updateTravelDirection(dx,dy);
             petNX+=dx/dist*step;
             petNY+=dy/dist*step;
 

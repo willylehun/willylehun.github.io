@@ -11,9 +11,7 @@ AGES=("cub","teen","adult","old")
 
 def white_to_alpha(im):
     im=im.convert("RGBA")
-    a=im.getchannel("A")
-    if a.getextrema()[0] < 250:
-        return im
+    original_alpha=np.asarray(im.getchannel("A"),dtype=np.uint8)
     rgb=np.asarray(im.convert("RGB"))
     h,w,_=rgb.shape
     mn=rgb.min(axis=2); mx=rgb.max(axis=2)
@@ -32,11 +30,12 @@ def white_to_alpha(im):
         if x+1<w and cand[y,x+1] and not bg[y,x+1]: bg[y,x+1]=True;q.append((x+1,y))
         if y>0 and cand[y-1,x] and not bg[y-1,x]: bg[y-1,x]=True;q.append((x,y-1))
         if y+1<h and cand[y+1,x] and not bg[y+1,x]: bg[y+1,x]=True;q.append((x,y+1))
-    alpha=Image.fromarray(np.where(bg,0,255).astype("uint8"),"L").filter(ImageFilter.GaussianBlur(.7))
+    cleaned=np.where(bg,0,original_alpha).astype("uint8")
+    alpha=Image.fromarray(cleaned,"L").filter(ImageFilter.GaussianBlur(.55))
     im.putalpha(alpha)
     return im
 
-def pad_frame(im,size=640,maxw=525,maxh=500,bottom=588):
+def pad_frame(im,size=640,maxw=500,maxh=470,bottom=588):
     im=white_to_alpha(im)
     bbox=im.getchannel("A").getbbox()
     if not bbox: raise RuntimeError("image vide")
@@ -45,7 +44,7 @@ def pad_frame(im,size=640,maxw=525,maxh=500,bottom=588):
     sub=sub.resize((max(1,round(sub.width*scale)),max(1,round(sub.height*scale))),Image.Resampling.LANCZOS)
     out=Image.new("RGBA",(size,size),(0,0,0,0))
     x=(size-sub.width)//2
-    y=max(34,min(size-sub.height-24,bottom-sub.height))
+    y=max(54,min(size-sub.height-30,bottom-sub.height))
     out.alpha_composite(sub,(x,y))
     return out
 
@@ -54,10 +53,10 @@ def face_frame(im):
     bbox=im.getchannel("A").getbbox()
     if not bbox: raise RuntimeError("face vide")
     sub=im.crop(bbox)
-    scale=min(286/sub.width,286/sub.height)
+    scale=min(270/sub.width,260/sub.height)
     sub=sub.resize((max(1,round(sub.width*scale)),max(1,round(sub.height*scale))),Image.Resampling.LANCZOS)
     out=Image.new("RGBA",(320,320),(0,0,0,0))
-    out.alpha_composite(sub,((320-sub.width)//2,max(10,306-sub.height)))
+    out.alpha_composite(sub,((320-sub.width)//2,max(26,300-sub.height)))
     return out
 
 def save_webp(im,path,quality=92):
@@ -113,6 +112,23 @@ def prepare_rooms():
     living=Image.open(SRC/"rooms"/"room_living_hd.webp").convert("RGB")
     living.save(dst/"room_living_hd.webp","WEBP",quality=90,method=2)
 
+    # Cuisine : suppression complète de l'îlot/table et des tabourets.
+    kitchen=Image.open(SRC/"rooms"/"room_kitchen_hd.webp").convert("RGB")
+    kw,kh=kitchen.size
+    cut=round(kh*.55)
+    floor_src=kitchen.crop((0,round(kh*.84),kw,kh))
+    floor=floor_src.resize((kw,kh-cut),Image.Resampling.BICUBIC)
+    kitchen.paste(floor,(0,cut))
+    # léger fondu de raccord sous les meubles du fond
+    seam=Image.new("RGB",(kw,40))
+    for yy in range(40):
+        a=yy/39
+        upper=kitchen.crop((0,cut-20+yy,kw,cut-19+yy))
+        lower=floor.crop((0,yy,kw,yy+1))
+        seam.paste(Image.blend(upper,lower,a),(0,yy))
+    kitchen.paste(seam,(0,cut-20))
+    kitchen.save(dst/"room_kitchen_hd.webp","WEBP",quality=92,method=2)
+
     # Jardin : recadrage avant la barrière de premier plan, puis remise au format 4:3.
     garden=Image.open(SRC/"rooms"/"room_garden_hd.webp").convert("RGB")
     w,h=garden.size
@@ -125,7 +141,7 @@ def prepare_rooms():
 def main():
     for age in AGES: prepare_age(age)
     prepare_rooms()
-    print("v0.5.7 runtime assets prepared: ears padded, CUB 5-frame walks, face atlases cleaned, garden foreground fence removed.")
+    print("v0.5.8 runtime assets prepared: ears padded, CUB 5-frame walks, face atlases cleaned, garden foreground fence removed.")
 
 if __name__=="__main__":
     main()
