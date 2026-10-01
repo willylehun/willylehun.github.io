@@ -1502,7 +1502,7 @@ public class MainActivity extends Activity {
                 long directional=(travelDirection==TravelDirection.DOWN)?0L:DIRECTIONAL_IDLE_MS;
                 directionalIdleUntil=now+directional;
 
-                // Seul IDLE DOWN + les humeurs comptent dans la cible de 70 %.
+                // Seul IDLE DOWN + les humeurs comptent dans la cible de 30 %.
                 long nonFace=walkDuration+directional;
                 long requiredFace=(long)Math.ceil(nonFace*
                     (MIN_IDLE_DOWN_SHARE/(1f-MIN_IDLE_DOWN_SHARE)));
@@ -1827,7 +1827,7 @@ public class MainActivity extends Activity {
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         TextView note=text(12,false);
-        note.setText("Version 0.6.0 • "+p.zone+"\n"+names[k]+
+        note.setText("Version 0.6.6 • "+p.zone+"\n"+names[k]+
             (counts[k]>1?" • frame "+(f+1)+"/"+counts[k]:""));
         note.setPadding(dp(14),dp(8),dp(14),dp(8));
         box.addView(note);
