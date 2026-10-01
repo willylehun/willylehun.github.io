@@ -45,6 +45,7 @@ for age in ['cub','teen','adult','old']:
         f'leopard_{age}_soap.webp':(256,256),
         f'leopard_{age}_comb.webp':(256,256),
         f'leopard_{age}_towel.webp':(256,256),
+        f'leopard_{age}_scratcher_play.webp':(512,256),
     }
     if age=='cub':
         expected[f'leopard_{age}_bottle.webp']=(256,256)
@@ -59,11 +60,13 @@ with tempfile.TemporaryDirectory() as temp:
     chars=(JAVA/'CharacterSprites.java').read_text()
     games_java=(JAVA/'GameSprites.java').read_text()
     care_java=(JAVA/'CareSprites.java').read_text()
+    garden_java=(JAVA/'GardenSprites.java').read_text()
     (p/'CharacterSprites.java').write_text(chars)
     (p/'GameSprites.java').write_text(games_java)
     (p/'CareSprites.java').write_text(care_java)
+    (p/'GardenSprites.java').write_text(garden_java)
     (p/'SpriteMotion.java').write_text((JAVA/'SpriteMotion.java').read_text())
-    names=sorted(set(re.findall(r'R.drawable.(leopard_\w+)',chars+games_java+care_java)))
+    names=sorted(set(re.findall(r'R.drawable.(leopard_\w+)',chars+games_java+care_java+garden_java)))
     (p/'R.java').write_text('package com.byw.monpetitleopard; final class R { static class drawable {'+
         ''.join('static final int '+n+'='+str(i+1)+';' for i,n in enumerate(names))+'}}')
     (p/'MainActivity.java').write_text(
@@ -105,6 +108,11 @@ class ContractTest {
    }else{
     check(CareSprites.bottle(age)==0);
    }
+
+   GardenSprites.Pack garden=GardenSprites.forStage(age);
+   check(garden.stage==age);
+   check(garden.expectedWidth(garden.scratcherPlay)==512);
+   for(int id:garden.allResources())check(id!=0&&seen.add(id));
   }
   check(SpriteMotion.direction(-.10f,.25f,1f,1f)==SpriteMotion.LEFT);
   check(SpriteMotion.direction(.10f,.25f,1f,1f)==SpriteMotion.RIGHT);
@@ -112,13 +120,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.7.6: PASS");
+  System.out.println("Sprite registry v0.7.7: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.7.6: PASS')
+print('Sprite contract v0.7.7: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -218,7 +226,7 @@ for age in ['cub','teen','adult','old']:
 
 print("Normalisation de masse visuelle v0.7.1: PASS")
 
-# Soins v0.7.6 : même canevas et masse visuelle propre à chaque tranche d'âge.
+# Soins v0.7.7 : même canevas et masse visuelle propre à chaque tranche d'âge.
 for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
     idle_areas=[]
@@ -258,7 +266,7 @@ with Image.open(ROOT/'app/src/main/res-cub/drawable-nodpi/leopard_cub_bottle.web
     assert full is not None
     assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,('cub','bottle',full)
 
-print("Assets biberon et soins v0.7.6: PASS")
+print("Assets biberon et soins v0.7.7: PASS")
 
 
 toy_visuals={'tennis':(96,96),'yarn':(96,96),'mouse':(96,96),'plush':(96,96),'rope':(96,64)}
@@ -278,7 +286,7 @@ for age in ['cub','teen','adult','old']:
         for i in range(5):
             assert strip.crop((i*128,0,(i+1)*128,128)).getchannel('A').getbbox() is not None,(age,i,'frame corde vide')
 
-print("Visuels PNG et sources corde v0.7.6: PASS")
+print("Visuels PNG et sources corde v0.7.7: PASS")
 
 # Régression v0.7.1 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
@@ -343,7 +351,7 @@ assert 'CareSprites.forStage(petStage()).action(animation)' in main
 assert 'CareSprites.bottle(petStage())' in main
 assert 'startSpecialPose' in main
 
-print('Jeux salon v0.7.6: PASS')
+print('Jeux salon v0.7.7: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
@@ -358,7 +366,7 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.7.6: PASS')
+print('Assets gameplay salon v0.7.7: PASS')
 
 prepare_care=(ROOT/'tools/prepare_v075_care_assets.py').read_text()
 care_registry=(JAVA/'CareSprites.java').read_text()
@@ -367,10 +375,10 @@ assert 'leopard_{age}_{action}.webp' in prepare_care
 assert 'leopard_cub_bottle.webp' in prepare_care
 assert 'static Pack forStage' in care_registry
 assert 'static int bottle' in care_registry
-print('Assets biberon et soins v0.7.6: PASS')
+print('Assets biberon et soins v0.7.7: PASS')
 
 
-# Promenade v0.7.6 : assets, durée réelle, départ/retour maison et branchement Jardin.
+# Promenade v0.7.7 : assets, durée réelle, départ/retour maison et branchement Jardin.
 promenade_java=(JAVA/'PromenadeActivity.java').read_text()
 manifest=(ROOT/'app/src/main/AndroidManifest.xml').read_text()
 prepare_walk=(ROOT/'tools/prepare_v076_promenade_assets.py').read_text()
@@ -395,4 +403,47 @@ assert 'a.startPromenade(i);' in objects
 assert 'void startPromenade(ObjectSystem.Item item)' in main
 assert '.PromenadeActivity' in manifest
 assert 'v076-promenade-bundle' in prepare_walk
-print('Promenade v0.7.6: PASS')
+print('Promenade v0.7.7: PASS')
+
+
+# Jardin v0.7.7 : griffoir, animation 2 frames, jouets réutilisés, repos et simplification.
+garden_games=(JAVA/'GardenGames.java').read_text()
+garden_registry=(JAVA/'GardenSprites.java').read_text()
+prepare_garden=(ROOT/'tools/prepare_v077_garden_assets.py').read_text()
+objects=(JAVA/'ObjectSystem.java').read_text()
+living=(JAVA/'LivingRoomGames.java').read_text()
+
+with Image.open(ROOT/'app/src/main/res/drawable-nodpi/garden_scratcher.webp') as im:
+    rgba=im.convert('RGBA')
+    assert rgba.size==(256,256),rgba.size
+    b=rgba.getchannel('A').getbbox()
+    assert b is not None and b[0]>=10 and b[1]>=10 and b[2]<=246 and b[3]<=246,b
+
+for age in ['cub','teen','adult','old']:
+    p=ROOT/f'app/src/main/res-{age}/drawable-nodpi'/f'leopard_{age}_scratcher_play.webp'
+    with Image.open(p) as strip:
+        strip=strip.convert('RGBA')
+        assert strip.size==(512,256),(age,strip.size)
+        for i in range(2):
+            b=strip.crop((i*256,0,(i+1)*256,256)).getchannel('A').getbbox()
+            assert b is not None,(age,i)
+            assert b[0]>=10 and b[1]>=10 and b[2]<=246 and b[3]<=246,(age,i,b)
+
+assert 'static final int NONE=0,APPROACH=1,PLAYING=2' in garden_games
+assert 'playUntil=now+4200L' in garden_games
+assert 'GardenSprites.forStage(a.petStage()).scratcherPlay' in garden_games
+assert 'garden_scratcher' in garden_games
+assert 'a.gardenGames.startScratcher(i)' in objects
+assert 'String[] groups={"Jouets","Jardin"};' in objects
+assert '"tennis","Balle de tennis","🎾","jardin","Jouets","toy"' in objects
+assert '"plush","Peluche","🧸","jardin","Jouets","toy"' in objects
+assert '"rope","Corde","🪢","jardin","Jouets","rope"' in objects
+assert '"scratch","Griffoir","🐾","jardin","Jardin","scratcher"' in objects
+assert '"sun","Repos au soleil","☀️","jardin","Jardin","rest"' in objects
+assert '"contest"' not in objects
+assert '"feather"' not in objects
+assert '"hoop"' not in objects
+assert 'salon ou le jardin' in living
+assert 'v077-garden-scratcher' in prepare_garden
+assert 'GardenSprites.Pack garden=GardenSprites.forStage(age);' in main
+print('Jardin griffoir et jouets v0.7.7: PASS')
