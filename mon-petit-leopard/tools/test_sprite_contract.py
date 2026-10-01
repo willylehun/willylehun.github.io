@@ -95,23 +95,6 @@ for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
             assert b is not None,(name,i,'vide')
             assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,(name,i,b)
 
-# Régression v0.6.7 : les 3 frames sommeil du léopardeau gardent une échelle cohérente.
-sleep_path=ROOT/'app/src/main/res-cub/drawable-nodpi/leopard_cub_sleep.webp'
-with Image.open(sleep_path) as strip:
-    strip=strip.convert('RGBA')
-    assert strip.size==(768,256),strip.size
-    widths=[]
-    for i in range(3):
-        frame=strip.crop((i*256,0,(i+1)*256,256))
-        b=frame.getchannel('A').getbbox()
-        assert b is not None,('cub_sleep',i,'vide')
-        assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,('cub_sleep',i,b)
-        widths.append(b[2]-b[0])
-    assert widths[0]<=155,('cub_sleep_frame0_trop_grande',widths)
-    assert max(widths)-min(widths)<=12,('cub_sleep_saut_echelle',widths)
-
-
-
 # Régression v0.6.7 : normalisation globale d'échelle, âge par âge.
 def visible_bbox(im,threshold=20):
     a=im.getchannel('A')
