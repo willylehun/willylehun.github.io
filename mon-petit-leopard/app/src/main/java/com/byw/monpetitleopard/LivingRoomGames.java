@@ -57,14 +57,6 @@ final class LivingRoomGames {
         toyView.setOnTouchListener((v,e)->handleTouch(e));
     }
 
-    int toyDrawable(String id){
-        if("tennis".equals(id))return R.drawable.toy_tennis;
-        if("yarn".equals(id))return R.drawable.toy_yarn;
-        if("mouse".equals(id))return R.drawable.toy_mouse;
-        if("plush".equals(id))return R.drawable.toy_plush;
-        return 0;
-    }
-
     boolean active(){return state!=NONE;}
     boolean fastRun(){return state==RUN_TO_TOY||state==RETURNING;}
     int walkFrameAdvance(){return fastRun()?2:1;}
