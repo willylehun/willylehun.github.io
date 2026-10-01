@@ -71,6 +71,8 @@ public class MainActivity extends Activity {
     Bitmap actionStrip=null;
     Bitmap[] actionFrames=null;
     int actionStripRes=0,actionFrameIndex=0;
+    int specialPoseRes=0;
+    PetStage specialPoseStage=null;
 
     final Set<Integer> invalidCharacterAssets=new HashSet<>();
     boolean assetErrorShown=false;
@@ -545,6 +547,16 @@ public class MainActivity extends Activity {
         syncVisualStage();
         long now=System.currentTimeMillis();
 
+        if(specialPoseRes!=0){
+            if(now<manualUntil && specialPoseStage==petStage() && renderSpecialPose()){
+                petView.setAlpha(1f);
+                petView.setVisibility(View.VISIBLE);
+                updatePetPosition();
+                return;
+            }
+            clearSpecialPose();
+        }
+
         if(actionAnim!=ActionAnim.NONE){
             showActionAnimationFrame(now);
             petView.setAlpha(1f);
@@ -608,6 +620,7 @@ public class MainActivity extends Activity {
         releaseWalkFrames();
         releaseFaceMoodFrames();
         releaseActionFrames();
+        clearSpecialPose();
         actionAnim=ActionAnim.NONE;
         faceMoodUntil=0;
         nextFaceMoodAt=0;
@@ -937,6 +950,59 @@ public class MainActivity extends Activity {
         actionFrameAt=0;
     }
 
+    void clearSpecialPose(){
+        specialPoseRes=0;
+        specialPoseStage=null;
+    }
+
+    int specialPoseResource(String animation){
+        if("bottle".equals(animation))return CareSprites.bottle(petStage());
+        if("groom_foam".equals(animation)||"soap".equals(animation)
+                ||"comb".equals(animation)||"towel".equals(animation))
+            return CareSprites.forStage(petStage()).action(animation);
+        return 0;
+    }
+
+    boolean renderSpecialPose(){
+        if(specialPoseRes==0||specialPoseStage==null||specialPoseStage!=petStage())return false;
+        if(invalidCharacterAssets.contains(specialPoseRes)){
+            showAssetErrorOnce();
+            return false;
+        }
+        try{
+            petView.setImageResource(specialPoseRes);
+            displayedPetStage=specialPoseStage;
+            petView.setVisibility(View.VISIBLE);
+            currentPetRes=0;
+            return true;
+        }catch(Throwable err){
+            markCharacterAssetInvalid(specialPoseRes,"action spéciale","chargement impossible");
+            showAssetErrorOnce();
+            return false;
+        }
+    }
+
+    void startSpecialPose(int res,long duration){
+        if(res==0)return;
+        walking=false;
+        moodApproach=false;
+        moodExitUp=false;
+        activeFaceMood=-1;
+        pendingFaceMood=-1;
+        faceMoodUntil=0;
+        directionalIdleUntil=0;
+        releaseWalkFrames();
+        releaseActionFrames();
+        actionAnim=ActionAnim.NONE;
+        specialPoseRes=res;
+        specialPoseStage=petStage();
+        manualUntil=System.currentTimeMillis()+Math.max(500L,duration);
+        manualFrame=0;
+        currentPetRes=0;
+        renderSpecialPose();
+        updatePetPosition();
+    }
+
     int actionResource(ActionAnim type){
         CharacterSprites.Pack pack=CharacterSprites.forStage(petStage());
         if(type==ActionAnim.EAT)return pack.eat;
@@ -1002,6 +1068,7 @@ public class MainActivity extends Activity {
         directionalIdleUntil=0;
         releaseWalkFrames();
         releaseActionFrames();
+        clearSpecialPose();
         actionAnim=type;
         actionStartedAt=System.currentTimeMillis();
         actionUntil=type==ActionAnim.SLEEP?Long.MAX_VALUE:actionStartedAt+Math.max(500L,duration);
@@ -1595,8 +1662,17 @@ public class MainActivity extends Activity {
         }
 
         if(now<manualUntil){
+            if(specialPoseRes!=0){
+                if(renderSpecialPose()){
+                    updatePetPosition();
+                    return;
+                }
+                clearSpecialPose();
+            }
             applyPose(manualFrame);
             return;
+        }else if(specialPoseRes!=0){
+            clearSpecialPose();
         }
 
         if(stage()==Stage.ENDED){
@@ -1702,6 +1778,7 @@ public class MainActivity extends Activity {
             showFaceMoodNow(rnd.nextBoolean()?0:8,MOOD_DURATION_MS);
             return;
         }
+        clearSpecialPose();
         manualFrame=frame;
         manualUntil=System.currentTimeMillis()+duration;
         activeFaceMood=-1;
@@ -1727,7 +1804,9 @@ public class MainActivity extends Activity {
         energy=clamp(energy+e);
         stars+=gainStars;
 
-        if("eat".equals(animation))startActionAnimation(ActionAnim.EAT,3000L);
+        int special=specialPoseResource(animation);
+        if(special!=0)startSpecialPose(special,"bottle".equals(animation)?3000L:2600L);
+        else if("eat".equals(animation))startActionAnimation(ActionAnim.EAT,3000L);
         else if("jump".equals(animation))startActionAnimation(ActionAnim.JUMP,2200L);
         else showAction(frame,2200);
 
@@ -1971,7 +2050,7 @@ public class MainActivity extends Activity {
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         TextView note=text(12,false);
-        note.setText("Version 0.7.4 • "+p.zone+"\n"+names[k]+
+        note.setText("Version 0.7.5 • "+p.zone+"\n"+names[k]+
             (counts[k]>1?" • frame "+(f+1)+"/"+counts[k]:""));
         note.setPadding(dp(14),dp(8),dp(14),dp(8));
         box.addView(note);
@@ -2129,6 +2208,52 @@ public class MainActivity extends Activity {
                             " au lieu de "+width+"x"+height);
                 }catch(RuntimeException error){
                     markCharacterAssetInvalid(res,age+" GAME",error.getMessage());
+                }
+            }
+
+            CareSprites.Pack care=CareSprites.forStage(age);
+            for(int res:care.allResources()){
+                PetStage other=owners.put(res,age);
+                if(other!=null && other!=age){
+                    markCharacterAssetInvalid(res,age+" CARE","partage inter-âge interdit");
+                    continue;
+                }
+                try{
+                    String name=getResources().getResourceEntryName(res);
+                    if(!name.startsWith("leopard_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                        throw new IllegalArgumentException("mauvais préfixe soin : "+name);
+                    BitmapFactory.Options opts=new BitmapFactory.Options();
+                    opts.inJustDecodeBounds=true;opts.inScaled=false;
+                    BitmapFactory.decodeResource(getResources(),res,opts);
+                    int width=care.expectedWidth(res);
+                    int height=CareSprites.FRAME_SIZE;
+                    if(width<0 || opts.outWidth!=width || opts.outHeight!=height)
+                        throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+
+                            " au lieu de "+width+"x"+height);
+                }catch(RuntimeException error){
+                    markCharacterAssetInvalid(res,age+" CARE",error.getMessage());
+                }
+            }
+
+            if(age==PetStage.CUB){
+                int bottle=CareSprites.bottle(age);
+                PetStage other=owners.put(bottle,age);
+                if(other!=null && other!=age){
+                    markCharacterAssetInvalid(bottle,age+" BOTTLE","partage inter-âge interdit");
+                }else{
+                    try{
+                        String name=getResources().getResourceEntryName(bottle);
+                        if(!name.startsWith("leopard_cub_bottle"))
+                            throw new IllegalArgumentException("mauvais préfixe biberon : "+name);
+                        BitmapFactory.Options opts=new BitmapFactory.Options();
+                        opts.inJustDecodeBounds=true;opts.inScaled=false;
+                        BitmapFactory.decodeResource(getResources(),bottle,opts);
+                        if(opts.outWidth!=CareSprites.FRAME_SIZE || opts.outHeight!=CareSprites.FRAME_SIZE)
+                            throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+
+                                " au lieu de "+CareSprites.FRAME_SIZE+"x"+CareSprites.FRAME_SIZE);
+                    }catch(RuntimeException error){
+                        markCharacterAssetInvalid(bottle,age+" BOTTLE",error.getMessage());
+                    }
                 }
             }
         }

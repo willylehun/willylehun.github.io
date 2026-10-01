@@ -198,7 +198,12 @@ public class ObjectSystem {
         }
 
         String animation=null;
-        if(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))animation="eat";
+        if(i.id.equals("bottle"))animation="bottle";
+        else if(i.id.equals("groom"))animation="groom_foam";
+        else if(i.id.equals("soap"))animation="soap";
+        else if(i.id.equals("comb"))animation="comb";
+        else if(i.id.equals("towel"))animation="towel";
+        else if(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))animation="eat";
         else if(i.kind.equals("toy")||i.kind.equals("activity"))animation="jump";
         a.act(i.name,i.frame,i.hunger,i.water,i.clean,i.affection,i.happy,i.energy,i.stars,animation);
         a.save();

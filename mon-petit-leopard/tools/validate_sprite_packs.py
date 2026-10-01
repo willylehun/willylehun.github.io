@@ -21,9 +21,13 @@ GAME_EXPECTED={
     "fetch_yarn.png":(256,256),"fetch_mouse.png":(256,256),
     "fetch_plush.png":(256,256),"rope_play.png":(1280,256),
 }
+CARE_EXPECTED={
+    "groom_foam.webp":(256,256),"soap.webp":(256,256),
+    "comb.webp":(256,256),"towel.webp":(256,256),
+}
 
 def fail(msg):
-    raise SystemExit("ERREUR SPRITES v0.7.4: "+msg)
+    raise SystemExit("ERREUR SPRITES v0.7.5: "+msg)
 
 def main():
     common=ROOT/"res"/"drawable-nodpi"
@@ -33,7 +37,9 @@ def main():
     hashes={}
     for age in AGES:
         folder=ROOT/f"res-{age}"/"drawable-nodpi"
-        expected={f"leopard_{age}_{tail}":size for tail,size in {**EXPECTED,**GAME_EXPECTED}.items()}
+        expected={f"leopard_{age}_{tail}":size for tail,size in {**EXPECTED,**GAME_EXPECTED,**CARE_EXPECTED}.items()}
+        if age=="cub":
+            expected[f"leopard_{age}_bottle.webp"]=(256,256)
         actual={p.name for p in folder.glob("leopard_*") if p.is_file()}
         if actual!=set(expected):
             fail(f"{age}: manquants={sorted(set(expected)-actual)}, en trop={sorted(actual-set(expected))}")
@@ -54,8 +60,9 @@ def main():
             prev=hashes.get(digest)
             if prev and prev[0]!=age: fail(f"asset identique entre {prev} et {(age,name)}")
             hashes[digest]=(age,name)
-        print(f"OK {age}: 85 frames, canevas 256px, marges 10px, aucune frame rognée")
-    print("OK v0.7.4: sprites principaux + course + jeu, tailles et marges validées.")
+        count=sum(size[0]//FRAME for size in expected.values())
+        print(f"OK {age}: {count} frames/poses, canevas 256px, marges 10px, aucune frame rognée")
+    print("OK v0.7.5: sprites principaux + course + jeu + soins + biberon, tailles et marges validées.")
 
 if __name__=="__main__":
     main()
