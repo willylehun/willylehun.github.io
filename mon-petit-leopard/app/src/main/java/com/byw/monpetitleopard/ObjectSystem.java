@@ -199,15 +199,6 @@ public class ObjectSystem {
             return;
         }
 
-        if(i.kind.equals("contest")){
-            a.competition();
-            return;
-        }
-
-        if(i.kind.equals("training")){
-            a.skillObedience=a.clamp(a.skillObedience+2.5f);
-            a.skillCare=a.clamp(a.skillCare+1f);
-        }
         if(i.id.equals("groom")||i.id.equals("comb")){
             a.skillClean=a.clamp(a.skillClean+1.2f);
         }
