@@ -73,19 +73,29 @@ public class ObjectSystem {
 
         add("bed","Repos","🛏️","salon","Repos","rest",-3,-3,0,5,7,42,0,9,true,true,true,true);
 
-        // JARDIN — Fetch supprimé.
+        // JARDIN — promenade, jouets du salon, griffoir et repos au soleil.
         add("walk","Promenade","🌿","jardin","Jardin","activity",0,-7,-3,4,14,-10,1,10,true,true,true,true);
-        add("hoop","Anneau d’obstacle","⭕","jardin","Jardin","training",-3,-7,-3,3,18,-18,2,10,false,true,true,false);
-        add("feather","Canne à plume","🪶","jardin","Jardin","toy",0,-4,-2,4,15,-11,1,10,true,true,true,false);
-        add("scratch","Griffoir","🪵","jardin","Jardin","training",0,-2,-1,3,9,-7,1,6,true,true,true,true);
-        add("contest","Concours","🏅","jardin","Jardin","contest",0,-12,-4,4,12,-22,4,10,false,false,true,false);
+        add("scratch","Griffoir","🐾","jardin","Jardin","scratcher",0,-2,-1,3,9,-7,1,6,true,true,true,true);
         add("sun","Repos au soleil","☀️","jardin","Jardin","rest",0,-2,0,3,8,28,0,9,true,true,true,true);
+
+        add("tennis","Balle de tennis","🎾","jardin","Jouets","toy",0,-4,-2,5,16,-12,1,10,true,true,true,true);
+        add("yarn","Pelote","🧶","jardin","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,true);
+        add("mouse","Souris","🐭","jardin","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,true);
+        add("plush","Peluche","🧸","jardin","Jouets","toy",0,0,0,9,10,-3,0,11,true,true,true,true);
+        add("rope","Corde","🪢","jardin","Jouets","rope",0,-4,-3,5,15,-13,1,10,true,true,true,true);
     }
 
     void add(String id,String name,String icon,String room,String group,String kind,
              int h,int w,int c,int af,int happy,int energy,int stars,int frame,
              boolean cub,boolean teen,boolean adult,boolean old){
         items.add(new Item(id,name,icon,room,group,kind,h,w,c,af,happy,energy,stars,frame,cub,teen,adult,old));
+    }
+
+    Item findById(String id,String room){
+        for(Item i:items){
+            if(i.id.equals(id) && (room==null || i.room.equals(room)))return i;
+        }
+        return null;
     }
 
     boolean allowed(Item i){
@@ -110,7 +120,9 @@ public class ObjectSystem {
         if(a.room.equals("bain")){
             openItems("Salle de bain",itemsFor("bain",null));
         } else if(a.room.equals("jardin")){
-            openItems("Jardin",itemsFor("jardin",null));
+            String[] groups={"Jouets","Jardin"};
+            new AlertDialog.Builder(a).setTitle("Jardin").setItems(groups,(d,w)->
+                openItems(groups[w],itemsFor("jardin",groups[w]))).show();
         } else if(a.room.equals("cuisine")){
             String[] groups={"Boissons","Repas","Friandises & snacks"};
             new AlertDialog.Builder(a).setTitle("Cuisine").setItems(groups,(d,w)->openItems(groups[w],itemsFor("cuisine",groups[w]))).show();
@@ -149,6 +161,7 @@ public class ObjectSystem {
         if("mouse".equals(id))return R.drawable.toy_mouse_art;
         if("plush".equals(id))return R.drawable.toy_plush_art;
         if("rope".equals(id))return R.drawable.toy_rope_art;
+        if("scratch".equals(id))return R.drawable.garden_scratcher;
         return 0;
     }
 
@@ -163,7 +176,12 @@ public class ObjectSystem {
             return;
         }
 
-        if("salon".equals(i.room) && ("tennis".equals(i.id)
+        if("scratch".equals(i.id)){
+            if(a.gardenGames!=null)a.gardenGames.startScratcher(i);
+            return;
+        }
+
+        if(("salon".equals(i.room)||"jardin".equals(i.room)) && ("tennis".equals(i.id)
                 ||"yarn".equals(i.id)||"mouse".equals(i.id)||"plush".equals(i.id))){
             if(a.games!=null)a.games.startFetch(i);
             return;
