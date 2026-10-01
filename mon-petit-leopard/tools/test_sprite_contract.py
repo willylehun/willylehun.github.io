@@ -40,7 +40,7 @@ for age in ['cub','teen','adult','old']:
         f'leopard_{age}_fetch_yarn.png':(256,256),
         f'leopard_{age}_fetch_mouse.png':(256,256),
         f'leopard_{age}_fetch_plush.png':(256,256),
-        f'leopard_{age}_rope_play.png':(1280,256),
+        f'leopard_{age}_rope_play.webp':(1280,256),
     }
     assert {p.name for p in folder.glob('leopard_*')}==set(expected)
     for name,size in expected.items():
@@ -90,13 +90,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.7.2: PASS");
+  System.out.println("Sprite registry v0.8.0: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.7.2: PASS')
+print('Sprite contract v0.8.0: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -175,7 +175,7 @@ for age in ['cub','teen','adult','old']:
     target=float(np.median(idle_areas))
 
     for key,count in frame_counts.items():
-        ext='png' if key.startswith('idle_') or key.startswith('fetch_') or key=='rope_play' else 'webp'
+        ext='png' if key.startswith('idle_') or key.startswith('fetch_') else 'webp'
         with Image.open(folder/f'leopard_{age}_{key}.{ext}') as strip:
             strip=strip.convert('RGBA')
             assert strip.size==(256*count,256),(age,key,strip.size)
@@ -184,15 +184,20 @@ for age in ['cub','teen','adult','old']:
                 area,b=largest_component(frame)
                 assert area>0 and b is not None,(age,key,i,'vide')
                 ratio=area/target
-                if key.startswith('fetch_') or key=='rope_play':
-                    # Les poses de jeu peuvent être plus horizontales/compactes,
-                    # tout en restant visuellement proches du pack de l'âge.
+                if key=='rope_play':
+                    # Les vrais sprites corde conservent la taille du léopard ;
+                    # seule l'extrémité droite de la corde peut sortir du canevas.
+                    assert .70<=ratio<=1.65,(age,key,i,area,target,ratio,b)
+                elif key.startswith('fetch_'):
                     assert .80<=ratio<=1.20,(age,key,i,area,target,ratio,b)
                 else:
                     assert .95<=ratio<=1.05,(age,key,i,area,target,ratio,b)
                 full=frame.getchannel('A').getbbox()
                 assert full is not None
-                assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,i,full)
+                if key=='rope_play':
+                    assert full[0]>=0 and full[1]>=8 and full[2]<=256 and full[3]<=244,(age,key,i,full)
+                else:
+                    assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,i,full)
 
 print("Normalisation de masse visuelle v0.7.1: PASS")
 
@@ -212,7 +217,7 @@ print('Bêtises au sol et nettoyage direct v0.7.1: PASS')
 objects=(JAVA/'ObjectSystem.java').read_text()
 games=(JAVA/'LivingRoomGames.java').read_text()
 
-for toy in ['"ball"','"tennis"','"yarn"','"mouse"','"plush"']:
+for toy in ['"tennis"','"yarn"','"mouse"','"plush"']:
     assert toy in objects
 assert '"fishToy"' not in objects
 assert '"tunnel"' not in objects
@@ -229,6 +234,8 @@ assert 'chooseLandingNode' in games
 assert 'movePetToNode' in games
 assert 'fastRun()' in games
 assert 'ROPE_HOLD' in games
+assert 'ROPE_SOLO_MS=2200L' in games
+assert 'ROPE_FRAME_COUNT=5' in games
 assert 'ValueAnimator.ofFloat(0f,1f)' in games
 assert '4f*arc*t*(1f-t)' in games
 assert 'toyMenuDrawable' in objects
@@ -242,13 +249,16 @@ assert '{.30f,.74f}' not in main
 assert '{.30f,.86f}' in main and '{.50f,.95f}' in main
 assert 'speed*=1.85f' in main
 
-print('Jeux salon v0.7.2: PASS')
+print('Jeux salon v0.8.0: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
 prepare_game=(ROOT/'tools/prepare_v070_game_assets.py').read_text()
+prepare_v080=(ROOT/'tools/prepare_v080_game_assets.py').read_text()
 game_registry=(JAVA/'GameSprites.java').read_text()
 assert 'v070-fetch-bundle' in prepare_game
+assert 'v080-game-bundle' in prepare_v080
+assert 'EXPECTED_SHA256="925b9e00f0b8497373fca717f4f6f46c91f7035bdc663df2c01dc0f1fca83017"' in prepare_v080
 assert 'leopard_{age}_run_' in prepare_game
 assert 'leopard_{age}_fetch_' in prepare_game
 assert 'static Pack forStage' in game_registry
@@ -257,4 +267,16 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.7.2: PASS')
+
+for toy in ['tennis','yarn','mouse','plush','rope']:
+    p=ROOT/'app/src/main/res/drawable-nodpi'/f'toy_{toy}.webp'
+    with Image.open(p) as im:
+        im=im.convert('RGBA')
+        assert im.size==(256,256),(toy,im.size)
+        assert im.getchannel('A').getextrema()==(0,255),(toy,'alpha')
+for age in ['cub','teen','adult','old']:
+    p=ROOT/f'app/src/main/res-{age}/drawable-nodpi'/f'leopard_{age}_rope_play.webp'
+    with Image.open(p) as im:
+        im.load()
+        assert im.size==(1280,256),(age,im.size)
+print('Assets gameplay salon v0.8.0: PASS')
