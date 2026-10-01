@@ -44,6 +44,8 @@ jobs:
         run: python mon-petit-leopard/tools/prepare_v061_sprite_assets.py
       - name: Prepare salon game assets
         run: python mon-petit-leopard/tools/prepare_v070_game_assets.py
+      - name: Apply cahier des charges art assets
+        run: python mon-petit-leopard/tools/prepare_v080_game_assets.py
       - name: Sprite contract tests
         run: python mon-petit-leopard/tools/test_sprite_contract.py
       - name: Validate sprite packs
@@ -53,36 +55,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.7.2
+          name: mon-petit-leopard-v0.8.0
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.7.2.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.0.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.7.2"
+          TAG="mon-petit-leopard-v0.8.0"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.7.2 — Va chercher avec assets dédiés" \
-              --notes "v0.7.2 : le lancer des jouets suit maintenant une trajectoire en cloche avant d’atterrir au sol. Le moteur sait afficher les PNG transparents balle de tennis, pelote, souris et peluche dans le menu et pendant le lancer, avec repli sûr tant que les ressources artistiques ne sont pas présentes. La corde utilise un strip de 5 frames par âge et continue brièvement à s’animer après le relâchement. Repos, Appeler, les quatre directions, l’exclusion poisson/tunnel et la zone anti-canapé sont conservés."
+              --title "Mon Petit Léopard v0.8.0 — Cahier des charges jouets et corde" \
+              --notes "v0.8.0 : intègre les vrais visuels transparents fournis pour balle de tennis, pelote, souris et peluche, ainsi qu’une corde cohérente dans le menu et le mini-jeu. Les objets sont affichés à leur taille de jeu, lancés selon une trajectoire en cloche puis posés au sol avant la course du léopard. Le tir à la corde utilise désormais 5 vrais sprites par âge et continue 2,2 secondes après le relâchement. Repos, Appeler, les quatre directions, l’exclusion poisson/tunnel et la zone anti-canapé sont conservés."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.7.2.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.0.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.7.2 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.8.0 APK [skip ci]"
             git push
           fi
