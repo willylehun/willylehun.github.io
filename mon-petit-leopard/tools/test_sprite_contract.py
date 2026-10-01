@@ -41,7 +41,13 @@ for age in ['cub','teen','adult','old']:
         f'leopard_{age}_fetch_mouse.png':(256,256),
         f'leopard_{age}_fetch_plush.png':(256,256),
         f'leopard_{age}_rope_play.png':(1280,256),
+        f'leopard_{age}_groom_foam.webp':(256,256),
+        f'leopard_{age}_soap.webp':(256,256),
+        f'leopard_{age}_comb.webp':(256,256),
+        f'leopard_{age}_towel.webp':(256,256),
     }
+    if age=='cub':
+        expected[f'leopard_{age}_bottle.webp']=(256,256)
     assert {p.name for p in folder.glob('leopard_*')}==set(expected)
     for name,size in expected.items():
         with Image.open(folder/name) as im:
@@ -52,10 +58,12 @@ with tempfile.TemporaryDirectory() as temp:
     p=Path(temp)
     chars=(JAVA/'CharacterSprites.java').read_text()
     games_java=(JAVA/'GameSprites.java').read_text()
+    care_java=(JAVA/'CareSprites.java').read_text()
     (p/'CharacterSprites.java').write_text(chars)
     (p/'GameSprites.java').write_text(games_java)
+    (p/'CareSprites.java').write_text(care_java)
     (p/'SpriteMotion.java').write_text((JAVA/'SpriteMotion.java').read_text())
-    names=sorted(set(re.findall(r'R.drawable.(leopard_\w+)',chars+games_java)))
+    names=sorted(set(re.findall(r'R.drawable.(leopard_\w+)',chars+games_java+care_java)))
     (p/'R.java').write_text('package com.byw.monpetitleopard; final class R { static class drawable {'+
         ''.join('static final int '+n+'='+str(i+1)+';' for i,n in enumerate(names))+'}}')
     (p/'MainActivity.java').write_text(
@@ -83,6 +91,20 @@ class ContractTest {
    check(g.expectedWidth(g.fetchBall)==256);
    check(g.expectedWidth(g.ropePlay)==1280);
    for(int id:g.allResources())check(id!=0&&seen.add(id));
+
+   CareSprites.Pack care=CareSprites.forStage(age);
+   check(care.stage==age);
+   check(care.expectedWidth(care.groomFoam)==256);
+   check(care.expectedWidth(care.soap)==256);
+   check(care.expectedWidth(care.comb)==256);
+   check(care.expectedWidth(care.towel)==256);
+   for(int id:care.allResources())check(id!=0&&seen.add(id));
+   if(age==MainActivity.PetStage.CUB){
+    int bottle=CareSprites.bottle(age);
+    check(bottle!=0&&seen.add(bottle));
+   }else{
+    check(CareSprites.bottle(age)==0);
+   }
   }
   check(SpriteMotion.direction(-.10f,.25f,1f,1f)==SpriteMotion.LEFT);
   check(SpriteMotion.direction(.10f,.25f,1f,1f)==SpriteMotion.RIGHT);
@@ -90,13 +112,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.7.4: PASS");
+  System.out.println("Sprite registry v0.7.5: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.7.4: PASS')
+print('Sprite contract v0.7.5: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -196,6 +218,49 @@ for age in ['cub','teen','adult','old']:
 
 print("Normalisation de masse visuelle v0.7.1: PASS")
 
+# Soins v0.7.5 : même canevas et masse visuelle propre à chaque tranche d'âge.
+for age in ['cub','teen','adult','old']:
+    folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
+    idle_areas=[]
+    for key in ['idle_down','idle_left','idle_right','idle_up']:
+        with Image.open(folder/f'leopard_{age}_{key}.png') as im:
+            area,b=largest_component(im.convert('RGBA'))
+            assert area>0 and b is not None
+            idle_areas.append(area)
+    target=float(np.median(idle_areas))
+
+    for key in ['groom_foam','soap','comb','towel']:
+        with Image.open(folder/f'leopard_{age}_{key}.webp') as im:
+            frame=im.convert('RGBA')
+            assert frame.size==(256,256),(age,key,frame.size)
+            area,b=largest_component(frame)
+            assert area>0 and b is not None,(age,key,'vide')
+            ratio=area/target
+            assert .95<=ratio<=1.10,(age,key,area,target,ratio,b)
+            full=frame.getchannel('A').getbbox()
+            assert full is not None
+            assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,full)
+
+with Image.open(ROOT/'app/src/main/res-cub/drawable-nodpi/leopard_cub_bottle.webp') as im:
+    frame=im.convert('RGBA')
+    assert frame.size==(256,256),frame.size
+    cub_folder=ROOT/'app/src/main/res-cub/drawable-nodpi'
+    cub_idle=[]
+    for key in ['idle_down','idle_left','idle_right','idle_up']:
+        with Image.open(cub_folder/f'leopard_cub_{key}.png') as idle:
+            area,_=largest_component(idle.convert('RGBA'))
+            cub_idle.append(area)
+    target=float(np.median(cub_idle))
+    area,b=largest_component(frame)
+    ratio=area/target
+    assert .95<=ratio<=1.10,('cub','bottle',area,target,ratio,b)
+    full=frame.getchannel('A').getbbox()
+    assert full is not None
+    assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,('cub','bottle',full)
+
+print("Assets biberon et soins v0.7.5: PASS")
+
+
 toy_visuals={'tennis':(96,96),'yarn':(96,96),'mouse':(96,96),'plush':(96,96),'rope':(96,64)}
 for toy,size in toy_visuals.items():
     p=ROOT/'app/src/main/res/drawable-nodpi'/f'toy_{toy}_art.png'
@@ -213,7 +278,7 @@ for age in ['cub','teen','adult','old']:
         for i in range(5):
             assert strip.crop((i*128,0,(i+1)*128,128)).getchannel('A').getbbox() is not None,(age,i,'frame corde vide')
 
-print("Visuels PNG et sources corde v0.7.4: PASS")
+print("Visuels PNG et sources corde v0.7.5: PASS")
 
 # Régression v0.7.1 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
@@ -244,6 +309,11 @@ assert 'String[] groups={"Jouets","Repos"};' in objects
 assert 'games.startFetch(i)' in objects
 assert 'games.startRope(i)' in objects
 assert 'beginAutoSleep();' in objects
+assert 'if(i.id.equals("bottle"))animation="bottle";' in objects
+assert 'else if(i.id.equals("groom"))animation="groom_foam";' in objects
+assert 'else if(i.id.equals("soap"))animation="soap";' in objects
+assert 'else if(i.id.equals("comb"))animation="comb";' in objects
+assert 'else if(i.id.equals("towel"))animation="towel";' in objects
 
 assert 'class LivingRoomGames' in games
 assert 'THROW_READY' in games and 'RUN_TO_TOY' in games and 'RETURNING' in games
@@ -269,8 +339,11 @@ assert 'games.fastRun()' in main
 assert '{.30f,.74f}' not in main
 assert '{.30f,.86f}' in main and '{.50f,.95f}' in main
 assert 'speed*=1.85f' in main
+assert 'CareSprites.forStage(petStage()).action(animation)' in main
+assert 'CareSprites.bottle(petStage())' in main
+assert 'startSpecialPose' in main
 
-print('Jeux salon v0.7.4: PASS')
+print('Jeux salon v0.7.5: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
@@ -285,5 +358,14 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.7.4: PASS')
+print('Assets gameplay salon v0.7.5: PASS')
+
+prepare_care=(ROOT/'tools/prepare_v075_care_assets.py').read_text()
+care_registry=(JAVA/'CareSprites.java').read_text()
+assert 'v075-care-bundle' in prepare_care
+assert 'leopard_{age}_{action}.webp' in prepare_care
+assert 'leopard_cub_bottle.webp' in prepare_care
+assert 'static Pack forStage' in care_registry
+assert 'static int bottle' in care_registry
+print('Assets biberon et soins v0.7.5: PASS')
 
