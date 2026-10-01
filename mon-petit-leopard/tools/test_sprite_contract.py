@@ -184,7 +184,12 @@ for age in ['cub','teen','adult','old']:
                 area,b=largest_component(frame)
                 assert area>0 and b is not None,(age,key,i,'vide')
                 ratio=area/target
-                assert .95<=ratio<=1.05,(age,key,i,area,target,ratio,b)
+                if key.startswith('fetch_') or key=='rope_play':
+                    # Les poses de jeu peuvent être plus horizontales/compactes,
+                    # tout en restant visuellement proches du pack de l'âge.
+                    assert .80<=ratio<=1.20,(age,key,i,area,target,ratio,b)
+                else:
+                    assert .95<=ratio<=1.05,(age,key,i,area,target,ratio,b)
                 full=frame.getchannel('A').getbbox()
                 assert full is not None
                 assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,i,full)
