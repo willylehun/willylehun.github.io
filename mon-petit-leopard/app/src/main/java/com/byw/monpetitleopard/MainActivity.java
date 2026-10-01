@@ -1431,6 +1431,41 @@ public class MainActivity extends Activity {
         }).show();
     }
 
+    void startPromenade(ObjectSystem.Item item){
+        if(stage()==Stage.ENDED)return;
+        wakeForAction();
+
+        long now=System.currentTimeMillis();
+        long start=sp.getLong("promenadeStart",0L);
+        boolean active=sp.getBoolean("promenadeActive",false);
+        if(active && (start<=0L || now-start>=PromenadeActivity.DURATION_MS)){
+            active=false;
+            sp.edit().putBoolean("promenadeActive",false).apply();
+        }
+
+        if(!active){
+            hunger=clamp(hunger+item.hunger);
+            thirst=clamp(thirst+item.water);
+            clean=clamp(clean+item.clean);
+            affection=clamp(affection+item.affection);
+            happy=clamp(happy+item.happy);
+            energy=clamp(energy+item.energy);
+            stars+=item.stars;
+            skillCare=clamp(skillCare+.5f);
+            start=now;
+            sp.edit()
+              .putBoolean("promenadeActive",true)
+              .putLong("promenadeStart",start)
+              .apply();
+            addHistory("Promenade démarrée pour 30 minutes.");
+            save();
+            refresh();
+        }
+
+        Intent intent=new Intent(this,PromenadeActivity.class);
+        startActivity(intent);
+    }
+
     void actionsMenu(){
         String[] actions={"⚠ Punir","🧽 Nettoyer","📣 Appeler"};
         new AlertDialog.Builder(this).setTitle("Actions").setItems(actions,(d,w)->{
