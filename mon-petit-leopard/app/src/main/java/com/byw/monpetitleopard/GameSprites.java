@@ -48,7 +48,7 @@ final class GameSprites {
 
         int expectedWidth(int res){
             if(ownsRun(res))return FRAME_SIZE*6;
-            if(res==ropePlay)return FRAME_SIZE;
+            if(res==ropePlay)return FRAME_SIZE*5;
             if(ownsPose(res))return FRAME_SIZE;
             return -1;
         }
