@@ -15,10 +15,10 @@ ACTIONS=("groom_foam","soap","comb","towel")
 FRAME=(256,256)
 
 def load_bundle():
-    parts=sorted(SOURCE.glob("care_assets_v075_q88.b64.part*"))
-    if len(parts)!=7:
-        raise RuntimeError(f"bundle soins v0.7.5 incomplet: {len(parts)} parties")
-    payload="".join(p.read_text().strip() for p in parts)
+    source=SOURCE/"care_assets_v075_q88.b64"
+    if not source.exists():
+        raise RuntimeError("bundle soins v0.7.5 absent")
+    payload=source.read_text().strip()
     raw=base64.b64decode(payload,validate=True)
     return zipfile.ZipFile(io.BytesIO(raw),"r")
 
