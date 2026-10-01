@@ -14,6 +14,7 @@ from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
 SOURCE=ROOT/"source-assets"/"v070-fetch-bundle"
+ROPE_SOURCE=ROOT/"source-assets"/"v072-rope"
 RUNTIME=ROOT/"app"/"src"/"main"
 AGES=("cub","teen","adult","old")
 TOYS=("ball","tennis","yarn","mouse","plush")
@@ -138,23 +139,23 @@ def main():
                 frame=_normalize(frame,target_area)
                 frame.save(dst/f"leopard_{age}_fetch_{toy}.png","PNG",optimize=False)
 
-            # Fallback déterministe : fabrique un strip corde 5 frames à partir
-            # de la pose pelote. Un pack artistique 5 frames déjà présent peut
-            # remplacer ce fichier sans modifier le moteur.
-            base=Image.open(dst/f"leopard_{age}_fetch_yarn.png").convert("RGBA")
+            # v0.7.3 : vraie séquence corde fournie, 5 frames distinctes par âge.
+            rope_src=ROPE_SOURCE/f"leopard_{age}_rope_play_source.png"
+            if not rope_src.exists():
+                raise RuntimeError(f"{age}: source corde v0.7.3 manquante")
+            rope_source=Image.open(rope_src).convert("RGBA")
+            if rope_source.size!=(640,128):
+                raise RuntimeError(f"{age}: source corde {rope_source.size}, attendu 640x128")
             rope=Image.new("RGBA",(FRAME*5,FRAME),(0,0,0,0))
-            transforms=((0,0,0),(-3,1,-2),(2,-1,2),(-2,0,-1),(3,1,1))
-            for i,(dx,dy,angle) in enumerate(transforms):
-                frame=base.rotate(angle,Image.Resampling.BICUBIC,expand=False)
-                shifted=Image.new("RGBA",(FRAME,FRAME),(0,0,0,0))
-                shifted.alpha_composite(frame,(dx,dy))
-                shifted=_safe_fit(shifted)
-                rope.alpha_composite(shifted,(i*FRAME,0))
+            for i in range(5):
+                frame=rope_source.crop((i*128,0,(i+1)*128,128))
+                frame=_normalize(frame,target_area)
+                rope.alpha_composite(frame,(i*FRAME,0))
             rope.save(dst/f"leopard_{age}_rope_play.png","PNG",optimize=False)
 
             print(f"OK {age}: run 4 directions + 5 jouets + corde 5 frames, échelle alignée sur idle_down")
 
-    print("OK v0.7.2: assets de jeu salon préparés pour les quatre âges.")
+    print("OK v0.7.3: assets de jeu salon préparés pour les quatre âges.")
 
 if __name__=="__main__":
     main()

@@ -53,36 +53,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.7.2
+          name: mon-petit-leopard-v0.7.3
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.7.2.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.7.3.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.7.2"
+          TAG="mon-petit-leopard-v0.7.3"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.7.2 — Va chercher avec assets dédiés" \
-              --notes "v0.7.2 : le lancer des jouets suit maintenant une trajectoire en cloche avant d’atterrir au sol. Le moteur sait afficher les PNG transparents balle de tennis, pelote, souris et peluche dans le menu et pendant le lancer, avec repli sûr tant que les ressources artistiques ne sont pas présentes. La corde utilise un strip de 5 frames par âge et continue brièvement à s’animer après le relâchement. Repos, Appeler, les quatre directions, l’exclusion poisson/tunnel et la zone anti-canapé sont conservés."
+              --title "Mon Petit Léopard v0.7.3 — Jouets et corde finalisés" \
+              --notes "v0.7.3 : intègre les visuels PNG transparents fournis pour la balle de tennis, la pelote, la souris, la peluche et la corde. Le lancer suit une trajectoire en cloche, l’objet atterrit sur le sol, le léopard court le chercher, joue puis revient au premier plan. La corde utilise désormais les vraies séquences de 5 frames distinctes pour léopardeau, ado, adulte et vieux et continue brièvement à s’animer après le relâchement. Repos, Appeler, les quatre directions, l’exclusion poisson/tunnel et la zone anti-canapé sont conservés."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.7.2.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.7.3.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.7.2 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.7.3 APK [skip ci]"
             git push
           fi

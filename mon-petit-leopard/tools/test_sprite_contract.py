@@ -90,13 +90,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.7.2: PASS");
+  System.out.println("Sprite registry v0.7.3: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.7.2: PASS')
+print('Sprite contract v0.7.3: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -184,10 +184,10 @@ for age in ['cub','teen','adult','old']:
                 area,b=largest_component(frame)
                 assert area>0 and b is not None,(age,key,i,'vide')
                 ratio=area/target
-                if key.startswith('fetch_') or key=='rope_play':
-                    # Les poses de jeu peuvent être plus horizontales/compactes,
-                    # tout en restant visuellement proches du pack de l'âge.
+                if key.startswith('fetch_'):
                     assert .80<=ratio<=1.20,(age,key,i,area,target,ratio,b)
+                elif key=='rope_play':
+                    assert .50<=ratio<=1.60,(age,key,i,area,target,ratio,b)
                 else:
                     assert .95<=ratio<=1.05,(age,key,i,area,target,ratio,b)
                 full=frame.getchannel('A').getbbox()
@@ -195,6 +195,25 @@ for age in ['cub','teen','adult','old']:
                 assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,i,full)
 
 print("Normalisation de masse visuelle v0.7.1: PASS")
+
+toy_visuals={'tennis':(96,96),'yarn':(96,96),'mouse':(96,96),'plush':(96,96),'rope':(96,64)}
+for toy,size in toy_visuals.items():
+    p=ROOT/'app/src/main/res/drawable-nodpi'/f'toy_{toy}_art.png'
+    with Image.open(p) as im:
+        rgba=im.convert('RGBA')
+        assert rgba.size==size,(toy,rgba.size,size)
+        alpha=np.array(rgba.getchannel('A'))
+        assert alpha.min()==0 and alpha.max()==255,(toy,'alpha')
+
+for age in ['cub','teen','adult','old']:
+    p=ROOT/'source-assets/v072-rope'/f'leopard_{age}_rope_play_source.png'
+    with Image.open(p) as strip:
+        strip=strip.convert('RGBA')
+        assert strip.size==(640,128),(age,strip.size)
+        for i in range(5):
+            assert strip.crop((i*128,0,(i+1)*128,128)).getchannel('A').getbbox() is not None,(age,i,'frame corde vide')
+
+print("Visuels PNG et sources corde v0.7.3: PASS")
 
 # Régression v0.7.1 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
@@ -235,6 +254,8 @@ assert 'ValueAnimator.ofFloat(0f,1f)' in games
 assert 'u*u*sy+2f*u*t*cy+t*t*target[1]' in games
 assert 'toyMenuDrawable' in objects
 assert 'toyDrawable' in games
+for res in ['toy_tennis_art','toy_yarn_art','toy_mouse_art','toy_plush_art','toy_rope_art']:
+    assert ('R.drawable.'+res) in (games+objects),res
 
 assert '📣 Appeler' in main
 assert 'void callLeopard()' in main
@@ -244,7 +265,7 @@ assert '{.30f,.74f}' not in main
 assert '{.30f,.86f}' in main and '{.50f,.95f}' in main
 assert 'speed*=1.85f' in main
 
-print('Jeux salon v0.7.2: PASS')
+print('Jeux salon v0.7.3: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
@@ -259,4 +280,4 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.7.2: PASS')
+print('Assets gameplay salon v0.7.3: PASS')

@@ -146,8 +146,11 @@ public class ObjectSystem {
     }
 
     int toyMenuDrawable(String id){
-        if("tennis".equals(id)||"yarn".equals(id)||"mouse".equals(id)||"plush".equals(id))
-            return a.getResources().getIdentifier("toy_"+id,"drawable",a.getPackageName());
+        if("tennis".equals(id))return R.drawable.toy_tennis_art;
+        if("yarn".equals(id))return R.drawable.toy_yarn_art;
+        if("mouse".equals(id))return R.drawable.toy_mouse_art;
+        if("plush".equals(id))return R.drawable.toy_plush_art;
+        if("rope".equals(id))return R.drawable.toy_rope_art;
         return 0;
     }
 

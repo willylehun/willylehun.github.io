@@ -58,10 +58,10 @@ final class LivingRoomGames {
     }
 
     int toyDrawable(String id){
-        if("tennis".equals(id))return R.drawable.toy_tennis;
-        if("yarn".equals(id))return R.drawable.toy_yarn;
-        if("mouse".equals(id))return R.drawable.toy_mouse;
-        if("plush".equals(id))return R.drawable.toy_plush;
+        if("tennis".equals(id))return R.drawable.toy_tennis_art;
+        if("yarn".equals(id))return R.drawable.toy_yarn_art;
+        if("mouse".equals(id))return R.drawable.toy_mouse_art;
+        if("plush".equals(id))return R.drawable.toy_plush_art;
         return 0;
     }
 
@@ -136,7 +136,7 @@ final class LivingRoomGames {
         preparePet();
         activeItem=item;
         state=ROPE_APPROACH;
-        toyView.setImageResource(R.drawable.toy_rope);
+        toyView.setImageResource(R.drawable.toy_rope_art);
         toyView.setContentDescription("Corde");
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
