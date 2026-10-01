@@ -158,6 +158,11 @@ public class ObjectSystem {
             return;
         }
 
+        if("walk".equals(i.id)){
+            a.startPromenade(i);
+            return;
+        }
+
         if("salon".equals(i.room) && ("tennis".equals(i.id)
                 ||"yarn".equals(i.id)||"mouse".equals(i.id)||"plush".equals(i.id))){
             if(a.games!=null)a.games.startFetch(i);
