@@ -3,9 +3,6 @@ package com.byw.monpetitleopard;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.animation.ValueAnimator;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,11 +40,6 @@ final class LivingRoomGames {
     int ropeFrameIndex=0;
     float downRawX,downRawY,startViewX,startViewY;
     float toyNX=.50f,toyNY=.95f;
-    Bitmap ropeStrip;
-    Bitmap[] ropeFrames;
-    int ropeFrameIndex=0;
-    long ropeFrameAt=0;
-    MainActivity.PetStage loadedRopeStage=null;
 
     LivingRoomGames(MainActivity a){this.a=a;}
 
@@ -121,8 +113,10 @@ final class LivingRoomGames {
         preparePet();
         activeItem=item;
         state=THROW_READY;
-        toyView.setTextSize(34);
-        applyToyVisual(item);
+        int toyRes=toyDrawable(item.id);
+        if(toyRes==0){a.toast("Ce jouet n’a pas de visuel de lancer.");cancel();return;}
+        toyView.setImageResource(toyRes);
+        toyView.setContentDescription(item.name);
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
         float[][] nodes=a.roomNodes();
@@ -142,9 +136,8 @@ final class LivingRoomGames {
         preparePet();
         activeItem=item;
         state=ROPE_APPROACH;
-        toyView.setTextSize(24);
-        toyView.setBackground(null);
-        toyView.setText("│\n🪢");
+        toyView.setImageResource(R.drawable.toy_rope);
+        toyView.setContentDescription("Corde");
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
         float[][] nodes=a.roomNodes();
@@ -435,25 +428,6 @@ final class LivingRoomGames {
         a.refresh();
     }
 
-    int toyDrawable(String id){
-        if("tennis".equals(id)||"yarn".equals(id)||"mouse".equals(id)||"plush".equals(id)){
-            return a.getResources().getIdentifier("toy_"+id,"drawable",a.getPackageName());
-        }
-        return 0;
-    }
-
-    void applyToyVisual(ObjectSystem.Item item){
-        int res=toyDrawable(item.id);
-        if(res!=0){
-            toyView.setText("");
-            toyView.setBackgroundResource(res);
-            toyView.setContentDescription(item.name);
-        }else{
-            toyView.setBackground(null);
-            toyView.setText(item.icon);
-            toyView.setContentDescription(item.name);
-        }
-    }
 
     void beginReturn(){
         if(activeItem==null){cancel();return;}
