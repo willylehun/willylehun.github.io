@@ -32,4 +32,4 @@ android {
     }
 }
 
-// Character sprite packs physically separated, cleaned and validated for v0.7.7
+// Character sprite packs physically separated; garden scratcher and v0.7.7 assets validated.
