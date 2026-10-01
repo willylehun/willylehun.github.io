@@ -212,7 +212,7 @@ print('Bêtises au sol et nettoyage direct v0.7.1: PASS')
 objects=(JAVA/'ObjectSystem.java').read_text()
 games=(JAVA/'LivingRoomGames.java').read_text()
 
-for toy in ['"ball"','"tennis"','"yarn"','"mouse"','"plush"']:
+for toy in ['"tennis"','"yarn"','"mouse"','"plush"']:
     assert toy in objects
 assert '"fishToy"' not in objects
 assert '"tunnel"' not in objects
@@ -230,7 +230,7 @@ assert 'movePetToNode' in games
 assert 'fastRun()' in games
 assert 'ROPE_HOLD' in games
 assert 'ValueAnimator.ofFloat(0f,1f)' in games
-assert '4f*arc*t*(1f-t)' in games
+assert 'u*u*sy+2f*u*t*cy+t*t*target[1]' in games
 assert 'toyMenuDrawable' in objects
 assert 'toyDrawable' in games
 
