@@ -636,6 +636,13 @@ public class MainActivity extends Activity {
     }
 
     int getWalkStrip(PetStage stage,WalkMode mode){
+        if(games!=null && games.fastRun()){
+            GameSprites.Pack game=GameSprites.forStage(stage);
+            if(mode==WalkMode.FRONT)return game.runDown;
+            if(mode==WalkMode.BACK)return game.runUp;
+            return travelDirection==TravelDirection.RIGHT?game.runRight:game.runLeft;
+        }
+
         CharacterSprites.Pack pack=CharacterSprites.forStage(stage);
         if(mode==WalkMode.FRONT)return pack.walkDown;
         if(mode==WalkMode.BACK)return pack.walkUp;
@@ -1964,7 +1971,7 @@ public class MainActivity extends Activity {
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         TextView note=text(12,false);
-        note.setText("Version 0.7.0 • "+p.zone+"\n"+names[k]+
+        note.setText("Version 0.7.1 • "+p.zone+"\n"+names[k]+
             (counts[k]>1?" • frame "+(f+1)+"/"+counts[k]:""));
         note.setPadding(dp(14),dp(8),dp(14),dp(8));
         box.addView(note);
@@ -2098,6 +2105,30 @@ public class MainActivity extends Activity {
                             " au lieu de "+width+"x"+height);
                 }catch(RuntimeException error){
                     markCharacterAssetInvalid(res,age+" PACK",error.getMessage());
+                }
+            }
+
+            GameSprites.Pack game=GameSprites.forStage(age);
+            for(int res:game.allResources()){
+                PetStage other=owners.put(res,age);
+                if(other!=null && other!=age){
+                    markCharacterAssetInvalid(res,age+" GAME","partage inter-âge interdit");
+                    continue;
+                }
+                try{
+                    String name=getResources().getResourceEntryName(res);
+                    if(!name.startsWith("leopard_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                        throw new IllegalArgumentException("mauvais préfixe jeu : "+name);
+                    BitmapFactory.Options opts=new BitmapFactory.Options();
+                    opts.inJustDecodeBounds=true;opts.inScaled=false;
+                    BitmapFactory.decodeResource(getResources(),res,opts);
+                    int width=game.expectedWidth(res);
+                    int height=GameSprites.FRAME_SIZE;
+                    if(width<0 || opts.outWidth!=width || opts.outHeight!=height)
+                        throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+
+                            " au lieu de "+width+"x"+height);
+                }catch(RuntimeException error){
+                    markCharacterAssetInvalid(res,age+" GAME",error.getMessage());
                 }
             }
         }
