@@ -281,3 +281,4 @@ assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
 print('Assets gameplay salon v0.7.3: PASS')
+
