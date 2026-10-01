@@ -55,18 +55,16 @@ public class ObjectSystem {
         add("towel","Serviette","🧺","bain","Soins","care",0,0,12,8,6,3,0,11,true,true,true,true);
 
         // SALON
-        add("ball","Balle léopard","⚽","salon","Jouets","toy",0,-3,-2,5,14,-10,1,10,true,true,true,false);
+        add("ball","Balle","⚽","salon","Jouets","toy",0,-3,-2,5,14,-10,1,10,true,true,true,false);
         add("tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-2,5,16,-12,1,10,false,true,true,false);
-        add("yarn","Pelote de laine","🧶","salon","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,false);
-        add("mouse","Souris jouet","🐭","salon","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,false);
+        add("yarn","Pelote","🧶","salon","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,false);
+        add("mouse","Souris","🐭","salon","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,false);
         add("plush","Peluche","🧸","salon","Jouets","toy",0,0,0,9,10,-3,0,11,true,true,true,true);
-        add("rope","Corde","🪢","salon","Jouets","toy",0,-4,-3,5,15,-13,1,10,false,true,true,false);
-        add("fishToy","Poisson jouet","🐟","salon","Jouets","toy",0,-3,-2,5,13,-8,1,10,true,true,true,false);
-        add("tunnel","Tunnel","🟢","salon","Jouets","toy",0,-4,-2,4,16,-14,2,10,false,true,true,false);
+        add("rope","Corde","🪢","salon","Jouets","rope",0,-4,-3,5,15,-13,1,10,false,true,true,false);
 
         add("clicker","Clicker","🟩","salon","Dressage","training",0,0,0,3,7,-5,1,6,false,true,true,false);
         add("whistle","Sifflet","📣","salon","Dressage","training",0,0,0,2,5,-4,1,6,false,true,true,false);
-        add("bed","Cocon","🛏️","salon","Repos","rest",-3,-3,0,5,7,42,0,9,true,true,true,true);
+        add("bed","Repos","🛏️","salon","Repos","rest",-3,-3,0,5,7,42,0,9,true,true,true,true);
 
         // JARDIN — Fetch supprimé.
         add("walk","Promenade","🌿","jardin","Jardin","activity",0,-7,-3,4,14,-10,1,10,true,true,true,true);
@@ -127,6 +125,24 @@ public class ObjectSystem {
     void use(Item i){
         if(!allowed(i)){
             a.toast("Cet objet n’est pas adapté à l’âge actuel.");
+            return;
+        }
+
+        if("salon".equals(i.room) && ("ball".equals(i.id)||"tennis".equals(i.id)
+                ||"yarn".equals(i.id)||"mouse".equals(i.id)||"plush".equals(i.id))){
+            if(a.games!=null)a.games.startFetch(i);
+            return;
+        }
+
+        if("rope".equals(i.kind)){
+            if(a.games!=null)a.games.startRope(i);
+            return;
+        }
+
+        if("rest".equals(i.kind)){
+            a.wakeForAction();
+            a.beginAutoSleep();
+            a.toast("😴 "+a.pet+" se repose.");
             return;
         }
 
