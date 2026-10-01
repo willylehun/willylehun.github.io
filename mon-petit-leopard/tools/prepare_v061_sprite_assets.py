@@ -103,7 +103,8 @@ def _remove_rectangular_dark_artifacts(im:Image.Image)->Image.Image:
 
         # Plaque parasite: surface notable + géométrie compacte/rectangulaire.
         # On épargne les petits détails noirs du personnage.
-        if area>=110 and bw>=12 and bh>=12 and fill>=0.53:
+        aspect=max(bw,bh)/float(max(1,min(bw,bh)))
+        if area>=600 and bw>=20 and bh>=20 and fill>=0.78 and (aspect>=1.30 or area>=1200):
             for y,x in pts:
                 remove[y,x]=True
 
