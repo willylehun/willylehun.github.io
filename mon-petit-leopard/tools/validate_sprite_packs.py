@@ -19,11 +19,11 @@ GAME_EXPECTED={
     "run_right.webp":(1536,256),"run_up.webp":(1536,256),
     "fetch_ball.png":(256,256),"fetch_tennis.png":(256,256),
     "fetch_yarn.png":(256,256),"fetch_mouse.png":(256,256),
-    "fetch_plush.png":(256,256),"rope_play.png":(256,256),
+    "fetch_plush.png":(256,256),"rope_play.png":(1280,256),
 }
 
 def fail(msg):
-    raise SystemExit("ERREUR SPRITES v0.7.1: "+msg)
+    raise SystemExit("ERREUR SPRITES v0.7.2: "+msg)
 
 def main():
     common=ROOT/"res"/"drawable-nodpi"
@@ -54,8 +54,8 @@ def main():
             prev=hashes.get(digest)
             if prev and prev[0]!=age: fail(f"asset identique entre {prev} et {(age,name)}")
             hashes[digest]=(age,name)
-        print(f"OK {age}: 81 frames, canevas 256px, marges 10px, aucune frame rognée")
-    print("OK v0.7.1: sprites principaux + course + jeu, tailles et marges validées.")
+        print(f"OK {age}: 85 frames, canevas 256px, marges 10px, aucune frame rognée")
+    print("OK v0.7.2: sprites principaux + course + jeu, tailles et marges validées.")
 
 if __name__=="__main__":
     main()
