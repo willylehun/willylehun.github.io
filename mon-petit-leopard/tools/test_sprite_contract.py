@@ -247,7 +247,7 @@ game_registry=(JAVA/'GameSprites.java').read_text()
 assert 'v070-fetch-bundle' in prepare_game
 assert 'leopard_{age}_run_' in prepare_game
 assert 'leopard_{age}_fetch_' in prepare_game
-assert 'GameSprites.forStage' in game_registry
+assert 'static Pack forStage' in game_registry
 assert 'GameSprites.forStage(stage)' in main
 assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
