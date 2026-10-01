@@ -61,16 +61,16 @@ class ContractTest {
    check(p.expectedWidth(p.moods)==3072);
    for(int id:p.allResources())check(id!=0&&seen.add(id));
   }
-  System.out.println("Sprite registry v0.6.7: PASS");
+  System.out.println("Sprite registry v0.6.8: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.6.7: PASS')
+print('Sprite contract v0.6.8: PASS')
 
 
-# Décors HD v0.6.7 : dimensions natives 4:3 et contrôle du contenu exact.
+# Décors HD v0.6.8 : dimensions natives 4:3 et contrôle du contenu exact.
 expected_backgrounds={
     'room_kitchen_hd.webp':'089b81eaa7abf3c691b4e9a9e885c31a8c751f0eb3fbd68a98fa022f10179723',
     'room_garden_hd.webp':'9965028f7f921c410fb70397f1c35492d88910578380feb2a506c1f2eae6fe41',
@@ -83,7 +83,7 @@ for bg,expected_sha in expected_backgrounds.items():
     assert hashlib.sha256(p.read_bytes()).hexdigest()==expected_sha, bg
 
 
-# Régression v0.6.7 : oreilles intactes + walk-up sans rognage.
+# Régression v0.6.8 : oreilles intactes + walk-up sans rognage.
 for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
     p=ROOT/'app/src/main/res-cub/drawable-nodpi'/name
     with Image.open(p) as strip:
@@ -95,7 +95,7 @@ for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
             assert b is not None,(name,i,'vide')
             assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,(name,i,b)
 
-# Régression v0.6.7 : normalisation globale d'échelle, âge par âge.
+# Régression v0.6.8 : normalisation globale d'échelle, âge par âge.
 def visible_bbox(im,threshold=20):
     a=im.getchannel('A')
     import numpy as _np
@@ -136,4 +136,16 @@ for age in ['cub','teen','adult','old']:
                 assert abs(extent-target)<=2,(age,key,i,extent,target,b)
                 assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,(age,key,i,b)
 
-print('Normalisation globale d\'échelle v0.6.7: PASS')
+print('Normalisation globale d\'échelle v0.6.8: PASS')
+
+
+# Régression v0.6.8 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
+assert 'incidentView.setBackground(null);' in main
+assert 'incidentView.setBackground(incidentBg)' not in main
+assert 'void chooseIncidentPosition()' in main
+assert 'void positionIncident()' in main
+assert 'incidentRoom' in main and 'incidentNX' in main and 'incidentNY' in main
+assert 'chooseIncidentPosition();' in main
+assert 'if(!cleaningMode){' in main
+assert 'Retourne dans la pièce où la bêtise a été faite.' in main
+print('Bêtises au sol et nettoyage direct v0.6.8: PASS')
