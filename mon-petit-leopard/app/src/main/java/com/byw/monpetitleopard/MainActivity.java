@@ -31,10 +31,11 @@ public class MainActivity extends Activity {
     float hunger=85,thirst=85,clean=90,affection=90,happy=90,energy=90;
     float skillClean=5,skillObedience=5,skillCare=5;
     int stars=0,generation=1;
-    String pet="Léo",room="salon",incident="";
+    String pet="Léo",room="salon",incident="",incidentRoom="";
     String historyLog="",adoptedLog="";
     boolean endShown=false,cleaningMode=false,sleeping=false,walking=false;
     float cleanProgress=0,lastRubX=0,lastRubY=0;
+    float incidentNX=.50f,incidentNY=.85f;
     float petNX=.50f,petNY=.90f,targetNX=.50f,targetNY=.90f;
 
     TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView;
@@ -145,6 +146,9 @@ public class MainActivity extends Activity {
         pet=sp.getString("name","Léo");
         room=sp.getString("room","salon");
         incident=sp.getString("incident","");
+        incidentRoom=sp.getString("incidentRoom",incident.isEmpty()?"":room);
+        incidentNX=sp.getFloat("incidentNX",.50f);
+        incidentNY=sp.getFloat("incidentNY",.85f);
         nextMischiefAt=sp.getLong("nextMischiefAt",0);
         sleeping=sp.getBoolean("sleeping",false);
         sleepEndAt=sp.getLong("sleepEndAt",0);
@@ -172,6 +176,8 @@ public class MainActivity extends Activity {
           .putInt("stars",stars).putInt("generation",generation)
           .putString("name",pet).putString("room",room)
           .putString("incident",incident)
+          .putString("incidentRoom",incidentRoom)
+          .putFloat("incidentNX",incidentNX).putFloat("incidentNY",incidentNY)
           .putLong("nextMischiefAt",nextMischiefAt)
           .putBoolean("sleeping",sleeping)
           .putLong("sleepEndAt",sleepEndAt)
@@ -381,18 +387,14 @@ public class MainActivity extends Activity {
         scene.addView(cleanHint,hintParams);
 
         incidentView=new TextView(this);
-        incidentView.setTextSize(30);
+        incidentView.setTextSize(32);
         incidentView.setGravity(Gravity.CENTER);
         incidentView.setVisibility(View.GONE);
-        GradientDrawable incidentBg=new GradientDrawable();
-        incidentBg.setColor(Color.argb(210,255,249,230));
-        incidentBg.setCornerRadius(dp(18));
-        incidentBg.setStroke(dp(1),Color.argb(100,90,60,30));
-        incidentView.setBackground(incidentBg);
+        incidentView.setBackground(null);
+        incidentView.setPadding(0,0,0,0);
         incidentView.setElevation(dp(8));
-        FrameLayout.LayoutParams incidentParams=new FrameLayout.LayoutParams(dp(52),dp(52));
-        incidentParams.gravity=Gravity.TOP|Gravity.RIGHT;
-        incidentParams.setMargins(0,dp(54),dp(10),0);
+        FrameLayout.LayoutParams incidentParams=new FrameLayout.LayoutParams(dp(60),dp(60));
+        incidentParams.gravity=Gravity.TOP|Gravity.LEFT;
         scene.addView(incidentView,incidentParams);
         incidentView.setOnTouchListener((v,e)->handleRub(e));
 
@@ -1069,16 +1071,58 @@ public class MainActivity extends Activity {
         petView.setPivotY(size*(240f/256f));
 
         FrameLayout.LayoutParams incidentLp=(FrameLayout.LayoutParams)incidentView.getLayoutParams();
-        int incidentSize=Math.max(dp(40),Math.round(r[2]*.09f));
+        int incidentSize=Math.max(dp(48),Math.round(r[2]*.10f));
         incidentLp.width=incidentSize;
         incidentLp.height=incidentSize;
-        incidentLp.gravity=Gravity.TOP|Gravity.RIGHT;
-        incidentLp.topMargin=Math.max(dp(44),Math.round(scene.getHeight()*.09f));
-        incidentLp.rightMargin=dp(8);
+        incidentLp.gravity=Gravity.TOP|Gravity.LEFT;
+        incidentLp.setMargins(0,0,0,0);
         incidentView.setLayoutParams(incidentLp);
+        incidentView.post(this::positionIncident);
     }
 
     float clamp01(float v){return Math.max(0f,Math.min(1f,v));}
+
+    void chooseIncidentPosition(){
+        float[][] nodes=roomNodes();
+        if(nodes.length==0){
+            incidentNX=.50f;incidentNY=.85f;incidentRoom=room;return;
+        }
+
+        int index=rnd.nextInt(nodes.length);
+        if(nodes.length>1 && index==petNodeIndex)
+            index=(index+1+rnd.nextInt(nodes.length-1))%nodes.length;
+
+        float minX=1f,maxX=0f,minY=1f,maxY=0f;
+        for(float[] n:nodes){
+            minX=Math.min(minX,n[0]);maxX=Math.max(maxX,n[0]);
+            minY=Math.min(minY,n[1]);maxY=Math.max(maxY,n[1]);
+        }
+
+        float jitterX=(rnd.nextFloat()-.5f)*.10f;
+        float jitterY=(rnd.nextFloat()-.5f)*.05f;
+        incidentNX=Math.max(minX,Math.min(maxX,nodes[index][0]+jitterX));
+        incidentNY=Math.max(minY,Math.min(maxY,nodes[index][1]+jitterY));
+        incidentRoom=room;
+    }
+
+    void positionIncident(){
+        if(incidentView==null||scene==null||incident.isEmpty())return;
+        if(!incidentRoom.isEmpty()&&!room.equals(incidentRoom))return;
+
+        float[] r=imageRect();
+        if(r[2]<=0||r[3]<=0)return;
+        int w=incidentView.getWidth()>0?incidentView.getWidth():incidentView.getLayoutParams().width;
+        int h=incidentView.getHeight()>0?incidentView.getHeight():incidentView.getLayoutParams().height;
+        if(w<=0||h<=0)return;
+
+        float centerX=r[0]+clamp01(incidentNX)*r[2];
+        float groundY=r[1]+clamp01(incidentNY)*r[3];
+        float x=Math.max(r[0],Math.min(r[0]+r[2]-w,centerX-w/2f));
+        float y=Math.max(r[1],Math.min(r[1]+r[3]-h,groundY-h));
+        incidentView.setX(x);
+        incidentView.setY(y);
+    }
+
 
     /**
      * Points de marche analysés pièce par pièce.
@@ -1312,6 +1356,10 @@ public class MainActivity extends Activity {
             toast("Il n’y a aucune bêtise à nettoyer.");
             return;
         }
+        if(!incidentRoom.isEmpty()&&!room.equals(incidentRoom)){
+            toast("Retourne dans la pièce où la bêtise a été faite.");
+            return;
+        }
         cleaningMode=true;
         cleanProgress=0;
         cleanHint.setVisibility(View.VISIBLE);
@@ -1322,9 +1370,19 @@ public class MainActivity extends Activity {
     }
 
     boolean handleRub(MotionEvent e){
-        if(!cleaningMode)return true;
+        if(incident.isEmpty())return true;
+        if(!incidentRoom.isEmpty()&&!room.equals(incidentRoom))return true;
+
         float x=e.getX(),y=e.getY();
         if(e.getAction()==MotionEvent.ACTION_DOWN){
+            if(!cleaningMode){
+                cleaningMode=true;
+                cleanProgress=0;
+                cleanHint.setVisibility(View.VISIBLE);
+                incidentView.setAlpha(1f);
+                incidentView.setScaleX(1f);
+                incidentView.setScaleY(1f);
+            }
             lastRubX=x;lastRubY=y;
             return true;
         }
@@ -1351,15 +1409,17 @@ public class MainActivity extends Activity {
         cleanHint.setVisibility(View.GONE);
         String old=incident;
         incident="";
+        incidentRoom="";
+        incidentNX=.50f;incidentNY=.85f;
         clean=clamp(clean+20);
         happy=clamp(happy+2);
         skillClean=clamp(skillClean+3);
         stars+=1;
+        addHistory("Bêtise nettoyée : "+old+".");
         save();
         refreshIncident();
         refresh();
         toast("✨ Bêtise nettoyée ! +1 ★");
-        addHistory("Bêtise nettoyée : "+old+".");
     }
 
     void refreshIncident(){
@@ -1369,6 +1429,14 @@ public class MainActivity extends Activity {
             cleaningMode=false;
             return;
         }
+        if(incidentRoom.isEmpty())incidentRoom=room;
+        if(!room.equals(incidentRoom)){
+            incidentView.setVisibility(View.GONE);
+            cleanHint.setVisibility(View.GONE);
+            cleaningMode=false;
+            return;
+        }
+
         incidentView.setText(objects.incidentIcon(incident));
         incidentView.setVisibility(View.VISIBLE);
         if(!cleaningMode){
@@ -1376,6 +1444,7 @@ public class MainActivity extends Activity {
             incidentView.setScaleX(1f);
             incidentView.setScaleY(1f);
         }
+        incidentView.post(this::positionIncident);
     }
 
     void punish(){
@@ -1423,6 +1492,7 @@ public class MainActivity extends Activity {
 
         if(rnd.nextFloat()<chance){
             incident=objects.mischief();
+            chooseIncidentPosition();
             clean=clamp(clean-4);
             happy=clamp(happy-2);
             showAction(3,1200);
@@ -1667,6 +1737,8 @@ public class MainActivity extends Activity {
         hunger=85;thirst=85;clean=90;affection=90;happy=90;energy=90;
         skillClean=5;skillObedience=5;skillCare=5;
         incident="";
+        incidentRoom="";
+        incidentNX=.50f;incidentNY=.85f;
         nextMischiefAt=0;
         room="salon";
         currentPetRes=0;
@@ -1827,7 +1899,7 @@ public class MainActivity extends Activity {
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         TextView note=text(12,false);
-        note.setText("Version 0.6.7 • "+p.zone+"\n"+names[k]+
+        note.setText("Version 0.6.8 • "+p.zone+"\n"+names[k]+
             (counts[k]>1?" • frame "+(f+1)+"/"+counts[k]:""));
         note.setPadding(dp(14),dp(8),dp(14),dp(8));
         box.addView(note);
