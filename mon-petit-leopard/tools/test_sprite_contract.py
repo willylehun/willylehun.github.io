@@ -40,7 +40,7 @@ for age in ['cub','teen','adult','old']:
         f'leopard_{age}_fetch_yarn.png':(256,256),
         f'leopard_{age}_fetch_mouse.png':(256,256),
         f'leopard_{age}_fetch_plush.png':(256,256),
-        f'leopard_{age}_rope_play.png':(256,256),
+        f'leopard_{age}_rope_play.png':(1280,256),
     }
     assert {p.name for p in folder.glob('leopard_*')}==set(expected)
     for name,size in expected.items():
@@ -81,7 +81,7 @@ class ContractTest {
    check(g.stage==age);
    check(g.expectedWidth(g.runDown)==1536);
    check(g.expectedWidth(g.fetchBall)==256);
-   check(g.expectedWidth(g.ropePlay)==256);
+   check(g.expectedWidth(g.ropePlay)==1280);
    for(int id:g.allResources())check(id!=0&&seen.add(id));
   }
   check(SpriteMotion.direction(-.10f,.25f,1f,1f)==SpriteMotion.LEFT);
@@ -90,13 +90,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.7.1: PASS");
+  System.out.println("Sprite registry v0.7.2: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.7.1: PASS')
+print('Sprite contract v0.7.2: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -162,7 +162,7 @@ frame_counts={
     'jump':5,'eat':3,'sleep':3,'moods':12,
     'run_down':6,'run_left':6,'run_right':6,'run_up':6,
     'fetch_ball':1,'fetch_tennis':1,'fetch_yarn':1,'fetch_mouse':1,'fetch_plush':1,
-    'rope_play':1,
+    'rope_play':5,
 }
 for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
@@ -229,6 +229,10 @@ assert 'chooseLandingNode' in games
 assert 'movePetToNode' in games
 assert 'fastRun()' in games
 assert 'ROPE_HOLD' in games
+assert 'ValueAnimator.ofFloat(0f,1f)' in games
+assert '4f*arc*t*(1f-t)' in games
+assert 'toyMenuDrawable' in objects
+assert 'toyDrawable' in games
 
 assert '📣 Appeler' in main
 assert 'void callLeopard()' in main
@@ -238,7 +242,7 @@ assert '{.30f,.74f}' not in main
 assert '{.30f,.86f}' in main and '{.50f,.95f}' in main
 assert 'speed*=1.85f' in main
 
-print('Jeux salon v0.7.1: PASS')
+print('Jeux salon v0.7.2: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
@@ -253,4 +257,4 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.7.1: PASS')
+print('Assets gameplay salon v0.7.2: PASS')
