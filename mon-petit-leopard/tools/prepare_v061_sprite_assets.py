@@ -4,6 +4,7 @@ from __future__ import annotations
 import base64
 import io
 import zipfile
+import hashlib
 from pathlib import Path
 from collections import deque
 
@@ -17,7 +18,7 @@ AGES=("cub","teen","adult","old")
 FRAME=256
 COLS=9
 ROWS=6
-SAFE_MARGIN=10
+SAFE_MARGIN=16
 
 OFFSETS={
     "idle_down":0,"idle_left":1,"idle_right":2,"idle_up":3,
@@ -30,12 +31,17 @@ COUNTS={
     "jump":5,"eat":3,"sleep":3,"moods":12,
 }
 
+EXPECTED_BUNDLE_SHA256="cad88d994fe493d26454df9b3ffb4218d1df235848ba3b5cc87190187d14ce3c"
+
 def load_bundle():
     parts=sorted(SOURCE_BUNDLE.glob("v060_assets.b64.part*"))
-    if not parts:
-        raise RuntimeError("bundle source v0.6.0 absent")
+    if len(parts)!=10:
+        raise RuntimeError(f"bundle source v0.6.5 incomplet: {len(parts)} parties")
     payload="".join(p.read_text().strip() for p in parts)
     raw=base64.b64decode(payload,validate=True)
+    digest=hashlib.sha256(raw).hexdigest()
+    if digest!=EXPECTED_BUNDLE_SHA256:
+        raise RuntimeError(f"mauvais bundle sprites: {digest}")
     return zipfile.ZipFile(io.BytesIO(raw),"r")
 
 def _neighbors4(y:int,x:int,h:int,w:int):
@@ -127,6 +133,43 @@ def _remove_rectangular_dark_artifacts(im:Image.Image)->Image.Image:
 def _alpha_bbox(im:Image.Image):
     return im.getchannel("A").getbbox()
 
+def _decontaminate_alpha_edges(im:Image.Image)->Image.Image:
+    """Supprime les halos de détourage sans rogner le personnage."""
+    arr=np.array(im.convert("RGBA")).copy()
+    alpha=arr[:,:,3]
+    arr[alpha<=2]=0
+    alpha=arr[:,:,3]
+    arr[:,:,3][alpha>=250]=255
+    alpha=arr[:,:,3]
+
+    solid=alpha>=235
+    pending=(alpha>2)&(alpha<235)
+    filled=solid.copy()
+    h,w=alpha.shape
+
+    for _ in range(8):
+        sums=np.zeros((h,w,3),dtype=np.int32)
+        counts=np.zeros((h,w),dtype=np.int16)
+        for dy,dx in ((-1,0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)):
+            ys0=max(0,-dy); ys1=min(h,h-dy)
+            xs0=max(0,-dx); xs1=min(w,w-dx)
+            yd0=ys0+dy; yd1=ys1+dy
+            xd0=xs0+dx; xd1=xs1+dx
+            m=filled[ys0:ys1,xs0:xs1]
+            if not m.any():
+                continue
+            rgb=arr[ys0:ys1,xs0:xs1,:3].astype(np.int32)
+            sums[yd0:yd1,xd0:xd1]+=rgb*m[:,:,None]
+            counts[yd0:yd1,xd0:xd1]+=m.astype(np.int16)
+        take=pending & (~filled) & (counts>0)
+        if not take.any():
+            break
+        arr[take,:3]=(sums[take]/counts[take,None]).astype(np.uint8)
+        filled[take]=True
+
+    arr[arr[:,:,3]==0,:3]=0
+    return Image.fromarray(arr,"RGBA")
+
 def _safe_fit(im:Image.Image)->Image.Image:
     """
     Garantit que le sujet complet reste à l'intérieur du canevas 256x256.
@@ -170,7 +213,9 @@ def clean_cell(atlas:Image.Image,index:int)->Image.Image:
     y=(index//COLS)*FRAME
     out=atlas.crop((x,y,x+FRAME,y+FRAME)).convert("RGBA")
     out=_remove_rectangular_dark_artifacts(out)
+    out=_decontaminate_alpha_edges(out)
     out=_safe_fit(out)
+    out=_decontaminate_alpha_edges(out)
     b=_alpha_bbox(out)
     if not b:
         raise RuntimeError(f"frame {index} vide après nettoyage")
@@ -218,8 +263,8 @@ def main():
     with load_bundle() as z:
         for age in AGES:
             prepare_age(z,age)
-    print("v0.6.1: 4 packs nettoyés et réintégrés en 256px natif.")
-    print("Marge de sécurité 10px, suppression des plaques sombres rectangulaires, aucun rognage.")
+    print("v0.6.5: 4 packs source remplacés, nettoyés et réintégrés en 256px natif.")
+    print("Marge de sécurité 16px, nettoyage des contours, suppression des plaques sombres, aucun rognage.")
 
 if __name__=="__main__":
     main()
