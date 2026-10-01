@@ -1971,7 +1971,7 @@ public class MainActivity extends Activity {
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         TextView note=text(12,false);
-        note.setText("Version 0.7.2 • "+p.zone+"\n"+names[k]+
+        note.setText("Version 0.8.0 • "+p.zone+"\n"+names[k]+
             (counts[k]>1?" • frame "+(f+1)+"/"+counts[k]:""));
         note.setPadding(dp(14),dp(8),dp(14),dp(8));
         box.addView(note);
