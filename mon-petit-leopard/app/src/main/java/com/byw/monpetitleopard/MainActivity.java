@@ -2210,6 +2210,52 @@ public class MainActivity extends Activity {
                     markCharacterAssetInvalid(res,age+" GAME",error.getMessage());
                 }
             }
+
+            CareSprites.Pack care=CareSprites.forStage(age);
+            for(int res:care.allResources()){
+                PetStage other=owners.put(res,age);
+                if(other!=null && other!=age){
+                    markCharacterAssetInvalid(res,age+" CARE","partage inter-âge interdit");
+                    continue;
+                }
+                try{
+                    String name=getResources().getResourceEntryName(res);
+                    if(!name.startsWith("leopard_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                        throw new IllegalArgumentException("mauvais préfixe soin : "+name);
+                    BitmapFactory.Options opts=new BitmapFactory.Options();
+                    opts.inJustDecodeBounds=true;opts.inScaled=false;
+                    BitmapFactory.decodeResource(getResources(),res,opts);
+                    int width=care.expectedWidth(res);
+                    int height=CareSprites.FRAME_SIZE;
+                    if(width<0 || opts.outWidth!=width || opts.outHeight!=height)
+                        throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+
+                            " au lieu de "+width+"x"+height);
+                }catch(RuntimeException error){
+                    markCharacterAssetInvalid(res,age+" CARE",error.getMessage());
+                }
+            }
+
+            if(age==PetStage.CUB){
+                int bottle=CareSprites.bottle(age);
+                PetStage other=owners.put(bottle,age);
+                if(other!=null && other!=age){
+                    markCharacterAssetInvalid(bottle,age+" BOTTLE","partage inter-âge interdit");
+                }else{
+                    try{
+                        String name=getResources().getResourceEntryName(bottle);
+                        if(!name.startsWith("leopard_cub_bottle"))
+                            throw new IllegalArgumentException("mauvais préfixe biberon : "+name);
+                        BitmapFactory.Options opts=new BitmapFactory.Options();
+                        opts.inJustDecodeBounds=true;opts.inScaled=false;
+                        BitmapFactory.decodeResource(getResources(),bottle,opts);
+                        if(opts.outWidth!=CareSprites.FRAME_SIZE || opts.outHeight!=CareSprites.FRAME_SIZE)
+                            throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+
+                                " au lieu de "+CareSprites.FRAME_SIZE+"x"+CareSprites.FRAME_SIZE);
+                    }catch(RuntimeException error){
+                        markCharacterAssetInvalid(bottle,age+" BOTTLE",error.getMessage());
+                    }
+                }
+            }
         }
         if(!invalidCharacterAssets.isEmpty())showAssetErrorOnce();
     }
