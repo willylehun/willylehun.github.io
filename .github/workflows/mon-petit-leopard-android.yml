@@ -51,36 +51,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.6.9
+          name: mon-petit-leopard-v0.7.0
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.6.9.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.7.0.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.6.9"
+          TAG="mon-petit-leopard-v0.7.0"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.6.9 — tailles cohérentes et bonnes directions" \
-              --notes "v0.6.9 : corrige à nouveau la cohérence de taille en normalisant la masse visuelle réelle du personnage pour toutes les frames de chaque âge. Les diagonales utilisent désormais WALK_LEFT/RIGHT dès qu’il existe un déplacement horizontal ; FRONT/BACK sont réservés aux déplacements réellement verticaux. La perspective est adoucie pour éviter les sauts de taille. Les bêtises au sol et les décors HD sont conservés."
+              --title "Mon Petit Léopard v0.7.0 — nouveau gameplay du salon" \
+              --notes "v0.7.0 : nouveau gameplay du salon. Balle, balle de tennis, pelote, souris et peluche se lancent au doigt vers le haut puis atterrissent sur le tapis ; le léopard court les chercher et les rapporte. La corde devient un jeu maintenu au doigt, Repos déclenche le sommeil, et le menu Actions permet d’appeler le léopard au premier plan depuis n’importe quelle pièce. Poisson jouet et tunnel sont retirés. Les déplacements réutilisent les packs directionnels déjà normalisés de chaque âge afin de conserver exactement la même échelle, et la zone de marche du salon est éloignée du canapé."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.6.9.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.7.0.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.6.9 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.7.0 APK [skip ci]"
             git push
           fi
