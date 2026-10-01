@@ -234,6 +234,63 @@ def _normalize_cub_sleep_first_frame(im:Image.Image)->Image.Image:
 def _cub_sleep_transform(i:int,im:Image.Image)->Image.Image:
     return _normalize_cub_sleep_first_frame(im) if i==0 else im
 
+def _visible_bbox(im:Image.Image,threshold:int=20):
+    arr=np.array(im.getchannel("A"))
+    ys,xs=np.nonzero(arr>threshold)
+    if len(xs)==0:
+        return None
+    return (int(xs.min()),int(ys.min()),int(xs.max()+1),int(ys.max()+1))
+
+def _visual_extent(im:Image.Image)->int:
+    b=_visible_bbox(im)
+    if not b:
+        return 0
+    return max(b[2]-b[0],b[3]-b[1])
+
+def _normalize_visual_extent(im:Image.Image,target_extent:int,anchor_bottom:bool=True)->Image.Image:
+    """Normalise l'échelle apparente sans modifier le canevas 256x256."""
+    im=im.convert("RGBA")
+    vb=_visible_bbox(im)
+    if not vb:
+        raise RuntimeError("frame vide pendant normalisation")
+    current=max(vb[2]-vb[0],vb[3]-vb[1])
+    if current<=0:
+        return im
+
+    scale=target_extent/float(current)
+    if abs(scale-1.0)<0.004:
+        return im
+
+    ab=_alpha_bbox(im)
+    if not ab:
+        return im
+    obj=im.crop(ab)
+    nw=max(1,int(round(obj.width*scale)))
+    nh=max(1,int(round(obj.height*scale)))
+    max_dim=FRAME-2*SAFE_MARGIN
+    if nw>max_dim or nh>max_dim:
+        limit=min(max_dim/nw,max_dim/nh)
+        nw=max(1,int(round(nw*limit)))
+        nh=max(1,int(round(nh*limit)))
+    obj=obj.resize((nw,nh),Image.Resampling.LANCZOS)
+
+    out=Image.new("RGBA",(FRAME,FRAME),(0,0,0,0))
+    x=(FRAME-nw)//2
+    if anchor_bottom:
+        y=FRAME-SAFE_MARGIN-nh
+    else:
+        center_y=(vb[1]+vb[3])/2.0
+        y=int(round(center_y-nh/2.0))
+        y=max(SAFE_MARGIN,min(FRAME-SAFE_MARGIN-nh,y))
+    y=max(SAFE_MARGIN,min(FRAME-SAFE_MARGIN-nh,y))
+    out.alpha_composite(obj,(x,y))
+    out=_decontaminate_alpha_edges(out)
+
+    b=_alpha_bbox(out)
+    if not b or b[0]<SAFE_MARGIN or b[1]<SAFE_MARGIN or b[2]>FRAME-SAFE_MARGIN or b[3]>FRAME-SAFE_MARGIN:
+        out=_safe_fit(out)
+    return out
+
 def clean_cell(atlas:Image.Image,index:int)->Image.Image:
     x=(index%COLS)*FRAME
     y=(index//COLS)*FRAME
@@ -272,29 +329,52 @@ def prepare_age(z:zipfile.ZipFile,age:str):
     if atlas.size!=(FRAME*COLS,FRAME*ROWS):
         raise RuntimeError(f"{age}: atlas {atlas.size}, attendu {(FRAME*COLS,FRAME*ROWS)}")
 
+    # Référence d'échelle propre à chaque âge : médiane des 4 poses idle.
+    idle_base=[clean_cell(atlas,OFFSETS[key]) for key in ("idle_down","idle_left","idle_right","idle_up")]
+    idle_extents=[_visual_extent(frame) for frame in idle_base]
+    target_extent=int(round(float(np.median(idle_extents))))
+    if target_extent<=0 or target_extent>FRAME-2*SAFE_MARGIN:
+        raise RuntimeError(f"{age}: taille canonique invalide {target_extent}")
+
     dst=RUNTIME/f"res-{age}"/"drawable-nodpi"
     dst.mkdir(parents=True,exist_ok=True)
     for old in dst.glob("leopard_*"):
         old.unlink()
 
-    for key in ("idle_down","idle_left","idle_right","idle_up"):
-        save_png(clean_cell(atlas,OFFSETS[key]),dst/f"leopard_{age}_{key}.png")
+    for key,base in zip(("idle_down","idle_left","idle_right","idle_up"),idle_base):
+        frame=_normalize_visual_extent(base,target_extent,True)
+        save_png(frame,dst/f"leopard_{age}_{key}.png")
 
     for key in ("walk_down","walk_left","walk_right","walk_up"):
-        save_webp(strip(atlas,OFFSETS[key],COUNTS[key]),dst/f"leopard_{age}_{key}.webp")
+        frames=[]
+        for i in range(COUNTS[key]):
+            frame=clean_cell(atlas,OFFSETS[key]+i)
+            frame=_normalize_visual_extent(frame,target_extent,True)
+            frames.append(frame)
+        out=Image.new("RGBA",(FRAME*len(frames),FRAME),(0,0,0,0))
+        for i,frame in enumerate(frames):
+            out.alpha_composite(frame,(i*FRAME,0))
+        save_webp(out,dst/f"leopard_{age}_{key}.webp")
 
-    save_webp(strip(atlas,OFFSETS["jump"],5),dst/f"leopard_{age}_jump.webp")
-    save_webp(strip(atlas,OFFSETS["eat"],3),dst/f"leopard_{age}_eat.webp")
-    sleep_transform=_cub_sleep_transform if age=="cub" else None
-    save_webp(strip(atlas,OFFSETS["sleep"],3,sleep_transform),dst/f"leopard_{age}_sleep.webp")
-    save_webp(strip(atlas,OFFSETS["moods"],12),dst/f"leopard_{age}_moods.webp")
+    for key in ("jump","eat","sleep","moods"):
+        frames=[]
+        for i in range(COUNTS[key]):
+            frame=clean_cell(atlas,OFFSETS[key]+i)
+            frame=_normalize_visual_extent(frame,target_extent,key!="jump")
+            frames.append(frame)
+        out=Image.new("RGBA",(FRAME*len(frames),FRAME),(0,0,0,0))
+        for i,frame in enumerate(frames):
+            out.alpha_composite(frame,(i*FRAME,0))
+        save_webp(out,dst/f"leopard_{age}_{key}.webp")
+
+    print(f"{age}: taille visuelle canonique {target_extent}px pour toutes les frames.")
 
 def main():
     with load_bundle() as z:
         for age in AGES:
             prepare_age(z,age)
-    print("v0.6.6: packs réintégrés, sommeil CUB normalisé, contours nettoyés.")
-    print("Marge 16px, sommeil CUB sans saut de taille, suppression des halos et rognages.")
+    print("v0.6.7: 4 âges normalisés frame par frame sur une échelle visuelle canonique.")
+    print("Marge 16px, aucune variation brutale de taille entre idle, marches, actions, sommeil et humeurs.")
 
 if __name__=="__main__":
     main()
