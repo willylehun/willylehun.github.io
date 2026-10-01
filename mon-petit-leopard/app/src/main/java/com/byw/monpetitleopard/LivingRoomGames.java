@@ -99,6 +99,7 @@ final class LivingRoomGames {
         preparePet();
         activeItem=item;
         state=THROW_READY;
+        toyView.setTextSize(34);
         toyView.setText(item.icon);
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
@@ -119,7 +120,8 @@ final class LivingRoomGames {
         preparePet();
         activeItem=item;
         state=ROPE_APPROACH;
-        toyView.setText("🪢");
+        toyView.setTextSize(24);
+        toyView.setText("│\n🪢");
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
         float[][] nodes=a.roomNodes();
@@ -238,8 +240,9 @@ final class LivingRoomGames {
         if(state==ROPE_READY && e.getAction()==MotionEvent.ACTION_DOWN){
             state=ROPE_HOLD;
             ropeHoldStartedAt=System.currentTimeMillis();
-            // Boucle l'animation de jeu existante : même taille et même pack d'âge.
-            a.startActionAnimation(MainActivity.ActionAnim.JUMP,Long.MAX_VALUE/4);
+            a.releaseActionFrames();
+            a.actionAnim=MainActivity.ActionAnim.NONE;
+            showRopePose();
             positionToyNearPet();
             return true;
         }
@@ -247,8 +250,6 @@ final class LivingRoomGames {
             long held=Math.max(0,System.currentTimeMillis()-ropeHoldStartedAt);
             float factor=Math.min(1f,held/1800f);
             applyRewards(factor);
-            a.releaseActionFrames();
-            a.actionAnim=MainActivity.ActionAnim.NONE;
             a.currentPetRes=0;
             state=ROPE_READY;
             positionToy();
@@ -267,17 +268,18 @@ final class LivingRoomGames {
         if(state==NONE||state==RUN_TO_TOY||state==RETURNING||state==ROPE_APPROACH)return false;
 
         if(state==PLAYING){
-            positionToyNearPet();
+            showFetchPose();
             if(now>=playUntil){
                 beginReturn();
                 return false;
             }
-            return false; // laisse ActionAnim.JUMP afficher le jeu.
+            return true;
         }
 
         if(state==ROPE_HOLD){
+            showRopePose();
             positionToyNearPet();
-            return false; // laisse l'animation JUMP boucler tant que le doigt reste appuyé.
+            return true;
         }
 
         if(state==THROW_READY||state==TOY_FLYING||state==ROPE_READY){
@@ -295,8 +297,8 @@ final class LivingRoomGames {
             a.walking=false;
             state=PLAYING;
             playUntil=now+1350L;
-            positionToyNearPet();
-            a.startActionAnimation(MainActivity.ActionAnim.JUMP,1350L);
+            toyView.setVisibility(View.GONE);
+            showFetchPose();
             return true;
         }
         if(state==RETURNING){
@@ -316,6 +318,36 @@ final class LivingRoomGames {
             return true;
         }
         return false;
+    }
+
+    boolean showGamePose(int res){
+        if(res==0||a.invalidCharacterAssets.contains(res)){
+            a.showAssetErrorOnce();
+            return false;
+        }
+        try{
+            a.petView.setImageResource(res);
+            a.displayedPetStage=a.petStage();
+            a.petView.setVisibility(View.VISIBLE);
+            a.currentPetRes=0;
+            a.updatePetPosition();
+            return true;
+        }catch(Throwable err){
+            a.markCharacterAssetInvalid(res,"jeu","chargement impossible");
+            a.showAssetErrorOnce();
+            return false;
+        }
+    }
+
+    void showFetchPose(){
+        if(activeItem==null)return;
+        int res=GameSprites.forStage(a.petStage()).fetch(activeItem.id);
+        showGamePose(res);
+    }
+
+    void showRopePose(){
+        int res=GameSprites.forStage(a.petStage()).ropePlay;
+        showGamePose(res);
     }
 
     void beginReturn(){
