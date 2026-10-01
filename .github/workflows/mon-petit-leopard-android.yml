@@ -40,8 +40,8 @@ jobs:
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
       - name: Install image test dependency
         run: python -m pip install Pillow==11.3.0 numpy==2.3.3
-      - name: Prepare v0.5.9 runtime assets
-        run: python mon-petit-leopard/tools/prepare_v057_runtime_assets.py
+      - name: Prepare v0.6.0 sprite packs
+        run: python mon-petit-leopard/tools/prepare_v060_sprite_assets.py
       - name: Sprite contract tests
         run: python mon-petit-leopard/tools/test_sprite_contract.py
       - name: Validate sprite packs
@@ -51,25 +51,25 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.5.9
+          name: mon-petit-leopard-v0.6.0
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.5.9.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.6.0.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.5.9"
+          TAG="mon-petit-leopard-v0.6.0"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.5.9 — face, directions et sommeil" \
+              --title "Mon Petit Léopard v0.6.0 — nouveaux sprites complets" \
               --notes "v0.6.0 : refonte complète des quatre âges avec canevas natif 256x256 sans rognage, 6 frames de marche LEFT/RIGHT/DOWN/UP, 5 sauts, 3 repas, 3 sommeil, 12 humeurs corps entier en idle-down. Idle-down + humeurs sont la seule base de la cible 70 %, chaque humeur dure 1 min 30, comme le sommeil."
           fi
       - name: Publish direct-download APK
@@ -77,10 +77,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.5.9.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.6.0.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.5.9 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.6.0 APK [skip ci]"
             git push
           fi
