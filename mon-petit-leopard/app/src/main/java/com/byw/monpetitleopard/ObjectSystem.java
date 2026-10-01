@@ -1,6 +1,10 @@
 package com.byw.monpetitleopard;
 
 import android.app.AlertDialog;
+import android.graphics.drawable.Drawable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ImageSpan;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
@@ -114,12 +118,32 @@ public class ObjectSystem {
     }
 
     void openItems(String title,ArrayList<Item> list){
-        String[] labels=new String[list.size()];
+        CharSequence[] labels=new CharSequence[list.size()];
         for(int n=0;n<list.size();n++){
             Item i=list.get(n);
-            labels[n]=i.icon+"  "+i.name+(allowed(i)?"":"  🔒");
+            int res=toyMenuDrawable(i.id);
+            if(res!=0){
+                SpannableString row=new SpannableString("   "+i.name+(allowed(i)?"":"  🔒"));
+                try{
+                    Drawable d=a.getDrawable(res);
+                    int s=a.dp(30);
+                    d.setBounds(0,0,s,s);
+                    row.setSpan(new ImageSpan(d,ImageSpan.ALIGN_CENTER),0,1,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    labels[n]=row;
+                }catch(Throwable ignored){
+                    labels[n]=i.icon+"  "+i.name+(allowed(i)?"":"  🔒");
+                }
+            }else{
+                labels[n]=i.icon+"  "+i.name+(allowed(i)?"":"  🔒");
+            }
         }
         new AlertDialog.Builder(a).setTitle(title).setItems(labels,(d,w)->use(list.get(w))).show();
+    }
+
+    int toyMenuDrawable(String id){
+        if("tennis".equals(id)||"yarn".equals(id)||"mouse".equals(id)||"plush".equals(id))
+            return a.getResources().getIdentifier("toy_"+id,"drawable",a.getPackageName());
+        return 0;
     }
 
     void use(Item i){
