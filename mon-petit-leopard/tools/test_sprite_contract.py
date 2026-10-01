@@ -7,7 +7,7 @@ JAVA=ROOT/'app/src/main/java/com/byw/monpetitleopard'
 main=(JAVA/'MainActivity.java').read_text()
 
 assert 'MIN_SLEEP_MS=90000L' in main
-assert 'MOOD_DURATION_MS=90000L' in main
+assert 'MOOD_DURATION_MS=4000L' in main
 assert 'MIN_IDLE_DOWN_SHARE=.30f' in main
 assert 'CharacterSprites.FRAME_SIZE' in main
 assert 'startMoodExitUp()' in main
@@ -61,10 +61,10 @@ class ContractTest {
    check(p.expectedWidth(p.moods)==3072);
    for(int id:p.allResources())check(id!=0&&seen.add(id));
   }
-  System.out.println("Sprite registry v0.6.1: PASS");
+  System.out.println("Sprite registry v0.6.2: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.6.1: PASS')
+print('Sprite contract v0.6.2: PASS')

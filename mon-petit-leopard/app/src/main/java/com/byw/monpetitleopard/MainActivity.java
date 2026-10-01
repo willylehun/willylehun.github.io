@@ -14,7 +14,7 @@ import java.util.*;
 public class MainActivity extends Activity {
     static final long H=3600000L, CUB=H, TEEN=5*H, ADULT=5*H, OLD=2*H, LIFE=13*H;
     static final long MIN_SLEEP_MS=90000L;
-    static final long MOOD_DURATION_MS=90000L;
+    static final long MOOD_DURATION_MS=4000L;
     static final long DIRECTIONAL_IDLE_MS=700L;
     // Minimum share of AWAKE visible time reserved for static IDLE DOWN (30%).
     // Face moods count because they are always rendered on the full-body idle-down pose.
@@ -810,7 +810,7 @@ public class MainActivity extends Activity {
     }
 
     void showFaceMoodNow(int index,long duration){
-        // Une humeur est toujours un idle-down complet, affiché 1 min 30.
+        // Une humeur est toujours un idle-down complet, affiché 4 secondes.
         beginMoodApproach(index);
     }
 
