@@ -1,5 +1,8 @@
 package com.byw.monpetitleopard;
 
+import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +35,8 @@ final class LivingRoomGames {
     int landingNode=-1;
     long playUntil=0;
     long ropeHoldStartedAt=0;
+    long ropeFrameAt=0;
+    int ropeFrameIndex=0;
     float downRawX,downRawY,startViewX,startViewY;
     float toyNX=.50f,toyNY=.95f;
 
@@ -100,7 +105,7 @@ final class LivingRoomGames {
         activeItem=item;
         state=THROW_READY;
         toyView.setTextSize(34);
-        toyView.setText(item.icon);
+        applyToyVisual(item);
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
         float[][] nodes=a.roomNodes();
@@ -121,6 +126,7 @@ final class LivingRoomGames {
         activeItem=item;
         state=ROPE_APPROACH;
         toyView.setTextSize(24);
+        toyView.setBackground(null);
         toyView.setText("│\n🪢");
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
@@ -225,21 +231,35 @@ final class LivingRoomGames {
         toyNY=nodes[landingNode][1];
         float[] xy=toyPixelPosition(toyNX,toyNY);
         toyView.animate().cancel();
-        toyView.animate()
-            .x(xy[0]).y(xy[1])
-            .rotationBy(360f)
-            .setDuration(520)
-            .withEndAction(()->{
-                toyView.setRotation(0f);
+        final float sx=toyView.getX(), sy=toyView.getY();
+        final float ex=xy[0], ey=xy[1];
+        final float arc=Math.max(a.dp(74),Math.abs(ey-sy)*.55f+a.dp(48));
+        ValueAnimator flight=ValueAnimator.ofFloat(0f,1f);
+        flight.setDuration(620L);
+        flight.addUpdateListener(anim->{
+            float t=(float)anim.getAnimatedValue();
+            float x=sx+(ex-sx)*t;
+            float y=sy+(ey-sy)*t-4f*arc*t*(1f-t);
+            toyView.setX(x);
+            toyView.setY(y);
+            toyView.setRotation(540f*t);
+        });
+        flight.addListener(new android.animation.AnimatorListenerAdapter(){
+            @Override public void onAnimationEnd(android.animation.Animator animation){
+                toyView.setX(ex);toyView.setY(ey);toyView.setRotation(0f);
                 state=RUN_TO_TOY;
                 movePetToNode(landingNode,true);
-            }).start();
+            }
+        });
+        flight.start();
     }
 
     boolean handleRopeTouch(MotionEvent e){
         if(state==ROPE_READY && e.getAction()==MotionEvent.ACTION_DOWN){
             state=ROPE_HOLD;
             ropeHoldStartedAt=System.currentTimeMillis();
+            ropeFrameAt=0;
+            ropeFrameIndex=0;
             a.releaseActionFrames();
             a.actionAnim=MainActivity.ActionAnim.NONE;
             showRopePose();
@@ -250,11 +270,13 @@ final class LivingRoomGames {
             long held=Math.max(0,System.currentTimeMillis()-ropeHoldStartedAt);
             float factor=Math.min(1f,held/1800f);
             applyRewards(factor);
-            a.currentPetRes=0;
-            state=ROPE_READY;
-            positionToy();
-            a.ensurePetImage();
-            a.updatePetPosition();
+            // Au relâchement, le léopard continue brièvement à jouer seul.
+            state=PLAYING;
+            playUntil=System.currentTimeMillis()+1100L;
+            toyView.setVisibility(View.GONE);
+            ropeFrameAt=0;
+            ropeFrameIndex=0;
+            showRopePose();
             return true;
         }
         return true;
@@ -268,10 +290,18 @@ final class LivingRoomGames {
         if(state==NONE||state==RUN_TO_TOY||state==RETURNING||state==ROPE_APPROACH)return false;
 
         if(state==PLAYING){
-            showFetchPose();
-            if(now>=playUntil){
-                beginReturn();
-                return false;
+            if(activeItem!=null && "rope".equals(activeItem.kind)){
+                showRopePose();
+                if(now>=playUntil){
+                    finishRopePlay();
+                    return true;
+                }
+            }else{
+                showFetchPose();
+                if(now>=playUntil){
+                    beginReturn();
+                    return false;
+                }
             }
             return true;
         }
@@ -347,7 +377,64 @@ final class LivingRoomGames {
 
     void showRopePose(){
         int res=GameSprites.forStage(a.petStage()).ropePlay;
-        showGamePose(res);
+        if(res==0||a.invalidCharacterAssets.contains(res)){a.showAssetErrorOnce();return;}
+        Bitmap strip=null;
+        try{strip=BitmapFactory.decodeResource(a.getResources(),res);}catch(Throwable ignored){}
+        if(strip==null){a.markCharacterAssetInvalid(res,"corde","ressource illisible");return;}
+        final int frame=GameSprites.FRAME_SIZE;
+        final int count=5;
+        if(strip.getWidth()!=frame*count||strip.getHeight()!=frame){
+            // Compatibilité avec une ancienne ressource pendant une migration.
+            showGamePose(res);
+            return;
+        }
+        long now=System.currentTimeMillis();
+        if(ropeFrameAt==0||now>=ropeFrameAt){
+            ropeFrameIndex=(ropeFrameIndex+1)%count;
+            ropeFrameAt=now+115L;
+        }
+        try{
+            Bitmap b=Bitmap.createBitmap(strip,ropeFrameIndex*frame,0,frame,frame);
+            a.petView.setImageBitmap(b);
+            a.displayedPetStage=a.petStage();
+            a.petView.setVisibility(View.VISIBLE);
+            a.currentPetRes=0;
+            a.updatePetPosition();
+        }catch(Throwable err){
+            a.markCharacterAssetInvalid(res,"corde","découpage impossible");
+        }
+    }
+
+    void finishRopePlay(){
+        a.walking=false;
+        state=ROPE_READY;
+        a.currentPetRes=0;
+        toyView.setVisibility(View.VISIBLE);
+        positionToy();
+        a.ensurePetImage();
+        a.updatePetPosition();
+        a.save();
+        a.refresh();
+    }
+
+    int toyDrawable(String id){
+        if("tennis".equals(id)||"yarn".equals(id)||"mouse".equals(id)||"plush".equals(id)){
+            return a.getResources().getIdentifier("toy_"+id,"drawable",a.getPackageName());
+        }
+        return 0;
+    }
+
+    void applyToyVisual(ObjectSystem.Item item){
+        int res=toyDrawable(item.id);
+        if(res!=0){
+            toyView.setText("");
+            toyView.setBackgroundResource(res);
+            toyView.setContentDescription(item.name);
+        }else{
+            toyView.setBackground(null);
+            toyView.setText(item.icon);
+            toyView.setContentDescription(item.name);
+        }
     }
 
     void beginReturn(){
