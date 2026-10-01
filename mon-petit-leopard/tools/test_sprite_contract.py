@@ -1,5 +1,5 @@
 from pathlib import Path
-import re, subprocess, tempfile
+import re, subprocess, tempfile, hashlib
 from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -61,18 +61,23 @@ class ContractTest {
    check(p.expectedWidth(p.moods)==3072);
    for(int id:p.allResources())check(id!=0&&seen.add(id));
   }
-  System.out.println("Sprite registry v0.6.3: PASS");
+  System.out.println("Sprite registry v0.6.4: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.6.3: PASS')
+print('Sprite contract v0.6.4: PASS')
 
 
-# Décors HD v0.6.3 : dimensions natives 4:3, sans ré-échantillonnage Android.
-for bg in ['room_kitchen_hd.webp','room_garden_hd.webp']:
+# Décors HD v0.6.4 : dimensions natives 4:3 et contrôle du contenu exact.
+expected_backgrounds={
+    'room_kitchen_hd.webp':'089b81eaa7abf3c691b4e9a9e885c31a8c751f0eb3fbd68a98fa022f10179723',
+    'room_garden_hd.webp':'9965028f7f921c410fb70397f1c35492d88910578380feb2a506c1f2eae6fe41',
+}
+for bg,expected_sha in expected_backgrounds.items():
     p=ROOT/'app/src/main/res/drawable-nodpi'/bg
     with Image.open(p) as im:
         im.load()
         assert im.size==(1536,1152),(bg,im.size)
+    assert hashlib.sha256(p.read_bytes()).hexdigest()==expected_sha, bg
