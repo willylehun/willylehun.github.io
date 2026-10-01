@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
     static final long MOOD_DURATION_MS=90000L;
     // Minimum share of AWAKE visible time reserved for static IDLE DOWN.
     // Face moods count because they are always rendered on the full-body idle-down pose.
-    static final float MIN_FACE_SHARE=.70f;
+    static final float MIN_IDLE_DOWN_SHARE=.70f;
 
     final Handler handler=new Handler(Looper.getMainLooper());
     final Random rnd=new Random();
