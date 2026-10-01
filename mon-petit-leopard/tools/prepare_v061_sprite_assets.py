@@ -208,6 +208,32 @@ def _safe_fit(im:Image.Image)->Image.Image:
     out.alpha_composite(obj,(x,y))
     return out
 
+def _normalize_cub_sleep_first_frame(im:Image.Image)->Image.Image:
+    """Réduit uniquement la 1re frame de sommeil CUB pour supprimer le saut d'échelle."""
+    im=im.convert("RGBA")
+    b=_alpha_bbox(im)
+    if not b:
+        return im
+    left,top,right,bottom=b
+    width=right-left
+    if width<=155:
+        return im
+    target_width=150
+    scale=target_width/float(width)
+    obj=im.crop(b)
+    nw=max(1,int(round(obj.width*scale)))
+    nh=max(1,int(round(obj.height*scale)))
+    obj=obj.resize((nw,nh),Image.Resampling.LANCZOS)
+    out=Image.new("RGBA",(FRAME,FRAME),(0,0,0,0))
+    x=(FRAME-nw)//2
+    anchor_bottom=min(bottom,FRAME-SAFE_MARGIN)
+    y=max(SAFE_MARGIN,anchor_bottom-nh)
+    out.alpha_composite(obj,(x,y))
+    return _decontaminate_alpha_edges(out)
+
+def _cub_sleep_transform(i:int,im:Image.Image)->Image.Image:
+    return _normalize_cub_sleep_first_frame(im) if i==0 else im
+
 def clean_cell(atlas:Image.Image,index:int)->Image.Image:
     x=(index%COLS)*FRAME
     y=(index//COLS)*FRAME
@@ -223,10 +249,13 @@ def clean_cell(atlas:Image.Image,index:int)->Image.Image:
         raise RuntimeError(f"frame {index} trop proche du bord après nettoyage: {b}")
     return out
 
-def strip(atlas:Image.Image,start:int,count:int)->Image.Image:
+def strip(atlas:Image.Image,start:int,count:int,transform=None)->Image.Image:
     out=Image.new("RGBA",(FRAME*count,FRAME),(0,0,0,0))
     for i in range(count):
-        out.alpha_composite(clean_cell(atlas,start+i),(i*FRAME,0))
+        frame=clean_cell(atlas,start+i)
+        if transform is not None:
+            frame=transform(i,frame)
+        out.alpha_composite(frame,(i*FRAME,0))
     return out
 
 def save_png(im:Image.Image,path:Path):
@@ -256,15 +285,16 @@ def prepare_age(z:zipfile.ZipFile,age:str):
 
     save_webp(strip(atlas,OFFSETS["jump"],5),dst/f"leopard_{age}_jump.webp")
     save_webp(strip(atlas,OFFSETS["eat"],3),dst/f"leopard_{age}_eat.webp")
-    save_webp(strip(atlas,OFFSETS["sleep"],3),dst/f"leopard_{age}_sleep.webp")
+    sleep_transform=_cub_sleep_transform if age=="cub" else None
+    save_webp(strip(atlas,OFFSETS["sleep"],3,sleep_transform),dst/f"leopard_{age}_sleep.webp")
     save_webp(strip(atlas,OFFSETS["moods"],12),dst/f"leopard_{age}_moods.webp")
 
 def main():
     with load_bundle() as z:
         for age in AGES:
             prepare_age(z,age)
-    print("v0.6.5: 4 packs source remplacés, nettoyés et réintégrés en 256px natif.")
-    print("Marge de sécurité 16px, nettoyage des contours, suppression des plaques sombres, aucun rognage.")
+    print("v0.6.6: packs réintégrés, sommeil CUB normalisé, contours nettoyés.")
+    print("Marge 16px, sommeil CUB sans saut de taille, suppression des halos et rognages.")
 
 if __name__=="__main__":
     main()
