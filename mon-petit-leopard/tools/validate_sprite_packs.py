@@ -23,7 +23,7 @@ GAME_EXPECTED={
 }
 
 def fail(msg):
-    raise SystemExit("ERREUR SPRITES v0.7.2: "+msg)
+    raise SystemExit("ERREUR SPRITES v0.7.4: "+msg)
 
 def main():
     common=ROOT/"res"/"drawable-nodpi"
@@ -55,7 +55,7 @@ def main():
             if prev and prev[0]!=age: fail(f"asset identique entre {prev} et {(age,name)}")
             hashes[digest]=(age,name)
         print(f"OK {age}: 85 frames, canevas 256px, marges 10px, aucune frame rognée")
-    print("OK v0.7.2: sprites principaux + course + jeu, tailles et marges validées.")
+    print("OK v0.7.4: sprites principaux + course + jeu, tailles et marges validées.")
 
 if __name__=="__main__":
     main()

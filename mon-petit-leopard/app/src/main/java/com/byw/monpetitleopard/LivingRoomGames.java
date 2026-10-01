@@ -273,8 +273,8 @@ final class LivingRoomGames {
             ropeFrameIndex=0;
             a.releaseActionFrames();
             a.actionAnim=MainActivity.ActionAnim.NONE;
+            toyView.setVisibility(View.GONE);
             showRopePose();
-            positionToyNearPet();
             return true;
         }
         if(state==ROPE_HOLD && (e.getAction()==MotionEvent.ACTION_UP||e.getAction()==MotionEvent.ACTION_CANCEL)){
@@ -318,8 +318,8 @@ final class LivingRoomGames {
         }
 
         if(state==ROPE_HOLD){
+            toyView.setVisibility(View.GONE);
             showRopePose();
-            positionToyNearPet();
             return true;
         }
 
@@ -489,11 +489,4 @@ final class LivingRoomGames {
         });
     }
 
-    void positionToyNearPet(){
-        if(toyView==null)return;
-        toyView.setVisibility(View.VISIBLE);
-        toyNX=a.clamp01(a.petNX+.09f);
-        toyNY=a.clamp01(a.petNY+.01f);
-        positionToy();
-    }
 }

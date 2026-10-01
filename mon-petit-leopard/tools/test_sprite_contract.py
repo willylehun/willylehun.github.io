@@ -90,13 +90,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.7.3: PASS");
+  System.out.println("Sprite registry v0.7.4: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.7.3: PASS')
+print('Sprite contract v0.7.4: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -213,7 +213,7 @@ for age in ['cub','teen','adult','old']:
         for i in range(5):
             assert strip.crop((i*128,0,(i+1)*128,128)).getchannel('A').getbbox() is not None,(age,i,'frame corde vide')
 
-print("Visuels PNG et sources corde v0.7.3: PASS")
+print("Visuels PNG et sources corde v0.7.4: PASS")
 
 # Régression v0.7.1 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
@@ -237,6 +237,10 @@ assert '"fishToy"' not in objects
 assert '"tunnel"' not in objects
 assert '"rope","Corde","🪢","salon","Jouets","rope"' in objects
 assert '"bed","Repos","🛏️","salon","Repos","rest"' in objects
+assert '"Dressage"' not in objects
+assert '"clicker"' not in objects
+assert '"whistle"' not in objects
+assert 'String[] groups={"Jouets","Repos"};' in objects
 assert 'games.startFetch(i)' in objects
 assert 'games.startRope(i)' in objects
 assert 'beginAutoSleep();' in objects
@@ -254,6 +258,7 @@ assert 'ValueAnimator.ofFloat(0f,1f)' in games
 assert 'u*u*sy+2f*u*t*cy+t*t*target[1]' in games
 assert 'toyMenuDrawable' in objects
 assert 'toyDrawable' in games
+assert 'positionToyNearPet();' not in games
 for res in ['toy_tennis_art','toy_yarn_art','toy_mouse_art','toy_plush_art','toy_rope_art']:
     assert ('R.drawable.'+res) in (games+objects),res
 
@@ -265,7 +270,7 @@ assert '{.30f,.74f}' not in main
 assert '{.30f,.86f}' in main and '{.50f,.95f}' in main
 assert 'speed*=1.85f' in main
 
-print('Jeux salon v0.7.3: PASS')
+print('Jeux salon v0.7.4: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
@@ -280,5 +285,5 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.7.3: PASS')
+print('Assets gameplay salon v0.7.4: PASS')
 

@@ -71,8 +71,6 @@ public class ObjectSystem {
         add("plush","Peluche","🧸","salon","Jouets","toy",0,0,0,9,10,-3,0,11,true,true,true,true);
         add("rope","Corde","🪢","salon","Jouets","rope",0,-4,-3,5,15,-13,1,10,true,true,true,true);
 
-        add("clicker","Clicker","🟩","salon","Dressage","training",0,0,0,3,7,-5,1,6,false,true,true,false);
-        add("whistle","Sifflet","📣","salon","Dressage","training",0,0,0,2,5,-4,1,6,false,true,true,false);
         add("bed","Repos","🛏️","salon","Repos","rest",-3,-3,0,5,7,42,0,9,true,true,true,true);
 
         // JARDIN — Fetch supprimé.
@@ -117,7 +115,7 @@ public class ObjectSystem {
             String[] groups={"Boissons","Repas","Friandises & snacks"};
             new AlertDialog.Builder(a).setTitle("Cuisine").setItems(groups,(d,w)->openItems(groups[w],itemsFor("cuisine",groups[w]))).show();
         } else {
-            String[] groups={"Jouets","Dressage","Repos"};
+            String[] groups={"Jouets","Repos"};
             new AlertDialog.Builder(a).setTitle("Salon").setItems(groups,(d,w)->openItems(groups[w],itemsFor("salon",groups[w]))).show();
         }
     }
