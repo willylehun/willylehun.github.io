@@ -48,6 +48,8 @@ jobs:
         run: python mon-petit-leopard/tools/prepare_v075_care_assets.py
       - name: Prepare promenade assets
         run: python mon-petit-leopard/tools/prepare_v076_promenade_assets.py
+      - name: Prepare garden scratcher assets
+        run: python mon-petit-leopard/tools/prepare_v077_garden_assets.py
       - name: Sprite contract tests
         run: python mon-petit-leopard/tools/test_sprite_contract.py
       - name: Validate sprite packs
@@ -57,36 +59,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.7.6
+          name: mon-petit-leopard-v0.7.7
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.7.6.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.7.7.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.7.6"
+          TAG="mon-petit-leopard-v0.7.7"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.7.6 — Promenade de 30 minutes" \
-              --notes "v0.7.6 : Promenade ouvre désormais une carte vue de haut avec une route de terre traversant champs, forêt, rivière et montagne. Un jeton tête de léopard, dimensionné comme la largeur de la route, part de la maison, suit le circuit à vitesse régulière pendant 30 minutes réelles, monte jusqu’au secteur enneigé puis revient à la maison. La progression repose sur l’heure réelle et continue même si l’écran est quitté. Les fonctions et assets des versions précédentes sont conservés."
+              --title "Mon Petit Léopard v0.7.7 — Jardin enrichi" \
+              --notes "v0.7.7 : ajoute un griffoir visible au fond du jardin et deux poses de griffage par tranche d’âge. Au clic sur Griffoir, le léopard se déplace jusqu’à lui puis joue l’animation dédiée. Le jardin récupère aussi le menu Jouets du salon (balle, pelote, souris, peluche et corde) avec la même logique de jeu. Repos au soleil endort désormais le léopard. Concours, Canne à plume et Anneau d’obstacle sont retirés. Les tailles de sprites restent compatibles avec le canevas 256 px existant."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.7.6.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.7.7.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.7.6 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.7.7 APK [skip ci]"
             git push
           fi
