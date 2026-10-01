@@ -3,11 +3,15 @@ package com.byw.monpetitleopard;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.animation.ValueAnimator;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.TextView;
+import android.widget.ImageView;
+import android.view.animation.LinearInterpolator;
 
 /**
  * Jeux interactifs du salon :
@@ -29,7 +33,7 @@ final class LivingRoomGames {
     static final int ROPE_HOLD=8;
 
     final MainActivity a;
-    TextView toyView;
+    ImageView toyView;
     ObjectSystem.Item activeItem;
     int state=NONE;
     int landingNode=-1;
@@ -39,13 +43,18 @@ final class LivingRoomGames {
     int ropeFrameIndex=0;
     float downRawX,downRawY,startViewX,startViewY;
     float toyNX=.50f,toyNY=.95f;
+    Bitmap ropeStrip;
+    Bitmap[] ropeFrames;
+    int ropeFrameIndex=0;
+    long ropeFrameAt=0;
+    MainActivity.PetStage loadedRopeStage=null;
 
     LivingRoomGames(MainActivity a){this.a=a;}
 
     void install(){
-        toyView=new TextView(a);
-        toyView.setTextSize(34);
-        toyView.setGravity(Gravity.CENTER);
+        toyView=new ImageView(a);
+        toyView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        toyView.setAdjustViewBounds(false);
         toyView.setBackground(null);
         toyView.setPadding(0,0,0,0);
         toyView.setElevation(a.dp(10));
@@ -54,6 +63,14 @@ final class LivingRoomGames {
         lp.gravity=Gravity.TOP|Gravity.LEFT;
         a.scene.addView(toyView,lp);
         toyView.setOnTouchListener((v,e)->handleTouch(e));
+    }
+
+    int toyDrawable(String id){
+        if("tennis".equals(id))return R.drawable.toy_tennis;
+        if("yarn".equals(id))return R.drawable.toy_yarn;
+        if("mouse".equals(id))return R.drawable.toy_mouse;
+        if("plush".equals(id))return R.drawable.toy_plush;
+        return 0;
     }
 
     boolean active(){return state!=NONE;}
