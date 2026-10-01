@@ -61,16 +61,16 @@ class ContractTest {
    check(p.expectedWidth(p.moods)==3072);
    for(int id:p.allResources())check(id!=0&&seen.add(id));
   }
-  System.out.println("Sprite registry v0.6.4: PASS");
+  System.out.println("Sprite registry v0.6.5: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.6.4: PASS')
+print('Sprite contract v0.6.5: PASS')
 
 
-# Décors HD v0.6.4 : dimensions natives 4:3 et contrôle du contenu exact.
+# Décors HD v0.6.5 : dimensions natives 4:3 et contrôle du contenu exact.
 expected_backgrounds={
     'room_kitchen_hd.webp':'089b81eaa7abf3c691b4e9a9e885c31a8c751f0eb3fbd68a98fa022f10179723',
     'room_garden_hd.webp':'9965028f7f921c410fb70397f1c35492d88910578380feb2a506c1f2eae6fe41',
@@ -81,3 +81,16 @@ for bg,expected_sha in expected_backgrounds.items():
         im.load()
         assert im.size==(1536,1152),(bg,im.size)
     assert hashlib.sha256(p.read_bytes()).hexdigest()==expected_sha, bg
+
+
+# Régression v0.6.5 : oreilles intactes + walk-up sans rognage.
+for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
+    p=ROOT/'app/src/main/res-cub/drawable-nodpi'/name
+    with Image.open(p) as strip:
+        strip=strip.convert('RGBA')
+        assert strip.size==(1536,256),(name,strip.size)
+        for i in range(6):
+            frame=strip.crop((i*256,0,(i+1)*256,256))
+            b=frame.getchannel('A').getbbox()
+            assert b is not None,(name,i,'vide')
+            assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,(name,i,b)

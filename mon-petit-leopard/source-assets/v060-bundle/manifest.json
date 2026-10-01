@@ -1,18 +1,20 @@
 {
-  "zip_bytes": 3530951,
-  "b64_chars": 4707936,
+  "zip_bytes": 2954106,
+  "b64_chars": 3938808,
   "parts": 10,
-  "chunk_chars": 500000,
+  "chunk_chars": 400000,
+  "sha256": "cad88d994fe493d26454df9b3ffb4218d1df235848ba3b5cc87190187d14ce3c",
   "files": [
     "v060_assets.b64.part00",
-    "v060_assets.b64.part04",
-    "v060_assets.b64.part02",
-    "v060_assets.b64.part05",
-    "v060_assets.b64.part03",
-    "v060_assets.b64.part09",
     "v060_assets.b64.part01",
-    "v060_assets.b64.part08",
+    "v060_assets.b64.part02",
+    "v060_assets.b64.part03",
+    "v060_assets.b64.part04",
+    "v060_assets.b64.part05",
     "v060_assets.b64.part06",
-    "v060_assets.b64.part07"
-  ]
+    "v060_assets.b64.part07",
+    "v060_assets.b64.part08",
+    "v060_assets.b64.part09"
+  ],
+  "note": "v0.6.5 source atlas bundle: cleaned/reframed four age packs; replaces the older source bytes."
 }
