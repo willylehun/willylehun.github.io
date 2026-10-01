@@ -1,5 +1,7 @@
 from pathlib import Path
 import re, subprocess, tempfile, hashlib
+from collections import deque
+import numpy as np
 from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -12,6 +14,7 @@ assert 'MIN_IDLE_DOWN_SHARE=.30f' in main
 assert 'CharacterSprites.FRAME_SIZE' in main
 assert 'startMoodExitUp()' in main
 assert 'ActionAnim' in main
+assert 'return .90f+.14f*t;' in main
 
 for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
@@ -39,6 +42,7 @@ with tempfile.TemporaryDirectory() as temp:
     p=Path(temp)
     chars=(JAVA/'CharacterSprites.java').read_text()
     (p/'CharacterSprites.java').write_text(chars)
+    (p/'SpriteMotion.java').write_text((JAVA/'SpriteMotion.java').read_text())
     names=sorted(set(re.findall(r'R.drawable.(leopard_\w+)',chars)))
     (p/'R.java').write_text('package com.byw.monpetitleopard; final class R { static class drawable {'+
         ''.join('static final int '+n+'='+str(i+1)+';' for i,n in enumerate(names))+'}}')
@@ -61,16 +65,20 @@ class ContractTest {
    check(p.expectedWidth(p.moods)==3072);
    for(int id:p.allResources())check(id!=0&&seen.add(id));
   }
-  System.out.println("Sprite registry v0.6.8: PASS");
+  check(SpriteMotion.direction(-.10f,.25f,1f,1f)==SpriteMotion.LEFT);
+  check(SpriteMotion.direction(.10f,.25f,1f,1f)==SpriteMotion.RIGHT);
+  check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
+  check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
+  System.out.println("Sprite registry v0.6.9: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.6.8: PASS')
+print('Sprite contract v0.6.9: PASS')
 
 
-# Décors HD v0.6.8 : dimensions natives 4:3 et contrôle du contenu exact.
+# Décors HD v0.6.9 : dimensions natives 4:3 et contrôle du contenu exact.
 expected_backgrounds={
     'room_kitchen_hd.webp':'089b81eaa7abf3c691b4e9a9e885c31a8c751f0eb3fbd68a98fa022f10179723',
     'room_garden_hd.webp':'9965028f7f921c410fb70397f1c35492d88910578380feb2a506c1f2eae6fe41',
@@ -83,7 +91,7 @@ for bg,expected_sha in expected_backgrounds.items():
     assert hashlib.sha256(p.read_bytes()).hexdigest()==expected_sha, bg
 
 
-# Régression v0.6.8 : oreilles intactes + walk-up sans rognage.
+# Régression v0.6.9 : oreilles intactes + walk-up sans rognage.
 for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
     p=ROOT/'app/src/main/res-cub/drawable-nodpi'/name
     with Image.open(p) as strip:
@@ -95,20 +103,37 @@ for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
             assert b is not None,(name,i,'vide')
             assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,(name,i,b)
 
-# Régression v0.6.8 : normalisation globale d'échelle, âge par âge.
-def visible_bbox(im,threshold=20):
-    a=im.getchannel('A')
-    import numpy as _np
-    arr=_np.array(a)
-    ys,xs=_np.nonzero(arr>threshold)
-    if len(xs)==0:
-        return None
-    return (int(xs.min()),int(ys.min()),int(xs.max()+1),int(ys.max()+1))
-
-def frame_extent(frame):
-    b=visible_bbox(frame)
-    assert b is not None
-    return max(b[2]-b[0],b[3]-b[1]),b
+# Régression v0.6.9 : masse visuelle cohérente, âge par âge.
+def largest_component(frame,threshold=20):
+    arr=np.array(frame.getchannel('A'))
+    mask=arr>threshold
+    h,w=mask.shape
+    seen=np.zeros((h,w),dtype=bool)
+    best_area=0
+    best_bbox=None
+    ys,xs=np.nonzero(mask)
+    for sy,sx in zip(ys.tolist(),xs.tolist()):
+        if seen[sy,sx]:
+            continue
+        q=deque([(sy,sx)])
+        seen[sy,sx]=True
+        area=0
+        minx=maxx=sx
+        miny=maxy=sy
+        while q:
+            y,x=q.popleft()
+            area+=1
+            minx=min(minx,x);maxx=max(maxx,x)
+            miny=min(miny,y);maxy=max(maxy,y)
+            for dy,dx in ((-1,0),(1,0),(0,-1),(0,1)):
+                ny,nx=y+dy,x+dx
+                if 0<=ny<h and 0<=nx<w and mask[ny,nx] and not seen[ny,nx]:
+                    seen[ny,nx]=True
+                    q.append((ny,nx))
+        if area>best_area:
+            best_area=area
+            best_bbox=(minx,miny,maxx+1,maxy+1)
+    return best_area,best_bbox
 
 frame_counts={
     'idle_down':1,'idle_left':1,'idle_right':1,'idle_up':1,
@@ -117,13 +142,13 @@ frame_counts={
 }
 for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
-    idle_extents=[]
+    idle_areas=[]
     for key in ['idle_down','idle_left','idle_right','idle_up']:
         with Image.open(folder/f'leopard_{age}_{key}.png') as im:
-            e,b=frame_extent(im.convert('RGBA'))
-            idle_extents.append(e)
-    target=round(sum(idle_extents)/len(idle_extents))
-    assert max(idle_extents)-min(idle_extents)<=2,(age,'idle incoherent',idle_extents)
+            area,b=largest_component(im.convert('RGBA'))
+            assert area>0 and b is not None
+            idle_areas.append(area)
+    target=float(np.median(idle_areas))
 
     for key,count in frame_counts.items():
         ext='png' if key.startswith('idle_') else 'webp'
@@ -132,14 +157,17 @@ for age in ['cub','teen','adult','old']:
             assert strip.size==(256*count,256),(age,key,strip.size)
             for i in range(count):
                 frame=strip.crop((i*256,0,(i+1)*256,256))
-                extent,b=frame_extent(frame)
-                assert abs(extent-target)<=2,(age,key,i,extent,target,b)
-                assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,(age,key,i,b)
+                area,b=largest_component(frame)
+                assert area>0 and b is not None,(age,key,i,'vide')
+                ratio=area/target
+                assert .95<=ratio<=1.05,(age,key,i,area,target,ratio,b)
+                full=frame.getchannel('A').getbbox()
+                assert full is not None
+                assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,i,full)
 
-print('Normalisation globale d\'échelle v0.6.8: PASS')
+print("Normalisation de masse visuelle v0.6.9: PASS")
 
-
-# Régression v0.6.8 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
+# Régression v0.6.9 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
 assert 'incidentView.setBackground(incidentBg)' not in main
 assert 'void chooseIncidentPosition()' in main
@@ -148,4 +176,4 @@ assert 'incidentRoom' in main and 'incidentNX' in main and 'incidentNY' in main
 assert 'chooseIncidentPosition();' in main
 assert 'if(!cleaningMode){' in main
 assert 'Retourne dans la pièce où la bêtise a été faite.' in main
-print('Bêtises au sol et nettoyage direct v0.6.8: PASS')
+print('Bêtises au sol et nettoyage direct v0.6.9: PASS')
