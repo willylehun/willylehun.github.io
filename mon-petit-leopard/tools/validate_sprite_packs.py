@@ -25,9 +25,12 @@ CARE_EXPECTED={
     "groom_foam.webp":(256,256),"soap.webp":(256,256),
     "comb.webp":(256,256),"towel.webp":(256,256),
 }
+GARDEN_EXPECTED={
+    "scratcher_play.webp":(512,256),
+}
 
 def fail(msg):
-    raise SystemExit("ERREUR SPRITES v0.7.5: "+msg)
+    raise SystemExit("ERREUR SPRITES v0.7.7: "+msg)
 
 def main():
     common=ROOT/"res"/"drawable-nodpi"
@@ -37,7 +40,7 @@ def main():
     hashes={}
     for age in AGES:
         folder=ROOT/f"res-{age}"/"drawable-nodpi"
-        expected={f"leopard_{age}_{tail}":size for tail,size in {**EXPECTED,**GAME_EXPECTED,**CARE_EXPECTED}.items()}
+        expected={f"leopard_{age}_{tail}":size for tail,size in {**EXPECTED,**GAME_EXPECTED,**CARE_EXPECTED,**GARDEN_EXPECTED}.items()}
         if age=="cub":
             expected[f"leopard_{age}_bottle.webp"]=(256,256)
         actual={p.name for p in folder.glob("leopard_*") if p.is_file()}
@@ -62,7 +65,7 @@ def main():
             hashes[digest]=(age,name)
         count=sum(size[0]//FRAME for size in expected.values())
         print(f"OK {age}: {count} frames/poses, canevas 256px, marges 10px, aucune frame rognée")
-    print("OK v0.7.5: sprites principaux + course + jeu + soins + biberon, tailles et marges validées.")
+    print("OK v0.7.7: sprites principaux + course + jeu + soins + biberon + griffoir, tailles et marges validées.")
 
 if __name__=="__main__":
     main()
