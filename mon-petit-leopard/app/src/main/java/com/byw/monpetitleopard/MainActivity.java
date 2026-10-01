@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     SharedPreferences sp;
     ObjectSystem objects;
     LivingRoomGames games;
+    GardenGames gardenGames;
 
     long born,last,nextMischiefAt=0,nextWalkAt=0,manualUntil=0,sleepEndAt=0,nextAutoSleepAt=0,walkStartedAt=0;
     long directionalIdleUntil=0,faceRecoveryUntil=0,actionUntil=0,actionFrameAt=0,actionStartedAt=0;
@@ -403,6 +404,8 @@ public class MainActivity extends Activity {
 
         games=new LivingRoomGames(this);
         games.install();
+        gardenGames=new GardenGames(this);
+        gardenGames.install();
 
         root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(360),0));
 
@@ -540,7 +543,11 @@ public class MainActivity extends Activity {
         bg.setScaleY(1.06f);
         bg.setImageResource(res);
         ensurePetImage();
-        scene.post(this::fitSceneAndPet);
+        if(gardenGames!=null)gardenGames.refreshVisibility();
+        scene.post(()->{
+            fitSceneAndPet();
+            if(gardenGames!=null)gardenGames.refreshVisibility();
+        });
     }
 
     void ensurePetImage(){
@@ -1422,6 +1429,7 @@ public class MainActivity extends Activity {
         new AlertDialog.Builder(this).setTitle("Choisir une pièce").setItems(rooms,(d,w)->{
             wakeForAction();
             if(games!=null)games.cancel();
+            if(gardenGames!=null)gardenGames.cancel();
             callingToForeground=false;
             room=w==1?"cuisine":w==2?"bain":w==3?"jardin":"salon";
             addHistory("Déplacement vers : "+roomName()+".");
@@ -1665,6 +1673,7 @@ public class MainActivity extends Activity {
         long now=System.currentTimeMillis();
 
         if(games!=null && games.beforeAnimate(now))return;
+        if(gardenGames!=null && gardenGames.beforeAnimate(now))return;
 
         if(sleeping){
             if(actionAnim!=ActionAnim.SLEEP)startActionAnimation(ActionAnim.SLEEP,MIN_SLEEP_MS);
@@ -1725,6 +1734,7 @@ public class MainActivity extends Activity {
                 if(targetNodeIndex>=0)petNodeIndex=targetNodeIndex;
 
                 if(games!=null && games.onPetArrived(now))return;
+                if(gardenGames!=null && gardenGames.onPetArrived(now))return;
 
                 if(callingToForeground){
                     callingToForeground=false;
@@ -2267,6 +2277,30 @@ public class MainActivity extends Activity {
                             " au lieu de "+width+"x"+height);
                 }catch(RuntimeException error){
                     markCharacterAssetInvalid(res,age+" CARE",error.getMessage());
+                }
+            }
+
+            GardenSprites.Pack garden=GardenSprites.forStage(age);
+            for(int res:garden.allResources()){
+                PetStage other=owners.put(res,age);
+                if(other!=null && other!=age){
+                    markCharacterAssetInvalid(res,age+" GARDEN","partage inter-âge interdit");
+                    continue;
+                }
+                try{
+                    String name=getResources().getResourceEntryName(res);
+                    if(!name.startsWith("leopard_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                        throw new IllegalArgumentException("mauvais préfixe jardin : "+name);
+                    BitmapFactory.Options opts=new BitmapFactory.Options();
+                    opts.inJustDecodeBounds=true;opts.inScaled=false;
+                    BitmapFactory.decodeResource(getResources(),res,opts);
+                    int width=garden.expectedWidth(res);
+                    int height=GardenSprites.FRAME_SIZE;
+                    if(width<0 || opts.outWidth!=width || opts.outHeight!=height)
+                        throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+
+                            " au lieu de "+width+"x"+height);
+                }catch(RuntimeException error){
+                    markCharacterAssetInvalid(res,age+" GARDEN",error.getMessage());
                 }
             }
 

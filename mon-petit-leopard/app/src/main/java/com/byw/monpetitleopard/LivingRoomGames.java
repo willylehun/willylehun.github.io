@@ -105,8 +105,8 @@ final class LivingRoomGames {
     }
 
     void startFetch(ObjectSystem.Item item){
-        if(!"salon".equals(a.room)){
-            a.toast("Le jeu « Va chercher » se joue dans le salon.");
+        if(!"salon".equals(a.room)&&!"jardin".equals(a.room)){
+            a.toast("Le jeu « Va chercher » se joue dans le salon ou le jardin.");
             return;
         }
         cancel();
@@ -128,8 +128,8 @@ final class LivingRoomGames {
     }
 
     void startRope(ObjectSystem.Item item){
-        if(!"salon".equals(a.room)){
-            a.toast("La corde se joue dans le salon.");
+        if(!"salon".equals(a.room)&&!"jardin".equals(a.room)){
+            a.toast("La corde se joue dans le salon ou le jardin.");
             return;
         }
         cancel();
