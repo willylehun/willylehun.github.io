@@ -16,7 +16,7 @@ EXPECTED={
 }
 
 def fail(msg):
-    raise SystemExit("ERREUR SPRITES v0.6.0: "+msg)
+    raise SystemExit("ERREUR SPRITES v0.6.1: "+msg)
 
 def main():
     common=ROOT/"res"/"drawable-nodpi"
@@ -41,14 +41,14 @@ def main():
                 for i in range(count):
                     b=rgba.crop((i*step,0,(i+1)*step,FRAME)).getchannel("A").getbbox()
                     if not b: fail(f"{age}/{name} frame {i+1}: vide")
-                    if b[0]<6 or b[1]<6 or b[2]>250 or b[3]>250:
+                    if b[0]<10 or b[1]<10 or b[2]>246 or b[3]>246:
                         fail(f"{age}/{name} frame {i+1}: risque de rognage {b}")
             digest=hashlib.sha256(p.read_bytes()).hexdigest()
             prev=hashes.get(digest)
             if prev and prev[0]!=age: fail(f"asset identique entre {prev} et {(age,name)}")
             hashes[digest]=(age,name)
-        print(f"OK {age}: 51 frames, canevas 256px, aucune frame rognée")
-    print("OK v0.6.0: tailles, marges, transparence et séparation des âges validées.")
+        print(f"OK {age}: 51 frames, canevas 256px, marges 10px, aucune frame rognée")
+    print("OK v0.6.1: tailles, marges, transparence et séparation des âges validées.")
 
 if __name__=="__main__":
     main()
