@@ -116,16 +116,22 @@ def main():
                 frame=_normalize(frame,target_area)
                 frame.save(dst/f"leopard_{age}_fetch_{toy}.png","PNG",optimize=False)
 
-            # La pose corde utilise la pose pelote, même échelle, avec la corde
-            # interactive superposée par LivingRoomGames.
-            shutil.copyfile(
-                dst/f"leopard_{age}_fetch_yarn.png",
-                dst/f"leopard_{age}_rope_play.png",
-            )
+            # Fallback déterministe : fabrique un strip corde 5 frames à partir
+            # de la pose pelote. Un pack artistique 5 frames déjà présent peut
+            # remplacer ce fichier sans modifier le moteur.
+            base=Image.open(dst/f"leopard_{age}_fetch_yarn.png").convert("RGBA")
+            rope=Image.new("RGBA",(FRAME*5,FRAME),(0,0,0,0))
+            transforms=((0,0,0),(-3,1,-2),(2,-1,2),(-2,0,-1),(3,1,1))
+            for i,(dx,dy,angle) in enumerate(transforms):
+                frame=base.rotate(angle,Image.Resampling.BICUBIC,expand=False)
+                shifted=Image.new("RGBA",(FRAME,FRAME),(0,0,0,0))
+                shifted.alpha_composite(frame,(dx,dy))
+                rope.alpha_composite(shifted,(i*FRAME,0))
+            rope.save(dst/f"leopard_{age}_rope_play.png","PNG",optimize=False)
 
-            print(f"OK {age}: run 4 directions + 5 jouets + corde, échelle alignée sur idle_down")
+            print(f"OK {age}: run 4 directions + 5 jouets + corde 5 frames, échelle alignée sur idle_down")
 
-    print("OK v0.7.1: assets de jeu salon préparés pour les quatre âges.")
+    print("OK v0.7.2: assets de jeu salon préparés pour les quatre âges.")
 
 if __name__=="__main__":
     main()
