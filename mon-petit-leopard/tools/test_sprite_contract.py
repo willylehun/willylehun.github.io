@@ -224,7 +224,7 @@ assert 'beginAutoSleep();' in objects
 
 assert 'class LivingRoomGames' in games
 assert 'THROW_READY' in games and 'RUN_TO_TOY' in games and 'RETURNING' in games
-assert 'dy<-a.dp(48)' in games
+assert 'dy<-a.dp(48)' in games\nassert 'ValueAnimator.ofFloat(0f,1f)' in games\nassert 'ImageView toyView' in games
 assert 'chooseLandingNode' in games
 assert 'movePetToNode' in games
 assert 'fastRun()' in games
