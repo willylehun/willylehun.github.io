@@ -1258,8 +1258,8 @@ public class MainActivity extends Activity {
             maxY=Math.max(maxY,n[1]);
         }
         float t=clamp01((petNY-minY)/Math.max(.01f,maxY-minY));
-        // L'animal est naturellement plus petit au fond et plus grand au premier plan.
-        return .76f+.28f*t;
+        // Perspective plus douce : profondeur visible sans saut de taille excessif.
+        return .90f+.14f*t;
     }
 
     void updatePetPosition(){
@@ -1899,7 +1899,7 @@ public class MainActivity extends Activity {
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         TextView note=text(12,false);
-        note.setText("Version 0.6.8 • "+p.zone+"\n"+names[k]+
+        note.setText("Version 0.6.9 • "+p.zone+"\n"+names[k]+
             (counts[k]>1?" • frame "+(f+1)+"/"+counts[k]:""));
         note.setPadding(dp(14),dp(8),dp(14),dp(8));
         box.addView(note);
