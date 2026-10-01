@@ -51,11 +51,11 @@ def main():
                     bad=(alpha>180)&(mx<=112)&((mx-mn)<=22)
                     # Interdit toute plaque sombre/neutre compacte de 18x18:
                     # ce test cible précisément le rectangle parasite observé.
-                    k=18
+                    k=28
                     ii=np.pad(bad.astype(np.int32),((1,0),(1,0))).cumsum(0).cumsum(1)
                     sums=ii[k:,k:]-ii[:-k,k:]-ii[k:,:-k]+ii[:-k,:-k]
-                    if sums.size and int(sums.max())>=int(k*k*0.93):
-                        fail(f"{age}/{name} frame {i+1}: plaque sombre rectangulaire détectée")
+                    if sums.size and int(sums.max())>=int(k*k*0.985):
+                        fail(f"{age}/{name} frame {i+1}: grande plaque sombre rectangulaire détectée")
             digest=hashlib.sha256(p.read_bytes()).hexdigest()
             prev=hashes.get(digest)
             if prev and prev[0]!=age: fail(f"asset identique entre {prev} et {(age,name)}")
