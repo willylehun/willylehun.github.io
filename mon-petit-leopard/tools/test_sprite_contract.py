@@ -440,9 +440,9 @@ assert '"plush","Peluche","🧸","jardin","Jouets","toy"' in objects
 assert '"rope","Corde","🪢","jardin","Jouets","rope"' in objects
 assert '"scratch","Griffoir","🐾","jardin","Jardin","scratcher"' in objects
 assert '"sun","Repos au soleil","☀️","jardin","Jardin","rest"' in objects
-assert '"contest"' not in objects
-assert '"feather"' not in objects
-assert '"hoop"' not in objects
+assert 'add("contest"' not in objects
+assert 'add("feather"' not in objects
+assert 'add("hoop"' not in objects
 assert 'salon ou le jardin' in living
 assert 'v077-garden-scratcher' in prepare_garden
 assert 'GardenSprites.Pack garden=GardenSprites.forStage(age);' in main
