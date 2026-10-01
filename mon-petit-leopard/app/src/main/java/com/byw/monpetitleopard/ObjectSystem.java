@@ -1,12 +1,6 @@
 package com.byw.monpetitleopard;
 
 import android.app.AlertDialog;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -24,10 +18,10 @@ public class ObjectSystem {
         Item(String id,String name,String icon,String room,String group,String kind,
              int hunger,int water,int clean,int affection,int happy,int energy,int stars,int frame,
              boolean cub,boolean teen,boolean adult,boolean old){
-            this.id=id; this.name=name; this.icon=icon; this.room=room; this.group=group; this.kind=kind;
-            this.hunger=hunger; this.water=water; this.clean=clean; this.affection=affection;
-            this.happy=happy; this.energy=energy; this.stars=stars; this.frame=frame;
-            this.cub=cub; this.teen=teen; this.adult=adult; this.old=old;
+            this.id=id;this.name=name;this.icon=icon;this.room=room;this.group=group;this.kind=kind;
+            this.hunger=hunger;this.water=water;this.clean=clean;this.affection=affection;
+            this.happy=happy;this.energy=energy;this.stars=stars;this.frame=frame;
+            this.cub=cub;this.teen=teen;this.adult=adult;this.old=old;
         }
     }
 
@@ -64,7 +58,7 @@ public class ObjectSystem {
         add("comb","Peigne","🪮","bain","Soins","care",0,0,18,6,5,0,0,11,true,true,true,true);
         add("towel","Serviette","🧺","bain","Soins","care",0,0,12,8,6,3,0,11,true,true,true,true);
 
-        // SALON
+        // SALON — poisson et tunnel restent volontairement absents.
         add("tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-2,5,16,-12,1,10,true,true,true,true);
         add("yarn","Pelote","🧶","salon","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,true);
         add("mouse","Souris","🐭","salon","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,true);
@@ -103,7 +97,7 @@ public class ObjectSystem {
     ArrayList<Item> itemsFor(String room,String group){
         ArrayList<Item> out=new ArrayList<>();
         for(Item i:items){
-            if(i.room.equals(room) && (group==null || i.group.equals(group))) out.add(i);
+            if(i.room.equals(room)&&(group==null||i.group.equals(group)))out.add(i);
         }
         return out;
     }
@@ -111,14 +105,16 @@ public class ObjectSystem {
     void openMenu(){
         if(a.room.equals("bain")){
             openItems("Salle de bain",itemsFor("bain",null));
-        } else if(a.room.equals("jardin")){
+        }else if(a.room.equals("jardin")){
             openItems("Jardin",itemsFor("jardin",null));
-        } else if(a.room.equals("cuisine")){
+        }else if(a.room.equals("cuisine")){
             String[] groups={"Boissons","Repas","Friandises & snacks"};
-            new AlertDialog.Builder(a).setTitle("Cuisine").setItems(groups,(d,w)->openItems(groups[w],itemsFor("cuisine",groups[w]))).show();
-        } else {
+            new AlertDialog.Builder(a).setTitle("Cuisine")
+                .setItems(groups,(d,w)->openItems(groups[w],itemsFor("cuisine",groups[w]))).show();
+        }else{
             String[] groups={"Jouets","Dressage","Repos"};
-            new AlertDialog.Builder(a).setTitle("Salon").setItems(groups,(d,w)->openItems(groups[w],itemsFor("salon",groups[w]))).show();
+            new AlertDialog.Builder(a).setTitle("Salon")
+                .setItems(groups,(d,w)->openItems(groups[w],itemsFor("salon",groups[w]))).show();
         }
     }
 
@@ -131,7 +127,7 @@ public class ObjectSystem {
                 SpannableString row=new SpannableString("   "+i.name+(allowed(i)?"":"  🔒"));
                 try{
                     Drawable d=a.getDrawable(res);
-                    int s=a.dp(30);
+                    int s=a.dp(32);
                     d.setBounds(0,0,s,s);
                     row.setSpan(new ImageSpan(d,ImageSpan.ALIGN_CENTER),0,1,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     labels[n]=row;
@@ -146,8 +142,11 @@ public class ObjectSystem {
     }
 
     int toyMenuDrawable(String id){
-        if("tennis".equals(id)||"yarn".equals(id)||"mouse".equals(id)||"plush".equals(id))
-            return a.getResources().getIdentifier("toy_"+id,"drawable",a.getPackageName());
+        if("tennis".equals(id))return R.drawable.toy_tennis;
+        if("yarn".equals(id))return R.drawable.toy_yarn;
+        if("mouse".equals(id))return R.drawable.toy_mouse;
+        if("plush".equals(id))return R.drawable.toy_plush;
+        if("rope".equals(id))return R.drawable.toy_rope;
         return 0;
     }
 
@@ -157,8 +156,8 @@ public class ObjectSystem {
             return;
         }
 
-        if("salon".equals(i.room) && ("tennis".equals(i.id)
-                ||"yarn".equals(i.id)||"mouse".equals(i.id)||"plush".equals(i.id))){
+        if("salon".equals(i.room)&&("tennis".equals(i.id)||"yarn".equals(i.id)
+                ||"mouse".equals(i.id)||"plush".equals(i.id))){
             if(a.games!=null)a.games.startFetch(i);
             return;
         }
@@ -191,7 +190,7 @@ public class ObjectSystem {
             a.skillCare=a.clamp(a.skillCare+.5f);
         }
 
-        if(i.kind.equals("treat") && a.hunger>88){
+        if(i.kind.equals("treat")&&a.hunger>88){
             a.clean=a.clamp(a.clean-2);
             a.happy=a.clamp(a.happy-2);
         }
@@ -208,12 +207,13 @@ public class ObjectSystem {
         String[] choices;
         if(a.room.equals("cuisine")){
             choices=new String[]{"a renversé sa gamelle","a répandu les croquettes","a renversé une bouteille","a fouillé les friandises"};
-        } else if(a.room.equals("bain")){
+        }else if(a.room.equals("bain")){
             choices=new String[]{"a fait pipi par terre","a fait une crotte","a déroulé le papier toilette","a renversé les serviettes"};
-        } else if(a.room.equals("jardin")){
+        }else if(a.room.equals("jardin")){
             choices=new String[]{"a déterré une plante","a cassé un pot","a renversé l’arrosoir","a mis de la terre partout"};
-        } else {
-            choices=new String[]{"a griffé le canapé","a déchiré un coussin","a mâchouillé une chaussure","a déroulé la pelote de laine","a abîmé un livre","a éventré un jouet"};
+        }else{
+            choices=new String[]{"a griffé le canapé","a déchiré un coussin","a mâchouillé une chaussure",
+                "a déroulé la pelote de laine","a abîmé un livre","a éventré un jouet"};
         }
         return choices[rnd.nextInt(choices.length)];
     }
