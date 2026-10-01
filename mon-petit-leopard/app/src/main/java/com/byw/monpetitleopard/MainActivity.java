@@ -1084,11 +1084,11 @@ public class MainActivity extends Activity {
      * Points de marche analysés pièce par pièce.
      * Chaque point correspond à une zone de sol réellement dégagée dans l'image.
      * Les connexions ci-dessous empêchent les trajets de traverser canapé,
-     * îlot de cuisine, baignoire, toilettes, bancs et massifs.
+     * mobilier fixe, baignoire, toilettes et massifs.
      */
     float[][] roomNodes(){
         if(room.equals("cuisine")){
-            // v0.5.8 : îlot retiré, grande zone de sol libre.
+            // v0.6.3 : nouveau décor sans table, grande zone de sol libre.
             return new float[][]{
                 {.16f,.93f},{.34f,.94f},{.52f,.94f},{.70f,.94f},{.86f,.93f},
                 {.20f,.82f},{.40f,.82f},{.60f,.82f},{.80f,.82f}
@@ -1101,7 +1101,7 @@ public class MainActivity extends Activity {
             };
         }
         if(room.equals("jardin")){
-            // Jardin v0.5.7 : grille centrale ouverte, sans barrière de premier plan.
+            // v0.6.3 : nouveau jardin sans barrières, grille centrale ouverte.
             // Toutes les liaisons sont horizontales ou verticales.
             return new float[][]{
                 {.34f,.90f},{.50f,.90f},{.66f,.90f},

@@ -51,36 +51,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.6.2
+          name: mon-petit-leopard-v0.6.3
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.6.2.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.6.3.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.6.2"
+          TAG="mon-petit-leopard-v0.6.3"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.6.2 — humeurs de 4 secondes" \
-              --notes "v0.6.2 : conserve les quatre packs de sprites nettoyés de v0.6.1 et la cible idle-down à 30 %. Les humeurs durent désormais 4 secondes. Le sommeil naturel reste à 1 min 30."
+              --title "Mon Petit Léopard v0.6.3 — nouveaux décors HD" \
+              --notes "v0.6.3 : remplace la cuisine par un décor HD sans table et le jardin par un décor HD sans barrières, afin de garder les zones de marche visuellement libres. Images 1536x1152 en WebP lossless. Les humeurs restent à 4 secondes, l idle-down à 30 % et le sommeil naturel à 1 min 30."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.6.2.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.6.3.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.6.2 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.6.3 APK [skip ci]"
             git push
           fi

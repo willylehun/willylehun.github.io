@@ -61,10 +61,18 @@ class ContractTest {
    check(p.expectedWidth(p.moods)==3072);
    for(int id:p.allResources())check(id!=0&&seen.add(id));
   }
-  System.out.println("Sprite registry v0.6.2: PASS");
+  System.out.println("Sprite registry v0.6.3: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.6.2: PASS')
+print('Sprite contract v0.6.3: PASS')
+
+
+# Décors HD v0.6.3 : dimensions natives 4:3, sans ré-échantillonnage Android.
+for bg in ['room_kitchen_hd.webp','room_garden_hd.webp']:
+    p=ROOT/'app/src/main/res/drawable-nodpi'/bg
+    with Image.open(p) as im:
+        im.load()
+        assert im.size==(1536,1152),(bg,im.size)
