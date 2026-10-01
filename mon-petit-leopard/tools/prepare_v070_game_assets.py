@@ -84,6 +84,28 @@ def _normalize(im:Image.Image,target_area:int)->Image.Image:
     out.alpha_composite(obj,(x,y))
     return out
 
+def _safe_fit(im:Image.Image)->Image.Image:
+    """Réinscrit une frame dans la marge de sécurité sans rogner le sujet."""
+    im=im.convert("RGBA")
+    bbox=im.getchannel("A").getbbox()
+    if not bbox:
+        raise RuntimeError("frame corde vide")
+    if bbox[0]>=SAFE and bbox[1]>=SAFE and bbox[2]<=FRAME-SAFE and bbox[3]<=FRAME-SAFE:
+        return im
+    obj=im.crop(bbox)
+    max_dim=FRAME-2*SAFE
+    scale=min(1.0,max_dim/float(obj.width),max_dim/float(obj.height))
+    nw=max(1,int(round(obj.width*scale)))
+    nh=max(1,int(round(obj.height*scale)))
+    if (nw,nh)!=obj.size:
+        obj=obj.resize((nw,nh),Image.Resampling.LANCZOS)
+    out=Image.new("RGBA",(FRAME,FRAME),(0,0,0,0))
+    x=(FRAME-nw)//2
+    y=FRAME-SAFE-nh
+    y=max(SAFE,min(FRAME-SAFE-nh,y))
+    out.alpha_composite(obj,(x,y))
+    return out
+
 def _load_bundle():
     parts=sorted(SOURCE.glob("fetch_assets_v070.b64.part*"))
     if len(parts)!=8:
@@ -126,6 +148,7 @@ def main():
                 frame=base.rotate(angle,Image.Resampling.BICUBIC,expand=False)
                 shifted=Image.new("RGBA",(FRAME,FRAME),(0,0,0,0))
                 shifted.alpha_composite(frame,(dx,dy))
+                shifted=_safe_fit(shifted)
                 rope.alpha_composite(shifted,(i*FRAME,0))
             rope.save(dst/f"leopard_{age}_rope_play.png","PNG",optimize=False)
 
