@@ -1,6 +1,12 @@
 package com.byw.monpetitleopard;
 
 import android.app.AlertDialog;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -59,7 +65,6 @@ public class ObjectSystem {
         add("towel","Serviette","🧺","bain","Soins","care",0,0,12,8,6,3,0,11,true,true,true,true);
 
         // SALON
-        add("ball","Balle","⚽","salon","Jouets","toy",0,-3,-2,5,14,-10,1,10,true,true,true,true);
         add("tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-2,5,16,-12,1,10,true,true,true,true);
         add("yarn","Pelote","🧶","salon","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,true);
         add("mouse","Souris","🐭","salon","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,true);
@@ -152,7 +157,7 @@ public class ObjectSystem {
             return;
         }
 
-        if("salon".equals(i.room) && ("ball".equals(i.id)||"tennis".equals(i.id)
+        if("salon".equals(i.room) && ("tennis".equals(i.id)
                 ||"yarn".equals(i.id)||"mouse".equals(i.id)||"plush".equals(i.id))){
             if(a.games!=null)a.games.startFetch(i);
             return;
