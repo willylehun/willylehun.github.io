@@ -10,13 +10,15 @@ final class SpriteMotion {
     static final int LEFT=0,RIGHT=1,UP=2,DOWN=3;
 
     static int direction(float dx,float dy,float width,float height){
-        // Priorité stricte au déplacement horizontal :
-        // si le léopard se déplace vers la gauche/droite, on affiche WALK_LEFT/RIGHT,
-        // même si le trajet est légèrement diagonal. FRONT/BACK ne sont utilisés
-        // que pour un déplacement réellement vertical.
-        if(Math.abs(dx)>0.004f)
+        float ax=Math.abs(dx), ay=Math.abs(dy);
+
+        // WALK_UP / WALK_DOWN uniquement quand la trajectoire est vraiment verticale.
+        // Une diagonale qui part clairement à gauche/droite reste en profil.
+        if(ay>0.004f && ax<=ay*.35f)
+            return dy<0?UP:DOWN;
+        if(ax>0.004f)
             return dx<0?LEFT:RIGHT;
-        if(Math.abs(dy)>0.004f)
+        if(ay>0.004f)
             return dy<0?UP:DOWN;
         return DOWN;
     }
