@@ -14,9 +14,16 @@ EXPECTED={
     "jump.webp":(1280,256),"eat.webp":(768,256),
     "sleep.webp":(768,256),"moods.webp":(3072,256),
 }
+GAME_EXPECTED={
+    "run_down.webp":(1536,256),"run_left.webp":(1536,256),
+    "run_right.webp":(1536,256),"run_up.webp":(1536,256),
+    "fetch_ball.png":(256,256),"fetch_tennis.png":(256,256),
+    "fetch_yarn.png":(256,256),"fetch_mouse.png":(256,256),
+    "fetch_plush.png":(256,256),"rope_play.png":(256,256),
+}
 
 def fail(msg):
-    raise SystemExit("ERREUR SPRITES v0.6.1: "+msg)
+    raise SystemExit("ERREUR SPRITES v0.7.1: "+msg)
 
 def main():
     common=ROOT/"res"/"drawable-nodpi"
@@ -26,7 +33,7 @@ def main():
     hashes={}
     for age in AGES:
         folder=ROOT/f"res-{age}"/"drawable-nodpi"
-        expected={f"leopard_{age}_{tail}":size for tail,size in EXPECTED.items()}
+        expected={f"leopard_{age}_{tail}":size for tail,size in {**EXPECTED,**GAME_EXPECTED}.items()}
         actual={p.name for p in folder.glob("leopard_*") if p.is_file()}
         if actual!=set(expected):
             fail(f"{age}: manquants={sorted(set(expected)-actual)}, en trop={sorted(actual-set(expected))}")
@@ -47,8 +54,8 @@ def main():
             prev=hashes.get(digest)
             if prev and prev[0]!=age: fail(f"asset identique entre {prev} et {(age,name)}")
             hashes[digest]=(age,name)
-        print(f"OK {age}: 51 frames, canevas 256px, marges 10px, aucune frame rognée")
-    print("OK v0.6.1: tailles, marges, transparence et séparation des âges validées.")
+        print(f"OK {age}: 81 frames, canevas 256px, marges 10px, aucune frame rognée")
+    print("OK v0.7.1: sprites principaux + course + jeu, tailles et marges validées.")
 
 if __name__=="__main__":
     main()
