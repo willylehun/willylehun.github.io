@@ -55,12 +55,12 @@ public class ObjectSystem {
         add("towel","Serviette","🧺","bain","Soins","care",0,0,12,8,6,3,0,11,true,true,true,true);
 
         // SALON
-        add("ball","Balle","⚽","salon","Jouets","toy",0,-3,-2,5,14,-10,1,10,true,true,true,false);
-        add("tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-2,5,16,-12,1,10,false,true,true,false);
-        add("yarn","Pelote","🧶","salon","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,false);
-        add("mouse","Souris","🐭","salon","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,false);
+        add("ball","Balle","⚽","salon","Jouets","toy",0,-3,-2,5,14,-10,1,10,true,true,true,true);
+        add("tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-2,5,16,-12,1,10,true,true,true,true);
+        add("yarn","Pelote","🧶","salon","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,true);
+        add("mouse","Souris","🐭","salon","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,true);
         add("plush","Peluche","🧸","salon","Jouets","toy",0,0,0,9,10,-3,0,11,true,true,true,true);
-        add("rope","Corde","🪢","salon","Jouets","rope",0,-4,-3,5,15,-13,1,10,false,true,true,false);
+        add("rope","Corde","🪢","salon","Jouets","rope",0,-4,-3,5,15,-13,1,10,true,true,true,true);
 
         add("clicker","Clicker","🟩","salon","Dressage","training",0,0,0,3,7,-5,1,6,false,true,true,false);
         add("whistle","Sifflet","📣","salon","Dressage","training",0,0,0,2,5,-4,1,6,false,true,true,false);
