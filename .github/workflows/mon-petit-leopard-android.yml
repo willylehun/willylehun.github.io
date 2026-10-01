@@ -51,36 +51,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.6.5
+          name: mon-petit-leopard-v0.6.6
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.6.5.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.6.6.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.6.5"
+          TAG="mon-petit-leopard-v0.6.6"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.6.5 — sprites recadrés et nettoyés" \
-              --notes "v0.6.5 : remplace le bundle source des quatre âges par les assets recadrés. Correction prioritaire du léopardeau : oreilles conservées avec marge de sécurité et nettoyage du halo blanc sur walk-up. Le build vérifie une marge minimale de 16 px. Les décors HD cuisine/jardin de v0.6.4 sont conservés."
+              --title "Mon Petit Léopard v0.6.6 — sommeil léopardeau normalisé" \
+              --notes "v0.6.6 : corrige le saut de taille pendant le sommeil du léopardeau en normalisant la première frame sur les deux autres. Les protections oreilles/walk-up de v0.6.5 sont conservées, ainsi que les décors HD cuisine/jardin. Humeurs 4 s, idle-down 30 %, sommeil naturel 1 min 30."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.6.5.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.6.6.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.6.5 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.6.6 APK [skip ci]"
             git push
           fi
