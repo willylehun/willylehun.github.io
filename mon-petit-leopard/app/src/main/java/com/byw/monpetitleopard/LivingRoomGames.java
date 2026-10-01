@@ -1,25 +1,21 @@
 package com.byw.monpetitleopard;
 
-import android.animation.ValueAnimator;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.view.animation.LinearInterpolator;
 
 /**
  * Jeux interactifs du salon :
- * - "Va chercher" avec geste de lancer vers le haut.
- * - Corde maintenue au doigt.
- *
- * Les déplacements utilisent volontairement les packs de marche déjà normalisés
- * de chaque âge afin de conserver exactement la même échelle que le reste du jeu.
+ * - "Va chercher" avec vrais visuels PNG/WebP et lancer en cloche.
+ * - Tir à la corde animé sur 5 frames par âge.
  */
 final class LivingRoomGames {
     static final int NONE=0;
@@ -32,6 +28,10 @@ final class LivingRoomGames {
     static final int ROPE_READY=7;
     static final int ROPE_HOLD=8;
 
+    static final int ROPE_FRAME_COUNT=5;
+    static final long ROPE_FRAME_MS=115L;
+    static final long ROPE_SOLO_MS=2200L;
+
     final MainActivity a;
     ImageView toyView;
     ObjectSystem.Item activeItem;
@@ -39,10 +39,11 @@ final class LivingRoomGames {
     int landingNode=-1;
     long playUntil=0;
     long ropeHoldStartedAt=0;
-    long ropeFrameAt=0;
-    int ropeFrameIndex=0;
     float downRawX,downRawY,startViewX,startViewY;
     float toyNX=.50f,toyNY=.95f;
+
+    ValueAnimator flightAnimator;
+
     Bitmap ropeStrip;
     Bitmap[] ropeFrames;
     int ropeFrameIndex=0;
@@ -59,7 +60,7 @@ final class LivingRoomGames {
         toyView.setPadding(0,0,0,0);
         toyView.setElevation(a.dp(10));
         toyView.setVisibility(View.GONE);
-        FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(a.dp(68),a.dp(68));
+        FrameLayout.LayoutParams lp=new FrameLayout.LayoutParams(a.dp(64),a.dp(64));
         lp.gravity=Gravity.TOP|Gravity.LEFT;
         a.scene.addView(toyView,lp);
         toyView.setOnTouchListener((v,e)->handleTouch(e));
@@ -70,19 +71,63 @@ final class LivingRoomGames {
         if("yarn".equals(id))return R.drawable.toy_yarn;
         if("mouse".equals(id))return R.drawable.toy_mouse;
         if("plush".equals(id))return R.drawable.toy_plush;
+        if("rope".equals(id))return R.drawable.toy_rope;
         return 0;
+    }
+
+    void applyToyVisual(ObjectSystem.Item item){
+        int res=item==null?0:toyDrawable(item.id);
+        toyView.setImageResource(res);
+        toyView.setContentDescription(item==null?null:item.name);
+        resizeToyForScene();
+    }
+
+    void resizeToyForScene(){
+        if(toyView==null)return;
+        int petSize=a.petView!=null?a.petView.getWidth():0;
+        if(petSize<=0)petSize=a.dp(110);
+        float ratio=.34f;
+        if(activeItem!=null){
+            if("tennis".equals(activeItem.id))ratio=.30f;
+            else if("yarn".equals(activeItem.id))ratio=.34f;
+            else if("mouse".equals(activeItem.id))ratio=.36f;
+            else if("plush".equals(activeItem.id))ratio=.40f;
+            else if("rope".equals(activeItem.id))ratio=.58f;
+        }
+        int size=Math.round(petSize*ratio);
+        size=Math.max(a.dp(42),Math.min(a.dp(88),size));
+        FrameLayout.LayoutParams lp=(FrameLayout.LayoutParams)toyView.getLayoutParams();
+        if(lp.width!=size||lp.height!=size){
+            lp.width=size;lp.height=size;
+            lp.gravity=Gravity.TOP|Gravity.LEFT;
+            toyView.setLayoutParams(lp);
+        }
     }
 
     boolean active(){return state!=NONE;}
     boolean fastRun(){return state==RUN_TO_TOY||state==RETURNING;}
     int walkFrameAdvance(){return fastRun()?2:1;}
 
+    void releaseRopeFrames(){
+        ropeFrames=null;
+        ropeStrip=null;
+        loadedRopeStage=null;
+        ropeFrameIndex=0;
+        ropeFrameAt=0;
+    }
+
     void cancel(){
+        if(flightAnimator!=null){
+            flightAnimator.cancel();
+            flightAnimator=null;
+        }
         if(toyView!=null){
             toyView.animate().cancel();
             toyView.setVisibility(View.GONE);
             toyView.setRotation(0f);
+            toyView.setImageDrawable(null);
         }
+        releaseRopeFrames();
         activeItem=null;
         state=NONE;
         landingNode=-1;
@@ -121,7 +166,6 @@ final class LivingRoomGames {
         preparePet();
         activeItem=item;
         state=THROW_READY;
-        toyView.setTextSize(34);
         applyToyVisual(item);
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
@@ -142,13 +186,11 @@ final class LivingRoomGames {
         preparePet();
         activeItem=item;
         state=ROPE_APPROACH;
-        toyView.setTextSize(24);
-        toyView.setBackground(null);
-        toyView.setText("│\n🪢");
+        applyToyVisual(item);
         toyView.setVisibility(View.VISIBLE);
         int front=foregroundCenterNode();
         float[][] nodes=a.roomNodes();
-        toyNX=Math.min(.82f,nodes[front][0]+.16f);
+        toyNX=Math.min(.82f,nodes[front][0]+.17f);
         toyNY=nodes[front][1];
         positionToy();
         movePetToNode(front,false);
@@ -177,7 +219,6 @@ final class LivingRoomGames {
         int best=0;
         float scoreBest=Float.MAX_VALUE;
         for(int i=0;i<nodes.length;i++){
-            // Un lancer vers le haut doit atterrir dans la rangée la plus profonde du tapis.
             float score=Math.abs(nodes[i][0]-desiredX)*1.5f + Math.abs(nodes[i][1]-minY)*5f;
             if(score<scoreBest){scoreBest=score;best=i;}
         }
@@ -211,7 +252,6 @@ final class LivingRoomGames {
         if(e.getAction()==MotionEvent.ACTION_DOWN){
             downRawX=rx;downRawY=ry;
             startViewX=toyView.getX();startViewY=toyView.getY();
-            toyView.animate().cancel();
             return true;
         }
         if(e.getAction()==MotionEvent.ACTION_MOVE){
@@ -247,29 +287,35 @@ final class LivingRoomGames {
         toyNX=nodes[landingNode][0];
         toyNY=nodes[landingNode][1];
 
-        final float sx=toyView.getX(), sy=toyView.getY();
+        final float sx=toyView.getX(),sy=toyView.getY();
         final float[] target=toyPixelPosition(toyNX,toyNY);
-        final float cx=(sx+target[0])*.5f;
-        final float cy=Math.max(a.imageRect()[1],Math.min(sy,target[1])-a.dp(125));
+        final float distance=Math.abs(target[1]-sy);
+        final float arc=Math.max(a.dp(92),distance*.55f+a.dp(36));
 
-        ValueAnimator flight=ValueAnimator.ofFloat(0f,1f);
-        flight.setDuration(720L);
-        flight.setInterpolator(new LinearInterpolator());
-        flight.addUpdateListener(anim->{
-            float t=(float)anim.getAnimatedValue(),u=1f-t;
-            toyView.setX(u*u*sx+2f*u*t*cx+t*t*target[0]);
-            toyView.setY(u*u*sy+2f*u*t*cy+t*t*target[1]);
-            toyView.setRotation(540f*t);
+        if(flightAnimator!=null)flightAnimator.cancel();
+        flightAnimator=ValueAnimator.ofFloat(0f,1f);
+        flightAnimator.setDuration(720L);
+        flightAnimator.setInterpolator(new LinearInterpolator());
+        flightAnimator.addUpdateListener(anim->{
+            float t=(float)anim.getAnimatedValue();
+            float x=sx+(target[0]-sx)*t;
+            float y=sy+(target[1]-sy)*t-4f*arc*t*(1f-t);
+            toyView.setX(x);
+            toyView.setY(y);
+            toyView.setRotation(420f*t);
         });
-        flight.addListener(new android.animation.AnimatorListenerAdapter(){
-            @Override public void onAnimationEnd(android.animation.Animator animation){
+        flightAnimator.addListener(new AnimatorListenerAdapter(){
+            @Override public void onAnimationEnd(Animator animation){
+                if(state!=TOY_FLYING)return;
                 toyView.setRotation(0f);
-                toyView.setX(target[0]);toyView.setY(target[1]);
+                toyView.setX(target[0]);
+                toyView.setY(target[1]);
                 state=RUN_TO_TOY;
                 movePetToNode(landingNode,true);
+                flightAnimator=null;
             }
         });
-        flight.start();
+        flightAnimator.start();
     }
 
     boolean handleRopeTouch(MotionEvent e){
@@ -288,9 +334,8 @@ final class LivingRoomGames {
             long held=Math.max(0,System.currentTimeMillis()-ropeHoldStartedAt);
             float factor=Math.min(1f,held/1800f);
             applyRewards(factor);
-            // Au relâchement, le léopard continue brièvement à jouer seul.
             state=PLAYING;
-            playUntil=System.currentTimeMillis()+1100L;
+            playUntil=System.currentTimeMillis()+ROPE_SOLO_MS;
             toyView.setVisibility(View.GONE);
             ropeFrameAt=0;
             ropeFrameIndex=0;
@@ -310,10 +355,7 @@ final class LivingRoomGames {
         if(state==PLAYING){
             if(activeItem!=null && "rope".equals(activeItem.kind)){
                 showRopePose();
-                if(now>=playUntil){
-                    finishRopePlay();
-                    return true;
-                }
+                if(now>=playUntil)finishRopePlay();
             }else{
                 showFetchPose();
                 if(now>=playUntil){
@@ -393,73 +435,83 @@ final class LivingRoomGames {
         showGamePose(res);
     }
 
-    void showRopePose(){
-        int res=GameSprites.forStage(a.petStage()).ropePlay;
-        if(res==0||a.invalidCharacterAssets.contains(res)){a.showAssetErrorOnce();return;}
+    boolean loadRopeFrames(){
+        MainActivity.PetStage stage=a.petStage();
+        if(ropeFrames!=null&&loadedRopeStage==stage&&ropeFrames.length==ROPE_FRAME_COUNT)return true;
+
+        releaseRopeFrames();
+        int res=GameSprites.forStage(stage).ropePlay;
+        if(res==0||a.invalidCharacterAssets.contains(res)){
+            a.showAssetErrorOnce();
+            return false;
+        }
+
         Bitmap strip=null;
         try{strip=BitmapFactory.decodeResource(a.getResources(),res);}catch(Throwable ignored){}
-        if(strip==null){a.markCharacterAssetInvalid(res,"corde","ressource illisible");return;}
-        final int frame=GameSprites.FRAME_SIZE;
-        final int count=5;
-        if(strip.getWidth()!=frame*count||strip.getHeight()!=frame){
-            // Compatibilité avec une ancienne ressource pendant une migration.
-            showGamePose(res);
-            return;
+        if(strip==null){
+            a.markCharacterAssetInvalid(res,"corde","ressource illisible");
+            a.showAssetErrorOnce();
+            return false;
         }
+        int frame=GameSprites.FRAME_SIZE;
+        if(strip.getWidth()!=frame*ROPE_FRAME_COUNT||strip.getHeight()!=frame){
+            a.markCharacterAssetInvalid(res,"corde",
+                strip.getWidth()+"x"+strip.getHeight()+" au lieu de "+(frame*ROPE_FRAME_COUNT)+"x"+frame);
+            a.showAssetErrorOnce();
+            return false;
+        }
+
+        ropeStrip=strip;
+        ropeFrames=new Bitmap[ROPE_FRAME_COUNT];
+        try{
+            for(int i=0;i<ROPE_FRAME_COUNT;i++)
+                ropeFrames[i]=Bitmap.createBitmap(strip,i*frame,0,frame,frame);
+        }catch(Throwable err){
+            releaseRopeFrames();
+            a.markCharacterAssetInvalid(res,"corde","découpage impossible");
+            a.showAssetErrorOnce();
+            return false;
+        }
+        loadedRopeStage=stage;
+        ropeFrameIndex=0;
+        ropeFrameAt=0;
+        return true;
+    }
+
+    void showRopePose(){
+        if(!loadRopeFrames())return;
         long now=System.currentTimeMillis();
         if(ropeFrameAt==0||now>=ropeFrameAt){
-            ropeFrameIndex=(ropeFrameIndex+1)%count;
-            ropeFrameAt=now+115L;
+            ropeFrameIndex=(ropeFrameIndex+1)%ropeFrames.length;
+            ropeFrameAt=now+ROPE_FRAME_MS;
         }
-        try{
-            Bitmap b=Bitmap.createBitmap(strip,ropeFrameIndex*frame,0,frame,frame);
-            a.petView.setImageBitmap(b);
-            a.displayedPetStage=a.petStage();
-            a.petView.setVisibility(View.VISIBLE);
-            a.currentPetRes=0;
-            a.updatePetPosition();
-        }catch(Throwable err){
-            a.markCharacterAssetInvalid(res,"corde","découpage impossible");
-        }
+        a.petView.setImageBitmap(ropeFrames[ropeFrameIndex]);
+        a.displayedPetStage=a.petStage();
+        a.petView.setVisibility(View.VISIBLE);
+        a.currentPetRes=0;
+        a.updatePetPosition();
     }
 
     void finishRopePlay(){
         a.walking=false;
         state=ROPE_READY;
+        releaseRopeFrames();
         a.currentPetRes=0;
         toyView.setVisibility(View.VISIBLE);
+        applyToyVisual(activeItem);
         positionToy();
         a.ensurePetImage();
         a.updatePetPosition();
         a.save();
         a.refresh();
-    }
-
-    int toyDrawable(String id){
-        if("tennis".equals(id)||"yarn".equals(id)||"mouse".equals(id)||"plush".equals(id)){
-            return a.getResources().getIdentifier("toy_"+id,"drawable",a.getPackageName());
-        }
-        return 0;
-    }
-
-    void applyToyVisual(ObjectSystem.Item item){
-        int res=toyDrawable(item.id);
-        if(res!=0){
-            toyView.setText("");
-            toyView.setBackgroundResource(res);
-            toyView.setContentDescription(item.name);
-        }else{
-            toyView.setBackground(null);
-            toyView.setText(item.icon);
-            toyView.setContentDescription(item.name);
-        }
+        a.toast("🪢 Le léopard continue de jouer puis te rend la corde.");
     }
 
     void beginReturn(){
         if(activeItem==null){cancel();return;}
         a.releaseActionFrames();
         a.actionAnim=MainActivity.ActionAnim.NONE;
-        toyView.setVisibility(View.GONE); // objet considéré comme attrapé.
+        toyView.setVisibility(View.GONE);
         state=RETURNING;
         movePetToNode(foregroundCenterNode(),true);
     }
@@ -496,6 +548,7 @@ final class LivingRoomGames {
     }
 
     float[] toyPixelPosition(float nx,float ny){
+        resizeToyForScene();
         float[] r=a.imageRect();
         int w=toyView.getWidth()>0?toyView.getWidth():toyView.getLayoutParams().width;
         int h=toyView.getHeight()>0?toyView.getHeight():toyView.getLayoutParams().height;
@@ -509,8 +562,10 @@ final class LivingRoomGames {
     void positionToy(){
         if(toyView==null||toyView.getVisibility()!=View.VISIBLE)return;
         toyView.post(()->{
+            resizeToyForScene();
             float[] xy=toyPixelPosition(toyNX,toyNY);
-            toyView.setX(xy[0]);toyView.setY(xy[1]);
+            toyView.setX(xy[0]);
+            toyView.setY(xy[1]);
             toyView.bringToFront();
         });
     }
@@ -518,8 +573,18 @@ final class LivingRoomGames {
     void positionToyNearPet(){
         if(toyView==null)return;
         toyView.setVisibility(View.VISIBLE);
-        toyNX=a.clamp01(a.petNX+.09f);
-        toyNY=a.clamp01(a.petNY+.01f);
-        positionToy();
+        toyView.post(()->{
+            resizeToyForScene();
+            int w=toyView.getWidth()>0?toyView.getWidth():toyView.getLayoutParams().width;
+            int h=toyView.getHeight()>0?toyView.getHeight():toyView.getLayoutParams().height;
+            float[] r=a.imageRect();
+            float x=a.petView.getX()+a.petView.getWidth()*.72f;
+            float y=a.petView.getY()+a.petView.getHeight()*.38f-h*.42f;
+            x=Math.max(r[0],Math.min(r[0]+r[2]-w,x));
+            y=Math.max(r[1],Math.min(r[1]+r[3]-h,y));
+            toyView.setX(x);
+            toyView.setY(y);
+            toyView.bringToFront();
+        });
     }
 }
