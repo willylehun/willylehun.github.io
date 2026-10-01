@@ -67,18 +67,20 @@ class ContractTest {
   }
   check(SpriteMotion.direction(-.10f,.25f,1f,1f)==SpriteMotion.LEFT);
   check(SpriteMotion.direction(.10f,.25f,1f,1f)==SpriteMotion.RIGHT);
+  check(SpriteMotion.direction(-.04f,-.25f,1f,1f)==SpriteMotion.UP);
+  check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.6.9: PASS");
+  System.out.println("Sprite registry v0.7.0: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.6.9: PASS')
+print('Sprite contract v0.7.0: PASS')
 
 
-# Décors HD v0.6.9 : dimensions natives 4:3 et contrôle du contenu exact.
+# Décors HD v0.7.0 : dimensions natives 4:3 et contrôle du contenu exact.
 expected_backgrounds={
     'room_kitchen_hd.webp':'089b81eaa7abf3c691b4e9a9e885c31a8c751f0eb3fbd68a98fa022f10179723',
     'room_garden_hd.webp':'9965028f7f921c410fb70397f1c35492d88910578380feb2a506c1f2eae6fe41',
@@ -91,7 +93,7 @@ for bg,expected_sha in expected_backgrounds.items():
     assert hashlib.sha256(p.read_bytes()).hexdigest()==expected_sha, bg
 
 
-# Régression v0.6.9 : oreilles intactes + walk-up sans rognage.
+# Régression v0.7.0 : oreilles intactes + walk-up sans rognage.
 for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
     p=ROOT/'app/src/main/res-cub/drawable-nodpi'/name
     with Image.open(p) as strip:
@@ -103,7 +105,7 @@ for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
             assert b is not None,(name,i,'vide')
             assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,(name,i,b)
 
-# Régression v0.6.9 : masse visuelle cohérente, âge par âge.
+# Régression v0.7.0 : masse visuelle cohérente, âge par âge.
 def largest_component(frame,threshold=20):
     arr=np.array(frame.getchannel('A'))
     mask=arr>threshold
@@ -165,9 +167,9 @@ for age in ['cub','teen','adult','old']:
                 assert full is not None
                 assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,i,full)
 
-print("Normalisation de masse visuelle v0.6.9: PASS")
+print("Normalisation de masse visuelle v0.7.0: PASS")
 
-# Régression v0.6.9 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
+# Régression v0.7.0 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
 assert 'incidentView.setBackground(incidentBg)' not in main
 assert 'void chooseIncidentPosition()' in main
@@ -176,4 +178,37 @@ assert 'incidentRoom' in main and 'incidentNX' in main and 'incidentNY' in main
 assert 'chooseIncidentPosition();' in main
 assert 'if(!cleaningMode){' in main
 assert 'Retourne dans la pièce où la bêtise a été faite.' in main
-print('Bêtises au sol et nettoyage direct v0.6.9: PASS')
+print('Bêtises au sol et nettoyage direct v0.7.0: PASS')
+
+
+# Gros changement salon v0.7.0.
+objects=(JAVA/'ObjectSystem.java').read_text()
+games=(JAVA/'LivingRoomGames.java').read_text()
+
+for toy in ['"ball"','"tennis"','"yarn"','"mouse"','"plush"']:
+    assert toy in objects
+assert '"fishToy"' not in objects
+assert '"tunnel"' not in objects
+assert '"rope","Corde","🪢","salon","Jouets","rope"' in objects
+assert '"bed","Repos","🛏️","salon","Repos","rest"' in objects
+assert 'games.startFetch(i)' in objects
+assert 'games.startRope(i)' in objects
+assert 'beginAutoSleep();' in objects
+
+assert 'class LivingRoomGames' in games
+assert 'THROW_READY' in games and 'RUN_TO_TOY' in games and 'RETURNING' in games
+assert 'dy<-a.dp(48)' in games
+assert 'chooseLandingNode' in games
+assert 'movePetToNode' in games
+assert 'fastRun()' in games
+assert 'ROPE_HOLD' in games
+
+assert '📣 Appeler' in main
+assert 'void callLeopard()' in main
+assert 'games.onPetArrived(now)' in main
+assert 'games.fastRun()' in main
+assert '{.30f,.74f}' not in main
+assert '{.30f,.86f}' in main and '{.50f,.95f}' in main
+assert 'speed*=1.85f' in main
+
+print('Jeux salon v0.7.0: PASS')
