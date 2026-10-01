@@ -246,24 +246,25 @@ final class LivingRoomGames {
         float[][] nodes=a.roomNodes();
         toyNX=nodes[landingNode][0];
         toyNY=nodes[landingNode][1];
-        float[] xy=toyPixelPosition(toyNX,toyNY);
-        toyView.animate().cancel();
+
         final float sx=toyView.getX(), sy=toyView.getY();
-        final float ex=xy[0], ey=xy[1];
-        final float arc=Math.max(a.dp(74),Math.abs(ey-sy)*.55f+a.dp(48));
+        final float[] target=toyPixelPosition(toyNX,toyNY);
+        final float cx=(sx+target[0])*.5f;
+        final float cy=Math.max(a.imageRect()[1],Math.min(sy,target[1])-a.dp(125));
+
         ValueAnimator flight=ValueAnimator.ofFloat(0f,1f);
-        flight.setDuration(620L);
+        flight.setDuration(720L);
+        flight.setInterpolator(new LinearInterpolator());
         flight.addUpdateListener(anim->{
-            float t=(float)anim.getAnimatedValue();
-            float x=sx+(ex-sx)*t;
-            float y=sy+(ey-sy)*t-4f*arc*t*(1f-t);
-            toyView.setX(x);
-            toyView.setY(y);
+            float t=(float)anim.getAnimatedValue(),u=1f-t;
+            toyView.setX(u*u*sx+2f*u*t*cx+t*t*target[0]);
+            toyView.setY(u*u*sy+2f*u*t*cy+t*t*target[1]);
             toyView.setRotation(540f*t);
         });
         flight.addListener(new android.animation.AnimatorListenerAdapter(){
             @Override public void onAnimationEnd(android.animation.Animator animation){
-                toyView.setX(ex);toyView.setY(ey);toyView.setRotation(0f);
+                toyView.setRotation(0f);
+                toyView.setX(target[0]);toyView.setY(target[1]);
                 state=RUN_TO_TOY;
                 movePetToNode(landingNode,true);
             }
