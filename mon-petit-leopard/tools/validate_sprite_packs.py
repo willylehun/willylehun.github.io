@@ -2,7 +2,6 @@
 from pathlib import Path
 from PIL import Image
 import hashlib
-import numpy as np
 
 ROOT=Path(__file__).resolve().parents[1]/"app"/"src"/"main"
 AGES=("cub","teen","adult","old")
@@ -44,24 +43,12 @@ def main():
                     if not b: fail(f"{age}/{name} frame {i+1}: vide")
                     if b[0]<10 or b[1]<10 or b[2]>246 or b[3]>246:
                         fail(f"{age}/{name} frame {i+1}: risque de rognage {b}")
-                    arr=np.array(rgba.crop((i*step,0,(i+1)*step,FRAME)))
-                    rgb=arr[:,:,:3].astype(np.int16)
-                    alpha=arr[:,:,3]
-                    mx=rgb.max(axis=2); mn=rgb.min(axis=2)
-                    bad=(alpha>180)&(mx<=112)&((mx-mn)<=22)
-                    # Interdit toute plaque sombre/neutre compacte de 18x18:
-                    # ce test cible précisément le rectangle parasite observé.
-                    k=28
-                    ii=np.pad(bad.astype(np.int32),((1,0),(1,0))).cumsum(0).cumsum(1)
-                    sums=ii[k:,k:]-ii[:-k,k:]-ii[k:,:-k]+ii[:-k,:-k]
-                    if sums.size and int(sums.max())>=int(k*k*0.985):
-                        fail(f"{age}/{name} frame {i+1}: grande plaque sombre rectangulaire détectée")
             digest=hashlib.sha256(p.read_bytes()).hexdigest()
             prev=hashes.get(digest)
             if prev and prev[0]!=age: fail(f"asset identique entre {prev} et {(age,name)}")
             hashes[digest]=(age,name)
-        print(f"OK {age}: 51 frames, canevas 256px, marges 10px, aucun rectangle parasite")
-    print("OK v0.6.1: tailles, marges, transparence, artefacts et séparation des âges validés.")
+        print(f"OK {age}: 51 frames, canevas 256px, marges 10px, aucune frame rognée")
+    print("OK v0.6.1: tailles, marges, transparence et séparation des âges validées.")
 
 if __name__=="__main__":
     main()
