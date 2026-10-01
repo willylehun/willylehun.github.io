@@ -8,8 +8,8 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 33
-        versionName '0.6.8'
+        versionCode 34
+        versionName '0.6.9'
     }
 
     sourceSets {
@@ -32,4 +32,4 @@ android {
     }
 }
 
-// Character sprite packs physically separated, cleaned and validated for v0.6.8
+// Character sprite packs physically separated, cleaned and validated for v0.6.9
