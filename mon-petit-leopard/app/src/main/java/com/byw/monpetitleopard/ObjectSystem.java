@@ -151,7 +151,10 @@ public class ObjectSystem {
             a.happy=a.clamp(a.happy-2);
         }
 
-        a.act(i.name,i.frame,i.hunger,i.water,i.clean,i.affection,i.happy,i.energy,i.stars);
+        String animation=null;
+        if(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))animation="eat";
+        else if(i.kind.equals("toy")||i.kind.equals("activity"))animation="jump";
+        a.act(i.name,i.frame,i.hunger,i.water,i.clean,i.affection,i.happy,i.energy,i.stars,animation);
         a.save();
         a.refresh();
     }

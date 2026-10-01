@@ -1,0 +1,18 @@
+{
+  "zip_bytes": 3530951,
+  "b64_chars": 4707936,
+  "parts": 10,
+  "chunk_chars": 500000,
+  "files": [
+    "v060_assets.b64.part00",
+    "v060_assets.b64.part04",
+    "v060_assets.b64.part02",
+    "v060_assets.b64.part05",
+    "v060_assets.b64.part03",
+    "v060_assets.b64.part09",
+    "v060_assets.b64.part01",
+    "v060_assets.b64.part08",
+    "v060_assets.b64.part06",
+    "v060_assets.b64.part07"
+  ]
+}

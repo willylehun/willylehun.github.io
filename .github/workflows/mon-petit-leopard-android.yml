@@ -70,7 +70,7 @@ jobs:
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
               --title "Mon Petit Léopard v0.5.9 — face, directions et sommeil" \
-              --notes "v0.5.9 : humeurs uniquement en IDLE DOWN plein corps face écran, durée fixe 1 min 30 comme le sommeil, et règle de présence >=70 % calculée uniquement sur IDLE DOWN éveillé (humeurs incluses, marches exclues). Les humeurs ne sont plus interrompues par le sommeil automatique ni les bêtises."
+              --notes "v0.6.0 : refonte complète des quatre âges avec canevas natif 256x256 sans rognage, 6 frames de marche LEFT/RIGHT/DOWN/UP, 5 sauts, 3 repas, 3 sommeil, 12 humeurs corps entier en idle-down. Idle-down + humeurs sont la seule base de la cible 70 %, chaque humeur dure 1 min 30, comme le sommeil."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'

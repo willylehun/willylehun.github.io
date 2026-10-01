@@ -2,67 +2,111 @@ package com.byw.monpetitleopard;
 
 final class CharacterSprites {
     static final boolean FACE_ATLAS_REVIEWED=true;
+    static final int FRAME_SIZE=256;
 
     static final class Pack {
         final MainActivity.PetStage stage;
         final String zone;
-        final int idle,happy,tired,sleep;
-        final int walkSide,walkFront,walkBack;
-        final int faceMoods,faceFrameSize,faceFrameCount;
-        final int sideFrames,frontFrames,backFrames;
+        final int idleDown,idleLeft,idleRight,idleUp;
+        final int walkDown,walkLeft,walkRight,walkUp;
+        final int jump,eat,sleep,moods;
 
         Pack(MainActivity.PetStage stage,String zone,
-             int idle,int happy,int tired,int sleep,
-             int walkSide,int walkFront,int walkBack,
-             int faceMoods,int faceFrameSize,int faceFrameCount,
-             int sideFrames,int frontFrames,int backFrames){
+             int idleDown,int idleLeft,int idleRight,int idleUp,
+             int walkDown,int walkLeft,int walkRight,int walkUp,
+             int jump,int eat,int sleep,int moods){
             this.stage=stage;this.zone=zone;
-            this.idle=idle;this.happy=happy;this.tired=tired;this.sleep=sleep;
-            this.walkSide=walkSide;this.walkFront=walkFront;this.walkBack=walkBack;
-            this.faceMoods=faceMoods;this.faceFrameSize=faceFrameSize;this.faceFrameCount=faceFrameCount;
-            this.sideFrames=sideFrames;this.frontFrames=frontFrames;this.backFrames=backFrames;
+            this.idleDown=idleDown;this.idleLeft=idleLeft;this.idleRight=idleRight;this.idleUp=idleUp;
+            this.walkDown=walkDown;this.walkLeft=walkLeft;this.walkRight=walkRight;this.walkUp=walkUp;
+            this.jump=jump;this.eat=eat;this.sleep=sleep;this.moods=moods;
         }
-        int mood(MainActivity.PetMood mood){
-            switch(mood){case HAPPY:return happy;case TIRED:return tired;case SLEEP:return sleep;case IDLE:return idle;}
-            throw new IllegalStateException("Humeur inconnue pour "+stage+": "+mood);
+
+        int idle(MainActivity.TravelDirection direction){
+            switch(direction){
+                case LEFT:return idleLeft;
+                case RIGHT:return idleRight;
+                case UP:return idleUp;
+                case DOWN:
+                default:return idleDown;
+            }
         }
-        int walk(MainActivity.WalkMode mode){
-            switch(mode){case FRONT:return walkFront;case BACK:return walkBack;case SIDE:return walkSide;}
-            throw new IllegalStateException("Marche inconnue pour "+stage+": "+mode);
+
+        int walk(MainActivity.TravelDirection direction){
+            switch(direction){
+                case LEFT:return walkLeft;
+                case RIGHT:return walkRight;
+                case UP:return walkUp;
+                case DOWN:
+                default:return walkDown;
+            }
         }
-        int frameCount(MainActivity.WalkMode mode){
-            switch(mode){case FRONT:return frontFrames;case BACK:return backFrames;case SIDE:return sideFrames;}
-            throw new IllegalStateException("Mode de marche inconnu: "+mode);
+
+        boolean ownsIdle(int res){
+            return res==idleDown||res==idleLeft||res==idleRight||res==idleUp;
         }
-        boolean ownsMood(int res){return res==idle||res==happy||res==tired||res==sleep;}
-        boolean ownsWalk(int res){return res==walkSide||res==walkFront||res==walkBack;}
-        boolean hasFaceMoods(){return faceMoods!=0&&faceFrameSize>0&&faceFrameCount>0;}
+
+        boolean ownsWalk(int res){
+            return res==walkDown||res==walkLeft||res==walkRight||res==walkUp;
+        }
+
+        boolean hasFaceMoods(){return moods!=0;}
+
+        int expectedWidth(int res){
+            if(ownsIdle(res))return FRAME_SIZE;
+            if(ownsWalk(res))return FRAME_SIZE*6;
+            if(res==jump)return FRAME_SIZE*5;
+            if(res==eat||res==sleep)return FRAME_SIZE*3;
+            if(res==moods)return FRAME_SIZE*12;
+            return -1;
+        }
+
         int[] allResources(){
-            return hasFaceMoods()?new int[]{idle,happy,tired,sleep,walkSide,walkFront,walkBack,faceMoods}
-                    :new int[]{idle,happy,tired,sleep,walkSide,walkFront,walkBack};
+            return new int[]{idleDown,idleLeft,idleRight,idleUp,
+                walkDown,walkLeft,walkRight,walkUp,jump,eat,sleep,moods};
         }
     }
 
     private static final Pack CUB=new Pack(MainActivity.PetStage.CUB,"res-cub",
-        R.drawable.leopard_cub_idle,R.drawable.leopard_cub_happy,R.drawable.leopard_cub_tired,R.drawable.leopard_cub_sleep,
-        R.drawable.leopard_cub_walk_side,R.drawable.leopard_cub_walk_front,R.drawable.leopard_cub_walk_back,
-        R.drawable.leopard_cub_face_moods,320,12,5,5,5);
+        R.drawable.leopard_cub_idle_down,R.drawable.leopard_cub_idle_left,
+        R.drawable.leopard_cub_idle_right,R.drawable.leopard_cub_idle_up,
+        R.drawable.leopard_cub_walk_down,R.drawable.leopard_cub_walk_left,
+        R.drawable.leopard_cub_walk_right,R.drawable.leopard_cub_walk_up,
+        R.drawable.leopard_cub_jump,R.drawable.leopard_cub_eat,
+        R.drawable.leopard_cub_sleep,R.drawable.leopard_cub_moods);
+
     private static final Pack TEEN=new Pack(MainActivity.PetStage.TEEN,"res-teen",
-        R.drawable.leopard_teen_idle,R.drawable.leopard_teen_happy,R.drawable.leopard_teen_tired,R.drawable.leopard_teen_sleep,
-        R.drawable.leopard_teen_walk_side,R.drawable.leopard_teen_walk_front,R.drawable.leopard_teen_walk_back,
-        R.drawable.leopard_teen_face_moods,320,11,4,4,4);
+        R.drawable.leopard_teen_idle_down,R.drawable.leopard_teen_idle_left,
+        R.drawable.leopard_teen_idle_right,R.drawable.leopard_teen_idle_up,
+        R.drawable.leopard_teen_walk_down,R.drawable.leopard_teen_walk_left,
+        R.drawable.leopard_teen_walk_right,R.drawable.leopard_teen_walk_up,
+        R.drawable.leopard_teen_jump,R.drawable.leopard_teen_eat,
+        R.drawable.leopard_teen_sleep,R.drawable.leopard_teen_moods);
+
     private static final Pack ADULT=new Pack(MainActivity.PetStage.ADULT,"res-adult",
-        R.drawable.leopard_adult_idle,R.drawable.leopard_adult_happy,R.drawable.leopard_adult_tired,R.drawable.leopard_adult_sleep,
-        R.drawable.leopard_adult_walk_side,R.drawable.leopard_adult_walk_front,R.drawable.leopard_adult_walk_back,
-        R.drawable.leopard_adult_face_moods,320,11,4,4,4);
+        R.drawable.leopard_adult_idle_down,R.drawable.leopard_adult_idle_left,
+        R.drawable.leopard_adult_idle_right,R.drawable.leopard_adult_idle_up,
+        R.drawable.leopard_adult_walk_down,R.drawable.leopard_adult_walk_left,
+        R.drawable.leopard_adult_walk_right,R.drawable.leopard_adult_walk_up,
+        R.drawable.leopard_adult_jump,R.drawable.leopard_adult_eat,
+        R.drawable.leopard_adult_sleep,R.drawable.leopard_adult_moods);
+
     private static final Pack OLD=new Pack(MainActivity.PetStage.OLD,"res-old",
-        R.drawable.leopard_old_idle,R.drawable.leopard_old_happy,R.drawable.leopard_old_tired,R.drawable.leopard_old_sleep,
-        R.drawable.leopard_old_walk_side,R.drawable.leopard_old_walk_front,R.drawable.leopard_old_walk_back,
-        R.drawable.leopard_old_face_moods,320,11,4,4,4);
+        R.drawable.leopard_old_idle_down,R.drawable.leopard_old_idle_left,
+        R.drawable.leopard_old_idle_right,R.drawable.leopard_old_idle_up,
+        R.drawable.leopard_old_walk_down,R.drawable.leopard_old_walk_left,
+        R.drawable.leopard_old_walk_right,R.drawable.leopard_old_walk_up,
+        R.drawable.leopard_old_jump,R.drawable.leopard_old_eat,
+        R.drawable.leopard_old_sleep,R.drawable.leopard_old_moods);
 
     static Pack forStage(MainActivity.PetStage stage){
-        switch(stage){case CUB:return CUB;case TEEN:return TEEN;case ADULT:return ADULT;case OLD:return OLD;}
+        switch(stage){
+            case CUB:return CUB;
+            case TEEN:return TEEN;
+            case ADULT:return ADULT;
+            case OLD:return OLD;
+        }
         throw new IllegalStateException("Aucun pack pour l'âge "+stage);
     }
+
     private CharacterSprites(){}
 }

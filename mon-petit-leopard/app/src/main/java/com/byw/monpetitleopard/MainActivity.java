@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     ObjectSystem objects;
 
     long born,last,nextMischiefAt=0,nextWalkAt=0,manualUntil=0,sleepEndAt=0,nextAutoSleepAt=0,walkStartedAt=0;
+    long directionalIdleUntil=0,faceRecoveryUntil=0,actionUntil=0,actionFrameAt=0,actionStartedAt=0;
     float hunger=85,thirst=85,clean=90,affection=90,happy=90,energy=90;
     float skillClean=5,skillObedience=5,skillCare=5;
     int stars=0,generation=1;
@@ -62,6 +63,11 @@ public class MainActivity extends Activity {
     boolean moodApproach=false,moodExitUp=false;
     int pendingFaceMood=-1;
     int activeFaceMood=-1;
+    TravelDirection idleDirection=TravelDirection.DOWN;
+    ActionAnim actionAnim=ActionAnim.NONE;
+    Bitmap actionStrip=null;
+    Bitmap[] actionFrames=null;
+    int actionStripRes=0,actionFrameIndex=0;
 
     final Set<Integer> invalidCharacterAssets=new HashSet<>();
     boolean assetErrorShown=false;
@@ -71,6 +77,7 @@ public class MainActivity extends Activity {
     enum PetMood {IDLE,HAPPY,TIRED,SLEEP}
     enum WalkMode {SIDE,FRONT,BACK}
     enum TravelDirection {LEFT,RIGHT,UP,DOWN}
+    enum ActionAnim {NONE,EAT,JUMP,SLEEP}
 
     @Override public void onCreate(Bundle b){
         super.onCreate(b);
@@ -529,12 +536,19 @@ public class MainActivity extends Activity {
 
     void ensurePetImage(){
         syncVisualStage();
-        CharacterSprites.Pack currentPack=CharacterSprites.forStage(petStage());
-        boolean faceActive=currentPack.hasFaceMoods()
-                && !sleeping
-                && !walking
-                && activeFaceMood>=0
-                && System.currentTimeMillis()<faceMoodUntil;
+        long now=System.currentTimeMillis();
+
+        if(actionAnim!=ActionAnim.NONE){
+            showActionAnimationFrame(now);
+            petView.setAlpha(1f);
+            petView.setVisibility(displayedPetStage==petStage()
+                    && petView.getDrawable()!=null?View.VISIBLE:View.INVISIBLE);
+            updatePetPosition();
+            return;
+        }
+
+        boolean faceActive=CharacterSprites.forStage(petStage()).hasFaceMoods()
+                && !sleeping && !walking && activeFaceMood>=0 && now<faceMoodUntil;
 
         if(faceActive){
             if(loadFaceMoodFrames()){
@@ -549,22 +563,14 @@ public class MainActivity extends Activity {
         }
 
         int res=0;
-        if(!faceActive){
-            if(sleeping)res=sleepDrawable();
-            else if(!walking)res=System.currentTimeMillis()<manualUntil
-                    ?poseDrawableForFrame(manualFrame):emotionDrawable();
+        if(!faceActive && !walking){
+            if(now<directionalIdleUntil)res=idleDrawableForDirection(idleDirection);
+            else res=idleDownDrawable();
         }
 
-        if(res!=0){
-            if(invalidCharacterAssets.contains(res)){
-                keepCurrentImageIfSameStage(petStage());
-                showAssetErrorOnce();
-                return;
-            }
-            if(res!=currentPetRes){
-                if(!setPetDrawableSafely(petStage(),res))return;
-                currentPetRes=res;
-            }
+        if(res!=0 && res!=currentPetRes){
+            if(!setPetDrawableSafely(petStage(),res))return;
+            currentPetRes=res;
         }
 
         petView.setAlpha(1f);
@@ -585,32 +591,32 @@ public class MainActivity extends Activity {
         visualStage=now;
         manualUntil=0;
         manualFrame=0;
+        walking=false;
+        walkMode=WalkMode.SIDE;
+        travelDirection=TravelDirection.DOWN;
+        idleDirection=TravelDirection.DOWN;
+        directionalIdleUntil=0;
+        faceRecoveryUntil=0;
+        walkFrameIndex=0;
+        releaseWalkFrames();
+        releaseFaceMoodFrames();
+        releaseActionFrames();
+        actionAnim=ActionAnim.NONE;
+        faceMoodUntil=0;
+        nextFaceMoodAt=0;
+        activeFaceMood=-1;
+        pendingFaceMood=-1;
+        moodApproach=false;
+        moodExitUp=false;
+        currentPetRes=0;
+        displayedPetStage=null;
         if(petView!=null){
             petView.setImageDrawable(null);
             petView.setRotation(0f);
             petView.setScaleX(1f);
             petView.setScaleY(1f);
         }
-
-        // Un changement d'âge invalide immédiatement toute image/animation
-        // déjà chargée. Ainsi aucun frame de l'âge précédent ne peut rester
-        // affiché pendant le nouveau cycle.
-        walking=false;
-        walkMode=WalkMode.SIDE;
-        travelDirection=TravelDirection.LEFT;
-        walkFrameIndex=0;
-        releaseWalkFrames();
-        releaseFaceMoodFrames();
-        faceMoodUntil=0;
-        nextFaceMoodAt=0;
-        activeFaceMood=-1;
-        currentPetRes=0;
-        displayedPetStage=null;
-        petView.setImageDrawable(null);
-
-        if(previous!=null){
-            addHistory("Verrouillage visuel : "+previous+" → "+now+".");
-        }
+        if(previous!=null)addHistory("Verrouillage visuel : "+previous+" → "+now+".");
     }
 
     PetStage petStage(){
@@ -622,31 +628,27 @@ public class MainActivity extends Activity {
         return PetStage.OLD;
     }
 
-    int getMoodDrawable(PetStage stage,PetMood mood){
-        return CharacterSprites.forStage(stage).mood(mood);
-    }
-
     int getWalkStrip(PetStage stage,WalkMode mode){
-        return CharacterSprites.forStage(stage).walk(mode);
+        CharacterSprites.Pack pack=CharacterSprites.forStage(stage);
+        if(mode==WalkMode.FRONT)return pack.walkDown;
+        if(mode==WalkMode.BACK)return pack.walkUp;
+        return travelDirection==TravelDirection.RIGHT?pack.walkRight:pack.walkLeft;
     }
 
-    int idleDrawable(){return getMoodDrawable(petStage(),PetMood.IDLE);}
-    int happyDrawable(){return getMoodDrawable(petStage(),PetMood.HAPPY);}
-    int tiredDrawable(){return getMoodDrawable(petStage(),PetMood.TIRED);}
-    int sleepDrawable(){return getMoodDrawable(petStage(),PetMood.SLEEP);}
+    int idleDownDrawable(){return CharacterSprites.forStage(petStage()).idleDown;}
 
-    int emotionDrawable(){
-        if(sleeping)return sleepDrawable();
-        // Hors sommeil et hors marche, l'animal reste toujours en IDLE DOWN complet.
-        // Les humeurs ne changent que l'expression faciale via faceMoods.
-        return idleDrawable();
+    int idleDrawableForDirection(TravelDirection direction){
+        return CharacterSprites.forStage(petStage()).idle(direction);
     }
 
-    int walkStripDrawable(WalkMode mode){
-        return getWalkStrip(petStage(),mode);
-    }
+    int idleDrawable(){return idleDownDrawable();}
+    int happyDrawable(){return idleDownDrawable();}
+    int tiredDrawable(){return idleDownDrawable();}
+    int sleepDrawable(){return idleDownDrawable();}
+    int emotionDrawable(){return idleDownDrawable();}
 
-    int faceMoodStripRes(){return CharacterSprites.forStage(petStage()).faceMoods;}
+    int walkStripDrawable(WalkMode mode){return getWalkStrip(petStage(),mode);}
+    int faceMoodStripRes(){return CharacterSprites.forStage(petStage()).moods;}
 
     void releaseFaceMoodFrames(){
         faceMoodFrames=null;
@@ -656,36 +658,39 @@ public class MainActivity extends Activity {
     boolean loadFaceMoodFrames(){
         CharacterSprites.Pack pack=CharacterSprites.forStage(petStage());
         if(!pack.hasFaceMoods())return false;
-        int res=pack.faceMoods;
+        int res=pack.moods;
         if(invalidCharacterAssets.contains(res)){
             showAssetErrorOnce();
             return false;
         }
-        if(faceMoodFrames!=null && faceMoodFrames.length==pack.faceFrameCount)return true;
+        if(faceMoodFrames!=null && faceMoodFrames.length==12)return true;
 
         releaseFaceMoodFrames();
         Bitmap strip=null;
         try{strip=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
         if(strip==null){
-            markCharacterAssetInvalid(res,petStage()+" FACE_MOODS","ressource illisible");
+            markCharacterAssetInvalid(res,petStage()+" MOODS","ressource illisible");
             showAssetErrorOnce();
             return false;
         }
-        final int frame=pack.faceFrameSize;
-        final int count=pack.faceFrameCount;
+
+        final int frame=CharacterSprites.FRAME_SIZE;
+        final int count=12;
         if(strip.getWidth()!=frame*count || strip.getHeight()!=frame){
-            markCharacterAssetInvalid(res,petStage()+" FACE_MOODS",
+            markCharacterAssetInvalid(res,petStage()+" MOODS",
                 strip.getWidth()+"x"+strip.getHeight()+" au lieu de "+(frame*count)+"x"+frame);
             showAssetErrorOnce();
             return false;
         }
+
         faceMoodStrip=strip;
         faceMoodFrames=new Bitmap[count];
         try{
-            for(int i=0;i<count;i++)faceMoodFrames[i]=Bitmap.createBitmap(faceMoodStrip,i*frame,0,frame,frame);
+            for(int i=0;i<count;i++)
+                faceMoodFrames[i]=Bitmap.createBitmap(faceMoodStrip,i*frame,0,frame,frame);
         }catch(Throwable err){
             releaseFaceMoodFrames();
-            markCharacterAssetInvalid(res,petStage()+" FACE_MOODS","découpage impossible");
+            markCharacterAssetInvalid(res,petStage()+" MOODS","découpage impossible");
             showAssetErrorOnce();
             return false;
         }
@@ -693,33 +698,34 @@ public class MainActivity extends Activity {
     }
 
     int chooseFaceMoodIndex(){
-        if(!incident.isEmpty())return 7;
-        if(energy<22)return 5;
-        if(hunger<18 || thirst<18 || clean<18)return 7;
-        if(happy<35)return 3;
-        if(happy>85 && affection>80)return rnd.nextBoolean()?1:10;
-        if(happy>65)return 1;
-        if(affection>82)return 1;
-        if(rnd.nextInt(4)==0)return 6;
-        return 0;
+        // 0 sourire, 1 énervé, 2 triste, 3 surpris, 4 fatigué, 5 faim,
+        // 6 amitié, 7 amoureux, 8 rire, 9 calme, 10 curieux, 11 anxieux.
+        if(!incident.isEmpty())return rnd.nextBoolean()?1:11;
+        if(energy<22)return 4;
+        if(hunger<22 || thirst<18)return 5;
+        if(happy<35)return 2;
+        if(happy>85 && affection>80)return 7;
+        if(happy>72)return rnd.nextBoolean()?0:8;
+        if(affection>82)return 6;
+        if(rnd.nextInt(4)==0)return 10;
+        return 9;
     }
 
     void scheduleNextFaceMood(long now){
-        // Entre deux humeurs, on conserve une vraie période IDLE DOWN neutre.
-        nextFaceMoodAt=now+30000L+rnd.nextInt(30001);
+        nextFaceMoodAt=now+60000L+rnd.nextInt(60001);
     }
 
     void maybeShowFaceMood(long now){
         if(!CharacterSprites.FACE_ATLAS_REVIEWED)return;
         CharacterSprites.Pack pack=CharacterSprites.forStage(petStage());
-        if(!pack.hasFaceMoods() || sleeping || walking || now<manualUntil
-                || moodApproach || moodExitUp || activeFaceMood>=0)return;
+        if(!pack.hasFaceMoods() || sleeping || walking || actionAnim!=ActionAnim.NONE
+                || moodApproach || moodExitUp || now<manualUntil)return;
         if(nextFaceMoodAt==0){
             scheduleNextFaceMood(now);
             return;
         }
         if(now<nextFaceMoodAt)return;
-        beginMoodApproach(Math.max(0,Math.min(pack.faceFrameCount-1,chooseFaceMoodIndex())));
+        beginMoodApproach(chooseFaceMoodIndex());
     }
 
     int foregroundNode(){
@@ -745,13 +751,13 @@ public class MainActivity extends Activity {
     }
 
     void beginMoodApproach(int index){
-        if(sleeping||stage()==Stage.ENDED)return;
-        CharacterSprites.Pack pack=CharacterSprites.forStage(petStage());
-        pendingFaceMood=Math.max(0,Math.min(pack.faceFrameCount-1,index));
+        if(sleeping||stage()==Stage.ENDED||actionAnim!=ActionAnim.NONE)return;
+        pendingFaceMood=Math.max(0,Math.min(11,index));
         activeFaceMood=-1;
         faceMoodUntil=0;
         moodExitUp=false;
         moodApproach=true;
+        directionalIdleUntil=0;
 
         float[][] nodes=roomNodes();
         int target=foregroundNode();
@@ -759,7 +765,6 @@ public class MainActivity extends Activity {
         targetNX=nodes[target][0];
         targetNY=nodes[target][1];
 
-        // L'approche vers le joueur utilise toujours FRONT.
         travelDirection=TravelDirection.DOWN;
         walkMode=WalkMode.FRONT;
         walkDir=0;
@@ -773,11 +778,13 @@ public class MainActivity extends Activity {
         walking=false;
         walkMode=WalkMode.FRONT;
         travelDirection=TravelDirection.DOWN;
+        idleDirection=TravelDirection.DOWN;
+        directionalIdleUntil=0;
         releaseWalkFrames();
         activeFaceMood=pendingFaceMood>=0?pendingFaceMood:chooseFaceMoodIndex();
         pendingFaceMood=-1;
         faceMoodUntil=System.currentTimeMillis()+MOOD_DURATION_MS;
-        scheduleNextFaceMood(faceMoodUntil);
+        faceRecoveryUntil=Math.max(faceRecoveryUntil,faceMoodUntil);
         currentPetRes=0;
         ensurePetImage();
         updatePetPosition();
@@ -787,6 +794,7 @@ public class MainActivity extends Activity {
         activeFaceMood=-1;
         faceMoodUntil=0;
         moodExitUp=true;
+        scheduleNextFaceMood(System.currentTimeMillis());
         int target=upwardNode();
         float[][] nodes=roomNodes();
         targetNodeIndex=target;
@@ -801,9 +809,7 @@ public class MainActivity extends Activity {
     }
 
     void showFaceMoodNow(int index,int duration){
-        // Toutes les humeurs suivent le même scénario :
-        // approche naturelle -> IDLE DOWN de face pendant 1 min 30 -> départ vers le haut de dos.
-        // Le paramètre duration est conservé pour compatibilité mais la durée est fixe.
+        // Une humeur est toujours un idle-down complet, affiché 1 min 30.
         beginMoodApproach(index);
     }
 
@@ -817,8 +823,6 @@ public class MainActivity extends Activity {
     }
 
     boolean loadWalkFrames(PetStage expectedStage,WalkMode expectedMode,int res){
-        // Verrou dur : une animation ne peut être chargée que si elle appartient
-        // exactement à l'âge et à la direction actuellement demandés.
         if(expectedStage!=petStage() || res!=getWalkStrip(expectedStage,expectedMode)){
             addHistory("ERREUR mélange d'âge bloqué avant chargement de marche.");
             showAssetErrorOnce();
@@ -832,53 +836,35 @@ public class MainActivity extends Activity {
                 && loadedWalkStage==expectedStage
                 && loadedWalkMode==expectedMode
                 && currentWalkFrames!=null
-                && currentWalkFrames.length>0)return true;
+                && currentWalkFrames.length==6)return true;
 
         releaseWalkFrames();
 
         Bitmap strip=null;
-        try{
-            strip=BitmapFactory.decodeResource(getResources(),res);
-        }catch(Throwable ignored){}
-
+        try{strip=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
         if(strip==null){
-            markCharacterAssetInvalid(res,"strip de marche","ressource illisible");
+            markCharacterAssetInvalid(res,"walk","ressource illisible");
             showAssetErrorOnce();
             return false;
         }
 
-        int w=strip.getWidth();
-        int h=strip.getHeight();
-        int count=CharacterSprites.forStage(expectedStage).frameCount(expectedMode);
-        int expectedWidth=640*count;
-        if(h!=640 || w!=expectedWidth){
-            strip.recycle();
-            markCharacterAssetInvalid(res,"strip de marche",
-                w+"x"+h+" : attendu "+expectedWidth+"x640 pour "+count+" frames");
+        final int frame=CharacterSprites.FRAME_SIZE;
+        final int count=6;
+        if(strip.getWidth()!=frame*count || strip.getHeight()!=frame){
+            markCharacterAssetInvalid(res,"walk",
+                strip.getWidth()+"x"+strip.getHeight()+" : attendu "+(frame*count)+"x"+frame);
             showAssetErrorOnce();
             return false;
         }
 
-        int sourceCount=w/h;
-        if(sourceCount!=count){
-            strip.recycle();
-            markCharacterAssetInvalid(res,"strip de marche",
-                w+"x"+h+" : "+sourceCount+" frames trouvées, au moins "+count+
-                " requises pour "+expectedStage+" "+expectedMode);
-            showAssetErrorOnce();
-            return false;
-        }
-        // Normalisation d'affichage : toutes les directions utilisent exactement
-        // les 'count' premières frames. SIDE ne change donc jamais de cadence.
         currentWalkStrip=strip;
         currentWalkFrames=new Bitmap[count];
         try{
-            for(int i=0;i<count;i++){
-                currentWalkFrames[i]=Bitmap.createBitmap(currentWalkStrip,i*h,0,h,h);
-            }
+            for(int i=0;i<count;i++)
+                currentWalkFrames[i]=Bitmap.createBitmap(currentWalkStrip,i*frame,0,frame,frame);
         }catch(Throwable err){
             releaseWalkFrames();
-            markCharacterAssetInvalid(res,"strip de marche","découpage impossible");
+            markCharacterAssetInvalid(res,"walk","découpage impossible");
             showAssetErrorOnce();
             return false;
         }
@@ -919,6 +905,108 @@ public class MainActivity extends Activity {
         walkFrameIndex=(walkFrameIndex+1)%currentWalkFrames.length;
         currentPetRes=0;
     }
+
+    void releaseActionFrames(){
+        actionStrip=null;
+        actionFrames=null;
+        actionStripRes=0;
+        actionFrameIndex=0;
+        actionFrameAt=0;
+    }
+
+    int actionResource(ActionAnim type){
+        CharacterSprites.Pack pack=CharacterSprites.forStage(petStage());
+        if(type==ActionAnim.EAT)return pack.eat;
+        if(type==ActionAnim.JUMP)return pack.jump;
+        if(type==ActionAnim.SLEEP)return pack.sleep;
+        return 0;
+    }
+
+    int actionFrameCount(ActionAnim type){
+        if(type==ActionAnim.JUMP)return 5;
+        if(type==ActionAnim.EAT||type==ActionAnim.SLEEP)return 3;
+        return 0;
+    }
+
+    boolean loadActionFrames(ActionAnim type){
+        int res=actionResource(type);
+        int count=actionFrameCount(type);
+        if(res==0||count==0)return false;
+        if(invalidCharacterAssets.contains(res)){showAssetErrorOnce();return false;}
+        if(actionStripRes==res && actionFrames!=null && actionFrames.length==count)return true;
+
+        releaseActionFrames();
+        Bitmap strip=null;
+        try{strip=BitmapFactory.decodeResource(getResources(),res);}catch(Throwable ignored){}
+        if(strip==null){
+            markCharacterAssetInvalid(res,type.name(),"ressource illisible");
+            showAssetErrorOnce();
+            return false;
+        }
+
+        int frame=CharacterSprites.FRAME_SIZE;
+        if(strip.getWidth()!=frame*count || strip.getHeight()!=frame){
+            markCharacterAssetInvalid(res,type.name(),
+                strip.getWidth()+"x"+strip.getHeight()+" au lieu de "+(frame*count)+"x"+frame);
+            showAssetErrorOnce();
+            return false;
+        }
+
+        actionStrip=strip;
+        actionFrames=new Bitmap[count];
+        try{
+            for(int i=0;i<count;i++)
+                actionFrames[i]=Bitmap.createBitmap(actionStrip,i*frame,0,frame,frame);
+        }catch(Throwable err){
+            releaseActionFrames();
+            markCharacterAssetInvalid(res,type.name(),"découpage impossible");
+            showAssetErrorOnce();
+            return false;
+        }
+        actionStripRes=res;
+        actionFrameIndex=0;
+        return true;
+    }
+
+    void startActionAnimation(ActionAnim type,long duration){
+        if(type==ActionAnim.NONE)return;
+        walking=false;
+        moodApproach=false;
+        moodExitUp=false;
+        activeFaceMood=-1;
+        pendingFaceMood=-1;
+        faceMoodUntil=0;
+        directionalIdleUntil=0;
+        releaseWalkFrames();
+        releaseActionFrames();
+        actionAnim=type;
+        actionStartedAt=System.currentTimeMillis();
+        actionUntil=type==ActionAnim.SLEEP?Long.MAX_VALUE:actionStartedAt+Math.max(500L,duration);
+        actionFrameAt=0;
+        currentPetRes=0;
+
+        if(type!=ActionAnim.SLEEP){
+            long nonFace=Math.max(500L,duration);
+            long recovery=(long)Math.ceil(nonFace*(MIN_IDLE_DOWN_SHARE/(1f-MIN_IDLE_DOWN_SHARE)));
+            faceRecoveryUntil=Math.max(faceRecoveryUntil,actionStartedAt+duration+recovery);
+            nextWalkAt=Math.max(nextWalkAt,faceRecoveryUntil);
+        }
+    }
+
+    void showActionAnimationFrame(long now){
+        if(actionAnim==ActionAnim.NONE)return;
+        if(!loadActionFrames(actionAnim))return;
+        long delay=actionAnim==ActionAnim.SLEEP?900L:220L;
+        if(actionFrameAt==0 || now-actionFrameAt>=delay){
+            if(actionFrameAt!=0)actionFrameIndex=(actionFrameIndex+1)%actionFrames.length;
+            actionFrameAt=now;
+        }
+        petView.setImageBitmap(actionFrames[actionFrameIndex]);
+        displayedPetStage=petStage();
+        petView.setVisibility(View.VISIBLE);
+        currentPetRes=0;
+    }
+
 
     void fitSceneAndPet(){
         if(root==null||scene==null||root.getWidth()<=0||root.getHeight()<=0)return;
@@ -966,19 +1054,18 @@ public class MainActivity extends Activity {
         if(r[2]<=0||r[3]<=0)return;
 
         float ratio=stage()==Stage.CUB?.30f:
-                    stage()==Stage.TEEN?.325f:
-                    stage()==Stage.ADULT?.35f:.335f;
+                    stage()==Stage.TEEN?.34f:
+                    stage()==Stage.ADULT?.39f:.38f;
 
-        int size=Math.round(r[2]*ratio);
-        size=Math.max(size,dp(88));
-
+        int size=Math.max(dp(88),Math.round(r[2]*ratio));
         FrameLayout.LayoutParams lp=(FrameLayout.LayoutParams)petView.getLayoutParams();
         lp.width=size;
         lp.height=size;
         lp.gravity=Gravity.TOP|Gravity.LEFT;
         petView.setLayoutParams(lp);
+        petView.setPadding(0,0,0,0);
         petView.setPivotX(size/2f);
-        petView.setPivotY(size*(588f/640f));
+        petView.setPivotY(size*(240f/256f));
 
         FrameLayout.LayoutParams incidentLp=(FrameLayout.LayoutParams)incidentView.getLayoutParams();
         int incidentSize=Math.max(dp(40),Math.round(r[2]*.09f));
@@ -1137,23 +1224,16 @@ public class MainActivity extends Activity {
 
         petNX=clamp01(petNX);
         petNY=clamp01(petNY);
-
         float left=r[0]+petNX*r[2]-petView.getWidth()/2f;
         float feet=r[1]+petNY*r[3];
-        float top=feet-petView.getHeight()*(588f/640f);
-
+        float top=feet-petView.getHeight()*(240f/256f);
         petView.setX(left);
         petView.setY(top);
 
-        float s=depthScale();
-        // Gauche et droite utilisent le même strip SIDE.
-        // Le déplacement vers la droite est uniquement un miroir horizontal.
-        float sign=1f;
-        if(walking && walkMode==WalkMode.SIDE){
-            sign=SpriteMotion.mirror(travelDirection.ordinal());
-        }
-        petView.setScaleX(sign*s);
-        petView.setScaleY(s);
+        float scale=depthScale();
+        // v0.6.0 : LEFT et RIGHT ont chacun leurs 6 vraies frames. Aucun miroir.
+        petView.setScaleX(scale);
+        petView.setScaleY(scale);
         petView.setAlpha(1f);
         petView.setVisibility(displayedPetStage==petStage()
                 && petView.getDrawable()!=null?View.VISIBLE:View.INVISIBLE);
@@ -1358,21 +1438,33 @@ public class MainActivity extends Activity {
     void animateAuto(){
         if(scene==null||petView==null)return;
         syncVisualStage();
-        idleTick++;
         long now=System.currentTimeMillis();
 
         if(sleeping){
-            currentPetRes=sleepDrawable();
-            if(!setPetDrawableSafely(petStage(),currentPetRes))return;
+            if(actionAnim!=ActionAnim.SLEEP)startActionAnimation(ActionAnim.SLEEP,MIN_SLEEP_MS);
+            showActionAnimationFrame(now);
             walking=false;
             updatePetPosition();
             return;
+        }else if(actionAnim==ActionAnim.SLEEP){
+            releaseActionFrames();
+            actionAnim=ActionAnim.NONE;
         }
 
-        if(CharacterSprites.forStage(petStage()).hasFaceMoods() && activeFaceMood>=0){
+        if(actionAnim!=ActionAnim.NONE){
+            if(now<actionUntil){
+                showActionAnimationFrame(now);
+                updatePetPosition();
+                return;
+            }
+            releaseActionFrames();
+            actionAnim=ActionAnim.NONE;
+            currentPetRes=0;
+        }
+
+        if(activeFaceMood>=0){
             if(now<faceMoodUntil){
                 ensurePetImage();
-                updatePetPosition();
                 return;
             }
             startMoodExitUp();
@@ -1384,17 +1476,7 @@ public class MainActivity extends Activity {
         }
 
         if(stage()==Stage.ENDED){
-            applyPose(9);
-            return;
-        }
-
-        if(energy<13){
-            applyPose(9);
-            return;
-        }
-
-        if(!incident.isEmpty()){
-            applyPose(3);
+            ensurePetImage();
             return;
         }
 
@@ -1404,29 +1486,32 @@ public class MainActivity extends Activity {
             float dist=(float)Math.sqrt(dx*dx+dy*dy);
 
             if(dist<.012f){
-                petNX=targetNX;
-                petNY=targetNY;
+                petNX=targetNX;petNY=targetNY;
                 if(targetNodeIndex>=0)petNodeIndex=targetNodeIndex;
                 if(moodApproach){
                     startFacePresentation();
                     return;
                 }
+
                 boolean finishedMoodExit=moodExitUp;
                 moodExitUp=false;
                 walking=false;
-                walkMode=WalkMode.SIDE;
-                currentPetRes=0;
-                ensurePetImage();
-                updatePetPosition();
+                idleDirection=travelDirection;
                 long walkDuration=Math.max(500L,now-walkStartedAt);
-                // Seul IDLE DOWN (neutre ou humeur) compte dans la règle des 70 %.
-                // Aucune marche, même FRONT, n'est comptée comme temps face-idle.
-                long requiredIdleDownRest=(long)Math.ceil(
-                        walkDuration*(MIN_FACE_SHARE/(1f-MIN_FACE_SHARE)));
-                nextWalkAt=finishedMoodExit
-                        ?now+3500L+rnd.nextInt(1501)
-                        :now+Math.max(3000L,requiredIdleDownRest)+rnd.nextInt(1501);
+                long directional=(travelDirection==TravelDirection.DOWN)?0L:DIRECTIONAL_IDLE_MS;
+                directionalIdleUntil=now+directional;
+
+                // Seul IDLE DOWN + les humeurs comptent dans la cible de 70 %.
+                long nonFace=walkDuration+directional;
+                long requiredFace=(long)Math.ceil(nonFace*
+                    (MIN_IDLE_DOWN_SHARE/(1f-MIN_IDLE_DOWN_SHARE)));
+                faceRecoveryUntil=directionalIdleUntil+requiredFace;
+                nextWalkAt=Math.max(faceRecoveryUntil,
+                    finishedMoodExit?now+3500L:faceRecoveryUntil);
+
+                currentPetRes=0;
                 walkStartedAt=0;
+                ensurePetImage();
                 return;
             }
 
@@ -1435,7 +1520,6 @@ public class MainActivity extends Activity {
             if(!moodApproach && !moodExitUp)updateTravelDirection(dx,dy);
             petNX+=dx/dist*step;
             petNY+=dy/dist*step;
-
             showWalkFrame(walkMode);
             updatePetPosition();
             return;
@@ -1444,29 +1528,26 @@ public class MainActivity extends Activity {
         maybeShowFaceMood(now);
         currentPetRes=0;
         ensurePetImage();
-        updatePetPosition();
 
-        if(nextWalkAt==0)nextWalkAt=now+4500+rnd.nextInt(2501);
-        if(now>=nextWalkAt && energy>22){
+        if(nextWalkAt==0)nextWalkAt=now+5000L;
+        if(now>=nextWalkAt && now>=faceRecoveryUntil && energy>22
+                && actionAnim==ActionAnim.NONE && activeFaceMood<0 && !moodApproach){
             int chance=stage()==Stage.OLD?35:75;
-            if(rnd.nextInt(100)<chance){
-                chooseWalkTarget();
-            }else{
-                nextWalkAt=now+3500+rnd.nextInt(2501);
-            }
+            if(rnd.nextInt(100)<chance)chooseWalkTarget();
+            else nextWalkAt=now+3500L+rnd.nextInt(2501);
         }
     }
 
     int poseDrawableForFrame(int frame){
-        if(sleeping || (frame==9 && stage()==Stage.ENDED))return sleepDrawable();
-        return idleDrawable();
+        return idleDownDrawable();
     }
 
     void applyPose(int frame){
         syncVisualStage();
         walking=false;
-        walkMode=WalkMode.SIDE;
-        int res=poseDrawableForFrame(frame);
+        idleDirection=TravelDirection.DOWN;
+        directionalIdleUntil=0;
+        int res=idleDownDrawable();
         if(!setPetDrawableSafely(petStage(),res))return;
         currentPetRes=res;
         petView.setRotation(0f);
@@ -1474,26 +1555,26 @@ public class MainActivity extends Activity {
     }
 
     void showAction(int frame,int duration){
-        long now=System.currentTimeMillis();
-        if(activeFaceMood>=0 && now<faceMoodUntil){
-            return;
-        }
-        if(frame==11 && !sleeping && CharacterSprites.forStage(petStage()).hasFaceMoods()){
-            showFaceMoodNow(rnd.nextBoolean()?1:10,duration);
+        if(frame==11 && !sleeping){
+            showFaceMoodNow(rnd.nextBoolean()?0:8,MOOD_DURATION_MS);
             return;
         }
         manualFrame=frame;
         manualUntil=System.currentTimeMillis()+duration;
-        faceMoodUntil=0;
         activeFaceMood=-1;
+        faceMoodUntil=0;
         walking=false;
-        walkMode=WalkMode.SIDE;
-        travelDirection=TravelDirection.LEFT;
+        idleDirection=TravelDirection.DOWN;
+        directionalIdleUntil=0;
         currentPetRes=0;
         applyPose(frame);
     }
 
     void act(String msg,int frame,float h,float w,float c,float af,float joy,float e,int gainStars){
+        act(msg,frame,h,w,c,af,joy,e,gainStars,null);
+    }
+
+    void act(String msg,int frame,float h,float w,float c,float af,float joy,float e,int gainStars,String animation){
         wakeForAction();
         hunger=clamp(hunger+h);
         thirst=clamp(thirst+w);
@@ -1502,7 +1583,11 @@ public class MainActivity extends Activity {
         happy=clamp(happy+joy);
         energy=clamp(energy+e);
         stars+=gainStars;
-        showAction(frame,2200);
+
+        if("eat".equals(animation))startActionAnimation(ActionAnim.EAT,3000L);
+        else if("jump".equals(animation))startActionAnimation(ActionAnim.JUMP,2200L);
+        else showAction(frame,2200);
+
         save();
         refresh();
         toast(msg);
@@ -1518,16 +1603,11 @@ public class MainActivity extends Activity {
         int skillBonus=Math.round((skillObedience+skillCare)/8f);
         int score=Math.max(0,Math.min(100,Math.round((happy+energy+clean)/3)+skillBonus+rnd.nextInt(31)-15));
         int reward=score>=82?10:score>=68?6:score>=55?3:1;
-        stars+=reward;
-        happy=clamp(happy+12);
-        affection=clamp(affection+4);
-        energy=clamp(energy-22);
-        thirst=clamp(thirst-12);
-        skillObedience=clamp(skillObedience+1);
-        skillCare=clamp(skillCare+1);
-        showAction(10,2400);
-        save();
-        refresh();
+        stars+=reward;happy=clamp(happy+12);affection=clamp(affection+4);
+        energy=clamp(energy-22);thirst=clamp(thirst-12);
+        skillObedience=clamp(skillObedience+1);skillCare=clamp(skillCare+1);
+        startActionAnimation(ActionAnim.JUMP,2400L);
+        save();refresh();
         addHistory("Concours : "+score+"/100, +"+reward+" ★.");
         new AlertDialog.Builder(this).setTitle("Concours")
             .setMessage("Score : "+score+"/100\nRécompense : +"+reward+" ★")
@@ -1617,22 +1697,14 @@ public class MainActivity extends Activity {
             return;
         }
 
-        if(!incident.isEmpty() || now<manualUntil || walking
+        if(!incident.isEmpty() || now<manualUntil || walking || actionAnim!=ActionAnim.NONE
                 || activeFaceMood>=0 || moodApproach || moodExitUp)return;
 
-        // Fatigue forte : sommeil immédiat.
-        if(energy<=35){
-            beginAutoSleep();
-            return;
-        }
+        if(energy<=35){beginAutoSleep();return;}
 
-        // Sinon le léopard peut choisir de dormir de lui-même.
         if(now>=nextAutoSleepAt){
-            if(energy<82){
-                beginAutoSleep();
-            }else{
-                nextAutoSleepAt=now+90000L+rnd.nextInt(90000);
-            }
+            if(energy<82)beginAutoSleep();
+            else nextAutoSleepAt=now+90000L+rnd.nextInt(90000);
         }
     }
 
@@ -1640,11 +1712,13 @@ public class MainActivity extends Activity {
         if(sleeping||stage()==Stage.ENDED)return;
         sleeping=true;
         walking=false;
-        walkMode=WalkMode.SIDE;
+        moodApproach=false;
+        moodExitUp=false;
+        activeFaceMood=-1;
+        faceMoodUntil=0;
         manualUntil=0;
         sleepEndAt=System.currentTimeMillis()+MIN_SLEEP_MS;
-        currentPetRes=sleepDrawable();
-        if(!setPetDrawableSafely(petStage(),currentPetRes))return;
+        startActionAnimation(ActionAnim.SLEEP,MIN_SLEEP_MS);
         addHistory(pet+" s'est endormi pour 1 min 30.");
         save();
         refresh();
@@ -1655,10 +1729,12 @@ public class MainActivity extends Activity {
         boolean natural=System.currentTimeMillis()>=sleepEndAt;
         sleeping=false;
         sleepEndAt=0;
-        walkMode=WalkMode.SIDE;
+        releaseActionFrames();
+        actionAnim=ActionAnim.NONE;
+        idleDirection=TravelDirection.DOWN;
+        directionalIdleUntil=0;
         nextAutoSleepAt=System.currentTimeMillis()+(4+rnd.nextInt(4))*60000L;
         if(natural)energy=100f;
-        nextWalkAt=System.currentTimeMillis()+12000L;
         currentPetRes=0;
         addHistory(reason+".");
         ensurePetImage();
@@ -1738,28 +1814,33 @@ public class MainActivity extends Activity {
     }
 
     void showSpritePack(PetStage age,int item,int frame){
-        CharacterSprites.Pack pack=CharacterSprites.forStage(age);
-        int[] ids={pack.idle,pack.happy,pack.tired,pack.sleep,
-            pack.walkSide,pack.walkFront,pack.walkBack};
-        String[] names={"idle","happy","tired","sleep","walk_side","walk_front","walk_back"};
+        CharacterSprites.Pack p=CharacterSprites.forStage(age);
+        int[] ids={p.idleDown,p.idleLeft,p.idleRight,p.idleUp,
+            p.walkDown,p.walkLeft,p.walkRight,p.walkUp,p.jump,p.eat,p.sleep,p.moods};
+        int[] counts={1,1,1,1,6,6,6,6,5,3,3,12};
+        String[] names={"idle_down","idle_left","idle_right","idle_up",
+            "walk_down","walk_left","walk_right","walk_up","jump","eat","sleep","moods"};
         int k=Math.floorMod(item,ids.length);
-        int f=Math.floorMod(frame,4);
+        int f=Math.floorMod(frame,counts[k]);
+
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         TextView note=text(12,false);
-        note.setText("Version 0.5.4 • "+pack.zone+"\n"
-            +"Contrôle technique ≠ validation du dessin ou de son âge.\n"
-            +names[k]+(k>=4?" • frame "+(f+1)+"/4":""));
+        note.setText("Version 0.6.0 • "+p.zone+"\n"+names[k]+
+            (counts[k]>1?" • frame "+(f+1)+"/"+counts[k]:""));
         note.setPadding(dp(14),dp(8),dp(14),dp(8));
         box.addView(note);
+
         ImageView image=new ImageView(this);
         image.setScaleType(ImageView.ScaleType.FIT_CENTER);
         Bitmap b=BitmapFactory.decodeResource(getResources(),ids[k]);
-        if(b!=null && k>=4 && b.getWidth()==2560 && b.getHeight()==640)
-            b=Bitmap.createBitmap(b,f*640,0,640,640);
+        int fs=CharacterSprites.FRAME_SIZE;
+        if(b!=null && counts[k]>1 && b.getWidth()==fs*counts[k] && b.getHeight()==fs)
+            b=Bitmap.createBitmap(b,f*fs,0,fs,fs);
         if(b!=null)image.setImageBitmap(b);
-        box.addView(image,new LinearLayout.LayoutParams(-1,dp(230)));
-        if(k>=4){
+        box.addView(image,new LinearLayout.LayoutParams(-1,dp(260)));
+
+        if(counts[k]>1){
             Button next=button("Frame suivante");
             box.addView(next);
             final AlertDialog[] dialog=new AlertDialog[1];
@@ -1819,7 +1900,7 @@ public class MainActivity extends Activity {
     }
 
     boolean isMoodResourceForStage(PetStage stage,int res){
-        return CharacterSprites.forStage(stage).ownsMood(res);
+        return CharacterSprites.forStage(stage).ownsIdle(res);
     }
 
     boolean keepCurrentImageIfSameStage(PetStage expectedStage){
@@ -1860,7 +1941,6 @@ public class MainActivity extends Activity {
         for(PetStage age:PetStage.values()){
             CharacterSprites.Pack pack=CharacterSprites.forStage(age);
             for(int res:pack.allResources()){
-                if(res==0)continue;
                 PetStage other=owners.put(res,age);
                 if(other!=null && other!=age){
                     markCharacterAssetInvalid(res,age+" PACK","partage inter-âge interdit");
@@ -1871,19 +1951,13 @@ public class MainActivity extends Activity {
                     if(!name.startsWith("leopard_"+age.name().toLowerCase(Locale.ROOT)+"_"))
                         throw new IllegalArgumentException("mauvais préfixe : "+name);
                     BitmapFactory.Options opts=new BitmapFactory.Options();
-                    opts.inJustDecodeBounds=true;
-                    opts.inScaled=false;
+                    opts.inJustDecodeBounds=true;opts.inScaled=false;
                     BitmapFactory.decodeResource(getResources(),res,opts);
-                    int width;
-                    int height=res==pack.faceMoods?pack.faceFrameSize:640;
-                    if(pack.ownsMood(res))width=640;
-                    else if(res==pack.faceMoods)width=pack.faceFrameSize*pack.faceFrameCount;
-                    else if(res==pack.walkSide)width=640*pack.sideFrames;
-                    else if(res==pack.walkFront)width=640*pack.frontFrames;
-                    else if(res==pack.walkBack)width=640*pack.backFrames;
-                    else throw new IllegalArgumentException("ressource hors pack : "+name);
-                    if(opts.outWidth!=width || opts.outHeight!=height)
-                        throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+" au lieu de "+width+"x"+height);
+                    int width=pack.expectedWidth(res);
+                    int height=CharacterSprites.FRAME_SIZE;
+                    if(width<0 || opts.outWidth!=width || opts.outHeight!=height)
+                        throw new IllegalArgumentException(opts.outWidth+"x"+opts.outHeight+
+                            " au lieu de "+width+"x"+height);
                 }catch(RuntimeException error){
                     markCharacterAssetInvalid(res,age+" PACK",error.getMessage());
                 }
