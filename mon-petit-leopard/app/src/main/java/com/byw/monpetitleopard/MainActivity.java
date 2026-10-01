@@ -14,6 +14,9 @@ import java.util.*;
 public class MainActivity extends Activity {
     static final long H=3600000L, CUB=H, TEEN=5*H, ADULT=5*H, OLD=2*H, LIFE=13*H;
     static final long MIN_SLEEP_MS=90000L;
+    static final long MOOD_DURATION_MS=90000L;
+    // Minimum share of AWAKE visible time reserved for static IDLE DOWN.
+    // Face moods count because they are always rendered on the full-body idle-down pose.
     static final float MIN_FACE_SHARE=.70f;
 
     final Handler handler=new Handler(Looper.getMainLooper());
@@ -634,8 +637,8 @@ public class MainActivity extends Activity {
 
     int emotionDrawable(){
         if(sleeping)return sleepDrawable();
-        if(energy<24 || hunger<18 || thirst<18 || clean<18 || happy<28)return tiredDrawable();
-        // Le sprite "happy" est volontairement réservé aux réactions ponctuelles.
+        // Hors sommeil et hors marche, l'animal reste toujours en IDLE DOWN complet.
+        // Les humeurs ne changent que l'expression faciale via faceMoods.
         return idleDrawable();
     }
 
@@ -701,17 +704,22 @@ public class MainActivity extends Activity {
         return 0;
     }
 
-    void scheduleNextFaceMood(long now){nextFaceMoodAt=now;}
+    void scheduleNextFaceMood(long now){
+        // Entre deux humeurs, on conserve une vraie période IDLE DOWN neutre.
+        nextFaceMoodAt=now+30000L+rnd.nextInt(30001);
+    }
 
     void maybeShowFaceMood(long now){
         if(!CharacterSprites.FACE_ATLAS_REVIEWED)return;
         CharacterSprites.Pack pack=CharacterSprites.forStage(petStage());
-        if(!pack.hasFaceMoods() || sleeping || walking || now<manualUntil)return;
-        if(activeFaceMood<0 || now>=faceMoodUntil){
-            activeFaceMood=Math.max(0,Math.min(pack.faceFrameCount-1,chooseFaceMoodIndex()));
-            beginMoodApproach(Math.max(0,Math.min(pack.faceFrameCount-1,chooseFaceMoodIndex())));
+        if(!pack.hasFaceMoods() || sleeping || walking || now<manualUntil
+                || moodApproach || moodExitUp || activeFaceMood>=0)return;
+        if(nextFaceMoodAt==0){
+            scheduleNextFaceMood(now);
             return;
         }
+        if(now<nextFaceMoodAt)return;
+        beginMoodApproach(Math.max(0,Math.min(pack.faceFrameCount-1,chooseFaceMoodIndex())));
     }
 
     int foregroundNode(){
@@ -768,8 +776,8 @@ public class MainActivity extends Activity {
         releaseWalkFrames();
         activeFaceMood=pendingFaceMood>=0?pendingFaceMood:chooseFaceMoodIndex();
         pendingFaceMood=-1;
-        faceMoodUntil=System.currentTimeMillis()+6000L;
-        nextFaceMoodAt=faceMoodUntil;
+        faceMoodUntil=System.currentTimeMillis()+MOOD_DURATION_MS;
+        scheduleNextFaceMood(faceMoodUntil);
         currentPetRes=0;
         ensurePetImage();
         updatePetPosition();
@@ -794,7 +802,8 @@ public class MainActivity extends Activity {
 
     void showFaceMoodNow(int index,int duration){
         // Toutes les humeurs suivent le même scénario :
-        // approche naturelle -> face 6 s -> départ vers le haut de dos.
+        // approche naturelle -> IDLE DOWN de face pendant 1 min 30 -> départ vers le haut de dos.
+        // Le paramètre duration est conservé pour compatibilité mais la durée est fixe.
         beginMoodApproach(index);
     }
 
@@ -1312,7 +1321,8 @@ public class MainActivity extends Activity {
     }
 
     void maybeMischief(){
-        if(stage()==Stage.ENDED || !incident.isEmpty() || sleeping)return;
+        if(stage()==Stage.ENDED || !incident.isEmpty() || sleeping
+                || activeFaceMood>=0 || moodApproach || moodExitUp)return;
 
         long now=System.currentTimeMillis();
         if(nextMischiefAt==0){
@@ -1409,15 +1419,13 @@ public class MainActivity extends Activity {
                 ensurePetImage();
                 updatePetPosition();
                 long walkDuration=Math.max(500L,now-walkStartedAt);
-                boolean nonFaceWalk=travelDirection==TravelDirection.UP
-                        || travelDirection==TravelDirection.LEFT
-                        || travelDirection==TravelDirection.RIGHT;
-                long requiredFaceRest=nonFaceWalk
-                        ?(long)Math.ceil(walkDuration*(MIN_FACE_SHARE/(1f-MIN_FACE_SHARE)))
-                        :2500L;
+                // Seul IDLE DOWN (neutre ou humeur) compte dans la règle des 70 %.
+                // Aucune marche, même FRONT, n'est comptée comme temps face-idle.
+                long requiredIdleDownRest=(long)Math.ceil(
+                        walkDuration*(MIN_FACE_SHARE/(1f-MIN_FACE_SHARE)));
                 nextWalkAt=finishedMoodExit
                         ?now+3500L+rnd.nextInt(1501)
-                        :now+Math.max(3000L,requiredFaceRest)+rnd.nextInt(1501);
+                        :now+Math.max(3000L,requiredIdleDownRest)+rnd.nextInt(1501);
                 walkStartedAt=0;
                 return;
             }
@@ -1451,9 +1459,7 @@ public class MainActivity extends Activity {
 
     int poseDrawableForFrame(int frame){
         if(sleeping || (frame==9 && stage()==Stage.ENDED))return sleepDrawable();
-        if(frame==9 || frame==3)return tiredDrawable();
-        if(frame==11)return idleDrawable();
-        return emotionDrawable();
+        return idleDrawable();
     }
 
     void applyPose(int frame){
@@ -1468,6 +1474,10 @@ public class MainActivity extends Activity {
     }
 
     void showAction(int frame,int duration){
+        long now=System.currentTimeMillis();
+        if(activeFaceMood>=0 && now<faceMoodUntil){
+            return;
+        }
         if(frame==11 && !sleeping && CharacterSprites.forStage(petStage()).hasFaceMoods()){
             showFaceMoodNow(rnd.nextBoolean()?1:10,duration);
             return;
@@ -1607,7 +1617,8 @@ public class MainActivity extends Activity {
             return;
         }
 
-        if(!incident.isEmpty() || now<manualUntil || walking)return;
+        if(!incident.isEmpty() || now<manualUntil || walking
+                || activeFaceMood>=0 || moodApproach || moodExitUp)return;
 
         // Fatigue forte : sommeil immédiat.
         if(energy<=35){
@@ -1647,6 +1658,7 @@ public class MainActivity extends Activity {
         walkMode=WalkMode.SIDE;
         nextAutoSleepAt=System.currentTimeMillis()+(4+rnd.nextInt(4))*60000L;
         if(natural)energy=100f;
+        nextWalkAt=System.currentTimeMillis()+12000L;
         currentPetRes=0;
         addHistory(reason+".");
         ensurePetImage();

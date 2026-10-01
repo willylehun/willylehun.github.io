@@ -8,7 +8,10 @@ assert (ROOT/'tools/prepare_v057_runtime_assets.py').exists()
 assert 'float step=Math.min(speed,dist);' in main
 assert 'enum TravelDirection {LEFT,RIGHT,UP,DOWN}' in main
 assert 'MIN_SLEEP_MS=90000L' in main
+assert 'MOOD_DURATION_MS=90000L' in main
 assert 'MIN_FACE_SHARE=.70f' in main
+assert 'requiredIdleDownRest' in main
+assert 'faceMoodUntil=System.currentTimeMillis()+MOOD_DURATION_MS' in main
 assert 'showFaceMoodNow' in main
 assert 'energy=100f' in main
 for name in ['releaseWalkFrames','releaseFaceMoodFrames']:
