@@ -13,7 +13,7 @@ RUNTIME=ROOT/"app"/"src"/"main"/"res"/"drawable-nodpi"
 
 def load_bundle():
     parts=sorted(SOURCE.glob("promenade_assets_v076.b64.part*"))
-    if len(parts)!=9:
+    if len(parts)!=6:
         raise RuntimeError(f"bundle promenade v0.7.6 incomplet: {len(parts)} parties")
     payload="".join(p.read_text().strip() for p in parts)
     raw=base64.b64decode(payload,validate=True)
