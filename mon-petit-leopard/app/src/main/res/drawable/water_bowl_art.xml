@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="128dp"
+    android:height="96dp"
+    android:viewportWidth="128"
+    android:viewportHeight="96">
+
+    <!-- bowl body -->
+    <path
+        android:fillColor="#9A5A2E"
+        android:pathData="M18,40 C22,64 28,80 43,86 C55,91 73,91 85,86 C100,80 106,64 110,40 C94,48 34,48 18,40 Z"/>
+    <path
+        android:fillColor="#B96F38"
+        android:pathData="M24,47 C31,67 38,76 49,80 C59,84 69,84 79,80 C90,76 97,67 104,47 C86,53 42,53 24,47 Z"/>
+    <path
+        android:fillColor="#7B4324"
+        android:pathData="M18,38 C18,24 110,24 110,38 C110,52 18,52 18,38 Z"/>
+    <!-- water surface -->
+    <path
+        android:fillColor="#69CFF5"
+        android:pathData="M23,38 C23,29 105,29 105,38 C105,47 23,47 23,38 Z"/>
+    <path
+        android:fillColor="#B9EDFF"
+        android:fillAlpha="0.72"
+        android:pathData="M31,35 C43,31 85,31 97,35 C84,37 44,37 31,35 Z"/>
+    <!-- rim -->
+    <path
+        android:fillColor="#C98349"
+        android:pathData="M16,38 C16,20 112,20 112,38 C112,56 16,56 16,38 Z M22,38 C22,27 106,27 106,38 C106,49 22,49 22,38 Z"
+        android:fillType="evenOdd"/>
+    <!-- paw decoration -->
+    <path
+        android:fillColor="#5A3422"
+        android:pathData="M60,66 C58,62 59,58 64,57 C69,58 70,62 68,66 C67,69 61,69 60,66 Z
+                          M53,61 C51,58 52,54 55,53 C58,53 60,56 59,59 C58,62 55,63 53,61 Z
+                          M69,59 C68,56 70,53 73,53 C76,54 77,57 75,60 C73,62 70,62 69,59 Z
+                          M57,72 C59,68 63,67 64,67 C65,67 69,68 71,72 C72,75 69,78 64,78 C59,78 56,75 57,72 Z"/>
+    <!-- subtle floor-shadow -->
+    <path
+        android:fillColor="#000000"
+        android:fillAlpha="0.16"
+        android:pathData="M29,87 C43,93 85,93 99,87 C90,94 38,94 29,87 Z"/>
+</vector>

@@ -47,10 +47,10 @@ public class MainActivity extends Activity {
     float incidentNX=.50f,incidentNY=.85f;
     float petNX=.50f,petNY=.90f,targetNX=.50f,targetNY=.90f;
 
-    TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView,waterBowlView;
+    TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView;
     ProgressBar[] bars=new ProgressBar[6];
     TextView[] vals=new TextView[6];
-    ImageView bgFill,bg,petView;
+    ImageView bgFill,bg,petView,waterBowlView;
     FrameLayout scene;
     LinearLayout root,bottomBar;
     Space flexibleSpace,footerSpace;
@@ -444,13 +444,15 @@ public class MainActivity extends Activity {
         scene.addView(incidentView,incidentParams);
         incidentView.setOnTouchListener((v,e)->handleRub(e));
 
-        waterBowlView=new TextView(this);
-        waterBowlView.setText("🥣💧");
-        waterBowlView.setTextSize(30);
-        waterBowlView.setGravity(Gravity.CENTER);
+        waterBowlView=new ImageView(this);
+        waterBowlView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        waterBowlView.setAdjustViewBounds(false);
+        waterBowlView.setBackground(null);
+        waterBowlView.setImageResource(R.drawable.water_bowl_art);
+        waterBowlView.setContentDescription("Gamelle d’eau");
         waterBowlView.setVisibility(View.GONE);
         waterBowlView.setElevation(dp(4));
-        FrameLayout.LayoutParams bowlParams=new FrameLayout.LayoutParams(dp(72),dp(58));
+        FrameLayout.LayoutParams bowlParams=new FrameLayout.LayoutParams(dp(72),dp(54));
         bowlParams.gravity=Gravity.TOP|Gravity.LEFT;
         scene.addView(waterBowlView,bowlParams);
 
@@ -599,6 +601,7 @@ public class MainActivity extends Activity {
         if(gardenGames!=null)gardenGames.refreshVisibility();
         scene.post(()->{
             fitSceneAndPet();
+            refreshWaterBowl();
             if(gardenGames!=null)gardenGames.refreshVisibility();
         });
     }
@@ -618,11 +621,33 @@ public class MainActivity extends Activity {
         boolean visible="cuisine".equals(room)&&waterBowl>.05f;
         waterBowlView.setVisibility(visible?View.VISIBLE:View.GONE);
         if(!visible)return;
-        waterBowlView.setText(waterBowl>55f?"🥣💧":"🥣");
+        waterBowlView.setImageResource(R.drawable.water_bowl_art);
+        waterBowlView.setAlpha(.78f+.22f*clamp01(waterBowl/100f));
         waterBowlView.post(()->{
             float[] r=imageRect();
-            waterBowlView.setX(r[0]+r[2]*.70f-waterBowlView.getWidth()/2f);
-            waterBowlView.setY(r[1]+r[3]*.84f-waterBowlView.getHeight());
+            if(r[2]<=0||r[3]<=0)return;
+
+            int width=Math.max(dp(52),Math.min(dp(82),Math.round(r[2]*.12f)));
+            int height=Math.round(width*.75f);
+            FrameLayout.LayoutParams lp=(FrameLayout.LayoutParams)waterBowlView.getLayoutParams();
+            if(lp.width!=width||lp.height!=height){
+                lp.width=width;
+                lp.height=height;
+                lp.gravity=Gravity.TOP|Gravity.LEFT;
+                waterBowlView.setLayoutParams(lp);
+            }
+
+            float centerX=r[0]+r[2]*.70f;
+            float feetY=r[1]+r[3]*.86f;
+            float margin=dp(5);
+            float minX=r[0]+margin;
+            float maxX=r[0]+r[2]-width-margin;
+            float minY=r[1]+margin;
+            float maxY=r[1]+r[3]-height-margin;
+            float x=Math.max(minX,Math.min(maxX,centerX-width/2f));
+            float y=Math.max(minY,Math.min(maxY,feetY-height));
+            waterBowlView.setX(x);
+            waterBowlView.setY(y);
             waterBowlView.bringToFront();
         });
     }

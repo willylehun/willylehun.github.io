@@ -120,13 +120,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.8.0: PASS");
+  System.out.println("Sprite registry v0.8.1: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.8.0: PASS')
+print('Sprite contract v0.8.1: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -226,7 +226,7 @@ for age in ['cub','teen','adult','old']:
 
 print("Normalisation de masse visuelle v0.7.1: PASS")
 
-# Soins v0.8.0 : même canevas et masse visuelle propre à chaque tranche d'âge.
+# Soins v0.8.1 : même canevas et masse visuelle propre à chaque tranche d'âge.
 for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
     idle_areas=[]
@@ -266,7 +266,7 @@ with Image.open(ROOT/'app/src/main/res-cub/drawable-nodpi/leopard_cub_bottle.web
     assert full is not None
     assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,('cub','bottle',full)
 
-print("Assets biberon et soins v0.8.0: PASS")
+print("Assets biberon et soins v0.8.1: PASS")
 
 
 toy_visuals={'tennis':(96,96),'yarn':(96,96),'mouse':(96,96),'plush':(96,96),'rope':(96,64)}
@@ -286,7 +286,7 @@ for age in ['cub','teen','adult','old']:
         for i in range(5):
             assert strip.crop((i*128,0,(i+1)*128,128)).getchannel('A').getbbox() is not None,(age,i,'frame corde vide')
 
-print("Visuels PNG et sources corde v0.8.0: PASS")
+print("Visuels PNG et sources corde v0.8.1: PASS")
 
 # Régression v0.7.1 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
@@ -351,7 +351,7 @@ assert 'CareSprites.forStage(petStage()).action(animation)' in main
 assert 'CareSprites.bottle(petStage())' in main
 assert 'startSpecialPose' in main
 
-print('Jeux salon v0.8.0: PASS')
+print('Jeux salon v0.8.1: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
@@ -366,7 +366,7 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.8.0: PASS')
+print('Assets gameplay salon v0.8.1: PASS')
 
 prepare_care=(ROOT/'tools/prepare_v075_care_assets.py').read_text()
 care_registry=(JAVA/'CareSprites.java').read_text()
@@ -375,10 +375,10 @@ assert 'leopard_{age}_{action}.webp' in prepare_care
 assert 'leopard_cub_bottle.webp' in prepare_care
 assert 'static Pack forStage' in care_registry
 assert 'static int bottle' in care_registry
-print('Assets biberon et soins v0.8.0: PASS')
+print('Assets biberon et soins v0.8.1: PASS')
 
 
-# Promenade v0.8.0 : assets, durée réelle, départ/retour maison et branchement Jardin.
+# Promenade v0.8.1 : assets, durée réelle, départ/retour maison et branchement Jardin.
 promenade_java=(JAVA/'PromenadeActivity.java').read_text()
 manifest=(ROOT/'app/src/main/AndroidManifest.xml').read_text()
 prepare_walk=(ROOT/'tools/prepare_v076_promenade_assets.py').read_text()
@@ -403,10 +403,10 @@ assert 'a.startPromenade(i);' in objects
 assert 'void startPromenade(ObjectSystem.Item item)' in main
 assert '.PromenadeActivity' in manifest
 assert 'v076-promenade-bundle' in prepare_walk
-print('Promenade v0.8.0: PASS')
+print('Promenade v0.8.1: PASS')
 
 
-# Jardin v0.8.0 : griffoir, animation 2 frames, jouets réutilisés, repos et simplification.
+# Jardin v0.8.1 : griffoir, animation 2 frames, jouets réutilisés, repos et simplification.
 garden_games=(JAVA/'GardenGames.java').read_text()
 garden_registry=(JAVA/'GardenSprites.java').read_text()
 prepare_garden=(ROOT/'tools/prepare_v078_garden_assets.py').read_text()
@@ -450,10 +450,10 @@ assert 'add("hoop"' not in objects
 assert 'salon ou le jardin' in living
 assert 'v078-garden-scratcher' in prepare_garden
 assert 'GardenSprites.Pack garden=GardenSprites.forStage(age);' in main
-print('Jardin griffoir et jouets v0.8.0: PASS')
+print('Jardin griffoir et jouets v0.8.1: PASS')
 
 
-# Profils animaux v0.8.0 : onboarding, 6 sauvegardes et sélection à chaque lancement.
+# Profils animaux v0.8.1 : onboarding, 6 sauvegardes et sélection à chaque lancement.
 profiles=(JAVA/'PetProfileStore.java').read_text()
 chooser=(JAVA/'PetChooserActivity.java').read_text()
 manifest=(ROOT/'app/src/main/AndroidManifest.xml').read_text()
@@ -496,10 +496,10 @@ assert 'if(!internalTransition)resumeNeedsChooser=true;' in main
 assert 'profileSlot=getIntent().getIntExtra(PetProfileStore.EXTRA_SLOT,-1);' in promenade
 assert 'getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE)' in promenade
 assert 'resumeNeedsChooser' in promenade and 'internalReturn' in promenade
-print('Profils animaux v0.8.0: PASS')
+print('Profils animaux v0.8.1: PASS')
 
 
-# Besoins, goûts, gamelle et lassitude v0.8.0.
+# Besoins, goûts, gamelle et lassitude v0.8.1.
 prefs=(JAVA/'PetPreferences.java').read_text()
 objects=(JAVA/'ObjectSystem.java').read_text()
 games=(JAVA/'LivingRoomGames.java').read_text()
@@ -544,4 +544,19 @@ assert 'boolean promenadeActive()' in main
 assert '!promenadeActive() && displayedPetStage==petStage()' in main
 assert 'est encore en promenade : la maison est vide' in objects
 assert 'est encore en promenade' in main
-print('Besoins et lassitude v0.8.0: PASS')
+print('Besoins et lassitude v0.8.1: PASS')
+
+
+# Gamelle d’eau v0.8.1 : vrai drawable et aucun dépassement.
+main=(JAVA/'MainActivity.java').read_text()
+bowl=(ROOT/'app/src/main/res/drawable/water_bowl_art.xml').read_text()
+assert '<vector' in bowl
+assert '#69CFF5' in bowl and '#9A5A2E' in bowl
+assert 'ImageView bgFill,bg,petView,waterBowlView;' in main
+assert 'waterBowlView=new ImageView(this);' in main
+assert 'R.drawable.water_bowl_art' in main
+assert 'waterBowlView.setText(' not in main
+assert 'Math.max(minX,Math.min(maxX,centerX-width/2f))' in main
+assert 'Math.max(minY,Math.min(maxY,feetY-height))' in main
+assert 'waterBowlView.setVisibility(visible?View.VISIBLE:View.GONE)' in main
+print('Gamelle d’eau v0.8.1: PASS')
