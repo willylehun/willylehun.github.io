@@ -514,7 +514,7 @@ assert 'if(count==3)return .40f;' in behavior
 assert 'if(count==4)return .15f;' in behavior
 assert 'return 0f;' in behavior
 assert '"sleep".equals(family)' in behavior
-assert '"bottle".equals(id)||"milk".equals(id)||"junior".equals(id)' in behavior
+assert 'cub&&("milk".equals(id)||"junior".equals(id))' in behavior
 assert 'TOY_IDS={"tennis","yarn","mouse","plush","rope"}' in behavior
 assert 'PetBehavior.ensurePersonality' in profiles
 
