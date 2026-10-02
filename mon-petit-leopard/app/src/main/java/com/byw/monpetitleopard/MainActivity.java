@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
     LivingRoomGames games;
     GardenGames gardenGames;
     PetBehavior behavior;
+    PetBehavior.Result gameActionResult=null,gardenActionResult=null;
     int profileSlot=-1;
     String petSex="";
     boolean internalTransition=false,resumeNeedsChooser=false;
