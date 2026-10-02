@@ -459,14 +459,8 @@ final class LivingRoomGames {
 
     void applyRewards(float factor){
         if(activeItem==null||factor<=0)return;
-        a.hunger=a.clamp(a.hunger+activeItem.hunger*factor);
-        a.thirst=a.clamp(a.thirst+activeItem.water*factor);
-        a.clean=a.clamp(a.clean+activeItem.clean*factor);
-        a.affection=a.clamp(a.affection+activeItem.affection*factor);
-        a.happy=a.clamp(a.happy+activeItem.happy*factor);
-        a.energy=a.clamp(a.energy+activeItem.energy*factor);
+        a.applyItemEffects(activeItem,factor);
         a.skillCare=a.clamp(a.skillCare+.6f*factor);
-        if(factor>=.8f)a.stars+=activeItem.stars;
     }
 
     float[] toyPixelPosition(float nx,float ny){
