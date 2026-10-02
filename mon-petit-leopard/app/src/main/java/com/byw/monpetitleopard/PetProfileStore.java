@@ -94,8 +94,17 @@ final class PetProfileStore {
         return "leopard".equals(species(context,slot))?"Léopard":species(context,slot);
     }
 
+    static boolean reproductionAgeEligible(Context context,int slot){
+        if(!exists(context,slot))return false;
+        SharedPreferences pet=context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE);
+        long born=pet.getLong("born",System.currentTimeMillis());
+        long age=Math.max(0L,System.currentTimeMillis()-born);
+        return age>=MainActivity.CUB && age<MainActivity.LIFE;
+    }
+
     static boolean compatibleParents(Context context,int a,int b){
         if(a==b||!exists(context,a)||!exists(context,b))return false;
+        if(!reproductionAgeEligible(context,a)||!reproductionAgeEligible(context,b))return false;
         String sa=sex(context,a),sb=sex(context,b);
         if(sa==null||sb==null||sa.isEmpty()||sb.isEmpty()||sa.equals(sb))return false;
         return species(context,a).equals(species(context,b));
