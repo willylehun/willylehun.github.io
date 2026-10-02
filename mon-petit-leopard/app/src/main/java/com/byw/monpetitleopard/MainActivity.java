@@ -1807,6 +1807,10 @@ public class MainActivity extends Activity {
 
     void punish(){
         if(stage()==Stage.ENDED)return;
+        if(promenadeAway()){
+            toast("🌿 "+pet+" est en promenade.");
+            return;
+        }
         wakeForAction();
         if(!incident.isEmpty()){
             skillObedience=clamp(skillObedience+4);
@@ -1829,7 +1833,7 @@ public class MainActivity extends Activity {
     }
 
     void maybeMischief(){
-        if(stage()==Stage.ENDED || !incident.isEmpty() || sleeping
+        if(stage()==Stage.ENDED || !incident.isEmpty() || sleeping || promenadeAway()
                 || activeFaceMood>=0 || moodApproach || moodExitUp)return;
 
         long now=System.currentTimeMillis();
@@ -2148,7 +2152,10 @@ public class MainActivity extends Activity {
         long n=System.currentTimeMillis();
         generation++;
         born=last=n;
+        sp.edit().putLong("born",born).apply();
+        PetBehavior.resetPersonality(sp,profileSlot);
         hunger=85;thirst=85;clean=90;affection=90;happy=90;energy=90;
+        waterBowl=0f;
         skillClean=5;skillObedience=5;skillCare=5;
         incident="";
         incidentRoom="";
@@ -2176,7 +2183,7 @@ public class MainActivity extends Activity {
     }
 
     void maybeAutoSleep(){
-        if(stage()==Stage.ENDED)return;
+        if(stage()==Stage.ENDED||promenadeAway())return;
         long now=System.currentTimeMillis();
 
         if(sleeping){
