@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
     float incidentNX=.50f,incidentNY=.85f;
     float petNX=.50f,petNY=.90f,targetNX=.50f,targetNY=.90f;
 
-    TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView;
+    TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView,waterBowlView;
     ProgressBar[] bars=new ProgressBar[6];
     TextView[] vals=new TextView[6];
     ImageView bgFill,bg,petView;
@@ -445,6 +445,16 @@ public class MainActivity extends Activity {
         hintParams.setMargins(dp(6),dp(44),dp(6),0);
         scene.addView(cleanHint,hintParams);
 
+        waterBowlView=new TextView(this);
+        waterBowlView.setText("🥣💧");
+        waterBowlView.setTextSize(27);
+        waterBowlView.setGravity(Gravity.CENTER);
+        waterBowlView.setVisibility(View.GONE);
+        waterBowlView.setBackground(null);
+        FrameLayout.LayoutParams bowlParams=new FrameLayout.LayoutParams(dp(64),dp(48));
+        bowlParams.gravity=Gravity.TOP|Gravity.LEFT;
+        scene.addView(waterBowlView,bowlParams);
+
         incidentView=new TextView(this);
         incidentView.setTextSize(32);
         incidentView.setGravity(Gravity.CENTER);
@@ -592,6 +602,23 @@ public class MainActivity extends Activity {
         }
     }
 
+    void refreshWaterBowl(){
+        if(waterBowlView==null||scene==null)return;
+        boolean visible="cuisine".equals(room)
+            && sp.getBoolean("waterBowlAvailable",false)
+            && sp.getFloat("waterBowlAmount",0f)>.01f;
+        waterBowlView.setVisibility(visible?View.VISIBLE:View.GONE);
+        if(!visible)return;
+        waterBowlView.post(()->{
+            float[] r=imageRect();
+            int w=waterBowlView.getWidth()>0?waterBowlView.getWidth():dp(64);
+            int h=waterBowlView.getHeight()>0?waterBowlView.getHeight():dp(48);
+            waterBowlView.setX(r[0]+r[2]*.73f-w/2f);
+            waterBowlView.setY(r[1]+r[3]*.82f-h);
+            waterBowlView.bringToFront();
+        });
+    }
+
     String roomName(){
         if(room.equals("cuisine"))return "Cuisine";
         if(room.equals("bain"))return "Salle de bain";
@@ -610,6 +637,7 @@ public class MainActivity extends Activity {
         bg.setImageResource(res);
         ensurePetImage();
         if(gardenGames!=null)gardenGames.refreshVisibility();
+        refreshWaterBowl();
         scene.post(()->{
             fitSceneAndPet();
             if(gardenGames!=null)gardenGames.refreshVisibility();
@@ -671,6 +699,7 @@ public class MainActivity extends Activity {
         petView.bringToFront();
         incidentView.bringToFront();
         moodLabel.bringToFront();
+        if(waterBowlView!=null&&waterBowlView.getVisibility()==View.VISIBLE)waterBowlView.bringToFront();
         cleanHint.bringToFront();
         updatePetPosition();
     }
@@ -1481,8 +1510,8 @@ public class MainActivity extends Activity {
             return;
         }
 
-        affection=clamp(affection+12);
-        happy=clamp(happy+6);
+        affection=clamp(affection+12*repeat.factor);
+        happy=clamp(happy+6*repeat.factor);
 
         if(!strongEmotion()){
             showFaceMoodNow(rnd.nextBoolean()?1:10,6000);
