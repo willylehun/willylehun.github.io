@@ -19,7 +19,7 @@ final class PetBehavior {
     private static final String TOY_DISLIKES="personality_toy_dislikes";
 
     private static final String[] FOOD_IDS={
-        "kibble","wet","chicken","fish","steak",
+        "milk","junior","kibble","wet","chicken","fish","steak",
         "biscuit","treats","apple","banana","watermelon","carrot","berries"
     };
     private static final String[] TOY_IDS={"tennis","yarn","mouse","plush","rope"};
@@ -51,8 +51,8 @@ final class PetBehavior {
             .apply();
     }
 
-    static Preference foodPreference(SharedPreferences sp,String id){
-        if("bottle".equals(id)||"milk".equals(id)||"junior".equals(id))
+    static Preference foodPreference(SharedPreferences sp,String id,boolean cub){
+        if("bottle".equals(id)||(cub&&("milk".equals(id)||"junior".equals(id))))
             return Preference.NEUTRAL;
         if(contains(sp.getString(FOOD_LIKES,""),id))return Preference.LOVE;
         if(contains(sp.getString(FOOD_DISLIKES,""),id))return Preference.DISLIKE;
