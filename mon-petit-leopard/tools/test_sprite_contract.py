@@ -490,7 +490,10 @@ assert 'getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIV
 assert '🐾 Changer d’animal' in main
 assert 'void openPetChooser()' in main
 assert 'intent.putExtra(PetProfileStore.EXTRA_SLOT,profileSlot);' in main
+assert 'resumeNeedsChooser' in main and 'internalTransition' in main
+assert 'if(!internalTransition)resumeNeedsChooser=true;' in main
 
 assert 'profileSlot=getIntent().getIntExtra(PetProfileStore.EXTRA_SLOT,-1);' in promenade
 assert 'getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE)' in promenade
+assert 'resumeNeedsChooser' in promenade and 'internalReturn' in promenade
 print('Profils animaux v0.7.9: PASS')
