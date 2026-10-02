@@ -1593,11 +1593,15 @@ public class MainActivity extends Activity {
             return;
         }
 
-        affection=clamp(affection+12);
-        happy=clamp(happy+6);
+        float factor=beginRepeatedAction("affection");
+        applyNeedDelta(0,0,0,12,4,0,0,factor);
 
-        if(!strongEmotion()){
-            showFaceMoodNow(rnd.nextBoolean()?1:10,6000);
+        String boredom=PetBehavior.boredomText(pet,factor);
+        if(!boredom.isEmpty()){
+            showFaceMoodNow(10,4000);
+            toast(boredom);
+        }else if(!strongEmotion()){
+            showFaceMoodNow(rnd.nextBoolean()?6:7,6000);
             toast("❤️ "+pet+" adore la caresse !");
         } else {
             showFaceMoodNow(chooseFaceMoodIndex(),6000);
@@ -1676,6 +1680,7 @@ public class MainActivity extends Activity {
             return;
         }
         wakeForAction();
+        callingEffectFactor=beginRepeatedAction("affection");
         if(games!=null)games.cancel();
         activeFaceMood=-1;
         pendingFaceMood=-1;
@@ -1844,7 +1849,7 @@ public class MainActivity extends Activity {
         if(rnd.nextFloat()<chance){
             incident=objects.mischief();
             chooseIncidentPosition();
-            clean=clamp(clean-4);
+            clean=clamp(clean-8);
             happy=clamp(happy-2);
             showAction(3,1200);
             toast("⚠ "+pet+" "+incident+" !");
@@ -1941,9 +1946,14 @@ public class MainActivity extends Activity {
                     directionalIdleUntil=0;
                     currentPetRes=0;
                     walkStartedAt=0;
+                    applyNeedDelta(0,0,0,8,2,0,0,callingEffectFactor);
                     ensurePetImage();
                     updatePetPosition();
-                    toast("🐆 "+pet+" est là !");
+                    save();
+                    refresh();
+                    String boredom=PetBehavior.boredomText(pet,callingEffectFactor);
+                    toast(boredom.isEmpty()?"🐆 "+pet+" est là ! ❤️":boredom);
+                    callingEffectFactor=1f;
                     return;
                 }
 
@@ -2178,6 +2188,7 @@ public class MainActivity extends Activity {
     void beginAutoSleep(){
         if(sleeping||stage()==Stage.ENDED)return;
         sleeping=true;
+        PetBehavior.resetRepetition(sp);
         walking=false;
         moodApproach=false;
         moodExitUp=false;
