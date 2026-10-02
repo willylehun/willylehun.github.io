@@ -287,7 +287,7 @@ public class MainActivity extends Activity {
 
         boolean food="food".equals(item.kind)||"snack".equals(item.kind)||"treat".equals(item.kind);
         if(food){
-            preference=PetBehavior.foodPreference(sp,item.id);
+            preference=PetBehavior.foodPreference(sp,item.id,stage()==Stage.CUB);
             // Manger salit davantage l'animal, même si l'aliment est neutre.
             c-=("snack".equals(item.kind)||"treat".equals(item.kind))?1.5f:3f;
             if(preference==PetBehavior.Preference.LOVE){
