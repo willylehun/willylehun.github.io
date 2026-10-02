@@ -1987,6 +1987,18 @@ public class MainActivity extends Activity {
         applyPose(frame);
     }
 
+    void performItem(ObjectSystem.Item item,String animation){
+        wakeForAction();
+        applyItemEffects(item,1f);
+        int special=specialPoseResource(animation);
+        if(special!=0)startSpecialPose(special,"bottle".equals(animation)?3000L:2600L);
+        else if("eat".equals(animation))startActionAnimation(ActionAnim.EAT,3000L);
+        else if("jump".equals(animation))startActionAnimation(ActionAnim.JUMP,2200L);
+        else showAction(item.frame,2200);
+        save();refresh();
+        addHistory("Action : "+item.name+".");
+    }
+
     void act(String msg,int frame,float h,float w,float c,float af,float joy,float e,int gainStars){
         act(msg,frame,h,w,c,af,joy,e,gainStars,null);
     }
