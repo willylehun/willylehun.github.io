@@ -43,7 +43,7 @@ final class GardenGames {
 
     void refreshVisibility(){
         if(scratcherView==null)return;
-        scratcherView.setVisibility("jardin".equals(a.room) && state!=PLAYING?View.VISIBLE:View.GONE);
+        scratcherView.setVisibility("jardin".equals(a.room)?View.VISIBLE:View.GONE);
         if("jardin".equals(a.room))positionScratcher();
     }
 
@@ -122,7 +122,8 @@ final class GardenGames {
         if(state!=APPROACH)return false;
         a.walking=false;
         state=PLAYING;
-        scratcherView.setVisibility(View.GONE);
+        scratcherView.setVisibility(View.VISIBLE);
+        positionScratcher();
         if(!loadFrames()){
             finish(false);
             return true;
