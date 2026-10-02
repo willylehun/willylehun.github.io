@@ -59,36 +59,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.8.3
+          name: mon-petit-leopard-v0.8.4
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.3.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.4.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.8.3"
+          TAG="mon-petit-leopard-v0.8.4"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.8.3 — Reproduction et profondeur cuisine" \
-              --notes "v0.8.3 : la gamelle d’eau reste désormais toujours derrière le léopard. Le menu diagnostic « Vérifier les quatre packs » est retiré du menu joueur et remplacé par Reproduction. Le joueur peut sélectionner deux animaux détenus de la même espèce et de sexes opposés ; si un emplacement sur les 6 est libre, un petit naît dans cet emplacement. Son sexe est déterminé automatiquement à la naissance et le joueur choisit uniquement son nom. Le petit démarre comme léopardeau avec son propre profil, sa propre personnalité et ses propres besoins. Toutes les fonctions v0.8.2 sont conservées."
+              --title "Mon Petit Léopard v0.8.4 — Gamelle et affichage cuisine" \
+              --notes "v0.8.4 : corrige l’affichage de la cuisine. La gamelle d’eau est une vraie gamelle illustrée avec eau visible, placée près du réfrigérateur et strictement bornée à la zone du décor. Le décor principal n’est plus agrandi à 106 %, ce qui supprime le dépassement horizontal sur les côtés. La scène clippe explicitement ses enfants. Toutes les fonctions v0.8.3, dont reproduction, profils, goûts, lassitude et promenade, sont conservées."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.3.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.4.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.8.3 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.8.4 APK [skip ci]"
             git push
           fi
