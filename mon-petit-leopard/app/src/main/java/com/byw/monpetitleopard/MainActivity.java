@@ -1465,7 +1465,7 @@ public class MainActivity extends Activity {
               .putBoolean("promenadeActive",true)
               .putLong("promenadeStart",start)
               .apply();
-            addHistory("Promenade démarrée pour 30 minutes.");
+            addHistory("Promenade démarrée pour 3 minutes.");
             save();
             refresh();
         }

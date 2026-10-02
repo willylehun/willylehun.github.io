@@ -19,7 +19,7 @@ import android.widget.TextView;
 import java.util.Locale;
 
 public class PromenadeActivity extends Activity {
-    static final long DURATION_MS=30L*60L*1000L;
+    static final long DURATION_MS=3L*60L*1000L;
     static final int MAP_W=1448, MAP_H=1086;
 
     android.content.SharedPreferences sp;
@@ -85,7 +85,7 @@ public class PromenadeActivity extends Activity {
         root.addView(bar);
 
         TextView note=new TextView(this);
-        note.setText("30 minutes réelles • la promenade continue même si tu quittes cet écran");
+        note.setText("3 minutes réelles • la promenade continue même si tu quittes cet écran");
         note.setTextSize(10);
         note.setTextColor(Color.rgb(95,84,63));
         note.setGravity(Gravity.CENTER);
