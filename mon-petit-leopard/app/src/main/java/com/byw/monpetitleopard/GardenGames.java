@@ -63,6 +63,10 @@ final class GardenGames {
     }
 
     void startScratcher(ObjectSystem.Item item){
+        if(a.promenadeAway()){
+            a.toast("🌿 "+a.pet+" est en promenade.");
+            return;
+        }
         if(!"jardin".equals(a.room)){
             a.toast("Le griffoir se trouve dans le jardin.");
             return;
