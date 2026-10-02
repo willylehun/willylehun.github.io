@@ -84,6 +84,15 @@ final class PetBehavior {
 
     static int repeatCount(SharedPreferences sp){return sp.getInt("repeat_count",0);}
 
+    static void resetPersonality(SharedPreferences sp,int slot){
+        sp.edit()
+            .remove(PERSONALITY_READY)
+            .remove(FOOD_LIKES).remove(FOOD_DISLIKES)
+            .remove(TOY_LIKES).remove(TOY_DISLIKES)
+            .apply();
+        ensurePersonality(sp,slot);
+    }
+
     static void resetRepetition(SharedPreferences sp){
         sp.edit().remove("repeat_family").remove("repeat_count").remove("repeat_at").apply();
     }
