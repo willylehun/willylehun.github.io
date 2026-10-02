@@ -13,6 +13,7 @@ final class GardenGames {
     final MainActivity a;
     ImageView scratcherView;
     ObjectSystem.Item activeItem;
+    float activeRepeatFactor=1f;
     int state=NONE;
     Bitmap scratcherStrip;
     Bitmap[] scratcherFrames;
@@ -70,6 +71,7 @@ final class GardenGames {
         cancelAnimationOnly();
         preparePet();
         activeItem=item;
+        activeRepeatFactor=a.beginRepeatedAction("play:scratch");
         state=APPROACH;
         scratcherView.setVisibility(View.VISIBLE);
         positionScratcher();
@@ -188,12 +190,12 @@ final class GardenGames {
         a.walking=false;
         state=NONE;
         if(reward && activeItem!=null){
-            a.applyItemEffects(activeItem,1f);
-            a.skillObedience=a.clamp(a.skillObedience+2.5f);
-            a.skillCare=a.clamp(a.skillCare+1f);
+            a.applyToyRewards(activeItem,activeRepeatFactor,1f);
+            a.skillObedience=a.clamp(a.skillObedience+2.5f*activeRepeatFactor);
             a.addHistory("Griffoir utilisé dans le jardin.");
         }
         activeItem=null;
+        activeRepeatFactor=1f;
         releaseFrames();
         a.idleDirection=MainActivity.TravelDirection.DOWN;
         a.travelDirection=MainActivity.TravelDirection.DOWN;
