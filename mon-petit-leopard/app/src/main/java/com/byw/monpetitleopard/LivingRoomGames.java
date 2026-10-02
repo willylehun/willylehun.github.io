@@ -40,6 +40,7 @@ final class LivingRoomGames {
     int ropeFrameIndex=0;
     float downRawX,downRawY,startViewX,startViewY;
     float toyNX=.50f,toyNY=.95f;
+    float rewardRepetitionFactor=1f;
 
     LivingRoomGames(MainActivity a){this.a=a;}
 
@@ -76,6 +77,7 @@ final class LivingRoomGames {
             toyView.setRotation(0f);
         }
         activeItem=null;
+        rewardRepetitionFactor=1f;
         state=NONE;
         landingNode=-1;
         playUntil=0;
@@ -112,6 +114,7 @@ final class LivingRoomGames {
         cancel();
         preparePet();
         activeItem=item;
+        rewardRepetitionFactor=a.beginRepeatedAction("plush".equals(item.id)?"affection":"toy");
         state=THROW_READY;
         int toyRes=toyDrawable(item.id);
         if(toyRes==0){a.toast("Ce jouet n’a pas de visuel de lancer.");cancel();return;}
@@ -135,6 +138,7 @@ final class LivingRoomGames {
         cancel();
         preparePet();
         activeItem=item;
+        rewardRepetitionFactor=a.beginRepeatedAction("toy");
         state=ROPE_APPROACH;
         toyView.setImageResource(R.drawable.toy_rope_art);
         toyView.setContentDescription("Corde");
@@ -459,14 +463,7 @@ final class LivingRoomGames {
 
     void applyRewards(float factor){
         if(activeItem==null||factor<=0)return;
-        a.hunger=a.clamp(a.hunger+activeItem.hunger*factor);
-        a.thirst=a.clamp(a.thirst+activeItem.water*factor);
-        a.clean=a.clamp(a.clean+activeItem.clean*factor);
-        a.affection=a.clamp(a.affection+activeItem.affection*factor);
-        a.happy=a.clamp(a.happy+activeItem.happy*factor);
-        a.energy=a.clamp(a.energy+activeItem.energy*factor);
-        a.skillCare=a.clamp(a.skillCare+.6f*factor);
-        if(factor>=.8f)a.stars+=activeItem.stars;
+        a.applyToyRewards(activeItem,rewardRepetitionFactor,factor);
     }
 
     float[] toyPixelPosition(float nx,float ny){
