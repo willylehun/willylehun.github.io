@@ -459,14 +459,20 @@ final class LivingRoomGames {
 
     void applyRewards(float factor){
         if(activeItem==null||factor<=0)return;
-        a.hunger=a.clamp(a.hunger+activeItem.hunger*factor);
-        a.thirst=a.clamp(a.thirst+activeItem.water*factor);
-        a.clean=a.clamp(a.clean+activeItem.clean*factor);
-        a.affection=a.clamp(a.affection+activeItem.affection*factor);
-        a.happy=a.clamp(a.happy+activeItem.happy*factor);
-        a.energy=a.clamp(a.energy+activeItem.energy*factor);
-        a.skillCare=a.clamp(a.skillCare+.6f*factor);
-        if(factor>=.8f)a.stars+=activeItem.stars;
+        PetBehavior.Result result=a.gameActionResult;
+        float repetition=result==null?1f:result.factor;
+        float preference=result!=null&&result.preference==PetBehavior.LIKE?1.35f:1f;
+        float effective=factor*repetition*preference;
+        a.hunger=a.clamp(a.hunger+activeItem.hunger*effective);
+        a.thirst=a.clamp(a.thirst+activeItem.water*effective);
+        a.clean=a.clamp(a.clean+activeItem.clean*effective);
+        a.affection=a.clamp(a.affection+activeItem.affection*effective);
+        a.happy=a.clamp(a.happy+activeItem.happy*effective);
+        a.energy=a.clamp(a.energy+activeItem.energy*effective);
+        a.skillCare=a.clamp(a.skillCare+.6f*effective);
+        if(effective>=.8f)a.stars+=activeItem.stars;
+        if(result!=null)a.behavior.react(activeItem,result);
+        a.gameActionResult=null;
     }
 
     float[] toyPixelPosition(float nx,float ny){

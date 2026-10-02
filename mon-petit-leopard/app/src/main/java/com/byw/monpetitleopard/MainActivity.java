@@ -27,6 +27,8 @@ public class MainActivity extends Activity {
     ObjectSystem objects;
     LivingRoomGames games;
     GardenGames gardenGames;
+    PetBehavior behavior;
+    PetBehavior.Result gameActionResult=null,gardenActionResult=null;
     int profileSlot=-1;
     String petSex="";
     boolean internalTransition=false,resumeNeedsChooser=false;
@@ -43,7 +45,7 @@ public class MainActivity extends Activity {
     float incidentNX=.50f,incidentNY=.85f;
     float petNX=.50f,petNY=.90f,targetNX=.50f,targetNY=.90f;
 
-    TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView;
+    TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView,waterBowlView;
     ProgressBar[] bars=new ProgressBar[6];
     TextView[] vals=new TextView[6];
     ImageView bgFill,bg,petView;
@@ -101,6 +103,7 @@ public class MainActivity extends Activity {
         sp=getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE);
         load();
         if(sp.getBoolean("named",false))ensureCurrentAdoptionRecorded();
+        behavior=new PetBehavior(this);
         objects=new ObjectSystem(this);
         build();
         validateCharacterAssets();
@@ -218,6 +221,17 @@ public class MainActivity extends Activity {
 
     float clamp(float v){return Math.max(0,Math.min(100,v));}
 
+    boolean promenadeActiveNow(){
+        if(sp==null)return false;
+        boolean active=sp.getBoolean("promenadeActive",false);
+        long start=sp.getLong("promenadeStart",0L);
+        if(active && (start<=0L || System.currentTimeMillis()-start>=PromenadeActivity.DURATION_MS)){
+            sp.edit().putBoolean("promenadeActive",false).apply();
+            active=false;
+        }
+        return active;
+    }
+
     void tickNeeds(){
         long n=System.currentTimeMillis();
         long start=last;
@@ -278,6 +292,22 @@ public class MainActivity extends Activity {
             nextAutoSleepAt=n+(4+rnd.nextInt(4))*60000L;
         }
 
+        if(promenadeActiveNow()){
+            clean=clamp(clean-.22f*(d/60000f));
+        }
+        if(!incident.isEmpty()){
+            clean=clamp(clean-.10f*(d/60000f));
+        }
+        if(sp.getBoolean("waterBowlAvailable",false)){
+            float amount=sp.getFloat("waterBowlAmount",0f);
+            if(amount>0f && thirst<96f && stage()!=Stage.ENDED){
+                float drink=Math.min(amount,Math.min(100f-thirst,.55f*(d/60000f)));
+                thirst=clamp(thirst+drink);
+                amount=Math.max(0f,amount-drink);
+                sp.edit().putFloat("waterBowlAmount",amount)
+                    .putBoolean("waterBowlAvailable",amount>.01f).apply();
+            }
+        }
         last=n;
     }
 
@@ -415,6 +445,16 @@ public class MainActivity extends Activity {
         hintParams.setMargins(dp(6),dp(44),dp(6),0);
         scene.addView(cleanHint,hintParams);
 
+        waterBowlView=new TextView(this);
+        waterBowlView.setText("🥣💧");
+        waterBowlView.setTextSize(27);
+        waterBowlView.setGravity(Gravity.CENTER);
+        waterBowlView.setVisibility(View.GONE);
+        waterBowlView.setBackground(null);
+        FrameLayout.LayoutParams bowlParams=new FrameLayout.LayoutParams(dp(64),dp(48));
+        bowlParams.gravity=Gravity.TOP|Gravity.LEFT;
+        scene.addView(waterBowlView,bowlParams);
+
         incidentView=new TextView(this);
         incidentView.setTextSize(32);
         incidentView.setGravity(Gravity.CENTER);
@@ -547,8 +587,36 @@ public class MainActivity extends Activity {
 
         refreshRoom();
         refreshIncident();
+        updatePromenadeAbsence();
 
         if(stage()==Stage.ENDED)endLife();
+    }
+
+    void updatePromenadeAbsence(){
+        if(petView==null)return;
+        boolean away=promenadeActiveNow();
+        if(away){
+            petView.setVisibility(View.INVISIBLE);
+            if(games!=null)games.cancel();
+            if(gardenGames!=null)gardenGames.cancel();
+        }
+    }
+
+    void refreshWaterBowl(){
+        if(waterBowlView==null||scene==null)return;
+        boolean visible="cuisine".equals(room)
+            && sp.getBoolean("waterBowlAvailable",false)
+            && sp.getFloat("waterBowlAmount",0f)>.01f;
+        waterBowlView.setVisibility(visible?View.VISIBLE:View.GONE);
+        if(!visible)return;
+        waterBowlView.post(()->{
+            float[] r=imageRect();
+            int w=waterBowlView.getWidth()>0?waterBowlView.getWidth():dp(64);
+            int h=waterBowlView.getHeight()>0?waterBowlView.getHeight():dp(48);
+            waterBowlView.setX(r[0]+r[2]*.73f-w/2f);
+            waterBowlView.setY(r[1]+r[3]*.82f-h);
+            waterBowlView.bringToFront();
+        });
     }
 
     String roomName(){
@@ -569,6 +637,7 @@ public class MainActivity extends Activity {
         bg.setImageResource(res);
         ensurePetImage();
         if(gardenGames!=null)gardenGames.refreshVisibility();
+        refreshWaterBowl();
         scene.post(()->{
             fitSceneAndPet();
             if(gardenGames!=null)gardenGames.refreshVisibility();
@@ -625,11 +694,12 @@ public class MainActivity extends Activity {
         }
 
         petView.setAlpha(1f);
-        petView.setVisibility(displayedPetStage==petStage()
+        petView.setVisibility(!promenadeActiveNow() && displayedPetStage==petStage()
                 && petView.getDrawable()!=null?View.VISIBLE:View.INVISIBLE);
         petView.bringToFront();
         incidentView.bringToFront();
         moodLabel.bringToFront();
+        if(waterBowlView!=null&&waterBowlView.getVisibility()==View.VISIBLE)waterBowlView.bringToFront();
         cleanHint.bringToFront();
         updatePetPosition();
     }
@@ -1427,15 +1497,21 @@ public class MainActivity extends Activity {
     }
 
     void petLeopard(){
-        if(stage()==Stage.ENDED)return;
+        if(stage()==Stage.ENDED||promenadeActiveNow())return;
+        PetBehavior.Result repeat=behavior.begin("pet",null);
+        if(repeat.noEffect()){
+            behavior.react(null,repeat);
+            toast("🥱 "+pet+" ne veut plus de caresses pour le moment.");
+            return;
+        }
 
         if(sleeping){
             wakeUp("Réveillé par le joueur",true);
             return;
         }
 
-        affection=clamp(affection+12);
-        happy=clamp(happy+6);
+        affection=clamp(affection+12*repeat.factor);
+        happy=clamp(happy+6*repeat.factor);
 
         if(!strongEmotion()){
             showFaceMoodNow(rnd.nextBoolean()?1:10,6000);
@@ -1466,6 +1542,11 @@ public class MainActivity extends Activity {
 
     void startPromenade(ObjectSystem.Item item){
         if(stage()==Stage.ENDED)return;
+        PetBehavior.Result repeat=behavior.begin("walk",item);
+        if(repeat.noEffect()){
+            behavior.react(item,repeat);
+            return;
+        }
         wakeForAction();
 
         long now=System.currentTimeMillis();
@@ -1477,12 +1558,13 @@ public class MainActivity extends Activity {
         }
 
         if(!active){
-            hunger=clamp(hunger+item.hunger);
-            thirst=clamp(thirst+item.water);
-            clean=clamp(clean+item.clean);
-            affection=clamp(affection+item.affection);
-            happy=clamp(happy+item.happy);
-            energy=clamp(energy+item.energy);
+            float effect=repeat.factor;
+            hunger=clamp(hunger+item.hunger*effect);
+            thirst=clamp(thirst+item.water*effect);
+            clean=clamp(clean+item.clean*effect-5f);
+            affection=clamp(affection+item.affection*effect);
+            happy=clamp(happy+item.happy*effect);
+            energy=clamp(energy+item.energy*effect);
             stars+=item.stars;
             skillCare=clamp(skillCare+.5f);
             start=now;
@@ -1493,8 +1575,10 @@ public class MainActivity extends Activity {
             addHistory("Promenade démarrée pour 3 minutes.");
             save();
             refresh();
+            behavior.react(item,repeat);
         }
 
+        updatePromenadeAbsence();
         Intent intent=new Intent(this,PromenadeActivity.class);
         intent.putExtra(PetProfileStore.EXTRA_SLOT,profileSlot);
         internalTransition=true;
@@ -1511,7 +1595,13 @@ public class MainActivity extends Activity {
     }
 
     void callLeopard(){
-        if(stage()==Stage.ENDED)return;
+        if(stage()==Stage.ENDED||promenadeActiveNow())return;
+        PetBehavior.Result repeat=behavior.begin("call",null);
+        if(repeat.noEffect()){
+            toast("🥱 "+pet+" ne réagit plus à l’appel pour le moment.");
+            return;
+        }
+        affection=clamp(affection+5f*repeat.factor);
         wakeForAction();
         if(games!=null)games.cancel();
         activeFaceMood=-1;
