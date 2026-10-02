@@ -176,13 +176,13 @@ public class ObjectSystem {
             return;
         }
 
-        if(a.promenadeActive()){
-            a.toast("🏡 "+a.pet+" est encore en promenade : la maison est vide.");
+        if("walk".equals(i.id)){
+            a.startPromenade(i);
             return;
         }
 
-        if("walk".equals(i.id)){
-            a.startPromenade(i);
+        if(a.promenadeActive()){
+            a.toast("🏡 "+a.pet+" est encore en promenade : la maison est vide.");
             return;
         }
 
