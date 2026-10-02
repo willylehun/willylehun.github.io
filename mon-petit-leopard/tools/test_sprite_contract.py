@@ -527,8 +527,10 @@ assert 'h*=1.35f' in main and 'joy+=6f' in main
 assert 'joy=-Math.max(6f' in main
 assert 'c-=("snack".equals(item.kind)||"treat".equals(item.kind))?1.5f:3f;' in main
 assert 'clean-=.16f*m;' in main
-assert 'affection=clamp(affection+7f*factor)' in main
+assert 'applyNeedDelta(0,0,0,8,0,0,0,callingEffectFactor)' in main
 assert 'promenadeAway()' in main
+assert 'item.clean-5f' in main
+assert 'clean=clamp(clean-8);' in main
 assert 'petView.setVisibility(View.INVISIBLE)' in main
 
 assert 'waterBowl=sp.getFloat("waterBowl",0f)' in main
