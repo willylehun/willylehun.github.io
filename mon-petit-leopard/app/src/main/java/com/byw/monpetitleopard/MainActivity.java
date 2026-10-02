@@ -225,6 +225,54 @@ public class MainActivity extends Activity {
 
     float clamp(float v){return Math.max(0,Math.min(100,v));}
 
+    boolean promenadeAway(){
+        return promenadeAwayAt(System.currentTimeMillis());
+    }
+
+    boolean promenadeAwayAt(long now){
+        if(sp==null)return false;
+        boolean active=sp.getBoolean("promenadeActive",false);
+        long start=sp.getLong("promenadeStart",0L);
+        if(!active||start<=0L)return false;
+        if(now-start>=PromenadeActivity.DURATION_MS){
+            sp.edit().putBoolean("promenadeActive",false).apply();
+            currentPetRes=0;
+            return false;
+        }
+        return true;
+    }
+
+    long promenadeAwayOverlap(long from,long to){
+        if(sp==null||to<=from)return 0L;
+        long start=sp.getLong("promenadeStart",0L);
+        if(start<=0L)return 0L;
+        long end=start+PromenadeActivity.DURATION_MS;
+        long a=Math.max(from,start);
+        long b=Math.min(to,end);
+        return Math.max(0L,b-a);
+    }
+
+    float beginRepeatedAction(String family){
+        float factor=PetBehavior.registerRepeat(sp,family);
+        String note=PetBehavior.boredomText(pet,factor);
+        if(!note.isEmpty())toast(note);
+        return factor;
+    }
+
+    void queueFaceMood(int mood){
+        queuedFaceMood=Math.max(0,Math.min(11,mood));
+    }
+
+    void applyNeedDelta(float h,float w,float c,float af,float joy,float e,int gainStars,float factor){
+        hunger=clamp(hunger+PetBehavior.positive(h,factor));
+        thirst=clamp(thirst+PetBehavior.positive(w,factor));
+        clean=clamp(clean+PetBehavior.positive(c,factor));
+        affection=clamp(affection+PetBehavior.positive(af,factor));
+        happy=clamp(happy+PetBehavior.positive(joy,factor));
+        energy=clamp(energy+PetBehavior.positive(e,factor));
+        stars+=PetBehavior.rewardStars(gainStars,factor);
+    }
+
     void tickNeeds(){
         long n=System.currentTimeMillis();
         long start=last;
@@ -259,8 +307,19 @@ public class MainActivity extends Activity {
                 energy-=.20f*m;
 
                 if(!incident.isEmpty()){
-                    clean-=.09f*m;
+                    clean-=.16f*m;
                     happy-=.04f*m;
+                }
+
+                long awayMs=promenadeAwayOverlap(start,n);
+                long homeAwakeMs=Math.max(0L,awakeMs-awayMs);
+                if(homeAwakeMs>0L && waterBowl>.05f && thirst<100f){
+                    float drinkCapacity=(homeAwakeMs/60000f)*6f;
+                    float drink=Math.min(waterBowl,Math.min(100f-thirst,drinkCapacity));
+                    if(drink>0f){
+                        thirst+=drink;
+                        waterBowl=Math.max(0f,waterBowl-drink);
+                    }
                 }
 
                 int critical=0;
@@ -273,8 +332,11 @@ public class MainActivity extends Activity {
             }
         }
 
+        promenadeAwayAt(n);
         hunger=clamp(hunger);thirst=clamp(thirst);clean=clamp(clean);
         affection=clamp(affection);happy=clamp(happy);energy=clamp(energy);
+        if(waterBowl<.05f)waterBowl=0f;
+        if(kitchenWater!=null)kitchenWater.refreshVisibility();
 
         if(sleeping && n>=sleepEndAt){
             sleeping=false;
