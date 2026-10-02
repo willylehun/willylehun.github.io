@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
     ObjectSystem objects;
     LivingRoomGames games;
     GardenGames gardenGames;
+    KitchenWaterSystem kitchenWater;
     int profileSlot=-1;
     String petSex="";
     boolean internalTransition=false,resumeNeedsChooser=false;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
     long born,last,nextMischiefAt=0,nextWalkAt=0,manualUntil=0,sleepEndAt=0,nextAutoSleepAt=0,walkStartedAt=0;
     long directionalIdleUntil=0,faceRecoveryUntil=0,actionUntil=0,actionFrameAt=0,actionStartedAt=0;
     float hunger=85,thirst=85,clean=90,affection=90,happy=90,energy=90;
+    float waterBowl=0f;
     float skillClean=5,skillObedience=5,skillCare=5;
     int stars=0,generation=1;
     String pet="Léo",room="salon",incident="",incidentRoom="";
@@ -70,6 +72,8 @@ public class MainActivity extends Activity {
     boolean moodApproach=false,moodExitUp=false;
     int pendingFaceMood=-1;
     int activeFaceMood=-1;
+    int queuedFaceMood=-1;
+    float callingEffectFactor=1f;
     TravelDirection idleDirection=TravelDirection.DOWN;
     ActionAnim actionAnim=ActionAnim.NONE;
     Bitmap actionStrip=null;
@@ -99,6 +103,7 @@ public class MainActivity extends Activity {
             return;
         }
         sp=getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE);
+        PetBehavior.ensurePersonality(sp,profileSlot);
         load();
         if(sp.getBoolean("named",false))ensureCurrentAdoptionRecorded();
         objects=new ObjectSystem(this);
@@ -184,6 +189,7 @@ public class MainActivity extends Activity {
         nextAutoSleepAt=sp.getLong("nextAutoSleepAt",0);
         historyLog=sp.getString("historyLog","");
         adoptedLog=sp.getString("adoptedLog","");
+        waterBowl=sp.getFloat("waterBowl",0f);
 
         // Ne pas annuler ici un sommeil expiré : tickNeeds() calcule d'abord
         // la portion réellement passée à dormir, même si l'app était fermée.
@@ -213,6 +219,7 @@ public class MainActivity extends Activity {
           .putLong("nextAutoSleepAt",nextAutoSleepAt)
           .putString("historyLog",historyLog)
           .putString("adoptedLog",adoptedLog)
+          .putFloat("waterBowl",waterBowl)
           .apply();
     }
 
@@ -431,6 +438,8 @@ public class MainActivity extends Activity {
         games.install();
         gardenGames=new GardenGames(this);
         gardenGames.install();
+        kitchenWater=new KitchenWaterSystem(this);
+        kitchenWater.install();
 
         root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(360),0));
 
@@ -569,9 +578,11 @@ public class MainActivity extends Activity {
         bg.setImageResource(res);
         ensurePetImage();
         if(gardenGames!=null)gardenGames.refreshVisibility();
+        if(kitchenWater!=null)kitchenWater.refreshVisibility();
         scene.post(()->{
             fitSceneAndPet();
             if(gardenGames!=null)gardenGames.refreshVisibility();
+            if(kitchenWater!=null)kitchenWater.refreshVisibility();
         });
     }
 
