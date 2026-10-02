@@ -264,13 +264,14 @@ public class MainActivity extends Activity {
     }
 
     void applyNeedDelta(float h,float w,float c,float af,float joy,float e,int gainStars,float factor){
-        hunger=clamp(hunger+PetBehavior.positive(h,factor));
-        thirst=clamp(thirst+PetBehavior.positive(w,factor));
-        clean=clamp(clean+PetBehavior.positive(c,factor));
-        affection=clamp(affection+PetBehavior.positive(af,factor));
-        happy=clamp(happy+PetBehavior.positive(joy,factor));
-        energy=clamp(energy+PetBehavior.positive(e,factor));
-        stars+=PetBehavior.rewardStars(gainStars,factor);
+        float f=Math.max(0f,Math.min(1f,factor));
+        hunger=clamp(hunger+h*f);
+        thirst=clamp(thirst+w*f);
+        clean=clamp(clean+c*f);
+        affection=clamp(affection+af*f);
+        happy=clamp(happy+joy*f);
+        energy=clamp(energy+e*f);
+        stars+=PetBehavior.rewardStars(gainStars,f);
     }
 
     void queuePreferenceReaction(PetBehavior.Preference preference){
@@ -1594,7 +1595,7 @@ public class MainActivity extends Activity {
         }
 
         float factor=beginRepeatedAction("affection");
-        applyNeedDelta(0,0,0,12,4,0,0,factor);
+        applyNeedDelta(0,0,0,12,0,0,0,factor);
 
         String boredom=PetBehavior.boredomText(pet,factor);
         if(!boredom.isEmpty()){
@@ -1960,7 +1961,7 @@ public class MainActivity extends Activity {
                     directionalIdleUntil=0;
                     currentPetRes=0;
                     walkStartedAt=0;
-                    applyNeedDelta(0,0,0,8,2,0,0,callingEffectFactor);
+                    applyNeedDelta(0,0,0,8,0,0,0,callingEffectFactor);
                     ensurePetImage();
                     updatePetPosition();
                     save();
