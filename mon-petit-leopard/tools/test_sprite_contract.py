@@ -120,13 +120,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.7.8: PASS");
+  System.out.println("Sprite registry v0.7.9: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.7.8: PASS')
+print('Sprite contract v0.7.9: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -226,7 +226,7 @@ for age in ['cub','teen','adult','old']:
 
 print("Normalisation de masse visuelle v0.7.1: PASS")
 
-# Soins v0.7.8 : même canevas et masse visuelle propre à chaque tranche d'âge.
+# Soins v0.7.9 : même canevas et masse visuelle propre à chaque tranche d'âge.
 for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
     idle_areas=[]
@@ -266,7 +266,7 @@ with Image.open(ROOT/'app/src/main/res-cub/drawable-nodpi/leopard_cub_bottle.web
     assert full is not None
     assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,('cub','bottle',full)
 
-print("Assets biberon et soins v0.7.8: PASS")
+print("Assets biberon et soins v0.7.9: PASS")
 
 
 toy_visuals={'tennis':(96,96),'yarn':(96,96),'mouse':(96,96),'plush':(96,96),'rope':(96,64)}
@@ -286,7 +286,7 @@ for age in ['cub','teen','adult','old']:
         for i in range(5):
             assert strip.crop((i*128,0,(i+1)*128,128)).getchannel('A').getbbox() is not None,(age,i,'frame corde vide')
 
-print("Visuels PNG et sources corde v0.7.8: PASS")
+print("Visuels PNG et sources corde v0.7.9: PASS")
 
 # Régression v0.7.1 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
@@ -351,7 +351,7 @@ assert 'CareSprites.forStage(petStage()).action(animation)' in main
 assert 'CareSprites.bottle(petStage())' in main
 assert 'startSpecialPose' in main
 
-print('Jeux salon v0.7.8: PASS')
+print('Jeux salon v0.7.9: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
@@ -366,7 +366,7 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.7.8: PASS')
+print('Assets gameplay salon v0.7.9: PASS')
 
 prepare_care=(ROOT/'tools/prepare_v075_care_assets.py').read_text()
 care_registry=(JAVA/'CareSprites.java').read_text()
@@ -375,10 +375,10 @@ assert 'leopard_{age}_{action}.webp' in prepare_care
 assert 'leopard_cub_bottle.webp' in prepare_care
 assert 'static Pack forStage' in care_registry
 assert 'static int bottle' in care_registry
-print('Assets biberon et soins v0.7.8: PASS')
+print('Assets biberon et soins v0.7.9: PASS')
 
 
-# Promenade v0.7.8 : assets, durée réelle, départ/retour maison et branchement Jardin.
+# Promenade v0.7.9 : assets, durée réelle, départ/retour maison et branchement Jardin.
 promenade_java=(JAVA/'PromenadeActivity.java').read_text()
 manifest=(ROOT/'app/src/main/AndroidManifest.xml').read_text()
 prepare_walk=(ROOT/'tools/prepare_v076_promenade_assets.py').read_text()
@@ -403,10 +403,10 @@ assert 'a.startPromenade(i);' in objects
 assert 'void startPromenade(ObjectSystem.Item item)' in main
 assert '.PromenadeActivity' in manifest
 assert 'v076-promenade-bundle' in prepare_walk
-print('Promenade v0.7.8: PASS')
+print('Promenade v0.7.9: PASS')
 
 
-# Jardin v0.7.8 : griffoir, animation 2 frames, jouets réutilisés, repos et simplification.
+# Jardin v0.7.9 : griffoir, animation 2 frames, jouets réutilisés, repos et simplification.
 garden_games=(JAVA/'GardenGames.java').read_text()
 garden_registry=(JAVA/'GardenSprites.java').read_text()
 prepare_garden=(ROOT/'tools/prepare_v078_garden_assets.py').read_text()
@@ -450,4 +450,47 @@ assert 'add("hoop"' not in objects
 assert 'salon ou le jardin' in living
 assert 'v078-garden-scratcher' in prepare_garden
 assert 'GardenSprites.Pack garden=GardenSprites.forStage(age);' in main
-print('Jardin griffoir et jouets v0.7.8: PASS')
+print('Jardin griffoir et jouets v0.7.9: PASS')
+
+
+# Profils animaux v0.7.9 : onboarding, 6 sauvegardes et sélection à chaque lancement.
+profiles=(JAVA/'PetProfileStore.java').read_text()
+chooser=(JAVA/'PetChooserActivity.java').read_text()
+manifest=(ROOT/'app/src/main/AndroidManifest.xml').read_text()
+promenade=(JAVA/'PromenadeActivity.java').read_text()
+main=(JAVA/'MainActivity.java').read_text()
+
+assert 'MAX_PROFILES=6' in profiles
+assert 'petPrefsName(int slot){return "pet_"+slot;}' in profiles
+assert 'ensureMigrated(Context context)' in profiles
+assert 'getSharedPreferences("pet",Context.MODE_PRIVATE)' in profiles
+assert 'copyAll(legacy,target)' in profiles
+assert 'createLeopard' in profiles
+assert 'R.drawable.leopard_cub_idle_down' in profiles
+assert 'R.drawable.leopard_teen_idle_down' in profiles
+assert 'R.drawable.leopard_adult_idle_down' in profiles
+assert 'R.drawable.leopard_old_idle_down' in profiles
+
+assert 'Choisis ton animal' in chooser
+assert 'Léopard' in chooser
+assert 'Choisis le sexe de l’animal' in chooser
+assert '♂  Mâle' in chooser and '♀  Femelle' in chooser
+assert 'Quel est son nom ?' in chooser
+assert 'De qui veux-tu t’occuper aujourd’hui ?' in chooser
+assert 'for(int slot=0;slot<PetProfileStore.MAX_PROFILES;slot++)' in chooser
+assert 'Nouvel animal' in chooser
+
+assert 'android:name=".PetChooserActivity"' in manifest
+assert '<action android:name="android.intent.action.MAIN" />' in manifest
+assert 'android:name=".MainActivity"' in manifest
+assert 'android:exported="false"' in manifest
+
+assert 'profileSlot=getIntent().getIntExtra(PetProfileStore.EXTRA_SLOT,-1);' in main
+assert 'getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE)' in main
+assert '🐾 Changer d’animal' in main
+assert 'void openPetChooser()' in main
+assert 'intent.putExtra(PetProfileStore.EXTRA_SLOT,profileSlot);' in main
+
+assert 'profileSlot=getIntent().getIntExtra(PetProfileStore.EXTRA_SLOT,-1);' in promenade
+assert 'getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE)' in promenade
+print('Profils animaux v0.7.9: PASS')
