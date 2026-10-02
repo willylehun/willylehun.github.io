@@ -8,8 +8,8 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 47
-        versionName '0.8.2'
+        versionCode 48
+        versionName '0.8.3'
     }
 
     sourceSets {
@@ -32,4 +32,4 @@ android {
     }
 }
 
-// Character sprite packs physically separated; garden scratcher and v0.8.2 assets validated.
+// Character sprite packs physically separated; garden scratcher and v0.8.3 assets validated.
