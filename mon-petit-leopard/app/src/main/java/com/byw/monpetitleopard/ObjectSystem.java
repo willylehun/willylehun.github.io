@@ -39,50 +39,50 @@ public class ObjectSystem {
         this.a=a;
 
         // CUISINE — aucun ustensile.
-        add("water","Eau","💧","cuisine","Boissons","food",0,42,0,0,2,0,0,1,true,true,true,true);
-        add("bottle","Biberon","🍼","cuisine","Boissons","food",24,12,0,3,6,0,0,1,true,false,false,false);
-        add("milk","Lait","🥛","cuisine","Boissons","food",18,14,0,2,5,0,0,1,true,true,false,false);
+        add("water","Remplir la gamelle","💧","cuisine","Boissons","water_bowl",0,0,0,0,0,0,0,1,true,true,true,true);
+        add("bottle","Biberon","🍼","cuisine","Boissons","food",24,0,0,0,0,0,0,1,true,false,false,false);
+        add("milk","Lait","🥛","cuisine","Boissons","food",18,0,0,0,0,0,0,1,true,true,false,false);
 
-        add("junior","Croquettes junior","🥣","cuisine","Repas","food",34,3,0,0,3,0,0,1,true,true,false,false);
-        add("kibble","Croquettes","🟤","cuisine","Repas","food",38,2,0,0,3,0,0,1,false,true,true,true);
-        add("wet","Pâtée","🥫","cuisine","Repas","food",42,5,0,1,5,0,0,1,false,true,true,true);
-        add("chicken","Poulet","🍗","cuisine","Repas","food",40,2,0,1,6,0,0,1,false,true,true,true);
-        add("fish","Poisson","🐟","cuisine","Repas","food",38,3,0,1,7,0,0,1,false,true,true,true);
-        add("steak","Viande","🥩","cuisine","Repas","food",48,0,0,1,8,0,0,1,false,false,true,false);
+        add("junior","Croquettes junior","🥣","cuisine","Repas","food",34,0,0,0,0,0,0,1,true,true,false,false);
+        add("kibble","Croquettes","🟤","cuisine","Repas","food",38,0,0,0,0,0,0,1,false,true,true,true);
+        add("wet","Pâtée","🥫","cuisine","Repas","food",42,0,0,0,0,0,0,1,false,true,true,true);
+        add("chicken","Poulet","🍗","cuisine","Repas","food",40,0,0,0,0,0,0,1,false,true,true,true);
+        add("fish","Poisson","🐟","cuisine","Repas","food",38,0,0,0,0,0,0,1,false,true,true,true);
+        add("steak","Viande","🥩","cuisine","Repas","food",48,0,0,0,0,0,0,1,false,false,true,false);
 
-        add("biscuit","Biscuit","🦴","cuisine","Friandises & snacks","treat",10,0,0,5,12,0,0,11,true,true,true,true);
-        add("treats","Friandises","🍪","cuisine","Friandises & snacks","treat",8,0,0,7,14,0,0,11,true,true,true,true);
-        add("apple","Pomme","🍎","cuisine","Friandises & snacks","snack",8,2,0,0,5,0,0,1,false,true,true,true);
-        add("banana","Banane","🍌","cuisine","Friandises & snacks","snack",10,1,0,0,5,0,0,1,false,true,true,true);
-        add("watermelon","Pastèque","🍉","cuisine","Friandises & snacks","snack",6,8,0,0,5,0,0,1,false,true,true,true);
-        add("carrot","Carotte","🥕","cuisine","Friandises & snacks","snack",7,1,0,0,4,0,0,1,false,true,true,true);
-        add("berries","Baies","🫐","cuisine","Friandises & snacks","snack",5,2,0,0,5,0,0,1,false,true,true,true);
+        add("biscuit","Biscuit","🦴","cuisine","Friandises & snacks","treat",10,0,0,0,0,0,0,11,true,true,true,true);
+        add("treats","Friandises","🍪","cuisine","Friandises & snacks","treat",8,0,0,0,0,0,0,11,true,true,true,true);
+        add("apple","Pomme","🍎","cuisine","Friandises & snacks","snack",8,0,0,0,0,0,0,1,false,true,true,true);
+        add("banana","Banane","🍌","cuisine","Friandises & snacks","snack",10,0,0,0,0,0,0,1,false,true,true,true);
+        add("watermelon","Pastèque","🍉","cuisine","Friandises & snacks","snack",6,0,0,0,0,0,0,1,false,true,true,true);
+        add("carrot","Carotte","🥕","cuisine","Friandises & snacks","snack",7,0,0,0,0,0,0,1,false,true,true,true);
+        add("berries","Baies","🫐","cuisine","Friandises & snacks","snack",5,0,0,0,0,0,0,1,false,true,true,true);
 
         // SALLE DE BAIN — uniquement les quatre éléments demandés.
-        add("groom","Toilettage","🪮","bain","Soins","care",0,0,24,7,8,0,0,11,true,true,true,true);
-        add("soap","Savon","🧼","bain","Soins","bath",0,0,32,2,3,-3,0,4,true,true,true,true);
-        add("comb","Peigne","🪮","bain","Soins","care",0,0,18,6,5,0,0,11,true,true,true,true);
-        add("towel","Serviette","🧺","bain","Soins","care",0,0,12,8,6,3,0,11,true,true,true,true);
+        add("groom","Toilettage","🪮","bain","Soins","care",0,0,24,0,0,0,0,11,true,true,true,true);
+        add("soap","Savon","🧼","bain","Soins","bath",0,0,32,0,0,-3,0,4,true,true,true,true);
+        add("comb","Peigne","🪮","bain","Soins","care",0,0,18,0,0,0,0,11,true,true,true,true);
+        add("towel","Serviette","🧺","bain","Soins","care",0,0,12,0,0,3,0,11,true,true,true,true);
 
         // SALON
-        add("tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-2,5,16,-12,1,10,true,true,true,true);
-        add("yarn","Pelote","🧶","salon","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,true);
-        add("mouse","Souris","🐭","salon","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,true);
-        add("plush","Peluche","🧸","salon","Jouets","toy",0,0,0,9,10,-3,0,11,true,true,true,true);
-        add("rope","Corde","🪢","salon","Jouets","rope",0,-4,-3,5,15,-13,1,10,true,true,true,true);
+        add("tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-1,0,16,-12,1,10,true,true,true,true);
+        add("yarn","Pelote","🧶","salon","Jouets","toy",0,-2,-1,0,12,-7,1,10,true,true,true,true);
+        add("mouse","Souris","🐭","salon","Jouets","toy",0,-3,-1,0,14,-9,1,10,true,true,true,true);
+        add("plush","Peluche","🧸","salon","Jouets","toy",0,0,0,12,8,-3,0,11,true,true,true,true);
+        add("rope","Corde","🪢","salon","Jouets","rope",0,-4,-1,0,15,-13,1,10,true,true,true,true);
 
         add("bed","Repos","🛏️","salon","Repos","rest",-3,-3,0,5,7,42,0,9,true,true,true,true);
 
         // JARDIN — promenade, jouets du salon, griffoir et repos au soleil.
-        add("walk","Promenade","🌿","jardin","Jardin","activity",0,-7,-3,4,14,-10,1,10,true,true,true,true);
-        add("scratch","Griffoir","🐾","jardin","Jardin","scratcher",0,-2,-1,3,9,-7,1,6,true,true,true,true);
+        add("walk","Promenade","🌿","jardin","Jardin","activity",0,-7,-6,0,14,-10,1,10,true,true,true,true);
+        add("scratch","Griffoir","🐾","jardin","Jardin","scratcher",0,-2,-1,0,9,-7,1,6,true,true,true,true);
         add("sun","Repos au soleil","☀️","jardin","Jardin","rest",0,-2,0,3,8,28,0,9,true,true,true,true);
 
-        add("tennis","Balle de tennis","🎾","jardin","Jouets","toy",0,-4,-2,5,16,-12,1,10,true,true,true,true);
-        add("yarn","Pelote","🧶","jardin","Jouets","toy",0,-2,-2,4,12,-7,1,10,true,true,true,true);
-        add("mouse","Souris","🐭","jardin","Jouets","toy",0,-3,-2,5,14,-9,1,10,true,true,true,true);
-        add("plush","Peluche","🧸","jardin","Jouets","toy",0,0,0,9,10,-3,0,11,true,true,true,true);
-        add("rope","Corde","🪢","jardin","Jouets","rope",0,-4,-3,5,15,-13,1,10,true,true,true,true);
+        add("tennis","Balle de tennis","🎾","jardin","Jouets","toy",0,-4,-1,0,16,-12,1,10,true,true,true,true);
+        add("yarn","Pelote","🧶","jardin","Jouets","toy",0,-2,-1,0,12,-7,1,10,true,true,true,true);
+        add("mouse","Souris","🐭","jardin","Jouets","toy",0,-3,-1,0,14,-9,1,10,true,true,true,true);
+        add("plush","Peluche","🧸","jardin","Jouets","toy",0,0,0,12,8,-3,0,11,true,true,true,true);
+        add("rope","Corde","🪢","jardin","Jouets","rope",0,-4,-1,0,15,-13,1,10,true,true,true,true);
     }
 
     void add(String id,String name,String icon,String room,String group,String kind,
@@ -171,6 +171,16 @@ public class ObjectSystem {
             return;
         }
 
+        if("water".equals(i.id)){
+            if(a.kitchenWater!=null)a.kitchenWater.fill();
+            return;
+        }
+
+        if(a.promenadeAway()&&!"walk".equals(i.id)){
+            a.toast("🌿 "+a.pet+" est en promenade.");
+            return;
+        }
+
         if("walk".equals(i.id)){
             a.startPromenade(i);
             return;
@@ -199,18 +209,6 @@ public class ObjectSystem {
             return;
         }
 
-        if(i.id.equals("groom")||i.id.equals("comb")){
-            a.skillClean=a.clamp(a.skillClean+1.2f);
-        }
-        if(i.kind.equals("toy")||i.kind.equals("activity")){
-            a.skillCare=a.clamp(a.skillCare+.5f);
-        }
-
-        if(i.kind.equals("treat") && a.hunger>88){
-            a.clean=a.clamp(a.clean-2);
-            a.happy=a.clamp(a.happy-2);
-        }
-
         String animation=null;
         if(i.id.equals("bottle"))animation="bottle";
         else if(i.id.equals("groom"))animation="groom_foam";
@@ -218,10 +216,9 @@ public class ObjectSystem {
         else if(i.id.equals("comb"))animation="comb";
         else if(i.id.equals("towel"))animation="towel";
         else if(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))animation="eat";
-        else if(i.kind.equals("toy")||i.kind.equals("activity"))animation="jump";
-        a.act(i.name,i.frame,i.hunger,i.water,i.clean,i.affection,i.happy,i.energy,i.stars,animation);
-        a.save();
-        a.refresh();
+
+        String family=(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))?"food":"care";
+        a.performItemAction(i,family,animation);
     }
 
     String mischief(){
