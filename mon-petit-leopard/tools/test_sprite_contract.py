@@ -547,3 +547,5 @@ assert 'a.beginRepeatedAction("play:"+item.id)' in games
 assert 'a.applyToyRewards(activeItem,activeRepeatFactor,1f);' in garden
 assert 'a.beginRepeatedAction("play:scratch")' in garden
 print('Besoins et lassitude v0.8.0: PASS')
+
+# v0.8.0 integration finalisée.
