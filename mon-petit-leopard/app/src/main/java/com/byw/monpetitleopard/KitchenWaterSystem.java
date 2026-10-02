@@ -36,7 +36,7 @@ final class KitchenWaterSystem {
     }
 
     void fill(){
-        a.waterBowl=40f;
+        a.waterBowl=100f;
         a.save();
         refreshVisibility();
         a.toast("💧 La gamelle d’eau est pleine.");
