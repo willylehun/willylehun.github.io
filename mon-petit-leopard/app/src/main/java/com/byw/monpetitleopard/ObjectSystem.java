@@ -166,6 +166,10 @@ public class ObjectSystem {
     }
 
     void use(Item i){
+        if(a.promenadeActiveNow() && !"waterbowl".equals(i.kind)){
+            a.toast("🏡 "+a.pet+" est en promenade : la maison est vide jusqu’à son retour.");
+            return;
+        }
         if(!allowed(i)){
             a.toast("Cet objet n’est pas adapté à l’âge actuel.");
             return;
