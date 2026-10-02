@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
     TextView title,subTitle,timer,starTxt,moodLabel,skillTxt,cleanHint,incidentView;
     ProgressBar[] bars=new ProgressBar[6];
     TextView[] vals=new TextView[6];
-    ImageView bgFill,bg,petView,waterBowlView;
+    ImageView profileIcon,bgFill,bg,petView,waterBowlView;
     FrameLayout scene;
     LinearLayout root,bottomBar;
     Space flexibleSpace,footerSpace;
@@ -336,6 +336,14 @@ public class MainActivity extends Activity {
         header.setGravity(Gravity.CENTER_VERTICAL);
         header.setPadding(dp(6),0,dp(6),0);
 
+        profileIcon=new ImageView(this);
+        profileIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        profileIcon.setAdjustViewBounds(false);
+        profileIcon.setPadding(dp(2),dp(2),dp(2),dp(2));
+        LinearLayout.LayoutParams profileParams=new LinearLayout.LayoutParams(dp(46),dp(46));
+        profileParams.setMargins(0,0,dp(5),0);
+        header.addView(profileIcon,profileParams);
+
         LinearLayout names=new LinearLayout(this);
         names.setOrientation(LinearLayout.VERTICAL);
         title=text(17,true);
@@ -366,7 +374,7 @@ public class MainActivity extends Activity {
         LinearLayout needRow2=new LinearLayout(this);
         needRow1.setPadding(dp(4),0,dp(4),0);
         needRow2.setPadding(dp(4),0,dp(4),0);
-        String[] namesNeeds={"Faim","Eau","Propreté","Câlins","Bonheur","Sommeil"};
+        String[] namesNeeds={"🍖 Faim","💧 Eau","🧼 Propreté","❤️ Câlins","😊 Bonheur","😴 Sommeil"};
         for(int i=0;i<6;i++){
             LinearLayout box=needBox(namesNeeds[i],i);
             (i<3?needRow1:needRow2).addView(box,new LinearLayout.LayoutParams(0,ViewGroup.LayoutParams.WRAP_CONTENT,1));
@@ -466,8 +474,8 @@ public class MainActivity extends Activity {
         bottomBar=new LinearLayout(this);
         bottomBar.setPadding(dp(4),0,dp(4),0);
         roomsBtn=button("🏠 Pièces");
-        objectsBtn=button("🎒 Objets");
-        actionsBtn=button("⚙ Actions");
+        objectsBtn=button("🧸 Jouets");
+        actionsBtn=button("⚙️ Actions");
 
         roomsBtn.setOnClickListener(v->roomsMenu());
         objectsBtn.setOnClickListener(v->objects.openMenu());
@@ -559,8 +567,10 @@ public class MainActivity extends Activity {
 
     void refresh(){
         syncVisualStage();
-        title.setText(pet+" • génération "+generation);
-        subTitle.setText(stageName()+" • "+roomName());
+        if(profileIcon!=null)profileIcon.setImageResource(CharacterSprites.forStage(petStage()).idleDown);
+        title.setText(pet+" "+sexSymbol()+" • génération "+generation);
+        subTitle.setText(stageName()+" • "+virtualAgeMonths()+" mois • "+roomName());
+        if(objectsBtn!=null)objectsBtn.setText(contextObjectButtonLabel());
         timer.setText(stage()==Stage.ENDED?"Terminé":format(remain()));
         starTxt.setText("★ "+stars);
 
@@ -578,6 +588,25 @@ public class MainActivity extends Activity {
         refreshIncident();
 
         if(stage()==Stage.ENDED)endLife();
+    }
+
+    String sexSymbol(){
+        if("female".equals(petSex))return "♀";
+        if("male".equals(petSex))return "♂";
+        return "•";
+    }
+
+    int virtualAgeMonths(){
+        long elapsed=Math.max(0L,System.currentTimeMillis()-born);
+        int months=(int)(elapsed/(5L*60L*1000L));
+        return Math.max(0,Math.min(156,months));
+    }
+
+    String contextObjectButtonLabel(){
+        if("cuisine".equals(room))return "🍽️ Nourriture";
+        if("bain".equals(room))return "🧼 Soins";
+        if("jardin".equals(room))return "🌿 Jardin";
+        return "🧸 Jouets";
     }
 
     String roomName(){
