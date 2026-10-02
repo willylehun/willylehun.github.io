@@ -499,54 +499,49 @@ assert 'resumeNeedsChooser' in promenade and 'internalReturn' in promenade
 print('Profils animaux v0.8.0: PASS')
 
 
-# Comportement animal v0.8.0 : lassitude, goûts, gamelle et absence en promenade.
-behavior=(JAVA/'PetBehavior.java').read_text()
-water_system=(JAVA/'KitchenWaterSystem.java').read_text()
+# Besoins, goûts, gamelle et lassitude v0.8.0.
+prefs=(JAVA/'PetPreferences.java').read_text()
 objects=(JAVA/'ObjectSystem.java').read_text()
 games=(JAVA/'LivingRoomGames.java').read_text()
 garden=(JAVA/'GardenGames.java').read_text()
-profiles=(JAVA/'PetProfileStore.java').read_text()
 main=(JAVA/'MainActivity.java').read_text()
 
-assert 'BOREDOM_RESET_MS=10L*60L*1000L' in behavior
-assert 'if(count==2)return .75f;' in behavior
-assert 'if(count==3)return .40f;' in behavior
-assert 'if(count==4)return .15f;' in behavior
-assert 'return 0f;' in behavior
-assert '"sleep".equals(family)' in behavior
-assert '"bottle".equals(id)||"milk".equals(id)||"junior".equals(id)' in behavior
-assert 'TOY_IDS={"tennis","yarn","mouse","plush","rope"}' in behavior
-assert 'PetBehavior.ensurePersonality' in profiles
+assert 'DISLIKE=-1,NEUTRAL=0,LIKE=1' in prefs
+assert '"milk","junior","kibble"' in prefs
+assert 'stage()==MainActivity.Stage.CUB' in prefs
+assert '"milk".equals(id)||"bottle".equals(id)||"junior".equals(id)' in prefs
+assert 'hungerMultiplier' in prefs and 'happyDelta' in prefs
+assert '0x51A7' in prefs and '0x2B19' in prefs
 
-assert 'a.waterBowl=100f;' in water_system
-assert 'bowlView.setVisibility(visible?View.VISIBLE:View.GONE);' in water_system
-assert '.putFloat("waterBowl",waterBowl)' in main
-assert 'float drinkCapacity=(homeAwakeMs/60000f)*6f;' in main
-assert 'waterBowl=Math.max(0f,waterBowl-drink);' in main
-
-assert '"water","Remplir la gamelle","💧","cuisine","Boissons","water_bowl"' in objects
-assert 'if("water".equals(i.id))' in objects
-assert 'a.kitchenWater.fill()' in objects
-assert '"walk","Promenade","🌿","jardin","Jardin","activity",0,-7,-6,0,14,-10' in objects
-assert '"plush","Peluche","🧸","salon","Jouets","toy",0,0,0,12,8,-3' in objects
-assert '"tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-1,0,16,-12' in objects
-
-assert 'PetBehavior.foodPreference(sp,item.id)' in main
-assert 'h*=1.35f;' in main and 'joy+=6f;' in main
-assert 'joy=-7f;' in main
-assert 'queueFaceMood(1)' in main
-assert 'c-=("snack".equals(item.kind)||"treat".equals(item.kind))?1.5f:3f;' in main
+assert 'float effectFactor(String key,boolean sleepExempt)' in main
+assert 'if(sleepExempt)return 1f;' in main
+assert 'if(repeatCount<=2)return 1f;' in main
+assert 'if(repeatCount==3)return .60f;' in main
+assert 'if(repeatCount==4)return .25f;' in main
+assert 'return 0f;' in main
+assert 'void applyItemEffects(ObjectSystem.Item item,float externalFactor)' in main
+assert 'showFaceMoodNow(1,MOOD_DURATION_MS)' in main
+assert 'clean=clamp(clean-2.5f*factor)' in main
+assert 'clean=clamp(clean-5f);' in main
 assert 'clean=clamp(clean-8);' in main
-assert 'if(stage()==Stage.ENDED||promenadeAway())return;' in main
-assert 'petView.setVisibility(View.INVISIBLE);' in main
-assert 'if(a.promenadeAway()&&!"walk".equals(i.id))' in objects
+assert 'affection=clamp(affection+7f*factor)' in main
+assert 'affection=clamp(affection+5f*factor)' in main
 
-assert 'rewardRepetitionFactor=a.beginRepeatedAction("plush".equals(item.id)?"affection":"toy");' in games
-assert 'rewardRepetitionFactor=a.beginRepeatedAction("toy");' in games
-assert 'a.applyToyRewards(activeItem,rewardRepetitionFactor,factor);' in games
-assert 'rewardRepetitionFactor=a.beginRepeatedAction("scratcher");' in garden
-assert 'applyNeedDelta(0,0,0,12,0,0,0,factor);' in main
-assert 'callingEffectFactor=beginRepeatedAction("affection");' in main
-assert 'applyNeedDelta(0,0,0,8,0,0,0,callingEffectFactor);' in main
+assert '"water","Remplir la gamelle d’eau"' in objects
+assert '"water_bowl"' in objects
+assert 'a.fillWaterBowl();' in objects
+assert 'a.performItem(i,animation);' in objects
+assert 'a.applyItemEffects(activeItem,factor);' in games
+assert 'a.applyItemEffects(activeItem,1f);' in garden
 
-print('Comportement animal v0.8.0: PASS')
+assert 'float waterBowl=0f;' in main
+assert 'waterBowlView' in main
+assert 'void fillWaterBowl()' in main
+assert 'waterBowl=Math.max(0f,waterBowl-drink)' in main
+assert 'waterBowlView.setVisibility(visible?View.VISIBLE:View.GONE)' in main
+
+assert 'boolean promenadeActive()' in main
+assert '!promenadeActive() && displayedPetStage==petStage()' in main
+assert 'est encore en promenade : la maison est vide' in objects
+assert 'est encore en promenade' in main
+print('Besoins et lassitude v0.8.0: PASS')
