@@ -393,6 +393,8 @@ public class MainActivity extends Activity {
         sceneBg.setCornerRadius(dp(10));
         scene.setBackground(sceneBg);
         scene.setClipToOutline(true);
+        scene.setClipChildren(true);
+        scene.setClipToPadding(true);
 
         // Remplissage décoratif derrière l'image complète : évite les bandes claires
         // sans jamais rogner ni déformer l'image principale.
@@ -622,8 +624,8 @@ public class MainActivity extends Activity {
                 room.equals("jardin")?R.drawable.room_garden_hd:R.drawable.room_living_hd;
         bgFill.setImageResource(res);
         bg.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        bg.setScaleX(1.06f);
-        bg.setScaleY(1.06f);
+        bg.setScaleX(1f);
+        bg.setScaleY(1f);
         bg.setImageResource(res);
         ensurePetImage();
         refreshWaterBowl();
@@ -656,7 +658,7 @@ public class MainActivity extends Activity {
             float[] r=imageRect();
             if(r[2]<=0||r[3]<=0)return;
 
-            int width=Math.max(dp(52),Math.min(dp(82),Math.round(r[2]*.12f)));
+            int width=Math.max(dp(48),Math.min(dp(70),Math.round(r[2]*.10f)));
             int height=Math.round(width*.75f);
             FrameLayout.LayoutParams lp=(FrameLayout.LayoutParams)waterBowlView.getLayoutParams();
             if(lp.width!=width||lp.height!=height){
@@ -666,8 +668,9 @@ public class MainActivity extends Activity {
                 waterBowlView.setLayoutParams(lp);
             }
 
-            float centerX=r[0]+r[2]*.70f;
-            float feetY=r[1]+r[3]*.86f;
+            // Zone sûre près du réfrigérateur : loin des bords et du passage central.
+            float centerX=r[0]+r[2]*.17f;
+            float feetY=r[1]+r[3]*.90f;
             float margin=dp(5);
             float minX=r[0]+margin;
             float maxX=r[0]+r[2]-width-margin;
