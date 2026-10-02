@@ -1652,7 +1652,7 @@ public class MainActivity extends Activity {
             walking=false;
 
             float factor=beginRepeatedAction("walk");
-            applyNeedDelta(item.hunger,item.water,item.clean,item.affection,item.happy,item.energy,item.stars,factor);
+            applyNeedDelta(item.hunger,item.water,item.clean-5f,item.affection,item.happy,item.energy,item.stars,factor);
             skillCare=clamp(skillCare+.5f*factor);
             start=now;
             sp.edit()
