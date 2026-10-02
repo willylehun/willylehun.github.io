@@ -500,53 +500,48 @@ print('Profils animaux v0.8.0: PASS')
 
 
 # Besoins, goûts, gamelle et lassitude v0.8.0.
-prefs=(JAVA/'PetPreferences.java').read_text()
+behavior=(JAVA/'PetBehavior.java').read_text()
 objects=(JAVA/'ObjectSystem.java').read_text()
 games=(JAVA/'LivingRoomGames.java').read_text()
 garden=(JAVA/'GardenGames.java').read_text()
+water_system=(JAVA/'KitchenWaterSystem.java').read_text()
 main=(JAVA/'MainActivity.java').read_text()
 
-assert 'DISLIKE=-1,NEUTRAL=0,LIKE=1' in prefs
-assert '"milk","junior","kibble"' in prefs
-assert 'stage()==MainActivity.Stage.CUB' in prefs
-assert '"milk".equals(id)||"bottle".equals(id)||"junior".equals(id)' in prefs
-assert 'hungerMultiplier' in prefs and 'happyDelta' in prefs
-assert '0x51A7' in prefs and '0x2B19' in prefs
-
-assert 'float effectFactor(String key,boolean sleepExempt)' in main
-assert 'if(sleepExempt)return 1f;' in main
-assert 'if(repeatCount<=2)return 1f;' in main
-assert 'if(repeatCount==3)return .60f;' in main
-assert 'if(repeatCount==4)return .25f;' in main
-assert 'return 0f;' in main
-assert 'void applyItemEffects(ObjectSystem.Item item,float externalFactor)' in main
-assert 'showFaceMoodNow(1,MOOD_DURATION_MS)' in main
-assert 'clean=clamp(clean-2.5f*factor)' in main
-assert 'clean=clamp(clean-5f);' in main
-assert 'clean=clamp(clean-8);' in main
-assert 'affection=clamp(affection+7f*factor)' in main
-assert 'affection=clamp(affection+5f*factor)' in main
-
-assert '"water","Remplir la gamelle d’eau"' in objects
-assert '"water_bowl"' in objects
-assert 'a.fillWaterBowl();' in objects
-assert 'a.performItem(i,animation);' in objects
-assert 'a.applyItemEffects(activeItem,factor);' in games
-assert 'a.applyItemEffects(activeItem,1f);' in garden
-
-assert 'float waterBowl=0f;' in main
-assert 'waterBowlView' in main
-assert 'void fillWaterBowl()' in main
-assert 'waterBowl=Math.max(0f,waterBowl-drink)' in main
-assert 'waterBowlView.setVisibility(visible?View.VISIBLE:View.GONE)' in main
-
-assert 'boolean promenadeActive()' in main
-assert '!promenadeActive() && displayedPetStage==petStage()' in main
-assert 'est encore en promenade : la maison est vide' in objects
-assert 'est encore en promenade' in main
-print('Besoins et lassitude v0.8.0: PASS')
-
-# Neutralité nourriture léopardeau v0.8.0.
+assert 'enum Preference {LOVE,NEUTRAL,DISLIKE}' in behavior
+assert 'registerRepeat' in behavior
+assert 'if(family==null||family.isEmpty()||"sleep".equals(family))return 1f;' in behavior
+assert 'if(count==2)return .75f;' in behavior
+assert 'if(count==3)return .40f;' in behavior
+assert 'if(count==4)return .15f;' in behavior
+assert 'return 0f;' in behavior
 assert 'foodPreference(SharedPreferences sp,String id,boolean cub)' in behavior
 assert 'cub&&("milk".equals(id)||"junior".equals(id))' in behavior
-print('Neutralité nourriture léopardeau v0.8.0: PASS')
+assert '"bottle".equals(id)' in behavior
+assert 'toyPreference' in behavior
+
+assert 'void performItemAction' in main
+assert 'void applyToyRewards' in main
+assert 'PetBehavior.Preference.DISLIKE' in main
+assert 'queueFaceMood(1)' in main
+assert 'h*=1.35f' in main and 'joy+=6f' in main
+assert 'joy=-Math.max(6f' in main
+assert 'c-=("snack".equals(item.kind)||"treat".equals(item.kind))?1.5f:3f;' in main
+assert 'clean-=.16f*m;' in main
+assert 'affection=clamp(affection+7f*factor)' in main
+assert 'promenadeAway()' in main
+assert 'petView.setVisibility(View.INVISIBLE)' in main
+
+assert 'waterBowl=sp.getFloat("waterBowl",0f)' in main
+assert 'waterBowl=Math.max(0f,waterBowl-drink)' in main
+assert 'KitchenWaterSystem kitchenWater' in main
+assert 'a.waterBowl=100f;' in water_system
+assert '"cuisine".equals(a.room)&&a.waterBowl>.05f' in water_system
+
+assert 'if(a.kitchenWater!=null)a.kitchenWater.fill();' in objects
+assert 'a.promenadeAway()' in objects
+assert 'a.performItemAction(i,family,animation);' in objects
+assert 'a.applyToyRewards(activeItem,activeRepeatFactor,factor);' in games
+assert 'a.beginRepeatedAction("play:"+item.id)' in games
+assert 'a.applyToyRewards(activeItem,activeRepeatFactor,1f);' in garden
+assert 'a.beginRepeatedAction("play:scratch")' in garden
+print('Besoins et lassitude v0.8.0: PASS')
