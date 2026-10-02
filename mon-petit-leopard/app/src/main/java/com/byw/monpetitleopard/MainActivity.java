@@ -273,6 +273,79 @@ public class MainActivity extends Activity {
         stars+=PetBehavior.rewardStars(gainStars,factor);
     }
 
+    void queuePreferenceReaction(PetBehavior.Preference preference){
+        if(preference==PetBehavior.Preference.DISLIKE)queueFaceMood(1);
+        else if(preference==PetBehavior.Preference.LOVE)queueFaceMood(rnd.nextBoolean()?0:8);
+    }
+
+    void performItemAction(ObjectSystem.Item item,String family,String animation){
+        if(item==null)return;
+        float factor=beginRepeatedAction(family);
+        float h=item.hunger,w=item.water,c=item.clean,af=item.affection,joy=item.happy,e=item.energy;
+        PetBehavior.Preference preference=PetBehavior.Preference.NEUTRAL;
+
+        boolean food="food".equals(item.kind)||"snack".equals(item.kind)||"treat".equals(item.kind);
+        if(food){
+            preference=PetBehavior.foodPreference(sp,item.id);
+            // Manger salit davantage l'animal, même si l'aliment est neutre.
+            c-=("snack".equals(item.kind)||"treat".equals(item.kind))?1.5f:3f;
+            if(preference==PetBehavior.Preference.LOVE){
+                h*=1.35f;
+                joy+=6f;
+            }else if(preference==PetBehavior.Preference.DISLIKE){
+                h*=.85f;
+                joy=-7f;
+            }
+        }
+
+        wakeForAction();
+        applyNeedDelta(h,w,c,af,joy,e,item.stars,factor);
+        if("groom".equals(item.id)||"comb".equals(item.id))
+            skillClean=clamp(skillClean+1.2f*factor);
+        if("care".equals(family))skillCare=clamp(skillCare+.35f*factor);
+
+        int special=specialPoseResource(animation);
+        if(special!=0)startSpecialPose(special,"bottle".equals(animation)?3000L:2600L);
+        else if("eat".equals(animation))startActionAnimation(ActionAnim.EAT,3000L);
+        else if("jump".equals(animation))startActionAnimation(ActionAnim.JUMP,2200L);
+        else showAction(item.frame,2200);
+
+        queuePreferenceReaction(preference);
+        save();
+        refresh();
+
+        String boredom=PetBehavior.boredomText(pet,factor);
+        if(!boredom.isEmpty())toast(boredom);
+        else if(preference==PetBehavior.Preference.LOVE)toast("😍 "+pet+" adore "+item.name.toLowerCase(Locale.ROOT)+" !");
+        else if(preference==PetBehavior.Preference.DISLIKE)toast("😠 "+pet+" n’aime pas "+item.name.toLowerCase(Locale.ROOT)+".");
+        else toast(item.name);
+        addHistory("Action : "+item.name+".");
+    }
+
+    void applyToyRewards(ObjectSystem.Item item,float repetitionFactor,float playFactor){
+        if(item==null)return;
+        float duration=Math.max(0f,Math.min(1f,playFactor));
+        float h=item.hunger*duration;
+        float w=item.water*duration;
+        float c=item.clean*duration;
+        float af=item.affection*duration;
+        float joy=item.happy*duration;
+        float e=item.energy*duration;
+
+        PetBehavior.Preference preference=PetBehavior.toyPreference(sp,item.id);
+        if(preference==PetBehavior.Preference.LOVE){
+            joy=joy*1.35f+3f*duration;
+            if("plush".equals(item.id))af*=1.25f;
+        }else if(preference==PetBehavior.Preference.DISLIKE){
+            joy=-6f*duration;
+            if("plush".equals(item.id))af=0f;
+        }
+
+        applyNeedDelta(h,w,c,af,joy,e,item.stars,repetitionFactor);
+        skillCare=clamp(skillCare+.6f*repetitionFactor*duration);
+        queuePreferenceReaction(preference);
+    }
+
     void tickNeeds(){
         long n=System.currentTimeMillis();
         long start=last;
