@@ -138,7 +138,7 @@ final class LivingRoomGames {
         cancel();
         preparePet();
         activeItem=item;
-        rewardRepetitionFactor=a.beginRepeatedAction("toy");
+        rewardRepetitionFactor=1f;
         state=ROPE_APPROACH;
         toyView.setImageResource(R.drawable.toy_rope_art);
         toyView.setContentDescription("Corde");
@@ -271,6 +271,7 @@ final class LivingRoomGames {
 
     boolean handleRopeTouch(MotionEvent e){
         if(state==ROPE_READY && e.getAction()==MotionEvent.ACTION_DOWN){
+            rewardRepetitionFactor=a.beginRepeatedAction("toy");
             state=ROPE_HOLD;
             ropeHoldStartedAt=System.currentTimeMillis();
             ropeFrameAt=0;
