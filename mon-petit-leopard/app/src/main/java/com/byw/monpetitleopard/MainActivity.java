@@ -700,6 +700,10 @@ public class MainActivity extends Activity {
 
     void ensurePetImage(){
         syncVisualStage();
+        if(promenadeActive()){
+            petView.setVisibility(View.INVISIBLE);
+            return;
+        }
         long now=System.currentTimeMillis();
 
         if(specialPoseRes!=0){
