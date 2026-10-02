@@ -459,7 +459,7 @@ public class MainActivity extends Activity {
         waterBowlView.setImageResource(R.drawable.water_bowl_art);
         waterBowlView.setContentDescription("Gamelle d’eau");
         waterBowlView.setVisibility(View.GONE);
-        waterBowlView.setElevation(dp(4));
+        waterBowlView.setElevation(dp(1));
         FrameLayout.LayoutParams bowlParams=new FrameLayout.LayoutParams(dp(72),dp(54));
         bowlParams.gravity=Gravity.TOP|Gravity.LEFT;
         scene.addView(waterBowlView,bowlParams);
@@ -677,7 +677,8 @@ public class MainActivity extends Activity {
             float y=Math.max(minY,Math.min(maxY,feetY-height));
             waterBowlView.setX(x);
             waterBowlView.setY(y);
-            waterBowlView.bringToFront();
+            // La gamelle reste un élément du sol : le léopard doit toujours passer devant.
+            if(petView!=null)petView.bringToFront();
         });
     }
 
@@ -2304,12 +2305,130 @@ public class MainActivity extends Activity {
     }
 
     void showTopMenu(){
-        String[] entries={"🐾 Changer d’animal","📜 Historique","🔎 Vérifier les quatre packs"};
+        String[] entries={"🐾 Changer d’animal","📜 Historique","🍼 Reproduction"};
         new AlertDialog.Builder(this).setTitle("Menu").setItems(entries,(d,w)->{
             if(w==0)openPetChooser();
             else if(w==1)showHistory();
-            else showSpritePackPicker();
+            else showReproductionMenu();
         }).show();
+    }
+
+    void showReproductionMenu(){
+        int empty=PetProfileStore.firstEmpty(this);
+        if(empty<0){
+            new AlertDialog.Builder(this)
+                .setTitle("Reproduction")
+                .setMessage("Les 6 emplacements sont déjà occupés. Libère un emplacement avant de faire naître un petit.")
+                .setPositiveButton("OK",null).show();
+            return;
+        }
+
+        ArrayList<Integer> candidates=new ArrayList<>();
+        for(int a=0;a<PetProfileStore.MAX_PROFILES;a++){
+            if(!PetProfileStore.exists(this,a))continue;
+            String sex=PetProfileStore.sex(this,a);
+            if(sex==null||sex.isEmpty())continue;
+            boolean hasMate=false;
+            for(int b=0;b<PetProfileStore.MAX_PROFILES;b++){
+                if(PetProfileStore.compatibleParents(this,a,b)){hasMate=true;break;}
+            }
+            if(hasMate)candidates.add(a);
+        }
+
+        if(candidates.isEmpty()){
+            new AlertDialog.Builder(this)
+                .setTitle("Reproduction")
+                .setMessage("Il faut posséder deux animaux de la même espèce et de sexes opposés.")
+                .setPositiveButton("OK",null).show();
+            return;
+        }
+
+        CharSequence[] labels=new CharSequence[candidates.size()];
+        for(int i=0;i<candidates.size();i++){
+            int slot=candidates.get(i);
+            labels[i]=PetProfileStore.name(this,slot)+"  •  "+
+                PetProfileStore.speciesLabel(this,slot)+"  •  "+
+                PetProfileStore.sexLabel(PetProfileStore.sex(this,slot));
+        }
+
+        new AlertDialog.Builder(this)
+            .setTitle("Reproduction — premier animal")
+            .setItems(labels,(d,w)->chooseSecondParent(candidates.get(w),empty))
+            .setNegativeButton("Annuler",null)
+            .show();
+    }
+
+    void chooseSecondParent(int first,int empty){
+        ArrayList<Integer> mates=new ArrayList<>();
+        for(int slot=0;slot<PetProfileStore.MAX_PROFILES;slot++)
+            if(PetProfileStore.compatibleParents(this,first,slot))mates.add(slot);
+
+        if(mates.isEmpty()){
+            toast("Aucun partenaire compatible.");
+            return;
+        }
+
+        CharSequence[] labels=new CharSequence[mates.size()];
+        for(int i=0;i<mates.size();i++){
+            int slot=mates.get(i);
+            labels[i]=PetProfileStore.name(this,slot)+"  •  "+
+                PetProfileStore.sexLabel(PetProfileStore.sex(this,slot));
+        }
+
+        new AlertDialog.Builder(this)
+            .setTitle("Avec qui ?")
+            .setMessage(PetProfileStore.name(this,first)+" • "+
+                PetProfileStore.speciesLabel(this,first))
+            .setItems(labels,(d,w)->askOffspringName(first,mates.get(w),empty))
+            .setNegativeButton("Annuler",null)
+            .show();
+    }
+
+    void askOffspringName(int first,int second,int empty){
+        EditText input=new EditText(this);
+        input.setSingleLine(true);
+        input.setHint("Nom du petit");
+        input.setInputType(android.text.InputType.TYPE_CLASS_TEXT|
+            android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        int pad=dp(18);
+        FrameLayout holder=new FrameLayout(this);
+        holder.setPadding(pad,dp(4),pad,0);
+        holder.addView(input,new FrameLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        AlertDialog dialog=new AlertDialog.Builder(this)
+            .setTitle("Nom du petit")
+            .setMessage(PetProfileStore.name(this,first)+" + "+PetProfileStore.name(this,second)+
+                "\nLe sexe sera déterminé à la naissance.")
+            .setView(holder)
+            .setPositiveButton("Faire naître",null)
+            .setNegativeButton("Annuler",null)
+            .create();
+
+        dialog.setOnShowListener(x->dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{
+            String name=input.getText().toString().trim();
+            if(name.isEmpty()){
+                input.setError("Choisis un nom.");
+                return;
+            }
+            if(PetProfileStore.firstEmpty(this)!=empty){
+                dialog.dismiss();
+                toast("Les emplacements ont changé. Recommence la reproduction.");
+                return;
+            }
+            String sex=PetProfileStore.createOffspring(this,empty,first,second,name);
+            dialog.dismiss();
+            addHistory("Naissance de "+name+" ("+PetProfileStore.sexLabel(sex)+").");
+            save();
+            new AlertDialog.Builder(this)
+                .setTitle("🐾 Une naissance !")
+                .setMessage(name+" est né"+("female".equals(sex)?"e":"")+" !\n"+
+                    PetProfileStore.sexLabel(sex)+" • "+PetProfileStore.speciesLabel(this,empty))
+                .setPositiveButton("Voir mes animaux",(d,w)->openPetChooser())
+                .setNegativeButton("Rester ici",null)
+                .show();
+        }));
+        dialog.show();
     }
 
     void openPetChooser(){
