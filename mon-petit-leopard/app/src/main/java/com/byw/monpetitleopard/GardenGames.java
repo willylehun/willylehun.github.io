@@ -214,6 +214,8 @@ final class GardenGames {
         a.updatePetPosition();
         a.save();
         a.refresh();
+        String boredom=PetBehavior.boredomText(a.pet,rewardRepetitionFactor);
+        if(reward&&!boredom.isEmpty())a.toast(boredom);
     }
 
     void cancelAnimationOnly(){
