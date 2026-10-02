@@ -188,13 +188,7 @@ final class GardenGames {
         a.walking=false;
         state=NONE;
         if(reward && activeItem!=null){
-            a.hunger=a.clamp(a.hunger+activeItem.hunger);
-            a.thirst=a.clamp(a.thirst+activeItem.water);
-            a.clean=a.clamp(a.clean+activeItem.clean);
-            a.affection=a.clamp(a.affection+activeItem.affection);
-            a.happy=a.clamp(a.happy+activeItem.happy);
-            a.energy=a.clamp(a.energy+activeItem.energy);
-            a.stars+=activeItem.stars;
+            a.applyItemEffects(activeItem,1f);
             a.skillObedience=a.clamp(a.skillObedience+2.5f);
             a.skillCare=a.clamp(a.skillCare+1f);
             a.addHistory("Griffoir utilisé dans le jardin.");
