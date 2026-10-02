@@ -297,6 +297,10 @@ public class MainActivity extends Activity {
                 h*=.85f;
                 joy=-7f;
             }
+            if("treat".equals(item.kind)&&hunger>88f){
+                c-=2f;
+                joy-=2f;
+            }
         }
 
         wakeForAction();
