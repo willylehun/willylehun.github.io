@@ -2210,7 +2210,6 @@ public class MainActivity extends Activity {
     void beginAutoSleep(){
         if(sleeping||stage()==Stage.ENDED)return;
         sleeping=true;
-        PetBehavior.resetRepetition(sp);
         walking=false;
         moodApproach=false;
         moodExitUp=false;
