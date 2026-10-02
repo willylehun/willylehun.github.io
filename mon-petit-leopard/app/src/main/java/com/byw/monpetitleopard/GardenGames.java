@@ -18,6 +18,7 @@ final class GardenGames {
     Bitmap[] scratcherFrames;
     int frameIndex=0;
     long frameAt=0,playUntil=0;
+    float rewardRepetitionFactor=1f;
 
     GardenGames(MainActivity a){this.a=a;}
 
@@ -62,6 +63,10 @@ final class GardenGames {
     }
 
     void startScratcher(ObjectSystem.Item item){
+        if(a.promenadeAway()){
+            a.toast("🌿 "+a.pet+" est en promenade.");
+            return;
+        }
         if(!"jardin".equals(a.room)){
             a.toast("Le griffoir se trouve dans le jardin.");
             return;
@@ -70,6 +75,7 @@ final class GardenGames {
         cancelAnimationOnly();
         preparePet();
         activeItem=item;
+        rewardRepetitionFactor=a.beginRepeatedAction("scratcher");
         state=APPROACH;
         scratcherView.setVisibility(View.VISIBLE);
         positionScratcher();
@@ -187,19 +193,17 @@ final class GardenGames {
     void finish(boolean reward){
         a.walking=false;
         state=NONE;
+        float effectFactor=rewardRepetitionFactor;
         if(reward && activeItem!=null){
-            a.hunger=a.clamp(a.hunger+activeItem.hunger);
-            a.thirst=a.clamp(a.thirst+activeItem.water);
-            a.clean=a.clamp(a.clean+activeItem.clean);
-            a.affection=a.clamp(a.affection+activeItem.affection);
-            a.happy=a.clamp(a.happy+activeItem.happy);
-            a.energy=a.clamp(a.energy+activeItem.energy);
-            a.stars+=activeItem.stars;
-            a.skillObedience=a.clamp(a.skillObedience+2.5f);
-            a.skillCare=a.clamp(a.skillCare+1f);
+            a.applyNeedDelta(activeItem.hunger,activeItem.water,activeItem.clean,
+                activeItem.affection,activeItem.happy,activeItem.energy,
+                activeItem.stars,effectFactor);
+            a.skillObedience=a.clamp(a.skillObedience+2.5f*effectFactor);
+            a.skillCare=a.clamp(a.skillCare+1f*effectFactor);
             a.addHistory("Griffoir utilisé dans le jardin.");
         }
         activeItem=null;
+        rewardRepetitionFactor=1f;
         releaseFrames();
         a.idleDirection=MainActivity.TravelDirection.DOWN;
         a.travelDirection=MainActivity.TravelDirection.DOWN;
@@ -211,11 +215,14 @@ final class GardenGames {
         a.updatePetPosition();
         a.save();
         a.refresh();
+        String boredom=PetBehavior.boredomText(a.pet,effectFactor);
+        if(reward&&!boredom.isEmpty())a.toast(boredom);
     }
 
     void cancelAnimationOnly(){
         state=NONE;
         activeItem=null;
+        rewardRepetitionFactor=1f;
         releaseFrames();
     }
 

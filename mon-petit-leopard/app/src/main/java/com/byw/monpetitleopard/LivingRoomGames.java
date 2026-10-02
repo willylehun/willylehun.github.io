@@ -40,6 +40,7 @@ final class LivingRoomGames {
     int ropeFrameIndex=0;
     float downRawX,downRawY,startViewX,startViewY;
     float toyNX=.50f,toyNY=.95f;
+    float rewardRepetitionFactor=1f;
 
     LivingRoomGames(MainActivity a){this.a=a;}
 
@@ -76,6 +77,7 @@ final class LivingRoomGames {
             toyView.setRotation(0f);
         }
         activeItem=null;
+        rewardRepetitionFactor=1f;
         state=NONE;
         landingNode=-1;
         playUntil=0;
@@ -112,6 +114,7 @@ final class LivingRoomGames {
         cancel();
         preparePet();
         activeItem=item;
+        rewardRepetitionFactor=a.beginRepeatedAction("plush".equals(item.id)?"affection":"toy");
         state=THROW_READY;
         int toyRes=toyDrawable(item.id);
         if(toyRes==0){a.toast("Ce jouet n’a pas de visuel de lancer.");cancel();return;}
@@ -135,6 +138,7 @@ final class LivingRoomGames {
         cancel();
         preparePet();
         activeItem=item;
+        rewardRepetitionFactor=1f;
         state=ROPE_APPROACH;
         toyView.setImageResource(R.drawable.toy_rope_art);
         toyView.setContentDescription("Corde");
@@ -267,6 +271,7 @@ final class LivingRoomGames {
 
     boolean handleRopeTouch(MotionEvent e){
         if(state==ROPE_READY && e.getAction()==MotionEvent.ACTION_DOWN){
+            rewardRepetitionFactor=a.beginRepeatedAction("toy");
             state=ROPE_HOLD;
             ropeHoldStartedAt=System.currentTimeMillis();
             ropeFrameAt=0;
@@ -426,6 +431,13 @@ final class LivingRoomGames {
         a.updatePetPosition();
         a.save();
         a.refresh();
+        if(activeItem!=null){
+            String boredom=PetBehavior.boredomText(a.pet,rewardRepetitionFactor);
+            PetBehavior.Preference pref=PetBehavior.toyPreference(a.sp,activeItem.id);
+            if(!boredom.isEmpty())a.toast(boredom);
+            else if(pref==PetBehavior.Preference.DISLIKE)a.toast("😠 "+a.pet+" n’aime pas ce jouet.");
+            else if(pref==PetBehavior.Preference.LOVE)a.toast("😍 "+a.pet+" adore ce jouet !");
+        }
     }
 
 
@@ -444,6 +456,9 @@ final class LivingRoomGames {
         toyView.setVisibility(View.GONE);
         applyRewards(1f);
         String name=activeItem!=null?activeItem.name:"Objet";
+        PetBehavior.Preference pref=activeItem==null?PetBehavior.Preference.NEUTRAL:
+            PetBehavior.toyPreference(a.sp,activeItem.id);
+        String boredom=PetBehavior.boredomText(a.pet,rewardRepetitionFactor);
         activeItem=null;
         a.idleDirection=MainActivity.TravelDirection.DOWN;
         a.travelDirection=MainActivity.TravelDirection.DOWN;
@@ -454,19 +469,15 @@ final class LivingRoomGames {
         a.nextWalkAt=System.currentTimeMillis()+3500L;
         a.save();
         a.refresh();
-        a.toast("🐆 "+name+" rapporté !");
+        if(!boredom.isEmpty())a.toast(boredom);
+        else if(pref==PetBehavior.Preference.DISLIKE)a.toast("😠 "+a.pet+" n’aime pas "+name.toLowerCase()+".");
+        else if(pref==PetBehavior.Preference.LOVE)a.toast("😍 "+a.pet+" adore "+name.toLowerCase()+" !");
+        else a.toast("🐆 "+name+" rapporté !");
     }
 
     void applyRewards(float factor){
         if(activeItem==null||factor<=0)return;
-        a.hunger=a.clamp(a.hunger+activeItem.hunger*factor);
-        a.thirst=a.clamp(a.thirst+activeItem.water*factor);
-        a.clean=a.clamp(a.clean+activeItem.clean*factor);
-        a.affection=a.clamp(a.affection+activeItem.affection*factor);
-        a.happy=a.clamp(a.happy+activeItem.happy*factor);
-        a.energy=a.clamp(a.energy+activeItem.energy*factor);
-        a.skillCare=a.clamp(a.skillCare+.6f*factor);
-        if(factor>=.8f)a.stars+=activeItem.stars;
+        a.applyToyRewards(activeItem,rewardRepetitionFactor,factor);
     }
 
     float[] toyPixelPosition(float nx,float ny){

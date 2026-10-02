@@ -22,6 +22,7 @@ final class PetProfileStore {
             String name=legacy.getString("name","Léo");
             if(name==null||name.trim().isEmpty())name="Léo";
             target.edit().putString("name",name).putBoolean("named",true).apply();
+            PetBehavior.ensurePersonality(target,0);
             meta.edit()
                 .putBoolean(existsKey(0),true)
                 .putString(nameKey(0),name)
@@ -111,6 +112,7 @@ final class PetProfileStore {
             .putString("name",clean).putString("sex",cleanSex)
             .putBoolean("named",true).putInt("generation",1)
             .apply();
+        PetBehavior.ensurePersonality(pet,slot);
 
         context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE).edit()
             .putBoolean(existsKey(slot),true)

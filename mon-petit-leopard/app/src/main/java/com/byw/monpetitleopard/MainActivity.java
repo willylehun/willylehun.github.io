@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
     ObjectSystem objects;
     LivingRoomGames games;
     GardenGames gardenGames;
+    KitchenWaterSystem kitchenWater;
     int profileSlot=-1;
     String petSex="";
     boolean internalTransition=false,resumeNeedsChooser=false;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
     long born,last,nextMischiefAt=0,nextWalkAt=0,manualUntil=0,sleepEndAt=0,nextAutoSleepAt=0,walkStartedAt=0;
     long directionalIdleUntil=0,faceRecoveryUntil=0,actionUntil=0,actionFrameAt=0,actionStartedAt=0;
     float hunger=85,thirst=85,clean=90,affection=90,happy=90,energy=90;
+    float waterBowl=0f;
     float skillClean=5,skillObedience=5,skillCare=5;
     int stars=0,generation=1;
     String pet="Léo",room="salon",incident="",incidentRoom="";
@@ -70,6 +72,8 @@ public class MainActivity extends Activity {
     boolean moodApproach=false,moodExitUp=false;
     int pendingFaceMood=-1;
     int activeFaceMood=-1;
+    int queuedFaceMood=-1;
+    float callingEffectFactor=1f;
     TravelDirection idleDirection=TravelDirection.DOWN;
     ActionAnim actionAnim=ActionAnim.NONE;
     Bitmap actionStrip=null;
@@ -99,6 +103,7 @@ public class MainActivity extends Activity {
             return;
         }
         sp=getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE);
+        PetBehavior.ensurePersonality(sp,profileSlot);
         load();
         if(sp.getBoolean("named",false))ensureCurrentAdoptionRecorded();
         objects=new ObjectSystem(this);
@@ -184,6 +189,7 @@ public class MainActivity extends Activity {
         nextAutoSleepAt=sp.getLong("nextAutoSleepAt",0);
         historyLog=sp.getString("historyLog","");
         adoptedLog=sp.getString("adoptedLog","");
+        waterBowl=sp.getFloat("waterBowl",0f);
 
         // Ne pas annuler ici un sommeil expiré : tickNeeds() calcule d'abord
         // la portion réellement passée à dormir, même si l'app était fermée.
@@ -213,10 +219,137 @@ public class MainActivity extends Activity {
           .putLong("nextAutoSleepAt",nextAutoSleepAt)
           .putString("historyLog",historyLog)
           .putString("adoptedLog",adoptedLog)
+          .putFloat("waterBowl",waterBowl)
           .apply();
     }
 
     float clamp(float v){return Math.max(0,Math.min(100,v));}
+
+    boolean promenadeAway(){
+        return promenadeAwayAt(System.currentTimeMillis());
+    }
+
+    boolean promenadeAwayAt(long now){
+        if(sp==null)return false;
+        boolean active=sp.getBoolean("promenadeActive",false);
+        long start=sp.getLong("promenadeStart",0L);
+        if(!active||start<=0L)return false;
+        if(now-start>=PromenadeActivity.DURATION_MS){
+            sp.edit().putBoolean("promenadeActive",false).apply();
+            currentPetRes=0;
+            return false;
+        }
+        return true;
+    }
+
+    long promenadeAwayOverlap(long from,long to){
+        if(sp==null||to<=from)return 0L;
+        long start=sp.getLong("promenadeStart",0L);
+        if(start<=0L)return 0L;
+        long end=start+PromenadeActivity.DURATION_MS;
+        long a=Math.max(from,start);
+        long b=Math.min(to,end);
+        return Math.max(0L,b-a);
+    }
+
+    float beginRepeatedAction(String family){
+        float factor=PetBehavior.registerRepeat(sp,family);
+        String note=PetBehavior.boredomText(pet,factor);
+        if(!note.isEmpty())toast(note);
+        return factor;
+    }
+
+    void queueFaceMood(int mood){
+        queuedFaceMood=Math.max(0,Math.min(11,mood));
+    }
+
+    void applyNeedDelta(float h,float w,float c,float af,float joy,float e,int gainStars,float factor){
+        float f=Math.max(0f,Math.min(1f,factor));
+        hunger=clamp(hunger+h*f);
+        thirst=clamp(thirst+w*f);
+        clean=clamp(clean+c*f);
+        affection=clamp(affection+af*f);
+        happy=clamp(happy+joy*f);
+        energy=clamp(energy+e*f);
+        stars+=PetBehavior.rewardStars(gainStars,f);
+    }
+
+    void queuePreferenceReaction(PetBehavior.Preference preference){
+        if(preference==PetBehavior.Preference.DISLIKE)queueFaceMood(1);
+        else if(preference==PetBehavior.Preference.LOVE)queueFaceMood(rnd.nextBoolean()?0:8);
+    }
+
+    void performItemAction(ObjectSystem.Item item,String family,String animation){
+        if(item==null)return;
+        float factor=beginRepeatedAction(family);
+        float h=item.hunger,w=item.water,c=item.clean,af=item.affection,joy=item.happy,e=item.energy;
+        PetBehavior.Preference preference=PetBehavior.Preference.NEUTRAL;
+
+        boolean food="food".equals(item.kind)||"snack".equals(item.kind)||"treat".equals(item.kind);
+        if(food){
+            preference=PetBehavior.foodPreference(sp,item.id);
+            // Manger salit davantage l'animal, même si l'aliment est neutre.
+            c-=("snack".equals(item.kind)||"treat".equals(item.kind))?1.5f:3f;
+            if(preference==PetBehavior.Preference.LOVE){
+                h*=1.35f;
+                joy+=6f;
+            }else if(preference==PetBehavior.Preference.DISLIKE){
+                h*=.85f;
+                joy=-7f;
+            }
+            if("treat".equals(item.kind)&&hunger>88f){
+                c-=2f;
+                joy-=2f;
+            }
+        }
+
+        wakeForAction();
+        applyNeedDelta(h,w,c,af,joy,e,item.stars,factor);
+        if("groom".equals(item.id)||"comb".equals(item.id))
+            skillClean=clamp(skillClean+1.2f*factor);
+        if("care".equals(family))skillCare=clamp(skillCare+.35f*factor);
+
+        int special=specialPoseResource(animation);
+        if(special!=0)startSpecialPose(special,"bottle".equals(animation)?3000L:2600L);
+        else if("eat".equals(animation))startActionAnimation(ActionAnim.EAT,3000L);
+        else if("jump".equals(animation))startActionAnimation(ActionAnim.JUMP,2200L);
+        else showAction(item.frame,2200);
+
+        if(factor>0f)queuePreferenceReaction(preference);
+        save();
+        refresh();
+
+        String boredom=PetBehavior.boredomText(pet,factor);
+        if(!boredom.isEmpty())toast(boredom);
+        else if(preference==PetBehavior.Preference.LOVE)toast("😍 "+pet+" adore "+item.name.toLowerCase(Locale.ROOT)+" !");
+        else if(preference==PetBehavior.Preference.DISLIKE)toast("😠 "+pet+" n’aime pas "+item.name.toLowerCase(Locale.ROOT)+".");
+        else toast(item.name);
+        addHistory("Action : "+item.name+".");
+    }
+
+    void applyToyRewards(ObjectSystem.Item item,float repetitionFactor,float playFactor){
+        if(item==null)return;
+        float duration=Math.max(0f,Math.min(1f,playFactor));
+        float h=item.hunger*duration;
+        float w=item.water*duration;
+        float c=item.clean*duration;
+        float af=item.affection*duration;
+        float joy=item.happy*duration;
+        float e=item.energy*duration;
+
+        PetBehavior.Preference preference=PetBehavior.toyPreference(sp,item.id);
+        if(preference==PetBehavior.Preference.LOVE){
+            joy=joy*1.35f+3f*duration;
+            if("plush".equals(item.id))af*=1.25f;
+        }else if(preference==PetBehavior.Preference.DISLIKE){
+            joy=-6f*duration;
+            if("plush".equals(item.id))af=0f;
+        }
+
+        applyNeedDelta(h,w,c,af,joy,e,item.stars,repetitionFactor);
+        skillCare=clamp(skillCare+.6f*repetitionFactor*duration);
+        if(repetitionFactor>0f)queuePreferenceReaction(preference);
+    }
 
     void tickNeeds(){
         long n=System.currentTimeMillis();
@@ -252,8 +385,19 @@ public class MainActivity extends Activity {
                 energy-=.20f*m;
 
                 if(!incident.isEmpty()){
-                    clean-=.09f*m;
+                    clean-=.16f*m;
                     happy-=.04f*m;
+                }
+
+                long awayMs=promenadeAwayOverlap(start,n);
+                long homeAwakeMs=Math.max(0L,awakeMs-awayMs);
+                if(homeAwakeMs>0L && waterBowl>.05f && thirst<100f){
+                    float drinkCapacity=(homeAwakeMs/60000f)*6f;
+                    float drink=Math.min(waterBowl,Math.min(100f-thirst,drinkCapacity));
+                    if(drink>0f){
+                        thirst+=drink;
+                        waterBowl=Math.max(0f,waterBowl-drink);
+                    }
                 }
 
                 int critical=0;
@@ -266,8 +410,11 @@ public class MainActivity extends Activity {
             }
         }
 
+        promenadeAwayAt(n);
         hunger=clamp(hunger);thirst=clamp(thirst);clean=clamp(clean);
         affection=clamp(affection);happy=clamp(happy);energy=clamp(energy);
+        if(waterBowl<.05f)waterBowl=0f;
+        if(kitchenWater!=null)kitchenWater.refreshVisibility();
 
         if(sleeping && n>=sleepEndAt){
             sleeping=false;
@@ -431,6 +578,8 @@ public class MainActivity extends Activity {
         games.install();
         gardenGames=new GardenGames(this);
         gardenGames.install();
+        kitchenWater=new KitchenWaterSystem(this);
+        kitchenWater.install();
 
         root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(360),0));
 
@@ -569,15 +718,21 @@ public class MainActivity extends Activity {
         bg.setImageResource(res);
         ensurePetImage();
         if(gardenGames!=null)gardenGames.refreshVisibility();
+        if(kitchenWater!=null)kitchenWater.refreshVisibility();
         scene.post(()->{
             fitSceneAndPet();
             if(gardenGames!=null)gardenGames.refreshVisibility();
+            if(kitchenWater!=null)kitchenWater.refreshVisibility();
         });
     }
 
     void ensurePetImage(){
         syncVisualStage();
         long now=System.currentTimeMillis();
+        if(promenadeAwayAt(now)){
+            petView.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         if(specialPoseRes!=0){
             if(now<manualUntil && specialPoseStage==petStage() && renderSpecialPose()){
@@ -1382,6 +1537,10 @@ public class MainActivity extends Activity {
 
     void updatePetPosition(){
         if(petView==null||scene==null||petView.getWidth()<=0)return;
+        if(promenadeAway()){
+            petView.setVisibility(View.INVISIBLE);
+            return;
+        }
         float[] r=imageRect();
         if(r[2]<=0||r[3]<=0)return;
 
@@ -1407,6 +1566,7 @@ public class MainActivity extends Activity {
     }
 
     String moodText(){
+        if(promenadeAway())return "En promenade";
         if(stage()==Stage.ENDED)return "Paisible";
         if(sleeping)return "Endormi";
         if(!incident.isEmpty())return "Inquiet";
@@ -1428,17 +1588,25 @@ public class MainActivity extends Activity {
 
     void petLeopard(){
         if(stage()==Stage.ENDED)return;
+        if(promenadeAway()){
+            toast("🌿 "+pet+" est en promenade.");
+            return;
+        }
 
         if(sleeping){
             wakeUp("Réveillé par le joueur",true);
             return;
         }
 
-        affection=clamp(affection+12);
-        happy=clamp(happy+6);
+        float factor=beginRepeatedAction("affection");
+        applyNeedDelta(0,0,0,12,0,0,0,factor);
 
-        if(!strongEmotion()){
-            showFaceMoodNow(rnd.nextBoolean()?1:10,6000);
+        String boredom=PetBehavior.boredomText(pet,factor);
+        if(!boredom.isEmpty()){
+            showFaceMoodNow(10,4000);
+            toast(boredom);
+        }else if(!strongEmotion()){
+            showFaceMoodNow(rnd.nextBoolean()?6:7,6000);
             toast("❤️ "+pet+" adore la caresse !");
         } else {
             showFaceMoodNow(chooseFaceMoodIndex(),6000);
@@ -1452,7 +1620,7 @@ public class MainActivity extends Activity {
     void roomsMenu(){
         String[] rooms={"🛋️ Salon","🍽️ Cuisine","🛁 Salle de bain","🌿 Jardin"};
         new AlertDialog.Builder(this).setTitle("Choisir une pièce").setItems(rooms,(d,w)->{
-            wakeForAction();
+            if(!promenadeAway())wakeForAction();
             if(games!=null)games.cancel();
             if(gardenGames!=null)gardenGames.cancel();
             callingToForeground=false;
@@ -1466,8 +1634,6 @@ public class MainActivity extends Activity {
 
     void startPromenade(ObjectSystem.Item item){
         if(stage()==Stage.ENDED)return;
-        wakeForAction();
-
         long now=System.currentTimeMillis();
         long start=sp.getLong("promenadeStart",0L);
         boolean active=sp.getBoolean("promenadeActive",false);
@@ -1477,20 +1643,24 @@ public class MainActivity extends Activity {
         }
 
         if(!active){
-            hunger=clamp(hunger+item.hunger);
-            thirst=clamp(thirst+item.water);
-            clean=clamp(clean+item.clean);
-            affection=clamp(affection+item.affection);
-            happy=clamp(happy+item.happy);
-            energy=clamp(energy+item.energy);
-            stars+=item.stars;
-            skillCare=clamp(skillCare+.5f);
+            wakeForAction();
+            if(games!=null)games.cancel();
+            if(gardenGames!=null)gardenGames.cancel();
+            releaseActionFrames();
+            actionAnim=ActionAnim.NONE;
+            clearSpecialPose();
+            walking=false;
+
+            float factor=beginRepeatedAction("walk");
+            applyNeedDelta(item.hunger,item.water,item.clean,item.affection,item.happy,item.energy,item.stars,factor);
+            skillCare=clamp(skillCare+.5f*factor);
             start=now;
             sp.edit()
               .putBoolean("promenadeActive",true)
               .putLong("promenadeStart",start)
               .apply();
             addHistory("Promenade démarrée pour 3 minutes.");
+            petView.setVisibility(View.INVISIBLE);
             save();
             refresh();
         }
@@ -1512,7 +1682,12 @@ public class MainActivity extends Activity {
 
     void callLeopard(){
         if(stage()==Stage.ENDED)return;
+        if(promenadeAway()){
+            toast("🌿 "+pet+" est en promenade.");
+            return;
+        }
         wakeForAction();
+        callingEffectFactor=beginRepeatedAction("affection");
         if(games!=null)games.cancel();
         activeFaceMood=-1;
         pendingFaceMood=-1;
@@ -1637,6 +1812,10 @@ public class MainActivity extends Activity {
 
     void punish(){
         if(stage()==Stage.ENDED)return;
+        if(promenadeAway()){
+            toast("🌿 "+pet+" est en promenade.");
+            return;
+        }
         wakeForAction();
         if(!incident.isEmpty()){
             skillObedience=clamp(skillObedience+4);
@@ -1659,7 +1838,7 @@ public class MainActivity extends Activity {
     }
 
     void maybeMischief(){
-        if(stage()==Stage.ENDED || !incident.isEmpty() || sleeping
+        if(stage()==Stage.ENDED || !incident.isEmpty() || sleeping || promenadeAway()
                 || activeFaceMood>=0 || moodApproach || moodExitUp)return;
 
         long now=System.currentTimeMillis();
@@ -1681,7 +1860,7 @@ public class MainActivity extends Activity {
         if(rnd.nextFloat()<chance){
             incident=objects.mischief();
             chooseIncidentPosition();
-            clean=clamp(clean-4);
+            clean=clamp(clean-8);
             happy=clamp(happy-2);
             showAction(3,1200);
             toast("⚠ "+pet+" "+incident+" !");
@@ -1698,6 +1877,12 @@ public class MainActivity extends Activity {
         if(scene==null||petView==null)return;
         syncVisualStage();
         long now=System.currentTimeMillis();
+
+        if(promenadeAwayAt(now)){
+            walking=false;
+            petView.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         if(games!=null && games.beforeAnimate(now))return;
         if(gardenGames!=null && gardenGames.beforeAnimate(now))return;
@@ -1746,6 +1931,14 @@ public class MainActivity extends Activity {
             clearSpecialPose();
         }
 
+        if(queuedFaceMood>=0 && actionAnim==ActionAnim.NONE && now>=manualUntil
+                && !walking && activeFaceMood<0 && !moodApproach && !sleeping){
+            int mood=queuedFaceMood;
+            queuedFaceMood=-1;
+            beginMoodApproach(mood);
+            return;
+        }
+
         if(stage()==Stage.ENDED){
             ensurePetImage();
             return;
@@ -1772,9 +1965,14 @@ public class MainActivity extends Activity {
                     directionalIdleUntil=0;
                     currentPetRes=0;
                     walkStartedAt=0;
+                    applyNeedDelta(0,0,0,8,0,0,0,callingEffectFactor);
                     ensurePetImage();
                     updatePetPosition();
-                    toast("🐆 "+pet+" est là !");
+                    save();
+                    refresh();
+                    String boredom=PetBehavior.boredomText(pet,callingEffectFactor);
+                    toast(boredom.isEmpty()?"🐆 "+pet+" est là ! ❤️":boredom);
+                    callingEffectFactor=1f;
                     return;
                 }
 
@@ -1959,7 +2157,10 @@ public class MainActivity extends Activity {
         long n=System.currentTimeMillis();
         generation++;
         born=last=n;
+        sp.edit().putLong("born",born).apply();
+        PetBehavior.resetPersonality(sp,profileSlot);
         hunger=85;thirst=85;clean=90;affection=90;happy=90;energy=90;
+        waterBowl=0f;
         skillClean=5;skillObedience=5;skillCare=5;
         incident="";
         incidentRoom="";
@@ -1987,7 +2188,7 @@ public class MainActivity extends Activity {
     }
 
     void maybeAutoSleep(){
-        if(stage()==Stage.ENDED)return;
+        if(stage()==Stage.ENDED||promenadeAway())return;
         long now=System.currentTimeMillis();
 
         if(sleeping){
