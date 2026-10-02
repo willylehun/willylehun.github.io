@@ -542,6 +542,6 @@ assert 'waterBowlView.setVisibility(visible?View.VISIBLE:View.GONE)' in main
 
 assert 'boolean promenadeActive()' in main
 assert '!promenadeActive() && displayedPetStage==petStage()' in main
-assert 'est en promenade : la maison est vide' in objects
+assert 'est encore en promenade : la maison est vide' in objects
 assert 'est encore en promenade' in main
 print('Besoins et lassitude v0.8.0: PASS')
