@@ -193,12 +193,13 @@ final class GardenGames {
     void finish(boolean reward){
         a.walking=false;
         state=NONE;
+        float effectFactor=rewardRepetitionFactor;
         if(reward && activeItem!=null){
             a.applyNeedDelta(activeItem.hunger,activeItem.water,activeItem.clean,
                 activeItem.affection,activeItem.happy,activeItem.energy,
-                activeItem.stars,rewardRepetitionFactor);
-            a.skillObedience=a.clamp(a.skillObedience+2.5f*rewardRepetitionFactor);
-            a.skillCare=a.clamp(a.skillCare+1f*rewardRepetitionFactor);
+                activeItem.stars,effectFactor);
+            a.skillObedience=a.clamp(a.skillObedience+2.5f*effectFactor);
+            a.skillCare=a.clamp(a.skillCare+1f*effectFactor);
             a.addHistory("Griffoir utilisé dans le jardin.");
         }
         activeItem=null;
@@ -214,13 +215,14 @@ final class GardenGames {
         a.updatePetPosition();
         a.save();
         a.refresh();
-        String boredom=PetBehavior.boredomText(a.pet,rewardRepetitionFactor);
+        String boredom=PetBehavior.boredomText(a.pet,effectFactor);
         if(reward&&!boredom.isEmpty())a.toast(boredom);
     }
 
     void cancelAnimationOnly(){
         state=NONE;
         activeItem=null;
+        rewardRepetitionFactor=1f;
         releaseFrames();
     }
 
