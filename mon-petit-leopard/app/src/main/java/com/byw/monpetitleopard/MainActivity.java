@@ -2308,15 +2308,26 @@ public class MainActivity extends Activity {
     }
 
     void showTopMenu(){
-        String[] entries={"🐾 Changer d’animal","📜 Historique","🍼 Reproduction"};
+        boolean reproductionAvailable=PetProfileStore.reproductionAgeEligible(this,profileSlot);
+        String[] entries=reproductionAvailable
+            ? new String[]{"🐾 Changer d’animal","📜 Historique","🍼 Reproduction"}
+            : new String[]{"🐾 Changer d’animal","📜 Historique"};
         new AlertDialog.Builder(this).setTitle("Menu").setItems(entries,(d,w)->{
             if(w==0)openPetChooser();
             else if(w==1)showHistory();
-            else showReproductionMenu();
+            else if(reproductionAvailable)showReproductionMenu();
         }).show();
     }
 
     void showReproductionMenu(){
+        if(!PetProfileStore.reproductionAgeEligible(this,profileSlot)){
+            new AlertDialog.Builder(this)
+                .setTitle("Reproduction")
+                .setMessage("La reproduction est disponible uniquement aux stades ado, adulte et vieux. Les léopardeaux ne peuvent pas se reproduire.")
+                .setPositiveButton("OK",null).show();
+            return;
+        }
+
         int empty=PetProfileStore.firstEmpty(this);
         if(empty<0){
             new AlertDialog.Builder(this)
@@ -2329,6 +2340,7 @@ public class MainActivity extends Activity {
         ArrayList<Integer> candidates=new ArrayList<>();
         for(int a=0;a<PetProfileStore.MAX_PROFILES;a++){
             if(!PetProfileStore.exists(this,a))continue;
+            if(!PetProfileStore.reproductionAgeEligible(this,a))continue;
             String sex=PetProfileStore.sex(this,a);
             if(sex==null||sex.isEmpty())continue;
             boolean hasMate=false;
@@ -2341,7 +2353,7 @@ public class MainActivity extends Activity {
         if(candidates.isEmpty()){
             new AlertDialog.Builder(this)
                 .setTitle("Reproduction")
-                .setMessage("Il faut posséder deux animaux de la même espèce et de sexes opposés.")
+                .setMessage("Il faut posséder deux animaux au stade ado, adulte ou vieux, de la même espèce et de sexes opposés.")
                 .setPositiveButton("OK",null).show();
             return;
         }
@@ -2417,6 +2429,11 @@ public class MainActivity extends Activity {
             if(PetProfileStore.firstEmpty(this)!=empty){
                 dialog.dismiss();
                 toast("Les emplacements ont changé. Recommence la reproduction.");
+                return;
+            }
+            if(!PetProfileStore.compatibleParents(this,first,second)){
+                dialog.dismiss();
+                toast("Un des parents n'est plus éligible à la reproduction.");
                 return;
             }
             String sex=PetProfileStore.createOffspring(this,empty,first,second,name);
