@@ -315,7 +315,7 @@ public class MainActivity extends Activity {
         else if("jump".equals(animation))startActionAnimation(ActionAnim.JUMP,2200L);
         else showAction(item.frame,2200);
 
-        queuePreferenceReaction(preference);
+        if(factor>0f)queuePreferenceReaction(preference);
         save();
         refresh();
 
@@ -348,7 +348,7 @@ public class MainActivity extends Activity {
 
         applyNeedDelta(h,w,c,af,joy,e,item.stars,repetitionFactor);
         skillCare=clamp(skillCare+.6f*repetitionFactor*duration);
-        queuePreferenceReaction(preference);
+        if(repetitionFactor>0f)queuePreferenceReaction(preference);
     }
 
     void tickNeeds(){
