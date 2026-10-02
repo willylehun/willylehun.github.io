@@ -531,7 +531,7 @@ assert '"walk","Promenade","🌿","jardin","Jardin","activity",0,-7,-6,0,14,-10'
 assert '"plush","Peluche","🧸","salon","Jouets","toy",0,0,0,12,8,-3' in objects
 assert '"tennis","Balle de tennis","🎾","salon","Jouets","toy",0,-4,-1,0,16,-12' in objects
 
-assert 'PetBehavior.foodPreference(sp,item.id)' in main
+assert 'PetBehavior.foodPreference(sp,item.id,stage()==Stage.CUB)' in main
 assert 'h*=1.35f;' in main and 'joy+=6f;' in main
 assert 'joy=-7f;' in main
 assert 'queueFaceMood(1)' in main
