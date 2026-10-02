@@ -172,7 +172,7 @@ public class ObjectSystem {
         }
 
         if("water".equals(i.id)){
-            a.fillWaterBowl();
+            if(a.kitchenWater!=null)a.kitchenWater.fill();
             return;
         }
 
@@ -181,7 +181,7 @@ public class ObjectSystem {
             return;
         }
 
-        if(a.promenadeActive()){
+        if(a.promenadeAway()){
             a.toast("🏡 "+a.pet+" est encore en promenade : la maison est vide.");
             return;
         }
@@ -229,7 +229,9 @@ public class ObjectSystem {
         else if(i.id.equals("towel"))animation="towel";
         else if(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))animation="eat";
         else if(i.kind.equals("toy")||i.kind.equals("activity"))animation="jump";
-        a.performItem(i,animation);
+        String family=(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))?"food":
+            (i.kind.equals("care")||i.kind.equals("bath"))?"care":i.kind;
+        a.performItemAction(i,family,animation);
     }
 
     String mischief(){
