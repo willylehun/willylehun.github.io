@@ -552,7 +552,7 @@ main=(JAVA/'MainActivity.java').read_text()
 bowl=(ROOT/'app/src/main/res/drawable/water_bowl_art.xml').read_text()
 assert '<vector' in bowl
 assert '#69CFF5' in bowl and '#9A5A2E' in bowl
-assert 'ImageView bgFill,bg,petView,waterBowlView;' in main
+assert 'ImageView profileIcon,bgFill,bg,petView,waterBowlView;' in main
 assert 'waterBowlView=new ImageView(this);' in main
 assert 'R.drawable.water_bowl_art' in main
 assert 'waterBowlView.setText(' not in main
