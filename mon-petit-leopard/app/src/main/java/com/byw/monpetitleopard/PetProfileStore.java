@@ -1,0 +1,148 @@
+package com.byw.monpetitleopard;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import java.util.Map;
+import java.util.Set;
+
+final class PetProfileStore {
+    static final int MAX_PROFILES=6;
+    static final String EXTRA_SLOT="profile_slot";
+    private static final String META_PREFS="pet_profiles_v079";
+    private static final String MIGRATED="migration_v079_done";
+
+    static void ensureMigrated(Context context){
+        SharedPreferences meta=context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE);
+        if(meta.getBoolean(MIGRATED,false))return;
+
+        SharedPreferences legacy=context.getSharedPreferences("pet",Context.MODE_PRIVATE);
+        if(!legacy.getAll().isEmpty()){
+            SharedPreferences target=context.getSharedPreferences(petPrefsName(0),Context.MODE_PRIVATE);
+            if(target.getAll().isEmpty())copyAll(legacy,target);
+            String name=legacy.getString("name","Léo");
+            if(name==null||name.trim().isEmpty())name="Léo";
+            target.edit().putString("name",name).putBoolean("named",true).apply();
+            meta.edit()
+                .putBoolean(existsKey(0),true)
+                .putString(nameKey(0),name)
+                .putString(sexKey(0),"")
+                .putString(typeKey(0),"leopard")
+                .putLong(createdKey(0),target.getLong("born",System.currentTimeMillis()))
+                .apply();
+        }
+        meta.edit().putBoolean(MIGRATED,true).apply();
+    }
+
+    private static void copyAll(SharedPreferences from,SharedPreferences to){
+        SharedPreferences.Editor e=to.edit();
+        for(Map.Entry<String,?> entry:from.getAll().entrySet()){
+            String k=entry.getKey();
+            Object v=entry.getValue();
+            if(v instanceof String)e.putString(k,(String)v);
+            else if(v instanceof Integer)e.putInt(k,(Integer)v);
+            else if(v instanceof Long)e.putLong(k,(Long)v);
+            else if(v instanceof Float)e.putFloat(k,(Float)v);
+            else if(v instanceof Boolean)e.putBoolean(k,(Boolean)v);
+            else if(v instanceof Set){
+                @SuppressWarnings("unchecked")
+                Set<String> set=(Set<String>)v;
+                e.putStringSet(k,set);
+            }
+        }
+        e.apply();
+    }
+
+    static String petPrefsName(int slot){return "pet_"+slot;}
+
+    static boolean validSlot(int slot){return slot>=0&&slot<MAX_PROFILES;}
+
+    static boolean exists(Context context,int slot){
+        if(!validSlot(slot))return false;
+        return context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE)
+            .getBoolean(existsKey(slot),false);
+    }
+
+    static int count(Context context){
+        int n=0;
+        for(int i=0;i<MAX_PROFILES;i++)if(exists(context,i))n++;
+        return n;
+    }
+
+    static int firstEmpty(Context context){
+        for(int i=0;i<MAX_PROFILES;i++)if(!exists(context,i))return i;
+        return -1;
+    }
+
+    static String name(Context context,int slot){
+        return context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE)
+            .getString(nameKey(slot),"Léo");
+    }
+
+    static String sex(Context context,int slot){
+        return context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE)
+            .getString(sexKey(slot),"");
+    }
+
+    static void setSex(Context context,int slot,String sex){
+        if(!validSlot(slot))return;
+        context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE).edit()
+            .putString(sexKey(slot),sex==null?"":sex).apply();
+        context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE).edit()
+            .putString("sex",sex==null?"":sex).apply();
+    }
+
+    static void updateName(Context context,int slot,String name){
+        if(!validSlot(slot)||!exists(context,slot))return;
+        String clean=(name==null||name.trim().isEmpty())?"Léo":name.trim();
+        context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE).edit()
+            .putString(nameKey(slot),clean).apply();
+        context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE).edit()
+            .putString("name",clean).putBoolean("named",true).apply();
+    }
+
+    static void createLeopard(Context context,int slot,String sex,String name){
+        if(!validSlot(slot))throw new IllegalArgumentException("slot invalide");
+        long now=System.currentTimeMillis();
+        String clean=(name==null||name.trim().isEmpty())?"Léo":name.trim();
+        String cleanSex=("female".equals(sex)||"male".equals(sex))?sex:"";
+        SharedPreferences pet=context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE);
+        pet.edit().clear()
+            .putLong("born",now).putLong("last",now)
+            .putString("name",clean).putString("sex",cleanSex)
+            .putBoolean("named",true).putInt("generation",1)
+            .apply();
+
+        context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE).edit()
+            .putBoolean(existsKey(slot),true)
+            .putString(nameKey(slot),clean)
+            .putString(sexKey(slot),cleanSex)
+            .putString(typeKey(slot),"leopard")
+            .putLong(createdKey(slot),now)
+            .apply();
+    }
+
+    static int iconRes(Context context,int slot){
+        if(!exists(context,slot))return R.drawable.leopard_cub_idle_down;
+        SharedPreferences p=context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE);
+        long born=p.getLong("born",System.currentTimeMillis());
+        long age=Math.max(0L,System.currentTimeMillis()-born);
+        if(age<MainActivity.CUB)return R.drawable.leopard_cub_idle_down;
+        if(age<MainActivity.CUB+MainActivity.TEEN)return R.drawable.leopard_teen_idle_down;
+        if(age<MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT)return R.drawable.leopard_adult_idle_down;
+        return R.drawable.leopard_old_idle_down;
+    }
+
+    static String sexLabel(String sex){
+        if("female".equals(sex))return "♀ Femelle";
+        if("male".equals(sex))return "♂ Mâle";
+        return "Sexe à choisir";
+    }
+
+    private static String existsKey(int i){return "slot_"+i+"_exists";}
+    private static String nameKey(int i){return "slot_"+i+"_name";}
+    private static String sexKey(int i){return "slot_"+i+"_sex";}
+    private static String typeKey(int i){return "slot_"+i+"_type";}
+    private static String createdKey(int i){return "slot_"+i+"_created";}
+
+    private PetProfileStore(){}
+}
