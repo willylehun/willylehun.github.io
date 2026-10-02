@@ -32,6 +32,7 @@ final class LivingRoomGames {
     final MainActivity a;
     ImageView toyView;
     ObjectSystem.Item activeItem;
+    float activeRepeatFactor=1f;
     int state=NONE;
     int landingNode=-1;
     long playUntil=0;
@@ -76,6 +77,7 @@ final class LivingRoomGames {
             toyView.setRotation(0f);
         }
         activeItem=null;
+        activeRepeatFactor=1f;
         state=NONE;
         landingNode=-1;
         playUntil=0;
@@ -112,6 +114,7 @@ final class LivingRoomGames {
         cancel();
         preparePet();
         activeItem=item;
+        activeRepeatFactor=a.beginRepeatedAction("play:"+item.id);
         state=THROW_READY;
         int toyRes=toyDrawable(item.id);
         if(toyRes==0){a.toast("Ce jouet n’a pas de visuel de lancer.");cancel();return;}
@@ -135,6 +138,7 @@ final class LivingRoomGames {
         cancel();
         preparePet();
         activeItem=item;
+        activeRepeatFactor=a.beginRepeatedAction("play:"+item.id);
         state=ROPE_APPROACH;
         toyView.setImageResource(R.drawable.toy_rope_art);
         toyView.setContentDescription("Corde");
@@ -459,8 +463,7 @@ final class LivingRoomGames {
 
     void applyRewards(float factor){
         if(activeItem==null||factor<=0)return;
-        a.applyItemEffects(activeItem,factor);
-        a.skillCare=a.clamp(a.skillCare+.6f*factor);
+        a.applyToyRewards(activeItem,activeRepeatFactor,factor);
     }
 
     float[] toyPixelPosition(float nx,float ny){
