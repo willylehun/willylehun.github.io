@@ -9,7 +9,7 @@ final class PetPreferences {
     static final int DISLIKE=-1,NEUTRAL=0,LIKE=1;
 
     private static final String[] FOODS={
-        "kibble","wet","chicken","fish","steak","biscuit","treats",
+        "milk","junior","kibble","wet","chicken","fish","steak","biscuit","treats",
         "apple","banana","watermelon","carrot","berries"
     };
     private static final String[] TOYS={"tennis","yarn","mouse","plush","rope","scratch"};
@@ -17,7 +17,7 @@ final class PetPreferences {
     static int food(MainActivity a,String id){
         if(a.stage()==MainActivity.Stage.CUB &&
             ("milk".equals(id)||"bottle".equals(id)||"junior".equals(id)))return NEUTRAL;
-        if("milk".equals(id)||"bottle".equals(id)||"junior".equals(id))return NEUTRAL;
+        if("bottle".equals(id))return NEUTRAL;
         return preference(a.profileSlot,a.pet,id,FOODS,0x51A7);
     }
 
