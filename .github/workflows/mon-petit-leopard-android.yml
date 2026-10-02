@@ -59,36 +59,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.7.9
+          name: mon-petit-leopard-v0.8.0
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.7.9.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.0.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.7.9"
+          TAG="mon-petit-leopard-v0.8.0"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.7.9 — Profils animaux" \
-              --notes "v0.7.9 : ajoute un système de profils avec jusqu’à 6 animaux. Au premier lancement, le joueur choisit Léopard, le sexe et le nom. À chaque ouverture, l’application affiche « De qui veux-tu t’occuper aujourd’hui ? » avec les profils et leurs noms. Chaque animal possède désormais sa sauvegarde indépendante et l’ancienne sauvegarde est migrée automatiquement vers le premier profil. Le menu en jeu permet de changer d’animal. La promenade reste à 3 minutes et les corrections du griffoir v0.7.8 sont conservées."
+              --title "Mon Petit Léopard v0.8.0 — besoins et personnalité" \
+              --notes "v0.8.0 : ajoute une personnalité propre à chaque animal avec nourriture et jouets aimés/détestés, réactions visuelles et effets adaptés. Les actions répétées provoquent une lassitude progressive jusqu’à ne plus avoir d’effet, sauf dormir. Les besoins sont reliés aux actions : nourriture→faim, gamelle d’eau persistante→eau, repas/promenade/bêtises→propreté, caresses/appel/peluche→câlins, jeux/promenade→bonheur, dormir→sommeil. Pendant la promenade de 3 minutes, le léopard est réellement absent de toutes les pièces jusqu’à son retour."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.7.9.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.0.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.7.9 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.8.0 APK [skip ci]"
             git push
           fi
