@@ -188,16 +188,27 @@ final class GardenGames {
         a.walking=false;
         state=NONE;
         if(reward && activeItem!=null){
-            a.hunger=a.clamp(a.hunger+activeItem.hunger);
-            a.thirst=a.clamp(a.thirst+activeItem.water);
-            a.clean=a.clamp(a.clean+activeItem.clean);
-            a.affection=a.clamp(a.affection+activeItem.affection);
-            a.happy=a.clamp(a.happy+activeItem.happy);
-            a.energy=a.clamp(a.energy+activeItem.energy);
-            a.stars+=activeItem.stars;
-            a.skillObedience=a.clamp(a.skillObedience+2.5f);
-            a.skillCare=a.clamp(a.skillCare+1f);
+            PetBehavior.Result result=a.gardenActionResult;
+            float repetition=result==null?1f:result.factor;
+            float preference=result!=null&&result.preference==PetBehavior.LIKE?1.35f:1f;
+            float effective=repetition*preference;
+            if(result!=null&&result.preference==PetBehavior.HATE){
+                a.happy=a.clamp(a.happy-7f);
+                a.behavior.react(activeItem,result);
+            }else{
+                a.hunger=a.clamp(a.hunger+activeItem.hunger*effective);
+                a.thirst=a.clamp(a.thirst+activeItem.water*effective);
+                a.clean=a.clamp(a.clean+activeItem.clean*effective);
+                a.affection=a.clamp(a.affection+activeItem.affection*effective);
+                a.happy=a.clamp(a.happy+activeItem.happy*effective);
+                a.energy=a.clamp(a.energy+activeItem.energy*effective);
+                if(effective>=.8f)a.stars+=activeItem.stars;
+                a.skillObedience=a.clamp(a.skillObedience+2.5f*effective);
+                a.skillCare=a.clamp(a.skillCare+1f*effective);
+                if(result!=null)a.behavior.react(activeItem,result);
+            }
             a.addHistory("Griffoir utilisé dans le jardin.");
+            a.gardenActionResult=null;
         }
         activeItem=null;
         releaseFrames();
