@@ -524,7 +524,7 @@ assert 'void applyToyRewards' in main
 assert 'PetBehavior.Preference.DISLIKE' in main
 assert 'queueFaceMood(1)' in main
 assert 'h*=1.35f' in main and 'joy+=6f' in main
-assert 'joy=-Math.max(6f' in main
+assert 'joy=-7f;' in main and 'joy=-6f*duration;' in main
 assert 'c-=("snack".equals(item.kind)||"treat".equals(item.kind))?1.5f:3f;' in main
 assert 'clean-=.16f*m;' in main
 assert 'applyNeedDelta(0,0,0,8,0,0,0,callingEffectFactor)' in main
