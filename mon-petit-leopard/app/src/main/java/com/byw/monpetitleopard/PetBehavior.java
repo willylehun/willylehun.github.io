@@ -142,5 +142,4 @@ final class PetBehavior {
         return i!=null&&("toy".equals(i.kind)||"rope".equals(i.kind)||"scratcher".equals(i.kind));
     }
 
-    private PetBehavior(){}
 }
