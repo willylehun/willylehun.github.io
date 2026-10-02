@@ -1,6 +1,7 @@
 package com.byw.monpetitleopard;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -26,6 +27,7 @@ public class PromenadeActivity extends Activity {
     int profileSlot=-1;
     PromenadeView mapView;
     TextView status;
+    boolean internalReturn=false,resumeNeedsChooser=false;
     final Handler handler=new Handler(Looper.getMainLooper());
 
     final Runnable ticker=new Runnable(){
@@ -49,6 +51,14 @@ public class PromenadeActivity extends Activity {
 
     @Override protected void onResume(){
         super.onResume();
+        if(resumeNeedsChooser){
+            resumeNeedsChooser=false;
+            Intent chooser=new Intent(this,PetChooserActivity.class);
+            startActivity(chooser);
+            finish();
+            return;
+        }
+        internalReturn=false;
         handler.removeCallbacks(ticker);
         handler.post(ticker);
     }
@@ -56,6 +66,16 @@ public class PromenadeActivity extends Activity {
     @Override protected void onPause(){
         super.onPause();
         handler.removeCallbacks(ticker);
+    }
+
+    @Override protected void onStop(){
+        super.onStop();
+        if(!internalReturn&&!isFinishing())resumeNeedsChooser=true;
+    }
+
+    @Override public void onBackPressed(){
+        internalReturn=true;
+        super.onBackPressed();
     }
 
     void build(){
@@ -86,7 +106,7 @@ public class PromenadeActivity extends Activity {
         close.setAllCaps(false);
         close.setText("Retour au jardin");
         close.setTextSize(11);
-        close.setOnClickListener(v->finish());
+        close.setOnClickListener(v->{internalReturn=true;finish();});
         bar.addView(close,new LinearLayout.LayoutParams(dp(128),dp(44)));
         root.addView(bar);
 
