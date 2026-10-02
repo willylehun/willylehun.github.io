@@ -52,6 +52,8 @@ jobs:
         run: python mon-petit-leopard/tools/prepare_v078_garden_assets.py
       - name: Sprite contract tests
         run: python mon-petit-leopard/tools/test_sprite_contract.py
+      - name: Food preference behavior tests
+        run: python mon-petit-leopard/tools/test_food_preference.py
       - name: Validate sprite packs
         run: python mon-petit-leopard/tools/validate_sprite_packs.py
       - name: Build APK
