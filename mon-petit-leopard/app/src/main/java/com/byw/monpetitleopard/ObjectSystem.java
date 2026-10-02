@@ -39,7 +39,7 @@ public class ObjectSystem {
         this.a=a;
 
         // CUISINE — aucun ustensile.
-        add("water","Eau","💧","cuisine","Boissons","food",0,42,0,0,2,0,0,1,true,true,true,true);
+        add("water","Remplir la gamelle d’eau","💧","cuisine","Boissons","water_bowl",0,0,0,0,0,0,0,1,true,true,true,true);
         add("bottle","Biberon","🍼","cuisine","Boissons","food",24,12,0,3,6,0,0,1,true,false,false,false);
         add("milk","Lait","🥛","cuisine","Boissons","food",18,14,0,2,5,0,0,1,true,true,false,false);
 
@@ -171,6 +171,16 @@ public class ObjectSystem {
             return;
         }
 
+        if("water".equals(i.id)){
+            a.fillWaterBowl();
+            return;
+        }
+
+        if(a.promenadeActive()){
+            a.toast("🏡 "+a.pet+" est encore en promenade : la maison est vide.");
+            return;
+        }
+
         if("walk".equals(i.id)){
             a.startPromenade(i);
             return;
@@ -219,9 +229,7 @@ public class ObjectSystem {
         else if(i.id.equals("towel"))animation="towel";
         else if(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))animation="eat";
         else if(i.kind.equals("toy")||i.kind.equals("activity"))animation="jump";
-        a.act(i.name,i.frame,i.hunger,i.water,i.clean,i.affection,i.happy,i.energy,i.stars,animation);
-        a.save();
-        a.refresh();
+        a.performItem(i,animation);
     }
 
     String mischief(){
