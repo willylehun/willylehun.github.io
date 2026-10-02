@@ -23,6 +23,7 @@ public class PromenadeActivity extends Activity {
     static final int MAP_W=1448, MAP_H=1086;
 
     android.content.SharedPreferences sp;
+    int profileSlot=-1;
     PromenadeView mapView;
     TextView status;
     final Handler handler=new Handler(Looper.getMainLooper());
@@ -36,7 +37,12 @@ public class PromenadeActivity extends Activity {
 
     @Override public void onCreate(Bundle state){
         super.onCreate(state);
-        sp=getSharedPreferences("pet",MODE_PRIVATE);
+        profileSlot=getIntent().getIntExtra(PetProfileStore.EXTRA_SLOT,-1);
+        if(!PetProfileStore.validSlot(profileSlot)||!PetProfileStore.exists(this,profileSlot)){
+            finish();
+            return;
+        }
+        sp=getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE);
         build();
         updateProgress();
     }
