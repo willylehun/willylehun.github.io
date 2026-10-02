@@ -430,6 +430,13 @@ final class LivingRoomGames {
         a.updatePetPosition();
         a.save();
         a.refresh();
+        if(activeItem!=null){
+            String boredom=PetBehavior.boredomText(a.pet,rewardRepetitionFactor);
+            PetBehavior.Preference pref=PetBehavior.toyPreference(a.sp,activeItem.id);
+            if(!boredom.isEmpty())a.toast(boredom);
+            else if(pref==PetBehavior.Preference.DISLIKE)a.toast("😠 "+a.pet+" n’aime pas ce jouet.");
+            else if(pref==PetBehavior.Preference.LOVE)a.toast("😍 "+a.pet+" adore ce jouet !");
+        }
     }
 
 
@@ -448,6 +455,9 @@ final class LivingRoomGames {
         toyView.setVisibility(View.GONE);
         applyRewards(1f);
         String name=activeItem!=null?activeItem.name:"Objet";
+        PetBehavior.Preference pref=activeItem==null?PetBehavior.Preference.NEUTRAL:
+            PetBehavior.toyPreference(a.sp,activeItem.id);
+        String boredom=PetBehavior.boredomText(a.pet,rewardRepetitionFactor);
         activeItem=null;
         a.idleDirection=MainActivity.TravelDirection.DOWN;
         a.travelDirection=MainActivity.TravelDirection.DOWN;
@@ -458,7 +468,10 @@ final class LivingRoomGames {
         a.nextWalkAt=System.currentTimeMillis()+3500L;
         a.save();
         a.refresh();
-        a.toast("🐆 "+name+" rapporté !");
+        if(!boredom.isEmpty())a.toast(boredom);
+        else if(pref==PetBehavior.Preference.DISLIKE)a.toast("😠 "+a.pet+" n’aime pas "+name.toLowerCase()+".");
+        else if(pref==PetBehavior.Preference.LOVE)a.toast("😍 "+a.pet+" adore "+name.toLowerCase()+" !");
+        else a.toast("🐆 "+name+" rapporté !");
     }
 
     void applyRewards(float factor){
