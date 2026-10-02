@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
     GardenGames gardenGames;
     int profileSlot=-1;
     String petSex="";
+    boolean internalTransition=false,resumeNeedsChooser=false;
 
     long born,last,nextMischiefAt=0,nextWalkAt=0,manualUntil=0,sleepEndAt=0,nextAutoSleepAt=0,walkStartedAt=0;
     long directionalIdleUntil=0,faceRecoveryUntil=0,actionUntil=0,actionFrameAt=0,actionStartedAt=0;
@@ -109,6 +110,13 @@ public class MainActivity extends Activity {
 
     @Override protected void onResume(){
         super.onResume();
+        if(sp==null)return;
+        if(resumeNeedsChooser){
+            resumeNeedsChooser=false;
+            openPetChooser();
+            return;
+        }
+        internalTransition=false;
         tickNeeds();
         handler.removeCallbacks(ticker);
         handler.removeCallbacks(animator);
@@ -118,10 +126,17 @@ public class MainActivity extends Activity {
 
     @Override protected void onPause(){
         super.onPause();
+        if(sp==null)return;
         handler.removeCallbacks(ticker);
         handler.removeCallbacks(animator);
         tickNeeds();
         save();
+    }
+
+    @Override protected void onStop(){
+        super.onStop();
+        if(sp==null||isFinishing())return;
+        if(!internalTransition)resumeNeedsChooser=true;
     }
 
     final Runnable ticker=new Runnable(){
@@ -1482,6 +1497,7 @@ public class MainActivity extends Activity {
 
         Intent intent=new Intent(this,PromenadeActivity.class);
         intent.putExtra(PetProfileStore.EXTRA_SLOT,profileSlot);
+        internalTransition=true;
         startActivity(intent);
     }
 
@@ -2095,6 +2111,7 @@ public class MainActivity extends Activity {
         save();
         if(games!=null)games.cancel();
         if(gardenGames!=null)gardenGames.cancel();
+        internalTransition=true;
         Intent chooser=new Intent(this,PetChooserActivity.class);
         startActivity(chooser);
         finish();
