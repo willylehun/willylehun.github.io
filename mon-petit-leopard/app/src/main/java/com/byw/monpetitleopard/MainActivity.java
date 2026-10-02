@@ -1551,6 +1551,10 @@ public class MainActivity extends Activity {
 
     void petLeopard(){
         if(stage()==Stage.ENDED)return;
+        if(promenadeActive()){
+            toast("🏡 "+pet+" est en promenade : la maison est vide.");
+            return;
+        }
 
         if(sleeping){
             wakeUp("Réveillé par le joueur",true);
@@ -1632,6 +1636,10 @@ public class MainActivity extends Activity {
 
     void callLeopard(){
         if(stage()==Stage.ENDED)return;
+        if(promenadeActive()){
+            toast("🌿 "+pet+" est encore en promenade.");
+            return;
+        }
         wakeForAction();
         if(games!=null)games.cancel();
         activeFaceMood=-1;
@@ -1801,7 +1809,7 @@ public class MainActivity extends Activity {
         if(rnd.nextFloat()<chance){
             incident=objects.mischief();
             chooseIncidentPosition();
-            clean=clamp(clean-4);
+            clean=clamp(clean-8);
             happy=clamp(happy-2);
             showAction(3,1200);
             toast("⚠ "+pet+" "+incident+" !");
