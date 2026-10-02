@@ -27,6 +27,8 @@ public class MainActivity extends Activity {
     ObjectSystem objects;
     LivingRoomGames games;
     GardenGames gardenGames;
+    int profileSlot=-1;
+    String petSex="";
 
     long born,last,nextMischiefAt=0,nextWalkAt=0,manualUntil=0,sleepEndAt=0,nextAutoSleepAt=0,walkStartedAt=0;
     long directionalIdleUntil=0,faceRecoveryUntil=0,actionUntil=0,actionFrameAt=0,actionStartedAt=0;
@@ -87,7 +89,15 @@ public class MainActivity extends Activity {
 
     @Override public void onCreate(Bundle b){
         super.onCreate(b);
-        sp=getSharedPreferences("pet",MODE_PRIVATE);
+        PetProfileStore.ensureMigrated(this);
+        profileSlot=getIntent().getIntExtra(PetProfileStore.EXTRA_SLOT,-1);
+        if(!PetProfileStore.validSlot(profileSlot)||!PetProfileStore.exists(this,profileSlot)){
+            Intent chooser=new Intent(this,PetChooserActivity.class);
+            startActivity(chooser);
+            finish();
+            return;
+        }
+        sp=getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE);
         load();
         if(sp.getBoolean("named",false))ensureCurrentAdoptionRecorded();
         objects=new ObjectSystem(this);
@@ -95,7 +105,6 @@ public class MainActivity extends Activity {
         validateCharacterAssets();
         tickNeeds();
         refresh();
-        if(!sp.getBoolean("named",false))rename(true);
     }
 
     @Override protected void onResume(){
@@ -147,7 +156,8 @@ public class MainActivity extends Activity {
         skillCare=sp.getFloat("skillCare",5);
         stars=sp.getInt("stars",0);
         generation=sp.getInt("generation",1);
-        pet=sp.getString("name","Léo");
+        pet=sp.getString("name",PetProfileStore.name(this,profileSlot));
+        petSex=PetProfileStore.sex(this,profileSlot);
         room=sp.getString("room","salon");
         incident=sp.getString("incident","");
         incidentRoom=sp.getString("incidentRoom",incident.isEmpty()?"":room);
@@ -1471,6 +1481,7 @@ public class MainActivity extends Activity {
         }
 
         Intent intent=new Intent(this,PromenadeActivity.class);
+        intent.putExtra(PetProfileStore.EXTRA_SLOT,profileSlot);
         startActivity(intent);
     }
 
@@ -1893,6 +1904,7 @@ public class MainActivity extends Activity {
                 String n=e.getText().toString().trim();
                 pet=n.isEmpty()?"Léo":n;
                 sp.edit().putBoolean("named",true).apply();
+                PetProfileStore.updateName(this,profileSlot,pet);
                 if(first)recordAdoption(pet);
                 save();
                 refresh();
@@ -1901,6 +1913,7 @@ public class MainActivity extends Activity {
                 if(first){
                     pet="Léo";
                     sp.edit().putBoolean("named",true).apply();
+                    PetProfileStore.updateName(this,profileSlot,pet);
                     recordAdoption(pet);
                     save();
                     refresh();
@@ -2070,10 +2083,21 @@ public class MainActivity extends Activity {
     }
 
     void showTopMenu(){
-        String[] entries={"📜 Historique","🔎 Vérifier les quatre packs"};
+        String[] entries={"🐾 Changer d’animal","📜 Historique","🔎 Vérifier les quatre packs"};
         new AlertDialog.Builder(this).setTitle("Menu").setItems(entries,(d,w)->{
-            if(w==0)showHistory(); else showSpritePackPicker();
+            if(w==0)openPetChooser();
+            else if(w==1)showHistory();
+            else showSpritePackPicker();
         }).show();
+    }
+
+    void openPetChooser(){
+        save();
+        if(games!=null)games.cancel();
+        if(gardenGames!=null)gardenGames.cancel();
+        Intent chooser=new Intent(this,PetChooserActivity.class);
+        startActivity(chooser);
+        finish();
     }
 
     void showSpritePackPicker(){
