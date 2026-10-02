@@ -39,7 +39,7 @@ public class ObjectSystem {
         this.a=a;
 
         // CUISINE — aucun ustensile.
-        add("water","Eau","💧","cuisine","Boissons","food",0,42,0,0,2,0,0,1,true,true,true,true);
+        add("water","Remplir la gamelle d’eau","💧","cuisine","Boissons","waterbowl",0,0,0,0,0,0,0,1,true,true,true,true);
         add("bottle","Biberon","🍼","cuisine","Boissons","food",24,12,0,3,6,0,0,1,true,false,false,false);
         add("milk","Lait","🥛","cuisine","Boissons","food",18,14,0,2,5,0,0,1,true,true,false,false);
 
@@ -171,23 +171,43 @@ public class ObjectSystem {
             return;
         }
 
+        if("waterbowl".equals(i.kind)){
+            a.sp.edit().putBoolean("waterBowlAvailable",true).putFloat("waterBowlAmount",100f).apply();
+            a.toast("💧 La gamelle d’eau est pleine et reste à disposition dans la cuisine.");
+            a.addHistory("Gamelle d’eau remplie.");
+            a.save();
+            a.refresh();
+            return;
+        }
+
         if("walk".equals(i.id)){
             a.startPromenade(i);
             return;
         }
 
         if("scratch".equals(i.id)){
+            PetBehavior.Result result=a.behavior.begin("scratch",i);
+            if(result.noEffect()){a.behavior.react(i,result);return;}
+            a.gardenActionResult=result;
             if(a.gardenGames!=null)a.gardenGames.startScratcher(i);
             return;
         }
 
         if(("salon".equals(i.room)||"jardin".equals(i.room)) && ("tennis".equals(i.id)
                 ||"yarn".equals(i.id)||"mouse".equals(i.id)||"plush".equals(i.id))){
+            PetBehavior.Result result=a.behavior.begin("toy:"+i.id,i);
+            if(result.preference==PetBehavior.HATE){a.behavior.react(i,result);a.happy=a.clamp(a.happy-7f);a.save();a.refresh();return;}
+            if(result.noEffect()){a.behavior.react(i,result);return;}
+            a.gameActionResult=result;
             if(a.games!=null)a.games.startFetch(i);
             return;
         }
 
         if("rope".equals(i.kind)){
+            PetBehavior.Result result=a.behavior.begin("toy:"+i.id,i);
+            if(result.preference==PetBehavior.HATE){a.behavior.react(i,result);a.happy=a.clamp(a.happy-7f);a.save();a.refresh();return;}
+            if(result.noEffect()){a.behavior.react(i,result);return;}
+            a.gameActionResult=result;
             if(a.games!=null)a.games.startRope(i);
             return;
         }
@@ -196,6 +216,20 @@ public class ObjectSystem {
             a.wakeForAction();
             a.beginAutoSleep();
             a.toast("😴 "+a.pet+" se repose.");
+            return;
+        }
+
+        PetBehavior.Result result=a.behavior.begin("item:"+i.id,i);
+        if(result.noEffect()){
+            a.behavior.react(i,result);
+            return;
+        }
+        if(a.behavior.isFood(i) && result.preference==PetBehavior.HATE){
+            a.happy=a.clamp(a.happy+a.behavior.happinessDelta(i,result));
+            a.clean=a.clamp(a.clean-1f);
+            a.showFaceMoodNow(3,4200L);
+            a.behavior.react(i,result);
+            a.save();a.refresh();
             return;
         }
 
@@ -219,7 +253,13 @@ public class ObjectSystem {
         else if(i.id.equals("towel"))animation="towel";
         else if(i.kind.equals("food")||i.kind.equals("snack")||i.kind.equals("treat"))animation="eat";
         else if(i.kind.equals("toy")||i.kind.equals("activity"))animation="jump";
-        a.act(i.name,i.frame,i.hunger,i.water,i.clean,i.affection,i.happy,i.energy,i.stars,animation);
+        float h=a.behavior.isFood(i)?a.behavior.hungerDelta(i,result):i.hunger*result.factor;
+        float af=a.behavior.affectionDelta(i,result);
+        float joy=a.behavior.happinessDelta(i,result);
+        float dirt=a.behavior.isFood(i)?-Math.max(2f,Math.abs(i.hunger)*.10f):i.clean*result.factor;
+        a.act(i.name,i.frame,h,i.water*result.factor,dirt,af,joy,i.energy*result.factor,
+            result.factor>=.8f?i.stars:0,animation);
+        a.behavior.react(i,result);
         a.save();
         a.refresh();
     }
