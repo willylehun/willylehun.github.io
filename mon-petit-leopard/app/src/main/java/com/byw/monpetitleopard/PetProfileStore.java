@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import java.util.Map;
 import java.util.Set;
+import java.util.Random;
 
 final class PetProfileStore {
     static final int MAX_PROFILES=6;
@@ -84,6 +85,22 @@ final class PetProfileStore {
             .getString(sexKey(slot),"");
     }
 
+    static String species(Context context,int slot){
+        return context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE)
+            .getString(typeKey(slot),"leopard");
+    }
+
+    static String speciesLabel(Context context,int slot){
+        return "leopard".equals(species(context,slot))?"Léopard":species(context,slot);
+    }
+
+    static boolean compatibleParents(Context context,int a,int b){
+        if(a==b||!exists(context,a)||!exists(context,b))return false;
+        String sa=sex(context,a),sb=sex(context,b);
+        if(sa==null||sb==null||sa.isEmpty()||sb.isEmpty()||sa.equals(sb))return false;
+        return species(context,a).equals(species(context,b));
+    }
+
     static void setSex(Context context,int slot,String sex){
         if(!validSlot(slot))return;
         context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE).edit()
@@ -102,23 +119,39 @@ final class PetProfileStore {
     }
 
     static void createLeopard(Context context,int slot,String sex,String name){
+        createProfile(context,slot,"leopard",sex,name,-1,-1);
+    }
+
+    static String createOffspring(Context context,int slot,int parentA,int parentB,String name){
+        if(!compatibleParents(context,parentA,parentB))
+            throw new IllegalArgumentException("parents incompatibles");
+        String type=species(context,parentA);
+        String sex=new Random(System.nanoTime()+slot*37L).nextBoolean()?"male":"female";
+        createProfile(context,slot,type,sex,name,parentA,parentB);
+        return sex;
+    }
+
+    private static void createProfile(Context context,int slot,String type,String sex,String name,int parentA,int parentB){
         if(!validSlot(slot))throw new IllegalArgumentException("slot invalide");
         long now=System.currentTimeMillis();
         String clean=(name==null||name.trim().isEmpty())?"Léo":name.trim();
         String cleanSex=("female".equals(sex)||"male".equals(sex))?sex:"";
+        String cleanType=(type==null||type.trim().isEmpty())?"leopard":type.trim();
         SharedPreferences pet=context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE);
-        pet.edit().clear()
+        SharedPreferences.Editor pe=pet.edit().clear()
             .putLong("born",now).putLong("last",now)
             .putString("name",clean).putString("sex",cleanSex)
-            .putBoolean("named",true).putInt("generation",1)
-            .apply();
+            .putBoolean("named",true).putInt("generation",1);
+        if(parentA>=0)pe.putInt("parentA",parentA);
+        if(parentB>=0)pe.putInt("parentB",parentB);
+        pe.apply();
         PetBehavior.ensurePersonality(pet,slot);
 
         context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE).edit()
             .putBoolean(existsKey(slot),true)
             .putString(nameKey(slot),clean)
             .putString(sexKey(slot),cleanSex)
-            .putString(typeKey(slot),"leopard")
+            .putString(typeKey(slot),cleanType)
             .putLong(createdKey(slot),now)
             .apply();
     }
