@@ -514,7 +514,7 @@ assert 'if(count==3)return .40f;' in behavior
 assert 'if(count==4)return .15f;' in behavior
 assert 'return 0f;' in behavior
 assert '"sleep".equals(family)' in behavior
-assert '"bottle".equals(id)||"milk".equals(id)||"junior".equals(id)' in behavior
+assert 'cub&&("milk".equals(id)||"junior".equals(id))' in behavior
 assert 'TOY_IDS={"tennis","yarn","mouse","plush","rope"}' in behavior
 assert 'PetBehavior.ensurePersonality' in profiles
 
@@ -550,3 +550,13 @@ assert 'callingEffectFactor=beginRepeatedAction("affection");' in main
 assert 'applyNeedDelta(0,0,0,8,0,0,0,callingEffectFactor);' in main
 
 print('Comportement animal v0.8.0: PASS')
+
+
+# Neutralité nourriture léopardeau v0.8.0.
+behavior=(JAVA/'PetBehavior.java').read_text()
+main=(JAVA/'MainActivity.java').read_text()
+assert 'foodPreference(SharedPreferences sp,String id,boolean cub)' in behavior
+assert 'cub&&("milk".equals(id)||"junior".equals(id))' in behavior
+assert '"milk","junior","kibble"' in behavior
+assert 'foodPreference(sp,item.id,stage()==Stage.CUB)' in main
+print('Neutralité nourriture léopardeau v0.8.0: PASS')
