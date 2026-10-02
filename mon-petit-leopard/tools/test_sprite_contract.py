@@ -120,13 +120,13 @@ class ContractTest {
   check(SpriteMotion.direction(.04f,.25f,1f,1f)==SpriteMotion.DOWN);
   check(SpriteMotion.direction(0f,-.25f,1f,1f)==SpriteMotion.UP);
   check(SpriteMotion.direction(0f,.25f,1f,1f)==SpriteMotion.DOWN);
-  System.out.println("Sprite registry v0.8.4: PASS");
+  System.out.println("Sprite registry v0.8.5: PASS");
  }
 }""")
     subprocess.run(['javac','-d',str(p),*[str(f) for f in p.glob('*.java')]],check=True)
     subprocess.run(['java','-cp',str(p),'com.byw.monpetitleopard.ContractTest'],check=True)
 
-print('Sprite contract v0.8.4: PASS')
+print('Sprite contract v0.8.5: PASS')
 
 
 # Décors HD v0.7.1 : dimensions natives 4:3 et contrôle du contenu exact.
@@ -226,7 +226,7 @@ for age in ['cub','teen','adult','old']:
 
 print("Normalisation de masse visuelle v0.7.1: PASS")
 
-# Soins v0.8.4 : même canevas et masse visuelle propre à chaque tranche d'âge.
+# Soins v0.8.5 : même canevas et masse visuelle propre à chaque tranche d'âge.
 for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
     idle_areas=[]
@@ -266,7 +266,7 @@ with Image.open(ROOT/'app/src/main/res-cub/drawable-nodpi/leopard_cub_bottle.web
     assert full is not None
     assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,('cub','bottle',full)
 
-print("Assets biberon et soins v0.8.4: PASS")
+print("Assets biberon et soins v0.8.5: PASS")
 
 
 toy_visuals={'tennis':(96,96),'yarn':(96,96),'mouse':(96,96),'plush':(96,96),'rope':(96,64)}
@@ -286,7 +286,7 @@ for age in ['cub','teen','adult','old']:
         for i in range(5):
             assert strip.crop((i*128,0,(i+1)*128,128)).getchannel('A').getbbox() is not None,(age,i,'frame corde vide')
 
-print("Visuels PNG et sources corde v0.8.4: PASS")
+print("Visuels PNG et sources corde v0.8.5: PASS")
 
 # Régression v0.7.1 : bêtises sans cercle, posées au sol, nettoyables au frottement direct.
 assert 'incidentView.setBackground(null);' in main
@@ -351,7 +351,7 @@ assert 'CareSprites.forStage(petStage()).action(animation)' in main
 assert 'CareSprites.bottle(petStage())' in main
 assert 'startSpecialPose' in main
 
-print('Jeux salon v0.8.4: PASS')
+print('Jeux salon v0.8.5: PASS')
 
 
 # Assets salon v0.7.1 : source, préparation et utilisation réelle.
@@ -366,7 +366,7 @@ assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
 assert 'startActionAnimation(MainActivity.ActionAnim.JUMP,1350L)' not in games
-print('Assets gameplay salon v0.8.4: PASS')
+print('Assets gameplay salon v0.8.5: PASS')
 
 prepare_care=(ROOT/'tools/prepare_v075_care_assets.py').read_text()
 care_registry=(JAVA/'CareSprites.java').read_text()
@@ -375,10 +375,10 @@ assert 'leopard_{age}_{action}.webp' in prepare_care
 assert 'leopard_cub_bottle.webp' in prepare_care
 assert 'static Pack forStage' in care_registry
 assert 'static int bottle' in care_registry
-print('Assets biberon et soins v0.8.4: PASS')
+print('Assets biberon et soins v0.8.5: PASS')
 
 
-# Promenade v0.8.4 : assets, durée réelle, départ/retour maison et branchement Jardin.
+# Promenade v0.8.5 : assets, durée réelle, départ/retour maison et branchement Jardin.
 promenade_java=(JAVA/'PromenadeActivity.java').read_text()
 manifest=(ROOT/'app/src/main/AndroidManifest.xml').read_text()
 prepare_walk=(ROOT/'tools/prepare_v076_promenade_assets.py').read_text()
@@ -403,10 +403,10 @@ assert 'a.startPromenade(i);' in objects
 assert 'void startPromenade(ObjectSystem.Item item)' in main
 assert '.PromenadeActivity' in manifest
 assert 'v076-promenade-bundle' in prepare_walk
-print('Promenade v0.8.4: PASS')
+print('Promenade v0.8.5: PASS')
 
 
-# Jardin v0.8.4 : griffoir, animation 2 frames, jouets réutilisés, repos et simplification.
+# Jardin v0.8.5 : griffoir, animation 2 frames, jouets réutilisés, repos et simplification.
 garden_games=(JAVA/'GardenGames.java').read_text()
 garden_registry=(JAVA/'GardenSprites.java').read_text()
 prepare_garden=(ROOT/'tools/prepare_v078_garden_assets.py').read_text()
@@ -450,10 +450,10 @@ assert 'add("hoop"' not in objects
 assert 'salon ou le jardin' in living
 assert 'v078-garden-scratcher' in prepare_garden
 assert 'GardenSprites.Pack garden=GardenSprites.forStage(age);' in main
-print('Jardin griffoir et jouets v0.8.4: PASS')
+print('Jardin griffoir et jouets v0.8.5: PASS')
 
 
-# Profils animaux v0.8.4 : onboarding, 6 sauvegardes et sélection à chaque lancement.
+# Profils animaux v0.8.5 : onboarding, 6 sauvegardes et sélection à chaque lancement.
 profiles=(JAVA/'PetProfileStore.java').read_text()
 chooser=(JAVA/'PetChooserActivity.java').read_text()
 manifest=(ROOT/'app/src/main/AndroidManifest.xml').read_text()
@@ -496,10 +496,10 @@ assert 'if(!internalTransition)resumeNeedsChooser=true;' in main
 assert 'profileSlot=getIntent().getIntExtra(PetProfileStore.EXTRA_SLOT,-1);' in promenade
 assert 'getSharedPreferences(PetProfileStore.petPrefsName(profileSlot),MODE_PRIVATE)' in promenade
 assert 'resumeNeedsChooser' in promenade and 'internalReturn' in promenade
-print('Profils animaux v0.8.4: PASS')
+print('Profils animaux v0.8.5: PASS')
 
 
-# Besoins, goûts, gamelle et lassitude v0.8.4.
+# Besoins, goûts, gamelle et lassitude v0.8.5.
 prefs=(JAVA/'PetPreferences.java').read_text()
 objects=(JAVA/'ObjectSystem.java').read_text()
 games=(JAVA/'LivingRoomGames.java').read_text()
@@ -544,10 +544,10 @@ assert 'boolean promenadeActive()' in main
 assert '!promenadeActive() && displayedPetStage==petStage()' in main
 assert 'est encore en promenade : la maison est vide' in objects
 assert 'est encore en promenade' in main
-print('Besoins et lassitude v0.8.4: PASS')
+print('Besoins et lassitude v0.8.5: PASS')
 
 
-# Gamelle d’eau v0.8.4 : vrai drawable et aucun dépassement.
+# Gamelle d’eau v0.8.5 : vrai drawable et aucun dépassement.
 main=(JAVA/'MainActivity.java').read_text()
 bowl=(ROOT/'app/src/main/res/drawable/water_bowl_art.xml').read_text()
 assert '<vector' in bowl
@@ -559,10 +559,10 @@ assert 'waterBowlView.setText(' not in main
 assert 'Math.max(minX,Math.min(maxX,centerX-width/2f))' in main
 assert 'Math.max(minY,Math.min(maxY,feetY-height))' in main
 assert 'waterBowlView.setVisibility(visible?View.VISIBLE:View.GONE)' in main
-print('Gamelle d’eau v0.8.4: PASS')
+print('Gamelle d’eau v0.8.5: PASS')
 
 
-# Interface profil v0.8.4 : portrait, sexe, âge mensuel et icônes de besoins.
+# Interface profil v0.8.5 : portrait, sexe, âge mensuel et icônes de besoins.
 main=(JAVA/'MainActivity.java').read_text()
 
 assert 'ImageView profileIcon,bgFill,bg,petView,waterBowlView;' in main
@@ -585,15 +585,18 @@ assert 'return "🧸 Jouets";' in main
 assert 'objectsBtn.setText(contextObjectButtonLabel());' in main
 assert 'roomsBtn=button("🏠 Pièces");' in main
 assert 'actionsBtn=button("⚙️ Actions");' in main
-print('Interface profil v0.8.4: PASS')
+print('Interface profil v0.8.5: PASS')
 
 
-# Reproduction v0.8.4 + profondeur de la gamelle.
+# Reproduction v0.8.5 + profondeur de la gamelle.
 profiles=(JAVA/'PetProfileStore.java').read_text()
 main=(JAVA/'MainActivity.java').read_text()
 
 assert 'static String species(Context context,int slot)' in profiles
+assert 'static boolean reproductionAgeEligible(Context context,int slot)' in profiles
+assert 'age>=MainActivity.CUB && age<MainActivity.LIFE' in profiles
 assert 'static boolean compatibleParents(Context context,int a,int b)' in profiles
+assert '!reproductionAgeEligible(context,a)||!reproductionAgeEligible(context,b)' in profiles
 assert 'sa.isEmpty()||sb.isEmpty()||sa.equals(sb)' in profiles
 assert 'species(context,a).equals(species(context,b))' in profiles
 assert 'static String createOffspring' in profiles
@@ -604,21 +607,25 @@ assert '.putInt("parentB",parentB)' in profiles
 
 assert '🍼 Reproduction' in main
 assert 'void showReproductionMenu()' in main
+assert 'boolean reproductionAvailable=PetProfileStore.reproductionAgeEligible(this,profileSlot);' in main
+assert 'La reproduction est disponible uniquement aux stades ado, adulte et vieux.' in main
+assert 'if(!PetProfileStore.reproductionAgeEligible(this,a))continue;' in main
 assert 'void chooseSecondParent(int first,int empty)' in main
 assert 'void askOffspringName(int first,int second,int empty)' in main
 assert 'Le sexe sera déterminé à la naissance.' in main
 assert 'PetProfileStore.createOffspring(this,empty,first,second,name)' in main
 assert 'Les 6 emplacements sont déjà occupés' in main
-assert 'deux animaux de la même espèce et de sexes opposés' in main
+assert 'deux animaux au stade ado, adulte ou vieux, de la même espèce et de sexes opposés' in main
+assert 'PetProfileStore.compatibleParents(this,first,second)' in main
 assert '🔎 Vérifier les quatre packs' not in main.split('void showTopMenu(){',1)[1].split('void openPetChooser()',1)[0]
 
 assert 'waterBowlView.setElevation(dp(1));' in main
 assert 'waterBowlView.bringToFront();' not in main
 assert 'if(petView!=null)petView.bringToFront();' in main
-print('Reproduction v0.8.4: PASS')
+print('Reproduction v0.8.5: PASS')
 
 
-# Affichage cuisine v0.8.4 : gamelle réelle et aucun dépassement latéral.
+# Affichage cuisine v0.8.5 : gamelle réelle et aucun dépassement latéral.
 main=(JAVA/'MainActivity.java').read_text()
 bowl=(ROOT/'app/src/main/res/drawable/water_bowl_art.xml').read_text()
 
@@ -638,4 +645,4 @@ assert 'r[3]*.90f' in main
 assert 'Math.min(dp(70),Math.round(r[2]*.10f))' in main
 assert 'Math.max(minX,Math.min(maxX,centerX-width/2f))' in main
 assert 'Math.max(minY,Math.min(maxY,feetY-height))' in main
-print('Affichage cuisine v0.8.4: PASS')
+print('Affichage cuisine v0.8.5: PASS')
