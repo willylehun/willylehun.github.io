@@ -545,3 +545,8 @@ assert '!promenadeActive() && displayedPetStage==petStage()' in main
 assert 'est encore en promenade : la maison est vide' in objects
 assert 'est encore en promenade' in main
 print('Besoins et lassitude v0.8.0: PASS')
+
+# Neutralité nourriture léopardeau v0.8.0.
+assert 'foodPreference(SharedPreferences sp,String id,boolean cub)' in behavior
+assert 'cub&&("milk".equals(id)||"junior".equals(id))' in behavior
+print('Neutralité nourriture léopardeau v0.8.0: PASS')
