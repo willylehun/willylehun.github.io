@@ -30,7 +30,7 @@ GARDEN_EXPECTED={
 }
 
 def fail(msg):
-    raise SystemExit("ERREUR SPRITES v0.7.8: "+msg)
+    raise SystemExit("ERREUR SPRITES v0.7.9: "+msg)
 
 def main():
     common=ROOT/"res"/"drawable-nodpi"
@@ -65,7 +65,7 @@ def main():
             hashes[digest]=(age,name)
         count=sum(size[0]//FRAME for size in expected.values())
         print(f"OK {age}: {count} frames/poses, canevas 256px, marges 10px, aucune frame rognée")
-    print("OK v0.7.8: sprites principaux + course + jeu + soins + biberon + griffoir, tailles et marges validées.")
+    print("OK v0.7.9: sprites principaux + course + jeu + soins + biberon + griffoir, tailles et marges validées.")
 
 if __name__=="__main__":
     main()
