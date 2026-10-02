@@ -1629,8 +1629,6 @@ public class MainActivity extends Activity {
 
     void startPromenade(ObjectSystem.Item item){
         if(stage()==Stage.ENDED)return;
-        wakeForAction();
-
         long now=System.currentTimeMillis();
         long start=sp.getLong("promenadeStart",0L);
         boolean active=sp.getBoolean("promenadeActive",false);
@@ -1640,20 +1638,24 @@ public class MainActivity extends Activity {
         }
 
         if(!active){
-            hunger=clamp(hunger+item.hunger);
-            thirst=clamp(thirst+item.water);
-            clean=clamp(clean+item.clean);
-            affection=clamp(affection+item.affection);
-            happy=clamp(happy+item.happy);
-            energy=clamp(energy+item.energy);
-            stars+=item.stars;
-            skillCare=clamp(skillCare+.5f);
+            wakeForAction();
+            if(games!=null)games.cancel();
+            if(gardenGames!=null)gardenGames.cancel();
+            releaseActionFrames();
+            actionAnim=ActionAnim.NONE;
+            clearSpecialPose();
+            walking=false;
+
+            float factor=beginRepeatedAction("walk");
+            applyNeedDelta(item.hunger,item.water,item.clean,item.affection,item.happy,item.energy,item.stars,factor);
+            skillCare=clamp(skillCare+.5f*factor);
             start=now;
             sp.edit()
               .putBoolean("promenadeActive",true)
               .putLong("promenadeStart",start)
               .apply();
             addHistory("Promenade démarrée pour 3 minutes.");
+            petView.setVisibility(View.INVISIBLE);
             save();
             refresh();
         }
@@ -1918,6 +1920,14 @@ public class MainActivity extends Activity {
             return;
         }else if(specialPoseRes!=0){
             clearSpecialPose();
+        }
+
+        if(queuedFaceMood>=0 && actionAnim==ActionAnim.NONE && now>=manualUntil
+                && !walking && activeFaceMood<0 && !moodApproach && !sleeping){
+            int mood=queuedFaceMood;
+            queuedFaceMood=-1;
+            beginMoodApproach(mood);
+            return;
         }
 
         if(stage()==Stage.ENDED){
