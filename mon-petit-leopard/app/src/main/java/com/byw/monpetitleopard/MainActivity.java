@@ -651,6 +651,10 @@ public class MainActivity extends Activity {
     void ensurePetImage(){
         syncVisualStage();
         long now=System.currentTimeMillis();
+        if(promenadeAwayAt(now)){
+            petView.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         if(specialPoseRes!=0){
             if(now<manualUntil && specialPoseStage==petStage() && renderSpecialPose()){
@@ -1455,6 +1459,10 @@ public class MainActivity extends Activity {
 
     void updatePetPosition(){
         if(petView==null||scene==null||petView.getWidth()<=0)return;
+        if(promenadeAway()){
+            petView.setVisibility(View.INVISIBLE);
+            return;
+        }
         float[] r=imageRect();
         if(r[2]<=0||r[3]<=0)return;
 
@@ -1480,6 +1488,7 @@ public class MainActivity extends Activity {
     }
 
     String moodText(){
+        if(promenadeAway())return "En promenade";
         if(stage()==Stage.ENDED)return "Paisible";
         if(sleeping)return "Endormi";
         if(!incident.isEmpty())return "Inquiet";
@@ -1501,6 +1510,10 @@ public class MainActivity extends Activity {
 
     void petLeopard(){
         if(stage()==Stage.ENDED)return;
+        if(promenadeAway()){
+            toast("🌿 "+pet+" est en promenade.");
+            return;
+        }
 
         if(sleeping){
             wakeUp("Réveillé par le joueur",true);
@@ -1525,7 +1538,7 @@ public class MainActivity extends Activity {
     void roomsMenu(){
         String[] rooms={"🛋️ Salon","🍽️ Cuisine","🛁 Salle de bain","🌿 Jardin"};
         new AlertDialog.Builder(this).setTitle("Choisir une pièce").setItems(rooms,(d,w)->{
-            wakeForAction();
+            if(!promenadeAway())wakeForAction();
             if(games!=null)games.cancel();
             if(gardenGames!=null)gardenGames.cancel();
             callingToForeground=false;
@@ -1585,6 +1598,10 @@ public class MainActivity extends Activity {
 
     void callLeopard(){
         if(stage()==Stage.ENDED)return;
+        if(promenadeAway()){
+            toast("🌿 "+pet+" est en promenade.");
+            return;
+        }
         wakeForAction();
         if(games!=null)games.cancel();
         activeFaceMood=-1;
@@ -1771,6 +1788,12 @@ public class MainActivity extends Activity {
         if(scene==null||petView==null)return;
         syncVisualStage();
         long now=System.currentTimeMillis();
+
+        if(promenadeAwayAt(now)){
+            walking=false;
+            petView.setVisibility(View.INVISIBLE);
+            return;
+        }
 
         if(games!=null && games.beforeAnimate(now))return;
         if(gardenGames!=null && gardenGames.beforeAnimate(now))return;
