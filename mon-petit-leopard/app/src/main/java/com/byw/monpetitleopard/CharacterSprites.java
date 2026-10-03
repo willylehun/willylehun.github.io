@@ -6,6 +6,7 @@ final class CharacterSprites {
 
     static final class Pack {
         final String species;
+        final String sex;
         final MainActivity.PetStage stage;
         final String zone;
         final int idleDown,idleLeft,idleRight,idleUp;
@@ -24,7 +25,15 @@ final class CharacterSprites {
              int idleDown,int idleLeft,int idleRight,int idleUp,
              int walkDown,int walkLeft,int walkRight,int walkUp,
              int jump,int eat,int sleep,int moods){
+            this(species,"",stage,zone,idleDown,idleLeft,idleRight,idleUp,walkDown,walkLeft,walkRight,walkUp,jump,eat,sleep,moods);
+        }
+
+        Pack(String species,String sex,MainActivity.PetStage stage,String zone,
+             int idleDown,int idleLeft,int idleRight,int idleUp,
+             int walkDown,int walkLeft,int walkRight,int walkUp,
+             int jump,int eat,int sleep,int moods){
             this.species=species;
+            this.sex=sex;
             this.stage=stage;this.zone=zone;
             this.idleDown=idleDown;this.idleLeft=idleLeft;this.idleRight=idleRight;this.idleUp=idleUp;
             this.walkDown=walkDown;this.walkLeft=walkLeft;this.walkRight=walkRight;this.walkUp=walkUp;
@@ -172,7 +181,84 @@ final class CharacterSprites {
         R.drawable.tiger_old_jump,R.drawable.tiger_old_eat,
         R.drawable.tiger_old_sleep,R.drawable.tiger_old_moods);
 
+    private static final Pack LION_MALE_CUB=new Pack("lion","male",MainActivity.PetStage.CUB,"res-lion-male-cub",
+        R.drawable.lion_male_cub_idle_down,R.drawable.lion_male_cub_idle_left,
+        R.drawable.lion_male_cub_idle_right,R.drawable.lion_male_cub_idle_up,
+        R.drawable.lion_male_cub_walk_down,R.drawable.lion_male_cub_walk_left,
+        R.drawable.lion_male_cub_walk_right,R.drawable.lion_male_cub_walk_up,
+        R.drawable.lion_male_cub_jump,R.drawable.lion_male_cub_eat,
+        R.drawable.lion_male_cub_sleep,R.drawable.lion_male_cub_moods);
+
+    private static final Pack LION_MALE_TEEN=new Pack("lion","male",MainActivity.PetStage.TEEN,"res-lion-male-teen",
+        R.drawable.lion_male_teen_idle_down,R.drawable.lion_male_teen_idle_left,
+        R.drawable.lion_male_teen_idle_right,R.drawable.lion_male_teen_idle_up,
+        R.drawable.lion_male_teen_walk_down,R.drawable.lion_male_teen_walk_left,
+        R.drawable.lion_male_teen_walk_right,R.drawable.lion_male_teen_walk_up,
+        R.drawable.lion_male_teen_jump,R.drawable.lion_male_teen_eat,
+        R.drawable.lion_male_teen_sleep,R.drawable.lion_male_teen_moods);
+
+    private static final Pack LION_MALE_ADULT=new Pack("lion","male",MainActivity.PetStage.ADULT,"res-lion-male-adult",
+        R.drawable.lion_male_adult_idle_down,R.drawable.lion_male_adult_idle_left,
+        R.drawable.lion_male_adult_idle_right,R.drawable.lion_male_adult_idle_up,
+        R.drawable.lion_male_adult_walk_down,R.drawable.lion_male_adult_walk_left,
+        R.drawable.lion_male_adult_walk_right,R.drawable.lion_male_adult_walk_up,
+        R.drawable.lion_male_adult_jump,R.drawable.lion_male_adult_eat,
+        R.drawable.lion_male_adult_sleep,R.drawable.lion_male_adult_moods);
+
+    private static final Pack LION_MALE_OLD=new Pack("lion","male",MainActivity.PetStage.OLD,"res-lion-male-old",
+        R.drawable.lion_male_old_idle_down,R.drawable.lion_male_old_idle_left,
+        R.drawable.lion_male_old_idle_right,R.drawable.lion_male_old_idle_up,
+        R.drawable.lion_male_old_walk_down,R.drawable.lion_male_old_walk_left,
+        R.drawable.lion_male_old_walk_right,R.drawable.lion_male_old_walk_up,
+        R.drawable.lion_male_old_jump,R.drawable.lion_male_old_eat,
+        R.drawable.lion_male_old_sleep,R.drawable.lion_male_old_moods);
+
+    private static final Pack LION_FEMALE_CUB=new Pack("lion","female",MainActivity.PetStage.CUB,"res-lion-female-cub",
+        R.drawable.lion_female_cub_idle_down,R.drawable.lion_female_cub_idle_left,
+        R.drawable.lion_female_cub_idle_right,R.drawable.lion_female_cub_idle_up,
+        R.drawable.lion_female_cub_walk_down,R.drawable.lion_female_cub_walk_left,
+        R.drawable.lion_female_cub_walk_right,R.drawable.lion_female_cub_walk_up,
+        R.drawable.lion_female_cub_jump,R.drawable.lion_female_cub_eat,
+        R.drawable.lion_female_cub_sleep,R.drawable.lion_female_cub_moods);
+
+    private static final Pack LION_FEMALE_TEEN=new Pack("lion","female",MainActivity.PetStage.TEEN,"res-lion-female-teen",
+        R.drawable.lion_female_teen_idle_down,R.drawable.lion_female_teen_idle_left,
+        R.drawable.lion_female_teen_idle_right,R.drawable.lion_female_teen_idle_up,
+        R.drawable.lion_female_teen_walk_down,R.drawable.lion_female_teen_walk_left,
+        R.drawable.lion_female_teen_walk_right,R.drawable.lion_female_teen_walk_up,
+        R.drawable.lion_female_teen_jump,R.drawable.lion_female_teen_eat,
+        R.drawable.lion_female_teen_sleep,R.drawable.lion_female_teen_moods);
+
+    private static final Pack LION_FEMALE_ADULT=new Pack("lion","female",MainActivity.PetStage.ADULT,"res-lion-female-adult",
+        R.drawable.lion_female_adult_idle_down,R.drawable.lion_female_adult_idle_left,
+        R.drawable.lion_female_adult_idle_right,R.drawable.lion_female_adult_idle_up,
+        R.drawable.lion_female_adult_walk_down,R.drawable.lion_female_adult_walk_left,
+        R.drawable.lion_female_adult_walk_right,R.drawable.lion_female_adult_walk_up,
+        R.drawable.lion_female_adult_jump,R.drawable.lion_female_adult_eat,
+        R.drawable.lion_female_adult_sleep,R.drawable.lion_female_adult_moods);
+
+    private static final Pack LION_FEMALE_OLD=new Pack("lion","female",MainActivity.PetStage.OLD,"res-lion-female-old",
+        R.drawable.lion_female_old_idle_down,R.drawable.lion_female_old_idle_left,
+        R.drawable.lion_female_old_idle_right,R.drawable.lion_female_old_idle_up,
+        R.drawable.lion_female_old_walk_down,R.drawable.lion_female_old_walk_left,
+        R.drawable.lion_female_old_walk_right,R.drawable.lion_female_old_walk_up,
+        R.drawable.lion_female_old_jump,R.drawable.lion_female_old_eat,
+        R.drawable.lion_female_old_sleep,R.drawable.lion_female_old_moods);
+
+    static Pack forStage(String species,String sex,MainActivity.PetStage stage){
+        if(!"lion".equals(species))return forStage(species,stage);
+        boolean female="female".equals(PetSpecies.requireLionSex(sex));
+        switch(stage){
+            case CUB:return female?LION_FEMALE_CUB:LION_MALE_CUB;
+            case TEEN:return female?LION_FEMALE_TEEN:LION_MALE_TEEN;
+            case ADULT:return female?LION_FEMALE_ADULT:LION_MALE_ADULT;
+            case OLD:return female?LION_FEMALE_OLD:LION_MALE_OLD;
+        }
+        throw new IllegalStateException("Aucun pack lion pour l'âge "+stage);
+    }
+
     static Pack forStage(String species,MainActivity.PetStage stage){
+        if("lion".equals(species))throw new IllegalArgumentException("Le pack du lion exige son sexe");
         if("leopard".equals(species))return forStage(stage);
         if("tiger".equals(species)){
             switch(stage){

@@ -8,13 +8,13 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 54
-        versionName '0.8.9'
+        versionCode 55
+        versionName '0.8.10'
     }
 
     sourceSets {
         main {
-            // Une zone indépendante par espèce et par âge : aucun sprite de personnage
+            // Une zone indépendante par espèce, sexe visuel et âge : aucun sprite de personnage
             // ne reste dans res/drawable-nodpi.
             res.srcDirs = [
                 'src/main/res',
@@ -29,7 +29,15 @@ android {
                 'src/main/res-tiger-cub',
                 'src/main/res-tiger-teen',
                 'src/main/res-tiger-adult',
-                'src/main/res-tiger-old'
+                'src/main/res-tiger-old',
+                'src/main/res-lion-male-cub',
+                'src/main/res-lion-male-teen',
+                'src/main/res-lion-male-adult',
+                'src/main/res-lion-male-old',
+                'src/main/res-lion-female-cub',
+                'src/main/res-lion-female-teen',
+                'src/main/res-lion-female-adult',
+                'src/main/res-lion-female-old'
             ]
         }
     }
@@ -40,4 +48,4 @@ android {
     }
 }
 
-// All three species use the same game rules and separate, validated sprite packs.
+// All four species share the same game rules; lion packs also preserve the profile's sex.

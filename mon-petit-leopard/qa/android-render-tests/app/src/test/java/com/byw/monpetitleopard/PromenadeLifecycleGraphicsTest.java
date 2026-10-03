@@ -2,6 +2,7 @@ package com.byw.monpetitleopard;
 
 import static org.junit.Assert.*;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.*;
 import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.*;
 import org.robolectric.android.controller.ActivityController;
+import org.robolectric.shadows.ShadowAlertDialog;
 import org.robolectric.annotation.*;
 
 @RunWith(RobolectricTestRunner.class)
@@ -33,21 +35,34 @@ public class PromenadeLifecycleGraphicsTest {
  @Test public void tigerAdult(){scenario(PetSpecies.TIGER,MainActivity.PetStage.ADULT,MainActivity.CUB+MainActivity.TEEN+10_000L);}
  @Test public void tigerOld(){scenario(PetSpecies.TIGER,MainActivity.PetStage.OLD,MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+10_000L);}
 
- void scenario(String species,MainActivity.PetStage stage,long age){
+ @Test public void lionMaleCub(){scenario(PetSpecies.LION,"male",MainActivity.PetStage.CUB,10_000L);}
+ @Test public void lionMaleTeen(){scenario(PetSpecies.LION,"male",MainActivity.PetStage.TEEN,MainActivity.CUB+10_000L);}
+ @Test public void lionMaleAdult(){scenario(PetSpecies.LION,"male",MainActivity.PetStage.ADULT,MainActivity.CUB+MainActivity.TEEN+10_000L);}
+ @Test public void lionMaleOld(){scenario(PetSpecies.LION,"male",MainActivity.PetStage.OLD,MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+10_000L);}
+ @Test public void lionFemaleCub(){scenario(PetSpecies.LION,"female",MainActivity.PetStage.CUB,10_000L);}
+ @Test public void lionFemaleTeen(){scenario(PetSpecies.LION,"female",MainActivity.PetStage.TEEN,MainActivity.CUB+10_000L);}
+ @Test public void lionFemaleAdult(){scenario(PetSpecies.LION,"female",MainActivity.PetStage.ADULT,MainActivity.CUB+MainActivity.TEEN+10_000L);}
+ @Test public void lionFemaleOld(){scenario(PetSpecies.LION,"female",MainActivity.PetStage.OLD,MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+10_000L);}
+
+ void scenario(String species,MainActivity.PetStage stage,long age){scenario(species,"female",stage,age);}
+
+ void scenario(String species,String sex,MainActivity.PetStage stage,long age){
   Context app=RuntimeEnvironment.getApplication();
   for(String prefs:new String[]{"pet_profiles_v079","pet","pet_0"})app.getSharedPreferences(prefs,Context.MODE_PRIVATE).edit().clear().commit();
   PetProfileStore.ensureMigrated(app);
-  PetProfileStore.createAnimal(app,0,species,"female","Alpha QA");
+  PetProfileStore.createAnimal(app,0,species,sex,"Alpha QA");
   app.getSharedPreferences("pet_0",Context.MODE_PRIVATE).edit().putLong("born",System.currentTimeMillis()-age).commit();
   Intent intent=new Intent(app,MainActivity.class).putExtra(PetProfileStore.EXTRA_SLOT,0);
   ActivityController<MainActivity> controller=Robolectric.buildActivity(MainActivity.class,intent).create().start().resume().visible();
   MainActivity main=controller.get();
   settle(main);
   assertEquals(stage,main.petStage());
+  assertEquals(sex,main.petSex);
   if(main.petView.getVisibility()!=View.VISIBLE){System.out.println("INITIAL_INVISIBLE species="+species+" stage="+stage+" displayed="+main.displayedPetStage+" invalid="+main.invalidCharacterAssets+" history="+main.historyLog+" idle="+main.getResources().getResourceEntryName(main.idleDownDrawable()));}
   assertEquals(View.VISIBLE,main.petView.getVisibility());
   assertTrue("Real animal must affect the initial native scene",animalPixels(main)>100);
   alphaIsPreserved(main,"initial");
+  if(PetSpecies.LION.equals(species))AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
 
   List<String> failures=new ArrayList<>();
   main.startPromenade(null);
@@ -59,11 +74,12 @@ public class PromenadeLifecycleGraphicsTest {
   ActivityController<PromenadeActivity> tripController=Robolectric.buildActivity(PromenadeActivity.class,promenadeIntent).create().start().resume().visible();
   PromenadeActivity trip=tripController.get();
   settle(trip);
-  assertEquals(PetSpecies.promenadeTokenRes(species,age),trip.mapView.tokenRes);
+  assertEquals(PetSpecies.promenadeTokenRes(species,sex,age),trip.mapView.tokenRes);
   assertNotNull("Promenade portrait is decoded",trip.mapView.token);
   assertTrue("Promenade portrait preserves transparency",trip.mapView.token.hasAlpha());
   assertEquals(0,Color.alpha(trip.mapView.token.getPixel(0,0)));
-  if(!PetSpecies.LEOPARD.equals(species))assertTrue(trip.getResources().getResourceEntryName(trip.mapView.tokenRes).startsWith(species+"_"+stage.name().toLowerCase(Locale.ROOT)+"_"));
+  if(!PetSpecies.LEOPARD.equals(species))assertTrue(trip.getResources().getResourceEntryName(trip.mapView.tokenRes).startsWith(species+(PetSpecies.LION.equals(species)?"_"+sex:"")+"_"+stage.name().toLowerCase(Locale.ROOT)+"_"));
+  if(PetSpecies.LION.equals(species))TigerIntegrationGraphicsTest.capture(trip,"lion-"+sex+"-"+stage.name().toLowerCase(Locale.ROOT)+"-promenade");
   assertTrue(main.promenadeActive());
   Button back=findButton(trip.getWindow().getDecorView(),"Retour au jardin");
   assertNotNull(back); assertTrue(back.performClick());
@@ -74,6 +90,18 @@ public class PromenadeLifecycleGraphicsTest {
   main.updatePetPosition(); checkHidden(main,"position-update",failures);
   main.animateAuto(); checkHidden(main,"animation-tick",failures);
   main.root.requestLayout(); settle(main); checkHidden(main,"layout-pass",failures);
+  if(PetSpecies.LION.equals(species)){
+   String[] rooms={"salon","cuisine","bain","jardin"};
+   for(int roomIndex=0;roomIndex<rooms.length;roomIndex++){
+    assertTrue(main.roomsBtn.performClick());
+    AlertDialog menu=ShadowAlertDialog.getLatestAlertDialog();
+    assertNotNull(menu);
+    assertTrue(menu.getListView().performItemClick(null,roomIndex,roomIndex));
+    menu.dismiss();
+    assertEquals(rooms[roomIndex],main.room);
+    settle(main);checkHidden(main,"room-"+rooms[roomIndex],failures);
+   }
+  }
 
   // Activity recreation while the profile still records a running promenade.
   controller.pause().stop().destroy();
@@ -86,13 +114,15 @@ public class PromenadeLifecycleGraphicsTest {
   main.ticker.run(); main.animateAuto(); settle(main);
   assertFalse(main.promenadeActive());
   assertEquals(stage,main.petStage());
+  assertEquals(sex,main.petSex);
   assertEquals("Animal returns after the trip",View.VISIBLE,main.petView.getVisibility());
   assertTrue("Returned animal must affect the native scene",animalPixels(main)>100);
   alphaIsPreserved(main,"returned");
+  if(PetSpecies.LION.equals(species))AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
   main.handler.removeCallbacksAndMessages(null);
   controller.pause().stop().destroy();
   assertTrue(species+" "+stage+": "+failures,failures.isEmpty());
-  System.out.println("NATIVE_LIFECYCLE_OK species="+species+" stage="+stage+" checks=6 drawable-alpha=true");
+  System.out.println("NATIVE_LIFECYCLE_OK species="+species+" sex="+sex+" stage="+stage+" checks="+(PetSpecies.LION.equals(species)?10:6)+" drawable-alpha=true");
  }
 
  static void settle(Activity activity){

@@ -1,0 +1,102 @@
+{
+  "male": {
+    "cub": {
+      "main": {
+        "file": "lion_male_cub_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 14_42_50-1(1).png",
+        "sha256": "b3d3951a88f7962e02561d979af27a4db6c982b99691f656401022d373a75cc4"
+      },
+      "objects": {
+        "file": "lion_male_cub_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 14_42_51-2(1).png",
+        "sha256": "f837213c7b1eb9b6c33ae1dda14f30dad9b08ed47988b8d94f04fe51fed9ddd3"
+      }
+    },
+    "teen": {
+      "main": {
+        "file": "lion_male_teen_main_source.png",
+        "original_filename": "Feuille de sprites complète d’un lion ado-1.png",
+        "sha256": "d4ff1b77f29c8a22eb6e92970b9369279c336bc15588167cef2a8bd1fea43721"
+      },
+      "objects": {
+        "file": "lion_male_teen_objects_source.png",
+        "original_filename": "Planche sprite du lion adolescent-2.png",
+        "sha256": "98408cf6234f9efaba82dde9c102a0d4f884569107ce68726181c5d835028593"
+      }
+    },
+    "adult": {
+      "main": {
+        "file": "lion_male_adult_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 14_43_08-1.png",
+        "sha256": "1b750152e4462e607089b0bf05198ddad634210f70b2b428afbe8e3cc858b8c0"
+      },
+      "objects": {
+        "file": "lion_male_adult_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 14_43_09-2.png",
+        "sha256": "1517e31ba1a1b0310269a27a81104837b67478eec58ade8898c2e5d98b79e27c"
+      }
+    },
+    "old": {
+      "main": {
+        "file": "lion_male_old_main_source.png",
+        "original_filename": "Planche de sprites du vieux lion(1).png",
+        "sha256": "0fb34f80973f52f83f78dfe43c19c59abda1ecb760e309639b301d6f760a03a8"
+      },
+      "objects": {
+        "file": "lion_male_old_objects_source.png",
+        "original_filename": "Planche d’assets du vieux lion mignon(1).png",
+        "sha256": "9e43c1a6e80b29c340377ab34680dc9fce1a15dbb3c18c81b48479d8de90fbf0"
+      }
+    }
+  },
+  "female": {
+    "cub": {
+      "main": {
+        "file": "lion_female_cub_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 15_05_53-1.png",
+        "sha256": "f09903e798ff90c6ccb3bf07971b296808a5501c79d2a2845f672a5dcc233a3d"
+      },
+      "objects": {
+        "file": "lion_female_cub_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 15_05_54-2.png",
+        "sha256": "be4832339317bc4489bb2137b5678fd9c2778d2aba4c7a4102fca054dd084a6a"
+      }
+    },
+    "teen": {
+      "main": {
+        "file": "lion_female_teen_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 15_06_01-1.png",
+        "sha256": "345b57f54c514fe456eaaaf69664469b75e258ada150edbe173027a21213a753"
+      },
+      "objects": {
+        "file": "lion_female_teen_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 15_06_02-2.png",
+        "sha256": "d155e49ec1d1c3802f2d3af1c3aab2309d6709a8d8d1c3858fec86ed904b27f5"
+      }
+    },
+    "adult": {
+      "main": {
+        "file": "lion_female_adult_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 15_06_10-1.png",
+        "sha256": "77e9e294e6a7d955bcad3b21e917ad3a46f6688b09173084cad214b6bb3a38ff"
+      },
+      "objects": {
+        "file": "lion_female_adult_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 15_06_11-2.png",
+        "sha256": "0ed510e7b83c1b1c67cb87369a794027442dca5709dbab5bb169a067eca92a16"
+      }
+    },
+    "old": {
+      "main": {
+        "file": "lion_female_old_main_source.png",
+        "original_filename": "Planche sprite de lionne âgée enchantée-2.png",
+        "sha256": "492d2c56866a33a8d195d446301051a1005ce24bfd0aeba7d5da35056053bfd9"
+      },
+      "objects": {
+        "file": "lion_female_old_objects_source.png",
+        "original_filename": "Planche de sprites _ lionne âgée et objets-1.png",
+        "sha256": "97451cf2cab44d7e8ce8dcef7adf0b9f2492185bda965f5075b6c43707282db6"
+      }
+    }
+  }
+}

@@ -146,7 +146,7 @@ final class GardenGames {
     }
 
     boolean loadFrames(){
-        GardenSprites.Pack pack=GardenSprites.forStage(a.petSpecies,a.petStage());
+        GardenSprites.Pack pack=GardenSprites.forStage(a.petSpecies,a.petSex,a.petStage());
         int res=pack.scratcherPlay;
         int count=pack.scratcherFrames;
         int frame=GardenSprites.FRAME_SIZE;

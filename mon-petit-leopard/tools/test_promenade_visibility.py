@@ -86,10 +86,11 @@ class Bitmap {
 }
 class BitmapFactory {
     static Bitmap decodeResource(Object resources,int res){
-        for(String species:new String[]{SPECIES})
+        for(String[] variant:new String[][]{VARIANTS})
             for(MainActivity.PetStage age:MainActivity.PetStage.values()){
-                int width=CharacterSprites.forStage(species,age).expectedWidth(res);
-                if(width<0)width=GameSprites.forStage(species,age).expectedWidth(res);
+                String species=variant[0],sex=variant[1];
+                int width=CharacterSprites.forStage(species,sex,age).expectedWidth(res);
+                if(width<0)width=GameSprites.forStage(species,sex,age).expectedWidth(res);
                 if(width>0)return new Bitmap(res,width,256);
             }
         return new Bitmap(res,256,256);
@@ -189,6 +190,46 @@ class GardenGames {
 """
 
 
+LION_IDENTITY_TEST = r"""
+    static void lionIdentitySwitch(String fromSex,int stage){
+        String toSex="male".equals(fromSex)?"female":"male";
+        for(boolean away:new boolean[]{false,true}){
+            MainActivity a=actor("lion",fromSex,stage);
+            if(away)depart(a);
+            int previousIdle=a.idleDownDrawable();
+            a.showWalkFrame(MainActivity.WalkMode.FRONT);
+            a.loadFaceMoodFrames();
+            a.loadActionFrames(MainActivity.ActionAnim.JUMP);
+            a.specialPoseRes=CareSprites.forStage("lion",fromSex,a.petStage()).soap;
+            a.specialPoseStage=a.petStage();
+            a.manualUntil=System.currentTimeMillis()+1000L;
+            a.walking=true;
+            int livingCancels=a.games.cancels,gardenCancels=a.gardenGames.cancels;
+            a.petSex=toSex;
+            a.syncVisualStage();
+            check(a.visualPack.sex.equals(toSex),"same-age sex switch selects the new pack singleton");
+            check(a.currentWalkFrames==null&&a.faceMoodFrames==null&&a.actionFrames==null,
+                "same-age sex switch clears all former movement/mood/action bitmaps");
+            check(a.specialPoseRes==0&&!a.walking&&a.manualUntil==0,
+                "same-age sex switch clears the previous care pose, movement and manual override");
+            check(a.games.cancels>livingCancels&&a.gardenGames.cancels>gardenCancels,
+                "same-age sex switch cancels both games before rendering the new pack");
+            check(a.petView.getDrawable()==null,"previous sex image is discarded immediately");
+            a.ensurePetImage();
+            check(a.idleDownDrawable()!=previousIdle,"lion and lioness have distinct age-specific idle resources");
+            if(away){
+                hidden(a,"sex switch cannot reveal an animal while away");
+                a.sp.edit().putLong("promenadeStart",System.currentTimeMillis()-PromenadeActivity.DURATION_MS-1000L).apply();
+                a.ensurePetImage();
+            }
+            visible(a,"new sex renders at home or after timed return");
+            check(((Integer)a.petView.getDrawable()).intValue()==CharacterSprites.forStage("lion",toSex,a.petStage()).idleDown,
+                "same-age sex switch renders exactly the new sex's own idle image");
+        }
+    }
+"""
+
+
 TEST = r"""package com.byw.monpetitleopard;
 import java.util.*;
 
@@ -197,16 +238,16 @@ final class PromenadeVisibilityContract {
     static final List<String> failures=new ArrayList<>();
     static void check(boolean ok,String message){checks++;if(!ok)failures.add(message);}
     static void hidden(MainActivity a,String message){
-        check(a.petView.getVisibility()==View.INVISIBLE,a.petSpecies+"/"+a.petStage()+": "+message);
+        check(a.petView.getVisibility()==View.INVISIBLE,a.petSpecies+"/"+a.petSex+"/"+a.petStage()+": "+message);
     }
     static void visible(MainActivity a,String message){
-        check(a.petView.getVisibility()==View.VISIBLE,a.petSpecies+"/"+a.petStage()+": "+message);
+        check(a.petView.getVisibility()==View.VISIBLE,a.petSpecies+"/"+a.petSex+"/"+a.petStage()+": "+message);
     }
-    static MainActivity actor(String species,int stage){
+    static MainActivity actor(String species,String sex,int stage){
         MainActivity a=new MainActivity();
         long[] ages={1000L,MainActivity.CUB+1000L,MainActivity.CUB+MainActivity.TEEN+1000L,
             MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+1000L};
-        a.petSpecies=species;a.born=System.currentTimeMillis()-ages[stage];
+        a.petSpecies=species;a.petSex=sex;a.born=System.currentTimeMillis()-ages[stage];
         a.sp=new SharedPreferences();a.profileSlot=stage;
         a.petView=new ImageView();a.scene=new FrameLayout();
         a.scene.width=1536;a.scene.height=1152;
@@ -222,8 +263,8 @@ final class PromenadeVisibilityContract {
         a.ensurePetImage();
         hidden(a,"house refresh hides animal during active promenade");
     }
-    static void visibilityWriters(String species,int stage){
-        MainActivity a=actor(species,stage);depart(a);
+    static void visibilityWriters(String species,String sex,int stage){
+        MainActivity a=actor(species,sex,stage);depart(a);
         a.updatePetPosition();hidden(a,"layout/placement cannot make animal reappear");
         for(String room:new String[]{"salon","cuisine","bain","jardin"}){
             a.room=room;a.resetPetForRoom(true);
@@ -235,7 +276,7 @@ final class PromenadeVisibilityContract {
         a.showActionAnimationFrame(System.currentTimeMillis());
         hidden(a,"direct action-frame callback keeps house empty");
         a.actionAnim=MainActivity.ActionAnim.NONE;
-        a.specialPoseRes=CareSprites.forStage(species,a.petStage()).soap;
+        a.specialPoseRes=CareSprites.forStage(species,sex,a.petStage()).soap;
         a.specialPoseStage=a.petStage();
         check(a.renderSpecialPose(),"care pose actually loads");
         hidden(a,"direct care pose keeps house empty");
@@ -245,19 +286,19 @@ final class PromenadeVisibilityContract {
         a.keepCurrentImageIfSameStage(a.petStage());
         hidden(a,"same-age fallback keeps house empty");
         a.applyPose(0);hidden(a,"manual pose keeps house empty");
-        check(a.games.showGamePose(GameSprites.forStage(species,a.petStage()).fetch("tennis")),
+        check(a.games.showGamePose(GameSprites.forStage(species,sex,a.petStage()).fetch("tennis")),
             "fetch pose actually loads");
         hidden(a,"fetch pose keeps house empty");
         a.games.showRopePose();hidden(a,"rope pose keeps house empty");
         a.gardenGames.scratcherFrames=a.recordingFrames(
-            GardenSprites.forStage(species,a.petStage()).scratcherPlay,1);
+            GardenSprites.forStage(species,sex,a.petStage()).scratcherPlay,1);
         a.gardenGames.showFrame(System.currentTimeMillis());
         hidden(a,"garden scratcher pose keeps house empty");
         check(a.assetErrors==0,"all direct pose paths execute without recording-resource errors");
     }
-    static void animationAndResume(String species,int stage){
+    static void animationAndResume(String species,String sex,int stage){
         for(String mode:new String[]{"idle","walking","sleeping","action","manual"}){
-            MainActivity a=actor(species,stage);depart(a);
+            MainActivity a=actor(species,sex,stage);depart(a);
             if("walking".equals(mode)){a.walking=true;a.targetNX=.9f;a.targetNY=.8f;}
             if("sleeping".equals(mode))a.sleeping=true;
             if("action".equals(mode))a.startActionAnimation(MainActivity.ActionAnim.JUMP,5000L);
@@ -267,7 +308,7 @@ final class PromenadeVisibilityContract {
             check(a.games.beforeCalls==0&&a.gardenGames.beforeCalls==0,
                 species+"/"+stage+": "+mode+" bypasses home-game hooks while away");
         }
-        MainActivity a=actor(species,stage);
+        MainActivity a=actor(species,sex,stage);
         a.sp.edit().putBoolean("promenadeActive",true)
             .putLong("promenadeStart",System.currentTimeMillis()-1000L).apply();
         a.onResume();
@@ -281,11 +322,11 @@ final class PromenadeVisibilityContract {
         hidden(a,"second internal resume keeps house empty");
         a.updatePetPosition();hidden(a,"post-resume layout cannot revive the animal");
     }
-    static void departureAndReturn(String species,int stage){
-        MainActivity a=actor(species,stage);
+    static void departureAndReturn(String species,String sex,int stage){
+        MainActivity a=actor(species,sex,stage);
         a.walking=true;a.callingToForeground=true;
         a.manualUntil=System.currentTimeMillis()+5000L;
-        a.specialPoseRes=CareSprites.forStage(species,a.petStage()).soap;
+        a.specialPoseRes=CareSprites.forStage(species,sex,a.petStage()).soap;
         a.specialPoseStage=a.petStage();
         a.actionAnim=MainActivity.ActionAnim.JUMP;
         a.startPromenade(new ObjectSystem.Item());
@@ -299,7 +340,7 @@ final class PromenadeVisibilityContract {
         a.startPromenade(new ObjectSystem.Item());
         check(a.sp.getLong("promenadeStart",0L)==start,"reopening preserves departure time");
         a.updatePetPosition();hidden(a,"returning to house before expiry stays invisible");
-        MainActivity other=actor(species,stage);
+        MainActivity other=actor(species,sex,stage);
         visible(other,"another profile's animal stays visible");
         a.sp.edit().putLong("promenadeStart",System.currentTimeMillis()-PromenadeActivity.DURATION_MS-1000L).apply();
         a.ensurePetImage();
@@ -314,9 +355,9 @@ final class PromenadeVisibilityContract {
         a.petView.setImageResource(a.idleDownDrawable());a.displayedPetStage=null;a.updatePetPosition();
         hidden(a,"wrong/unknown rendered stage stays hidden at home");
     }
-    static void ageTransitionWhileAway(String species,int stage){
+    static void ageTransitionWhileAway(String species,String sex,int stage){
         if(stage==3)return;
-        MainActivity a=actor(species,stage);depart(a);
+        MainActivity a=actor(species,sex,stage);depart(a);
         long start=a.sp.getLong("promenadeStart",0L);
         long[] boundaries={MainActivity.CUB,MainActivity.CUB+MainActivity.TEEN,
             MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT};
@@ -332,18 +373,21 @@ final class PromenadeVisibilityContract {
         check(((Integer)a.petView.getDrawable()).intValue()==a.idleDownDrawable(),
             "return loads grown species-specific idle image");
     }
+    EXTRA_IDENTITY_TEST
     public static void main(String[] args){
-        for(String species:new String[]{SPECIES})for(int stage=0;stage<4;stage++){
-            visibilityWriters(species,stage);
-            animationAndResume(species,stage);
-            departureAndReturn(species,stage);
-            ageTransitionWhileAway(species,stage);
+        for(String[] variant:new String[][]{VARIANTS})for(int stage=0;stage<4;stage++){
+            String species=variant[0],sex=variant[1];
+            visibilityWriters(species,sex,stage);
+            animationAndResume(species,sex,stage);
+            departureAndReturn(species,sex,stage);
+            ageTransitionWhileAway(species,sex,stage);
+            EXTRA_IDENTITY_CALL
         }
         if(!failures.isEmpty()){
             for(String failure:failures)System.err.println("FAIL: "+failure);
             throw new AssertionError(failures.size()+" of "+checks+" promenade visibility assertions failed");
         }
-        System.out.println("Promenade visibility: "+checks+" production-method assertions, SPECIES_COUNT species × 4 ages: PASS");
+        System.out.println("Promenade visibility: "+checks+" production-method assertions, VARIANT_COUNT visual variants × 4 ages: PASS");
         System.out.println("Departure, resume, animation, all pose writers, room/layout callbacks and timed return: PASS");
     }
 }
@@ -387,13 +431,21 @@ def run(source_ref=None):
     production = {name: read(name) for name in [
         "CharacterSprites", "GameSprites", "CareSprites", "GardenSprites", "PetSpecies", "SpriteMotion",
     ]}
-    # Older references predate tiger adoption. Keep the regression-reproduction
-    # option exercising exactly the animals that existed in that source tree.
-    species = [name for name in ("leopard", "wolf", "tiger")
+    # A source-ref regression must use exactly the species and overloads that
+    # existed in that tree. The current tree includes both lion appearances.
+    species = [name for name in ("leopard", "wolf", "tiger", "lion")
                if f"R.drawable.{name}_" in production["CharacterSprites"]]
-    species_literal = ",".join(f'"{name}"' for name in species)
-    contract = TEST.replace("SPECIES_COUNT", str(len(species))).replace("SPECIES", species_literal)
-    support = SUPPORT.replace("SPECIES", species_literal)
+    variants = [(name, sex) for name in species
+                for sex in (("male", "female") if name == "lion" else ("male",))]
+    variants_literal = ",".join('{"' + name + '","' + sex + '"}' for name, sex in variants)
+    contract = TEST.replace("VARIANT_COUNT", str(len(variants))).replace("VARIANTS", variants_literal)
+    support = SUPPORT.replace("VARIANTS", variants_literal)
+    contract = contract.replace("EXTRA_IDENTITY_TEST", LION_IDENTITY_TEST if "lion" in species else "")
+    contract = contract.replace("EXTRA_IDENTITY_CALL",
+        'if("lion".equals(species))lionIdentitySwitch(sex,stage);' if "lion" in species else "")
+    if "String species,String sex,MainActivity.PetStage stage" not in production["CharacterSprites"]:
+        contract = contract.replace("forStage(species,sex,", "forStage(species,")
+        support = support.replace("forStage(species,sex,", "forStage(species,")
     resources = sorted(set(re.findall(r"R\.drawable\.(\w+)", "\n".join(production.values()))))
     duration = re.search(r"static final long DURATION_MS=[^;]+;", read("PromenadeActivity")).group(0)
     with tempfile.TemporaryDirectory(prefix="promenade-visibility-") as directory:

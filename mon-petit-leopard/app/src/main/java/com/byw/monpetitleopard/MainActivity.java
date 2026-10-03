@@ -64,6 +64,7 @@ public class MainActivity extends Activity {
     Bitmap currentWalkStrip=null;
     Bitmap[] currentWalkFrames=null;
     PetStage visualStage=null;
+    CharacterSprites.Pack visualPack=null;
     PetStage displayedPetStage=null;
     PetStage loadedWalkStage=null;
     WalkMode loadedWalkMode=null;
@@ -321,7 +322,7 @@ public class MainActivity extends Activity {
     }
 
     String stageName(){
-        return stage()==Stage.ENDED?"Cycle terminé":PetSpecies.stageLabel(petSpecies,petStage());
+        return stage()==Stage.ENDED?"Cycle terminé":PetSpecies.stageLabel(petSpecies,petSex,petStage());
     }
 
     String petEmoji(){return PetSpecies.emoji(petSpecies);}
@@ -583,7 +584,7 @@ public class MainActivity extends Activity {
 
     void refresh(){
         syncVisualStage();
-        if(profileIcon!=null)profileIcon.setImageResource(CharacterSprites.forStage(petSpecies,petStage()).idleDown);
+        if(profileIcon!=null)profileIcon.setImageResource(CharacterSprites.forStage(petSpecies,petSex,petStage()).idleDown);
         title.setText(pet+" "+sexSymbol()+" • génération "+generation);
         subTitle.setText(stageName()+" • "+virtualAgeMonths()+" mois • "+roomName());
         if(objectsBtn!=null)objectsBtn.setText(contextObjectButtonLabel());
@@ -613,7 +614,7 @@ public class MainActivity extends Activity {
         devGrowthBtn.setEnabled(next!=null);
         devGrowthBtn.setAlpha(next!=null?1f:.5f);
         String label=next!=null
-            ? "Dev · Grandir → "+PetSpecies.stageLabel(petSpecies,next)
+            ? "Dev · Grandir → "+PetSpecies.stageLabel(petSpecies,petSex,next)
             : stage()==Stage.ENDED?"Dev · Cycle terminé":"Dev · Âge maximum (vieux)";
         devGrowthBtn.setText(label);
         devGrowthBtn.setContentDescription(label);
@@ -835,7 +836,7 @@ public class MainActivity extends Activity {
             return;
         }
 
-        boolean faceActive=CharacterSprites.forStage(petSpecies,petStage()).hasFaceMoods()
+        boolean faceActive=CharacterSprites.forStage(petSpecies,petSex,petStage()).hasFaceMoods()
                 && !sleeping && !walking && activeFaceMood>=0 && now<faceMoodUntil;
 
         if(faceActive){
@@ -872,12 +873,14 @@ public class MainActivity extends Activity {
 
     void syncVisualStage(){
         PetStage now=petStage();
-        if(visualStage==now)return;
+        CharacterSprites.Pack nextPack=CharacterSprites.forStage(petSpecies,petSex,now);
+        if(visualStage==now && visualPack==nextPack)return;
 
         PetStage previous=visualStage;
         visualStage=now;
+        visualPack=nextPack;
         if(previous!=null){
-            // Une activité en cours ne conserve jamais les images de l'âge précédent.
+            // Un changement d'âge, d'espèce ou de sexe ne conserve aucune image du pack précédent.
             if(games!=null)games.cancel();
             if(gardenGames!=null)gardenGames.cancel();
             nextWalkAt=System.currentTimeMillis()+3500L;
@@ -926,22 +929,22 @@ public class MainActivity extends Activity {
 
     int getWalkStrip(PetStage stage,WalkMode mode){
         if(games!=null && games.fastRun()){
-            GameSprites.Pack game=GameSprites.forStage(petSpecies,stage);
+            GameSprites.Pack game=GameSprites.forStage(petSpecies,petSex,stage);
             if(mode==WalkMode.FRONT)return game.runDown;
             if(mode==WalkMode.BACK)return game.runUp;
             return travelDirection==TravelDirection.RIGHT?game.runRight:game.runLeft;
         }
 
-        CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,stage);
+        CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,petSex,stage);
         if(mode==WalkMode.FRONT)return pack.walkDown;
         if(mode==WalkMode.BACK)return pack.walkUp;
         return travelDirection==TravelDirection.RIGHT?pack.walkRight:pack.walkLeft;
     }
 
-    int idleDownDrawable(){return CharacterSprites.forStage(petSpecies,petStage()).idleDown;}
+    int idleDownDrawable(){return CharacterSprites.forStage(petSpecies,petSex,petStage()).idleDown;}
 
     int idleDrawableForDirection(TravelDirection direction){
-        return CharacterSprites.forStage(petSpecies,petStage()).idle(direction);
+        return CharacterSprites.forStage(petSpecies,petSex,petStage()).idle(direction);
     }
 
     int idleDrawable(){return idleDownDrawable();}
@@ -951,7 +954,7 @@ public class MainActivity extends Activity {
     int emotionDrawable(){return idleDownDrawable();}
 
     int walkStripDrawable(WalkMode mode){return getWalkStrip(petStage(),mode);}
-    int faceMoodStripRes(){return CharacterSprites.forStage(petSpecies,petStage()).moods;}
+    int faceMoodStripRes(){return CharacterSprites.forStage(petSpecies,petSex,petStage()).moods;}
 
     void releaseFaceMoodFrames(){
         faceMoodFrames=null;
@@ -959,7 +962,7 @@ public class MainActivity extends Activity {
     }
 
     boolean loadFaceMoodFrames(){
-        CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,petStage());
+        CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,petSex,petStage());
         if(!pack.hasFaceMoods())return false;
         int res=pack.moods;
         if(invalidCharacterAssets.contains(res)){
@@ -1020,7 +1023,7 @@ public class MainActivity extends Activity {
 
     void maybeShowFaceMood(long now){
         if(!CharacterSprites.FACE_ATLAS_REVIEWED)return;
-        CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,petStage());
+        CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,petSex,petStage());
         if(!pack.hasFaceMoods() || sleeping || walking || actionAnim!=ActionAnim.NONE
                 || moodApproach || moodExitUp || now<manualUntil)return;
         if(nextFaceMoodAt==0){
@@ -1232,10 +1235,10 @@ public class MainActivity extends Activity {
     }
 
     int specialPoseResource(String animation){
-        if("bottle".equals(animation))return CareSprites.bottle(petSpecies,petStage());
+        if("bottle".equals(animation))return CareSprites.bottle(petSpecies,petSex,petStage());
         if("groom_foam".equals(animation)||"soap".equals(animation)
                 ||"comb".equals(animation)||"towel".equals(animation))
-            return CareSprites.forStage(petSpecies,petStage()).action(animation);
+            return CareSprites.forStage(petSpecies,petSex,petStage()).action(animation);
         return 0;
     }
 
@@ -1280,7 +1283,7 @@ public class MainActivity extends Activity {
     }
 
     int actionResource(ActionAnim type){
-        CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,petStage());
+        CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,petSex,petStage());
         if(type==ActionAnim.EAT)return pack.eat;
         if(type==ActionAnim.JUMP)return pack.jump;
         if(type==ActionAnim.SLEEP)return pack.sleep;
@@ -2192,20 +2195,20 @@ public class MainActivity extends Activity {
         e.setText(first?"":pet);
         new AlertDialog.Builder(this)
             .setTitle(first?"Bienvenue !":"Changer le nom")
-            .setMessage(first?"Donne un nom à ton "+PetSpecies.stageLabel(petSpecies,PetStage.CUB).toLowerCase(Locale.FRANCE)+".":null)
+            .setMessage(first?"Donne un nom à ton "+PetSpecies.stageLabel(petSpecies,petSex,PetStage.CUB).toLowerCase(Locale.FRANCE)+".":null)
             .setView(e)
             .setPositiveButton("Valider",(d,w)->{
                 String n=e.getText().toString().trim();
-                pet=n.isEmpty()?PetSpecies.defaultName(petSpecies):n;
+                pet=n.isEmpty()?PetSpecies.defaultName(petSpecies,petSex):n;
                 sp.edit().putBoolean("named",true).apply();
                 PetProfileStore.updateName(this,profileSlot,pet);
                 if(first)recordAdoption(pet);
                 save();
                 refresh();
             })
-            .setNegativeButton(first?PetSpecies.defaultName(petSpecies):"Annuler",(d,w)->{
+            .setNegativeButton(first?PetSpecies.defaultName(petSpecies,petSex):"Annuler",(d,w)->{
                 if(first){
-                    pet=PetSpecies.defaultName(petSpecies);
+                    pet=PetSpecies.defaultName(petSpecies,petSex);
                     sp.edit().putBoolean("named",true).apply();
                     PetProfileStore.updateName(this,profileSlot,pet);
                     recordAdoption(pet);
@@ -2225,7 +2228,7 @@ public class MainActivity extends Activity {
 
         AlertDialog a=new AlertDialog.Builder(this)
             .setTitle("Une belle vie")
-            .setMessage(pet+" a terminé son cycle de 13 heures réelles.\n\nTu peux maintenant adopter un nouveau "+PetSpecies.stageLabel(petSpecies,PetStage.CUB).toLowerCase(Locale.FRANCE)+".")
+            .setMessage(pet+" a terminé son cycle de 13 heures réelles.\n\nTu peux maintenant adopter un nouveau "+PetSpecies.stageLabel(petSpecies,petSex,PetStage.CUB).toLowerCase(Locale.FRANCE)+".")
             .setPositiveButton("Adopter",(d,w)->newGeneration())
             .setCancelable(false)
             .create();
@@ -2394,7 +2397,7 @@ public class MainActivity extends Activity {
         if(!PetProfileStore.reproductionAgeEligible(this,profileSlot)){
             new AlertDialog.Builder(this)
                 .setTitle("Reproduction")
-                .setMessage("La reproduction est disponible uniquement aux stades ado, adulte et vieux. Les léopardeaux, les louveteaux et les tigreaux ne peuvent pas se reproduire.")
+                .setMessage("La reproduction est disponible uniquement aux stades ado, adulte et vieux. Les léopardeaux, les louveteaux, les tigreaux et les lionceaux ne peuvent pas se reproduire.")
                 .setPositiveButton("OK",null).show();
             return;
         }
@@ -2541,13 +2544,13 @@ public class MainActivity extends Activity {
 
     void showSpritePackPicker(){
         String[] names=new String[PetStage.values().length];
-        for(PetStage age:PetStage.values())names[age.ordinal()]=PetSpecies.stageLabel(petSpecies,age);
+        for(PetStage age:PetStage.values())names[age.ordinal()]=PetSpecies.stageLabel(petSpecies,petSex,age);
         new AlertDialog.Builder(this).setTitle("Packs séparés — diagnostic")
             .setItems(names,(d,w)->showSpritePack(PetStage.values()[w],0,0)).show();
     }
 
     void showSpritePack(PetStage age,int item,int frame){
-        CharacterSprites.Pack p=CharacterSprites.forStage(petSpecies,age);
+        CharacterSprites.Pack p=CharacterSprites.forStage(petSpecies,petSex,age);
         int[] ids={p.idleDown,p.idleLeft,p.idleRight,p.idleUp,
             p.walkDown,p.walkLeft,p.walkRight,p.walkUp,p.jump,p.eat,p.sleep,p.moods};
         int[] counts={1,1,1,1,6,6,6,6,5,3,3,12};
@@ -2559,7 +2562,7 @@ public class MainActivity extends Activity {
         LinearLayout box=new LinearLayout(this);
         box.setOrientation(LinearLayout.VERTICAL);
         TextView note=text(12,false);
-        note.setText(PetSpecies.label(petSpecies)+" • "+p.zone+"\n"+names[k]+
+        note.setText(PetSpecies.label(petSpecies,petSex)+" • "+p.zone+"\n"+names[k]+
             (counts[k]>1?" • frame "+(f+1)+"/"+counts[k]:""));
         note.setPadding(dp(14),dp(8),dp(14),dp(8));
         box.addView(note);
@@ -2633,7 +2636,7 @@ public class MainActivity extends Activity {
     }
 
     boolean isMoodResourceForStage(PetStage stage,int res){
-        return CharacterSprites.forStage(petSpecies,stage).ownsIdle(res);
+        return CharacterSprites.forStage(petSpecies,petSex,stage).ownsIdle(res);
     }
 
     boolean keepCurrentImageIfSameStage(PetStage expectedStage){
@@ -2673,7 +2676,7 @@ public class MainActivity extends Activity {
         assetErrorShown=false;
         HashMap<Integer,PetStage> owners=new HashMap<>();
         for(PetStage age:PetStage.values()){
-            CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,age);
+            CharacterSprites.Pack pack=CharacterSprites.forStage(petSpecies,petSex,age);
             for(int res:pack.allResources()){
                 PetStage other=owners.put(res,age);
                 if(other!=null && other!=age){
@@ -2682,7 +2685,7 @@ public class MainActivity extends Activity {
                 }
                 try{
                     String name=getResources().getResourceEntryName(res);
-                    if(!name.startsWith(petSpecies+"_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                    if(!name.startsWith(PetSpecies.resourcePrefix(petSpecies,petSex,age)))
                         throw new IllegalArgumentException("mauvais préfixe : "+name);
                     BitmapFactory.Options opts=new BitmapFactory.Options();
                     opts.inJustDecodeBounds=true;opts.inScaled=false;
@@ -2697,7 +2700,7 @@ public class MainActivity extends Activity {
                 }
             }
 
-            GameSprites.Pack game=GameSprites.forStage(petSpecies,age);
+            GameSprites.Pack game=GameSprites.forStage(petSpecies,petSex,age);
             for(int res:game.allResources()){
                 PetStage other=owners.put(res,age);
                 if(other!=null && other!=age){
@@ -2706,7 +2709,7 @@ public class MainActivity extends Activity {
                 }
                 try{
                     String name=getResources().getResourceEntryName(res);
-                    if(!name.startsWith(petSpecies+"_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                    if(!name.startsWith(PetSpecies.resourcePrefix(petSpecies,petSex,age)))
                         throw new IllegalArgumentException("mauvais préfixe jeu : "+name);
                     BitmapFactory.Options opts=new BitmapFactory.Options();
                     opts.inJustDecodeBounds=true;opts.inScaled=false;
@@ -2721,7 +2724,7 @@ public class MainActivity extends Activity {
                 }
             }
 
-            CareSprites.Pack care=CareSprites.forStage(petSpecies,age);
+            CareSprites.Pack care=CareSprites.forStage(petSpecies,petSex,age);
             for(int res:care.allResources()){
                 PetStage other=owners.put(res,age);
                 if(other!=null && other!=age){
@@ -2730,7 +2733,7 @@ public class MainActivity extends Activity {
                 }
                 try{
                     String name=getResources().getResourceEntryName(res);
-                    if(!name.startsWith(petSpecies+"_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                    if(!name.startsWith(PetSpecies.resourcePrefix(petSpecies,petSex,age)))
                         throw new IllegalArgumentException("mauvais préfixe soin : "+name);
                     BitmapFactory.Options opts=new BitmapFactory.Options();
                     opts.inJustDecodeBounds=true;opts.inScaled=false;
@@ -2745,7 +2748,7 @@ public class MainActivity extends Activity {
                 }
             }
 
-            GardenSprites.Pack garden=GardenSprites.forStage(petSpecies,age);
+            GardenSprites.Pack garden=GardenSprites.forStage(petSpecies,petSex,age);
             for(int res:garden.allResources()){
                 PetStage other=owners.put(res,age);
                 if(other!=null && other!=age){
@@ -2754,7 +2757,7 @@ public class MainActivity extends Activity {
                 }
                 try{
                     String name=getResources().getResourceEntryName(res);
-                    if(!name.startsWith(petSpecies+"_"+age.name().toLowerCase(Locale.ROOT)+"_"))
+                    if(!name.startsWith(PetSpecies.resourcePrefix(petSpecies,petSex,age)))
                         throw new IllegalArgumentException("mauvais préfixe jardin : "+name);
                     BitmapFactory.Options opts=new BitmapFactory.Options();
                     opts.inJustDecodeBounds=true;opts.inScaled=false;
@@ -2770,14 +2773,14 @@ public class MainActivity extends Activity {
             }
 
             if(age==PetStage.CUB){
-                int bottle=CareSprites.bottle(petSpecies,age);
+                int bottle=CareSprites.bottle(petSpecies,petSex,age);
                 PetStage other=owners.put(bottle,age);
                 if(other!=null && other!=age){
                     markCharacterAssetInvalid(bottle,age+" BOTTLE","partage inter-âge interdit");
                 }else{
                     try{
                         String name=getResources().getResourceEntryName(bottle);
-                        if(!name.equals(petSpecies+"_cub_bottle"))
+                        if(!name.equals(PetSpecies.resourcePrefix(petSpecies,petSex,PetStage.CUB)+"bottle"))
                             throw new IllegalArgumentException("mauvais préfixe biberon : "+name);
                         BitmapFactory.Options opts=new BitmapFactory.Options();
                         opts.inJustDecodeBounds=true;opts.inScaled=false;

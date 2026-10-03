@@ -5,6 +5,7 @@ final class GardenSprites {
 
     static final class Pack {
         final String species;
+        final String sex;
         final MainActivity.PetStage stage;
         final int scratcherPlay;
         final int scratcherFrames;
@@ -14,7 +15,12 @@ final class GardenSprites {
         }
 
         Pack(String species,MainActivity.PetStage stage,int scratcherPlay,int scratcherFrames){
+            this(species,"",stage,scratcherPlay,scratcherFrames);
+        }
+
+        Pack(String species,String sex,MainActivity.PetStage stage,int scratcherPlay,int scratcherFrames){
             this.species=species;
+            this.sex=sex;
             this.stage=stage;
             this.scratcherPlay=scratcherPlay;
             this.scratcherFrames=scratcherFrames;
@@ -54,7 +60,38 @@ final class GardenSprites {
     private static final Pack TIGER_OLD=new Pack("tiger",MainActivity.PetStage.OLD,
         R.drawable.tiger_old_scratcher_play,1);
 
+    private static final Pack LION_MALE_CUB=new Pack("lion","male",MainActivity.PetStage.CUB,
+        R.drawable.lion_male_cub_scratcher_play,1);
+    private static final Pack LION_MALE_TEEN=new Pack("lion","male",MainActivity.PetStage.TEEN,
+        R.drawable.lion_male_teen_scratcher_play,1);
+    private static final Pack LION_MALE_ADULT=new Pack("lion","male",MainActivity.PetStage.ADULT,
+        R.drawable.lion_male_adult_scratcher_play,1);
+    private static final Pack LION_MALE_OLD=new Pack("lion","male",MainActivity.PetStage.OLD,
+        R.drawable.lion_male_old_scratcher_play,1);
+
+    private static final Pack LION_FEMALE_CUB=new Pack("lion","female",MainActivity.PetStage.CUB,
+        R.drawable.lion_female_cub_scratcher_play,1);
+    private static final Pack LION_FEMALE_TEEN=new Pack("lion","female",MainActivity.PetStage.TEEN,
+        R.drawable.lion_female_teen_scratcher_play,1);
+    private static final Pack LION_FEMALE_ADULT=new Pack("lion","female",MainActivity.PetStage.ADULT,
+        R.drawable.lion_female_adult_scratcher_play,1);
+    private static final Pack LION_FEMALE_OLD=new Pack("lion","female",MainActivity.PetStage.OLD,
+        R.drawable.lion_female_old_scratcher_play,1);
+
+    static Pack forStage(String species,String sex,MainActivity.PetStage stage){
+        if(!"lion".equals(species))return forStage(species,stage);
+        boolean female="female".equals(PetSpecies.requireLionSex(sex));
+        switch(stage){
+            case CUB:return female?LION_FEMALE_CUB:LION_MALE_CUB;
+            case TEEN:return female?LION_FEMALE_TEEN:LION_MALE_TEEN;
+            case ADULT:return female?LION_FEMALE_ADULT:LION_MALE_ADULT;
+            case OLD:return female?LION_FEMALE_OLD:LION_MALE_OLD;
+        }
+        throw new IllegalStateException("Aucun pack lion pour l'âge "+stage);
+    }
+
     static Pack forStage(String species,MainActivity.PetStage stage){
+        if("lion".equals(species))throw new IllegalArgumentException("Le pack du lion exige son sexe");
         if("leopard".equals(species))return forStage(stage);
         if("tiger".equals(species)){
             switch(stage){
