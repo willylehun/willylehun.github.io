@@ -13,15 +13,16 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 53
-        versionName '0.8.8-graphics-qa'
+        versionCode 54
+        versionName '0.8.9-graphics-qa'
     }
     sourceSets {
         main {
             manifest.srcFile "${qaSourceRoot}/app/src/main/AndroidManifest.xml"
             java.srcDirs = ["${qaSourceRoot}/app/src/main/java"]
             res.srcDirs = ['res', 'res-cub', 'res-teen', 'res-adult', 'res-old',
-                    'res-wolf-cub', 'res-wolf-teen', 'res-wolf-adult', 'res-wolf-old']
+                    'res-wolf-cub', 'res-wolf-teen', 'res-wolf-adult', 'res-wolf-old',
+                    'res-tiger-cub', 'res-tiger-teen', 'res-tiger-adult', 'res-tiger-old']
                     .collect { "${qaSourceRoot}/app/src/main/${it}" }
         }
     }

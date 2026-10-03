@@ -67,7 +67,7 @@ with tempfile.TemporaryDirectory() as temp:
     (p/'CareSprites.java').write_text(care_java)
     (p/'GardenSprites.java').write_text(garden_java)
     (p/'SpriteMotion.java').write_text((JAVA/'SpriteMotion.java').read_text())
-    names=sorted(set(re.findall(r'R\.drawable\.((?:leopard|wolf)_\w+)',chars+games_java+care_java+garden_java)))
+    names=sorted(set(re.findall(r'R\.drawable\.((?:leopard|wolf|tiger)_\w+)',chars+games_java+care_java+garden_java)))
     (p/'R.java').write_text('package com.byw.monpetitleopard; final class R { static class drawable {'+
         ''.join('static final int '+n+'='+str(i+1)+';' for i,n in enumerate(names))+'}}')
     (p/'MainActivity.java').write_text(
@@ -494,7 +494,7 @@ assert 'getSharedPreferences("pet",Context.MODE_PRIVATE)' in profiles
 assert 'copyAll(legacy,target)' in profiles
 assert 'createLeopard' in profiles
 assert 'PetSpecies.iconRes(species(context,slot),age)' in profiles
-for animal in ['leopard','wolf']:
+for animal in ['leopard','wolf','tiger']:
     for age in ['cub','teen','adult','old']:
         assert f'R.drawable.{animal}_{age}_idle_down' in species
 

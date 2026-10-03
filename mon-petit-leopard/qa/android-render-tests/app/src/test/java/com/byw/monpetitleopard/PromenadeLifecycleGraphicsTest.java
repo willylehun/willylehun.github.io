@@ -28,6 +28,10 @@ public class PromenadeLifecycleGraphicsTest {
  @Test public void wolfTeen(){scenario(PetSpecies.WOLF,MainActivity.PetStage.TEEN,MainActivity.CUB+10_000L);}
  @Test public void wolfAdult(){scenario(PetSpecies.WOLF,MainActivity.PetStage.ADULT,MainActivity.CUB+MainActivity.TEEN+10_000L);}
  @Test public void wolfOld(){scenario(PetSpecies.WOLF,MainActivity.PetStage.OLD,MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+10_000L);}
+ @Test public void tigerCub(){scenario(PetSpecies.TIGER,MainActivity.PetStage.CUB,10_000L);}
+ @Test public void tigerTeen(){scenario(PetSpecies.TIGER,MainActivity.PetStage.TEEN,MainActivity.CUB+10_000L);}
+ @Test public void tigerAdult(){scenario(PetSpecies.TIGER,MainActivity.PetStage.ADULT,MainActivity.CUB+MainActivity.TEEN+10_000L);}
+ @Test public void tigerOld(){scenario(PetSpecies.TIGER,MainActivity.PetStage.OLD,MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+10_000L);}
 
  void scenario(String species,MainActivity.PetStage stage,long age){
   Context app=RuntimeEnvironment.getApplication();
@@ -55,6 +59,11 @@ public class PromenadeLifecycleGraphicsTest {
   ActivityController<PromenadeActivity> tripController=Robolectric.buildActivity(PromenadeActivity.class,promenadeIntent).create().start().resume().visible();
   PromenadeActivity trip=tripController.get();
   settle(trip);
+  assertEquals(PetSpecies.promenadeTokenRes(species,age),trip.mapView.tokenRes);
+  assertNotNull("Promenade portrait is decoded",trip.mapView.token);
+  assertTrue("Promenade portrait preserves transparency",trip.mapView.token.hasAlpha());
+  assertEquals(0,Color.alpha(trip.mapView.token.getPixel(0,0)));
+  if(!PetSpecies.LEOPARD.equals(species))assertTrue(trip.getResources().getResourceEntryName(trip.mapView.tokenRes).startsWith(species+"_"+stage.name().toLowerCase(Locale.ROOT)+"_"));
   assertTrue(main.promenadeActive());
   Button back=findButton(trip.getWindow().getDecorView(),"Retour au jardin");
   assertNotNull(back); assertTrue(back.performClick());

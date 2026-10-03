@@ -86,7 +86,7 @@ class Bitmap {
 }
 class BitmapFactory {
     static Bitmap decodeResource(Object resources,int res){
-        for(String species:new String[]{"leopard","wolf"})
+        for(String species:new String[]{SPECIES})
             for(MainActivity.PetStage age:MainActivity.PetStage.values()){
                 int width=CharacterSprites.forStage(species,age).expectedWidth(res);
                 if(width<0)width=GameSprites.forStage(species,age).expectedWidth(res);
@@ -333,7 +333,7 @@ final class PromenadeVisibilityContract {
             "return loads grown species-specific idle image");
     }
     public static void main(String[] args){
-        for(String species:new String[]{"leopard","wolf"})for(int stage=0;stage<4;stage++){
+        for(String species:new String[]{SPECIES})for(int stage=0;stage<4;stage++){
             visibilityWriters(species,stage);
             animationAndResume(species,stage);
             departureAndReturn(species,stage);
@@ -343,7 +343,7 @@ final class PromenadeVisibilityContract {
             for(String failure:failures)System.err.println("FAIL: "+failure);
             throw new AssertionError(failures.size()+" of "+checks+" promenade visibility assertions failed");
         }
-        System.out.println("Promenade visibility: "+checks+" production-method assertions, 2 species × 4 ages: PASS");
+        System.out.println("Promenade visibility: "+checks+" production-method assertions, SPECIES_COUNT species × 4 ages: PASS");
         System.out.println("Departure, resume, animation, all pose writers, room/layout callbacks and timed return: PASS");
     }
 }
@@ -387,6 +387,13 @@ def run(source_ref=None):
     production = {name: read(name) for name in [
         "CharacterSprites", "GameSprites", "CareSprites", "GardenSprites", "PetSpecies", "SpriteMotion",
     ]}
+    # Older references predate tiger adoption. Keep the regression-reproduction
+    # option exercising exactly the animals that existed in that source tree.
+    species = [name for name in ("leopard", "wolf", "tiger")
+               if f"R.drawable.{name}_" in production["CharacterSprites"]]
+    species_literal = ",".join(f'"{name}"' for name in species)
+    contract = TEST.replace("SPECIES_COUNT", str(len(species))).replace("SPECIES", species_literal)
+    support = SUPPORT.replace("SPECIES", species_literal)
     resources = sorted(set(re.findall(r"R\.drawable\.(\w+)", "\n".join(production.values()))))
     duration = re.search(r"static final long DURATION_MS=[^;]+;", read("PromenadeActivity")).group(0)
     with tempfile.TemporaryDirectory(prefix="promenade-visibility-") as directory:
@@ -395,8 +402,8 @@ def run(source_ref=None):
         package.mkdir(parents=True)
         sources = {
             **production, "MainActivity": main_source, "LivingRoomGames": living,
-            "GardenGames": garden, "RecordingAndroid": SUPPORT.replace("DURATION", duration),
-            "PromenadeVisibilityContract": TEST,
+            "GardenGames": garden, "RecordingAndroid": support.replace("DURATION", duration),
+            "PromenadeVisibilityContract": contract,
             "R": "package com.byw.monpetitleopard; class R {static class drawable {" +
                 "".join(f"static final int {name}={index};" for index, name in enumerate(resources, 1)) + "}}",
         }

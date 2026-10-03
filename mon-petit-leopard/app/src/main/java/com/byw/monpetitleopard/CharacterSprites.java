@@ -140,8 +140,49 @@ final class CharacterSprites {
         R.drawable.wolf_old_jump,R.drawable.wolf_old_eat,
         R.drawable.wolf_old_sleep,R.drawable.wolf_old_moods);
 
+    private static final Pack TIGER_CUB=new Pack("tiger",MainActivity.PetStage.CUB,"res-tiger-cub",
+        R.drawable.tiger_cub_idle_down,R.drawable.tiger_cub_idle_left,
+        R.drawable.tiger_cub_idle_right,R.drawable.tiger_cub_idle_up,
+        R.drawable.tiger_cub_walk_down,R.drawable.tiger_cub_walk_left,
+        R.drawable.tiger_cub_walk_right,R.drawable.tiger_cub_walk_up,
+        R.drawable.tiger_cub_jump,R.drawable.tiger_cub_eat,
+        R.drawable.tiger_cub_sleep,R.drawable.tiger_cub_moods);
+
+    private static final Pack TIGER_TEEN=new Pack("tiger",MainActivity.PetStage.TEEN,"res-tiger-teen",
+        R.drawable.tiger_teen_idle_down,R.drawable.tiger_teen_idle_left,
+        R.drawable.tiger_teen_idle_right,R.drawable.tiger_teen_idle_up,
+        R.drawable.tiger_teen_walk_down,R.drawable.tiger_teen_walk_left,
+        R.drawable.tiger_teen_walk_right,R.drawable.tiger_teen_walk_up,
+        R.drawable.tiger_teen_jump,R.drawable.tiger_teen_eat,
+        R.drawable.tiger_teen_sleep,R.drawable.tiger_teen_moods);
+
+    private static final Pack TIGER_ADULT=new Pack("tiger",MainActivity.PetStage.ADULT,"res-tiger-adult",
+        R.drawable.tiger_adult_idle_down,R.drawable.tiger_adult_idle_left,
+        R.drawable.tiger_adult_idle_right,R.drawable.tiger_adult_idle_up,
+        R.drawable.tiger_adult_walk_down,R.drawable.tiger_adult_walk_left,
+        R.drawable.tiger_adult_walk_right,R.drawable.tiger_adult_walk_up,
+        R.drawable.tiger_adult_jump,R.drawable.tiger_adult_eat,
+        R.drawable.tiger_adult_sleep,R.drawable.tiger_adult_moods);
+
+    private static final Pack TIGER_OLD=new Pack("tiger",MainActivity.PetStage.OLD,"res-tiger-old",
+        R.drawable.tiger_old_idle_down,R.drawable.tiger_old_idle_left,
+        R.drawable.tiger_old_idle_right,R.drawable.tiger_old_idle_up,
+        R.drawable.tiger_old_walk_down,R.drawable.tiger_old_walk_left,
+        R.drawable.tiger_old_walk_right,R.drawable.tiger_old_walk_up,
+        R.drawable.tiger_old_jump,R.drawable.tiger_old_eat,
+        R.drawable.tiger_old_sleep,R.drawable.tiger_old_moods);
+
     static Pack forStage(String species,MainActivity.PetStage stage){
         if("leopard".equals(species))return forStage(stage);
+        if("tiger".equals(species)){
+            switch(stage){
+                case CUB:return TIGER_CUB;
+                case TEEN:return TIGER_TEEN;
+                case ADULT:return TIGER_ADULT;
+                case OLD:return TIGER_OLD;
+            }
+            throw new IllegalStateException("Aucun pack tigre pour l'âge "+stage);
+        }
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);
         switch(stage){

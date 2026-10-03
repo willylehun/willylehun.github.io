@@ -324,7 +324,7 @@ public class MainActivity extends Activity {
         return stage()==Stage.ENDED?"Cycle terminé":PetSpecies.stageLabel(petSpecies,petStage());
     }
 
-    String petEmoji(){return PetSpecies.isWolf(petSpecies)?"🐺":"🐆";}
+    String petEmoji(){return PetSpecies.emoji(petSpecies);}
 
     void build(){
         root=new LinearLayout(this);
@@ -2394,7 +2394,7 @@ public class MainActivity extends Activity {
         if(!PetProfileStore.reproductionAgeEligible(this,profileSlot)){
             new AlertDialog.Builder(this)
                 .setTitle("Reproduction")
-                .setMessage("La reproduction est disponible uniquement aux stades ado, adulte et vieux. Les léopardeaux et les louveteaux ne peuvent pas se reproduire.")
+                .setMessage("La reproduction est disponible uniquement aux stades ado, adulte et vieux. Les léopardeaux, les louveteaux et les tigreaux ne peuvent pas se reproduire.")
                 .setPositiveButton("OK",null).show();
             return;
         }
@@ -2596,7 +2596,7 @@ public class MainActivity extends Activity {
         List<String> events=splitLog(historyLog);
 
         StringBuilder b=new StringBuilder();
-        b.append(PetSpecies.isWolf(petSpecies)?"Loups adoptés (":"Léopards adoptés (").append(adopted.size()).append("/10)\n");
+        b.append(PetSpecies.pluralLabel(petSpecies)).append(" adoptés (").append(adopted.size()).append("/10)\n");
         if(adopted.isEmpty())b.append("Aucun\n");
         else for(int i=adopted.size()-1;i>=0;i--)b.append("• ").append(adopted.get(i)).append("\n");
 

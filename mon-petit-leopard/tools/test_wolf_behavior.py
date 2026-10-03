@@ -1,4 +1,4 @@
-"""Execute production Java rules for both species without an Android emulator.
+"""Execute production Java rules for all three species without an Android emulator.
 
 The Android UI is replaced by recording stubs. Profile storage, sprite registries,
 preferences, the object catalogue/routing and the relevant MainActivity methods
@@ -103,6 +103,7 @@ import android.content.SharedPreferences;
 import java.util.*;
 
 final class WolfBehaviorContract {
+    static final String[] SPECIES={"leopard","wolf","tiger"};
     static final class MemoryPreferences implements SharedPreferences {
         final Map<String,Object> values=new HashMap<>();
         int bornReads;
@@ -212,22 +213,28 @@ final class WolfBehaviorContract {
         PetProfileStore.setSex(c,0,"male");
         PetProfileStore.updateName(c,0,"Léo retrouvé");
         PetProfileStore.createAnimal(c,1,"wolf","female","Luna");
+        PetProfileStore.createAnimal(c,2,"tiger","male","Tigrou");
         Map<String,Map<String,?>> migrated=c.snapshot();
         PetProfileStore.ensureMigrated(c);
-        equal(c.snapshot(),migrated,"migration is idempotent after new wolf adoption");
+        equal(c.snapshot(),migrated,"migration is idempotent after wolf and tiger adoptions");
 
         MemoryContext resumed=new MemoryContext(c);
         PetProfileStore.ensureMigrated(resumed);
-        equal(resumed.snapshot(),migrated,"reopening profiles does not reset either animal");
+        equal(resumed.snapshot(),migrated,"reopening profiles does not reset any animal");
         equal(PetProfileStore.species(resumed,1),"wolf","wolf species survives reopening");
+        equal(PetProfileStore.species(resumed,2),"tiger","tiger species survives reopening");
         equal(PetProfileStore.iconRes(resumed,0),R.drawable.leopard_teen_idle_down,
             "migrated leopard keeps its age and portrait");
-        check(c.pet(0)!=c.pet(1),"each animal has its own preferences file");
+        check(c.pet(0)!=c.pet(1)&&c.pet(0)!=c.pet(2)&&c.pet(1)!=c.pet(2),
+            "each species has its own preferences file");
         c.pet(1).edit().putFloat("hunger",9f).putString("room","bain").apply();
+        c.pet(2).edit().putFloat("hunger",17f).putString("room","cuisine").apply();
         near(c.pet(0).getFloat("hunger",0),41.25f,"wolf needs do not overwrite leopard needs");
+        near(c.pet(1).getFloat("hunger",0),9f,"tiger needs do not overwrite wolf needs");
         equal(c.pet(0).getString("room",""),"jardin","room state is isolated");
         equal(c.pet(0).getInt("stars",0),179,"legacy rewards survive new adoption");
-        System.out.println("Legacy migration and isolated leopard/wolf saves: PASS");
+        equal(legacy.getAll(),before,"later tiger writes leave the original legacy save intact");
+        System.out.println("Legacy migration and isolated leopard/wolf/tiger saves: PASS");
     }
 
     static void adoptionSlotsAndGrowth(){
@@ -237,7 +244,7 @@ final class WolfBehaviorContract {
         check(!PetProfileStore.exists(c,-1)&&!PetProfileStore.exists(c,6),"slots are bounded");
         for(int slot=0;slot<6;slot++){
             equal(PetProfileStore.firstEmpty(c),slot,"next available slot");
-            String species=slot%2==0?"leopard":"wolf";
+            String species=SPECIES[slot%SPECIES.length];
             String sex=slot%2==0?"male":"female";
             create(c,slot,species,sex,ages()[slot%4]);
             equal(PetProfileStore.species(c,slot),species,"adoption keeps chosen species");
@@ -245,6 +252,19 @@ final class WolfBehaviorContract {
         }
         equal(PetProfileStore.count(c),6,"all six mixed animal slots work");
         equal(PetProfileStore.firstEmpty(c),-1,"full profile store has no empty slot");
+        for(int slot=0;slot<6;slot++){
+            Map<String,Map<String,?>> before=c.snapshot();
+            c.pet(slot).edit().putFloat("hunger",12f+slot).putInt("stars",100+slot)
+                .putString("room",slot%2==0?"jardin":"bain")
+                .putBoolean("promenadeActive",slot%2==0).apply();
+            for(int other=0;other<6;other++)if(other!=slot)
+                equal(c.pet(other).getAll(),before.get(PetProfileStore.petPrefsName(other)),
+                    "writes in slot "+slot+" leave slot "+other+" unchanged");
+        }
+        Map<String,Map<String,?>> beforeReopen=c.snapshot();
+        MemoryContext reopened=new MemoryContext(c);
+        PetProfileStore.ensureMigrated(reopened);
+        equal(reopened.snapshot(),beforeReopen,"all six mixed saves survive reopening");
         Map<String,Map<String,?>> full=c.snapshot();
         rejected(IllegalStateException.class,
             ()->PetProfileStore.createAnimal(c,0,"wolf","female","Replacement"),
@@ -257,16 +277,16 @@ final class WolfBehaviorContract {
             "negative slot is rejected");
         equal(c.snapshot(),full,"failed adoptions never clear any saved data");
 
-        for(String species:new String[]{"leopard","wolf"}){
-            int slot="wolf".equals(species)?1:0;
+        for(int speciesIndex=0;speciesIndex<SPECIES.length;speciesIndex++){
+            String species=SPECIES[speciesIndex];
+            int slot=speciesIndex;
             for(int stage=0;stage<4;stage++){
                 setAge(c,slot,ages()[stage]);
                 int expected=CharacterSprites.forStage(species,MainActivity.PetStage.values()[stage]).idleDown;
                 equal(PetProfileStore.iconRes(c,slot),expected,"portrait matches species and growing age");
                 int token=PetSpecies.promenadeTokenRes(species,ages()[stage]);
-                String tokenName="wolf".equals(species)?
-                    "wolf_"+MainActivity.PetStage.values()[stage].name().toLowerCase(Locale.ROOT)+"_promenade_token":
-                    "promenade_token";
+                String tokenName="leopard".equals(species)?"promenade_token":
+                    species+"_"+MainActivity.PetStage.values()[stage].name().toLowerCase(Locale.ROOT)+"_promenade_token";
                 equal(ResourceNames.NAMES[token],tokenName,"promenade token matches species and growing age");
             }
             long[] boundaries={0L,MainActivity.CUB,MainActivity.CUB+MainActivity.TEEN,
@@ -282,17 +302,22 @@ final class WolfBehaviorContract {
         MemoryContext defaults=new MemoryContext();
         PetProfileStore.createLeopard(defaults,0,"male",null);
         PetProfileStore.createAnimal(defaults,1,"wolf","female","  ");
+        PetProfileStore.createAnimal(defaults,2,"tiger","male","  ");
         equal(PetProfileStore.name(defaults,0),"Léo","legacy adoption API remains leopard");
         equal(PetProfileStore.name(defaults,1),"Lou","wolf has its own default name");
+        equal(PetProfileStore.name(defaults,2),"Tigrou","tiger has its own default name");
         equal(PetProfileStore.speciesLabel(defaults,1),"Loup","wolf is named correctly in profile UI");
+        equal(PetProfileStore.speciesLabel(defaults,2),"Tigre","tiger is named correctly in profile UI");
         equal(PetSpecies.stageLabel("wolf",MainActivity.PetStage.CUB),"Louveteau","cub label is species specific");
+        equal(PetSpecies.stageLabel("tiger",MainActivity.PetStage.CUB),"Tigreau","tiger cub label is species specific");
         check(!PetProfileStore.reproductionAgeEligible(defaults,0)
-            &&!PetProfileStore.reproductionAgeEligible(defaults,1),"new animals are cubs");
+            &&!PetProfileStore.reproductionAgeEligible(defaults,1)
+            &&!PetProfileStore.reproductionAgeEligible(defaults,2),"new animals are cubs");
         System.out.println("Six mixed profiles, protected saves and species-specific growth: PASS");
     }
 
     static void reproduction(){
-        for(String species:new String[]{"leopard","wolf"}){
+        for(String species:SPECIES){
             for(int firstAge=0;firstAge<5;firstAge++)for(int secondAge=0;secondAge<5;secondAge++){
                 MemoryContext c=new MemoryContext();
                 create(c,0,species,"male",ages()[firstAge]);
@@ -365,13 +390,18 @@ final class WolfBehaviorContract {
                 check(!PetProfileStore.exists(race,2),"no newborn save appears after failed final validation");
             }
         }
-        MemoryContext mixed=new MemoryContext();
-        create(mixed,0,"leopard","male",ages()[2]);
-        create(mixed,1,"wolf","female",ages()[2]);
-        check(!PetProfileStore.compatibleParents(mixed,0,1),"cross-species reproduction stays forbidden");
-        rejected(IllegalArgumentException.class,
-            ()->PetProfileStore.createOffspring(mixed,2,0,1,"Hybrid"),"birth rechecks species");
-        System.out.println("Reproduction: 50 age pairs, species, sexes, cub bans and final birth validation: PASS");
+        for(String first:SPECIES)for(String second:SPECIES)if(!first.equals(second)){
+            MemoryContext mixed=new MemoryContext();
+            create(mixed,0,first,"male",ages()[2]);
+            create(mixed,1,second,"female",ages()[2]);
+            Map<String,Map<String,?>> before=mixed.snapshot();
+            check(!PetProfileStore.compatibleParents(mixed,0,1),
+                first+"/"+second+": cross-species reproduction stays forbidden");
+            rejected(IllegalArgumentException.class,
+                ()->PetProfileStore.createOffspring(mixed,2,0,1,"Hybrid"),"birth rechecks species");
+            equal(mixed.snapshot(),before,"rejected mixed-species birth preserves all saves");
+        }
+        System.out.println("Reproduction: 75 age pairs, six interspecies pairs, sexes, cub bans and final birth validation: PASS");
     }
 
     static void resource(int id,String species,MainActivity.PetStage stage,String action,int frames,Set<Integer> used){
@@ -384,7 +414,7 @@ final class WolfBehaviorContract {
     }
     static void sprites(){
         Set<Integer> seen=new HashSet<>();
-        for(String species:new String[]{"leopard","wolf"})for(MainActivity.PetStage stage:MainActivity.PetStage.values()){
+        for(String species:SPECIES)for(MainActivity.PetStage stage:MainActivity.PetStage.values()){
             CharacterSprites.Pack p=CharacterSprites.forStage(species,stage);
             GameSprites.Pack g=GameSprites.forStage(species,stage);
             CareSprites.Pack c=CareSprites.forStage(species,stage);
@@ -413,8 +443,8 @@ final class WolfBehaviorContract {
                 resource(g.fetch(toy),species,stage,"fetch_"+toy,1,seen);
                 equal(g.expectedWidth(g.fetch(toy)),256,"fetch uses a whole pose");
             }
-            int ropeFrames="wolf".equals(species)?1:5;
-            int scratcherFrames="wolf".equals(species)?1:2;
+            int ropeFrames="leopard".equals(species)?5:1;
+            int scratcherFrames="leopard".equals(species)?2:1;
             resource(g.ropePlay,species,stage,"rope_play",ropeFrames,seen);
             equal(g.ropeFrames,ropeFrames,"rope frame count reflects supplied source");
             equal(g.expectedWidth(g.ropePlay),ropeFrames*256,"rope loader never crops the wrong frame count");
@@ -432,6 +462,19 @@ final class WolfBehaviorContract {
             equal(g.expectedWidth(0),-1,"games reject unrelated resource");
             equal(c.expectedWidth(0),-1,"care rejects unrelated resource");
             equal(garden.expectedWidth(0),-1,"garden rejects unrelated resource");
+            for(String otherSpecies:SPECIES)for(MainActivity.PetStage otherAge:MainActivity.PetStage.values()){
+                if(otherSpecies.equals(species)&&otherAge==stage)continue;
+                CharacterSprites.Pack other=CharacterSprites.forStage(otherSpecies,otherAge);
+                equal(p.expectedWidth(other.idleDown),-1,"character rejects another species/age");
+                check(!p.ownsIdle(other.idleDown)&&!p.ownsWalk(other.walkDown),
+                    "directional resources never belong to another species/age");
+                equal(g.expectedWidth(GameSprites.forStage(otherSpecies,otherAge).runDown),-1,
+                    "game loader rejects another species/age");
+                equal(c.expectedWidth(CareSprites.forStage(otherSpecies,otherAge).soap),-1,
+                    "care loader rejects another species/age");
+                equal(garden.expectedWidth(GardenSprites.forStage(otherSpecies,otherAge).scratcherPlay),-1,
+                    "garden loader rejects another species/age");
+            }
             if("leopard".equals(species)){
                 check(CharacterSprites.forStage(stage)==p,"legacy character API remains leopard");
                 check(GameSprites.forStage(stage)==g,"legacy game API remains leopard");
@@ -440,8 +483,21 @@ final class WolfBehaviorContract {
                 equal(CareSprites.bottle(stage),bottle,"legacy cub bottle remains leopard");
             }
         }
-        equal(seen.size(),218,"109 independent resources per species");
-        System.out.println("Eight sprite packs: 218 isolated resources, directions and frame contracts: PASS");
+        for(String unknown:new String[]{null,"","panther","tiger-wolf"})
+            for(MainActivity.PetStage stage:MainActivity.PetStage.values()){
+                rejected(IllegalArgumentException.class,()->CharacterSprites.forStage(unknown,stage),
+                    "character loader rejects unknown species");
+                rejected(IllegalArgumentException.class,()->GameSprites.forStage(unknown,stage),
+                    "game loader rejects unknown species");
+                rejected(IllegalArgumentException.class,()->CareSprites.forStage(unknown,stage),
+                    "care loader rejects unknown species");
+                rejected(IllegalArgumentException.class,()->GardenSprites.forStage(unknown,stage),
+                    "garden loader rejects unknown species");
+                rejected(IllegalArgumentException.class,()->CareSprites.bottle(unknown,stage),
+                    "bottle loader rejects unknown species at every age");
+            }
+        equal(seen.size(),327,"109 independent resources per species");
+        System.out.println("Twelve sprite packs: 327 isolated resources, directions and strict species/age frame contracts: PASS");
     }
 
     static MainActivity actor(String species,int age){
@@ -452,17 +508,27 @@ final class WolfBehaviorContract {
         a.born=System.currentTimeMillis()-ages()[age];
         return a;
     }
-    static void sameNeeds(MainActivity leopard,MainActivity wolf,String message){
+    static void sameNeeds(MainActivity leopard,MainActivity companion,String message){
         float[] a={leopard.hunger,leopard.thirst,leopard.clean,leopard.affection,leopard.happy,leopard.energy,
-            leopard.skillCare,leopard.skillClean,leopard.waterBowl};
-        float[] b={wolf.hunger,wolf.thirst,wolf.clean,wolf.affection,wolf.happy,wolf.energy,
-            wolf.skillCare,wolf.skillClean,wolf.waterBowl};
+            leopard.skillCare,leopard.skillClean,leopard.skillObedience,leopard.waterBowl};
+        float[] b={companion.hunger,companion.thirst,companion.clean,companion.affection,companion.happy,companion.energy,
+            companion.skillCare,companion.skillClean,companion.skillObedience,companion.waterBowl};
         for(int i=0;i<a.length;i++){
             near(a[i],b[i],message+" need "+i);
             check(a[i]>=0&&a[i]<=100,message+" stays within valid need bounds");
         }
-        equal(leopard.stars,wolf.stars,message+" rewards");
-        equal(leopard.lastMood,wolf.lastMood,message+" emotional reaction");
+        equal(leopard.stars,companion.stars,message+" rewards");
+        equal(leopard.lastMood,companion.lastMood,message+" emotional reaction");
+        equal(leopard.repeatCount,companion.repeatCount,message+" boredom count");
+        equal(leopard.repeatKey,companion.repeatKey,message+" boredom family");
+    }
+    static List<String> catalogueContract(ObjectSystem objects){
+        List<String> records=new ArrayList<>();
+        for(ObjectSystem.Item i:objects.items)records.add(
+            String.join("|",i.id,i.name,i.icon,i.room,i.group,i.kind)+
+            Arrays.toString(new int[]{i.hunger,i.water,i.clean,i.affection,i.happy,i.energy,i.stars,i.frame})+
+            Arrays.toString(new boolean[]{i.cub,i.teen,i.adult,i.old}));
+        return records;
     }
     static String expectedRoute(ObjectSystem.Item i){
         if("water".equals(i.id))return "water";
@@ -482,31 +548,40 @@ final class WolfBehaviorContract {
             MainActivity catalogue=actor("leopard",age);
             ObjectSystem objects=new ObjectSystem(catalogue);
             Set<String> rooms=new HashSet<>();
+            for(String species:SPECIES)
+                equal(catalogueContract(new ObjectSystem(actor(species,age))),catalogueContract(objects),
+                    species+": same complete catalogue, effects, age locks, menu order and objects");
             for(ObjectSystem.Item item:objects.items){
                 rooms.add(item.room);
-                for(float factor:new float[]{0f,.5f,1f}){
-                    MainActivity leopard=actor("leopard",age),wolf=actor("wolf",age);
+                for(String species:new String[]{"wolf","tiger"}){
+                    for(float factor:new float[]{0f,.5f,1f}){
+                        MainActivity leopard=actor("leopard",age),companion=actor(species,age);
+                        ObjectSystem.Item ownItem=new ObjectSystem(companion).findById(item.id,item.room);
+                        for(int repetition=0;repetition<6;repetition++){
+                            leopard.applyItemEffects(item,factor);
+                            companion.applyItemEffects(ownItem,factor);
+                            sameNeeds(leopard,companion,species+" "+age+" "+item.id+" repeated "+repetition+" at "+factor);
+                            effectCases++;
+                        }
+                    }
+                    MainActivity leopard=actor("leopard",age),companion=actor(species,age);
+                    ObjectSystem lo=new ObjectSystem(leopard),co=new ObjectSystem(companion);
+                    ObjectSystem.Item ownItem=co.findById(item.id,item.room);
+                    boolean allowed=lo.allowed(item);
+                    equal(co.allowed(ownItem),allowed,"same objects unlocked at the same age");
                     for(int repetition=0;repetition<6;repetition++){
-                        leopard.applyItemEffects(item,factor);
-                        wolf.applyItemEffects(item,factor);
-                        sameNeeds(leopard,wolf,age+" "+item.id+" repeated "+repetition+" at "+factor);
-                        effectCases++;
+                        lo.use(item);co.use(ownItem);
+                        equal(companion.lastAction,leopard.lastAction,"same action route for "+item.id);
+                        equal(companion.lastAction,allowed?expectedRoute(item):"","correct route or age lock for "+item.id);
+                        sameNeeds(leopard,companion,species+" using "+item.id+" repetition "+repetition);
+                        routingCases++;
                     }
                 }
-                MainActivity leopard=actor("leopard",age),wolf=actor("wolf",age);
-                ObjectSystem lo=new ObjectSystem(leopard),wo=new ObjectSystem(wolf);
-                boolean allowed=lo.allowed(item);
-                equal(wo.allowed(item),allowed,"same objects unlocked at the same age");
-                lo.use(item);wo.use(item);
-                equal(wolf.lastAction,leopard.lastAction,"same action route for "+item.id);
-                equal(wolf.lastAction,allowed?expectedRoute(item):"","correct route or age lock for "+item.id);
-                sameNeeds(leopard,wolf,"using "+item.id);
-                routingCases++;
             }
             equal(rooms,new HashSet<>(Arrays.asList("cuisine","salon","bain","jardin")),
-                "both animals have all four rooms");
+                "all species have all four rooms");
         }
-        for(String species:new String[]{"leopard","wolf"}){
+        for(String species:SPECIES){
             MainActivity cub=actor(species,0);
             for(String food:new String[]{"bottle","milk","junior"})
                 equal(PetPreferences.food(cub,food),PetPreferences.NEUTRAL,"cub food remains neutral for "+species);
@@ -517,7 +592,7 @@ final class WolfBehaviorContract {
     }
 
     static void promenades(){
-        for(String species:new String[]{"leopard","wolf"})for(int age=0;age<4;age++){
+        for(String species:SPECIES)for(int age=0;age<4;age++){
             MainActivity a=actor(species,age);
             ObjectSystem.Item walk=new ObjectSystem(a).findById("walk","jardin");
             check(!a.promenadeActive(),"no walk before departure");
@@ -544,7 +619,7 @@ final class WolfBehaviorContract {
             check(!a.sp.getBoolean("promenadeActive",true),"return is persisted");
         }
         equal(PromenadeActivity.DURATION_MS,180000L,"walk remains three real minutes");
-        System.out.println("Eight promenade life stages: departure, resume, profile isolation and return: PASS");
+        System.out.println("Twelve promenade life stages: departure, resume, profile isolation and return: PASS");
     }
 
     public static void main(String[] args){
@@ -554,7 +629,7 @@ final class WolfBehaviorContract {
         sprites();
         gameplayParity();
         promenades();
-        System.out.println("Wolf integration behavior contracts: PASS");
+        System.out.println("Leopard/wolf/tiger integration behavior contracts: PASS");
     }
 }
 """
@@ -588,7 +663,7 @@ class MainActivity extends Context {
     int profileSlot=0,repeatCount=0,stars=0,lastMood=-1;
     long born=System.currentTimeMillis(),repeatAt=0;
     float hunger=40,thirst=40,clean=40,affection=40,happy=40,energy=40;
-    float skillCare=0,skillClean=0,waterBowl=0;
+    float skillCare=0,skillClean=0,skillObedience=0,waterBowl=0;
     boolean internalTransition;
     final WolfBehaviorContract.MemoryContext backing=new WolfBehaviorContract.MemoryContext();
     SharedPreferences sp=backing.getSharedPreferences("selected-profile",0);
@@ -639,7 +714,7 @@ class ObjectSystem {
             heights.append(bitmap.height)
 
     # The real activities must supply the saved species to every sprite lookup.
-    # Otherwise a correct registry could still display leopard artwork for a wolf.
+    # Otherwise a correct registry could display leopard artwork for a wolf/tiger.
     assert "petSpecies=PetProfileStore.species(this,profileSlot);" in main
     for filename in ["MainActivity", "LivingRoomGames", "GardenGames"]:
         source = (JAVA / f"{filename}.java").read_text()

@@ -45,8 +45,26 @@ final class GardenSprites {
     private static final Pack WOLF_OLD=new Pack("wolf",MainActivity.PetStage.OLD,
         R.drawable.wolf_old_scratcher_play,1);
 
+    private static final Pack TIGER_CUB=new Pack("tiger",MainActivity.PetStage.CUB,
+        R.drawable.tiger_cub_scratcher_play,1);
+    private static final Pack TIGER_TEEN=new Pack("tiger",MainActivity.PetStage.TEEN,
+        R.drawable.tiger_teen_scratcher_play,1);
+    private static final Pack TIGER_ADULT=new Pack("tiger",MainActivity.PetStage.ADULT,
+        R.drawable.tiger_adult_scratcher_play,1);
+    private static final Pack TIGER_OLD=new Pack("tiger",MainActivity.PetStage.OLD,
+        R.drawable.tiger_old_scratcher_play,1);
+
     static Pack forStage(String species,MainActivity.PetStage stage){
         if("leopard".equals(species))return forStage(stage);
+        if("tiger".equals(species)){
+            switch(stage){
+                case CUB:return TIGER_CUB;
+                case TEEN:return TIGER_TEEN;
+                case ADULT:return TIGER_ADULT;
+                case OLD:return TIGER_OLD;
+            }
+            throw new IllegalStateException("Aucun pack jardin tigre pour l'âge "+stage);
+        }
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);
         switch(stage){

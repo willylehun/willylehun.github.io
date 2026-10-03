@@ -1,7 +1,7 @@
 """Execute the developer growth control, persistence and real click handler.
 
 Compiles production Java with recording UI stubs. Boundary cases use a fixed
-clock; profile cases exercise the actual six-slot store and both species.
+clock; profile cases exercise the actual six-slot store and all three species.
 """
 
 import argparse
@@ -67,8 +67,9 @@ final class DevGrowthContract {
         MemoryContext context=new MemoryContext();
         PetProfileStore.ensureMigrated(context);
         long now=System.currentTimeMillis();
+        String[] species={"leopard","wolf","tiger"};
         for(int slot=0;slot<PetProfileStore.MAX_PROFILES;slot++){
-            PetProfileStore.createAnimal(context,slot,slot%2==0?"leopard":"wolf",
+            PetProfileStore.createAnimal(context,slot,species[slot%species.length],
                 slot%2==0?"male":"female","Test "+slot);
             context.pet(slot).edit().putLong("born",now-1000L)
                 .putLong("last",now-1234L).putFloat("hunger",72f)
@@ -137,7 +138,7 @@ final class DevGrowthContract {
         ended.advanceGrowthForTesting();
         equal(context.snapshot(),snapshot,"completed profile is never revived");
         equal(ended.syncCalls,0,"completed profile is not visually restarted");
-        System.out.println("Growth clicks: six mixed profiles, 18 transitions, persistence/isolation and 120 bounded taps: PASS");
+        System.out.println("Growth clicks: six profiles across three species, 18 transitions, persistence/isolation and 120 bounded taps: PASS");
     }
 
     static void disabledControl(){
