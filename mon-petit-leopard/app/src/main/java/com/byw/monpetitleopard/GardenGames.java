@@ -183,7 +183,7 @@ final class GardenGames {
         }
         a.petView.setImageBitmap(scratcherFrames[frameIndex]);
         a.displayedPetStage=a.petStage();
-        a.petView.setVisibility(View.VISIBLE);
+        a.updatePetVisibility();
         a.currentPetRes=0;
         a.updatePetPosition();
         a.petView.setRotation(count==1?1.6f*(float)Math.sin(now/140.0):0f);

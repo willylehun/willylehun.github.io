@@ -60,6 +60,10 @@ jobs:
         run: python mon-petit-leopard/tools/test_food_preference.py
       - name: Wolf behavior and profile tests
         run: python mon-petit-leopard/tools/test_wolf_behavior.py
+      - name: Promenade visibility regression tests
+        run: python mon-petit-leopard/tools/test_promenade_visibility.py
+      - name: Developer growth tests
+        run: python mon-petit-leopard/tools/test_dev_growth.py
       - name: Validate sprite packs
         run: python mon-petit-leopard/tools/validate_sprite_packs.py
       - name: Validate wolf sprite packs
@@ -71,36 +75,36 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.8.7
+          name: mon-petit-leopard-v0.8.8
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.7.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.8.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.8.7"
+          TAG="mon-petit-leopard-v0.8.8"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.8.7 — Découpes des sprites corrigées" \
-              --notes "v0.8.7 : nettoie les contours des sprites du léopard et du loup pour retirer les résidus blancs et gris. Les découpes sont corrigées pour les quatre âges, les poses et les animations, avec une validation automatique avant compilation."
+              --title "Mon Petit Léopard v0.8.8 — Promenade et croissance de test" \
+              --notes "v0.8.8 : garde la maison vide pendant une promenade active, corrige la pose de sommeil du louveteau à deux queues et ajoute un bouton développeur pour passer au stade suivant. Le bouton avance le profil actif de petit à ado, adulte puis vieux, sans avancer les autres minuteries."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.7.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.8.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.8.7 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.8.8 APK [skip ci]"
             git push
           fi

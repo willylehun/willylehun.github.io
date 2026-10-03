@@ -380,7 +380,7 @@ final class LivingRoomGames {
         try{
             a.petView.setImageResource(res);
             a.displayedPetStage=a.petStage();
-            a.petView.setVisibility(View.VISIBLE);
+            a.updatePetVisibility();
             a.currentPetRes=0;
             a.updatePetPosition();
             return true;
@@ -420,7 +420,7 @@ final class LivingRoomGames {
             Bitmap b=Bitmap.createBitmap(strip,ropeFrameIndex*frame,0,frame,frame);
             a.petView.setImageBitmap(b);
             a.displayedPetStage=a.petStage();
-            a.petView.setVisibility(View.VISIBLE);
+            a.updatePetVisibility();
             a.currentPetRes=0;
             a.updatePetPosition();
             // La planche du loup fournit une seule pose : la traction est animée au rendu.

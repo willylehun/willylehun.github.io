@@ -594,6 +594,7 @@ def main():
                           "Detached bubbles and mood symbols are safely repositioned after body normalization.",
                           "v0.8.7 cutout audit: printed borders/digits, annotated grey ground and blue checker gaps are excluded; closed white fur is preserved.",
                           "Only the one-source-pixel exterior antialias ring is unmatted against adjacent checker colours; interior RGB is unchanged.",
+                          "v0.8.8: the cub's first supplied sleeping pose has two tails; its runtime frame aliases the complete third pose from the same source sheet, including the sleep bubble.",
                           "No drawing is shared across age packs or between species."]}
     for age in AGES:
         sheets = {}
@@ -661,6 +662,22 @@ def main():
             "method": "same largest-component visual mass for every pose, safe complete silhouette"}
         for action in frames:
             frames[action] = [normalize(im, target_area) for im in frames[action]]
+
+        if age == "cub":
+            # The original first sleeping drawing itself contains two tails.
+            # Reuse the complete, correct third drawing from this same-age
+            # sheet after normalization. Keep its bubble and every source
+            # detail; do not guess a hidden back contour by erasing a tail.
+            frames["sleep"][0] = frames["sleep"][2].copy()
+            records["sleep"]["source_cells"] = [MAIN[age]["sleep"][2],
+                                                *MAIN[age]["sleep"][1:]]
+            records["sleep"]["derivation"] = (
+                "runtime frame 1 is an exact copy of normalized frame 3 from "
+                "the same-age original sheet; the original frame 1 has two tails")
+            records["sleep"]["runtime_frame_aliases"] = {"1": 3}
+            records["sleep"]["excluded_source_cells"] = [{
+                "frame": 1, "box": MAIN[age]["sleep"][0],
+                "reason": "The original sleeping drawing contains two tails."}]
 
         dst = RUNTIME / f"res-wolf-{age}" / "drawable-nodpi"
         for action, values in frames.items():

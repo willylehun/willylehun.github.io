@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
     FrameLayout scene;
     LinearLayout root,bottomBar;
     Space flexibleSpace,footerSpace;
-    Button roomsBtn,objectsBtn,actionsBtn,menuBtn;
+    Button roomsBtn,objectsBtn,actionsBtn,menuBtn,devGrowthBtn;
 
     int walkDir=-1,walkTick=0,idleTick=0,currentPetRes=0,manualFrame=0,walkFrameIndex=0;
     int petNodeIndex=-1,targetNodeIndex=-1;
@@ -123,6 +123,8 @@ public class MainActivity extends Activity {
         }
         internalTransition=false;
         tickNeeds();
+        // Apply absence before the first resumed frame or queued layout callback.
+        ensurePetImage();
         handler.removeCallbacks(ticker);
         handler.removeCallbacks(animator);
         handler.post(ticker);
@@ -368,6 +370,18 @@ public class MainActivity extends Activity {
 
         root.addView(header);
 
+        if(DevGrowth.ENABLED){
+            devGrowthBtn=button("");
+            devGrowthBtn.setTextSize(11);
+            devGrowthBtn.setPadding(dp(12),0,dp(12),0);
+            LinearLayout.LayoutParams growthParams=new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,dp(40));
+            growthParams.gravity=Gravity.END;
+            growthParams.setMargins(dp(6),dp(2),dp(6),dp(2));
+            root.addView(devGrowthBtn,growthParams);
+            devGrowthBtn.setOnClickListener(v->advanceGrowthForTesting());
+        }
+
         LinearLayout needRow1=new LinearLayout(this);
         LinearLayout needRow2=new LinearLayout(this);
         needRow1.setPadding(dp(4),0,dp(4),0);
@@ -416,7 +430,7 @@ public class MainActivity extends Activity {
         petView=new ImageView(this);
         petView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         petView.setAdjustViewBounds(false);
-        petView.setVisibility(View.VISIBLE);
+        petView.setVisibility(View.INVISIBLE);
         petView.setAlpha(1f);
         petView.setElevation(dp(4));
         petView.setPivotX(0);
@@ -469,7 +483,9 @@ public class MainActivity extends Activity {
         gardenGames=new GardenGames(this);
         gardenGames.install();
 
-        root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,dp(360),0));
+        // Fixed controls are measured at their natural height; the scene takes
+        // the remaining space so the bottom buttons stay reachable on small screens.
+        root.addView(scene,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0,1f));
 
         bottomBar=new LinearLayout(this);
         bottomBar.setPadding(dp(4),0,dp(4),0);
@@ -572,6 +588,7 @@ public class MainActivity extends Activity {
         subTitle.setText(stageName()+" • "+virtualAgeMonths()+" mois • "+roomName());
         if(objectsBtn!=null)objectsBtn.setText(contextObjectButtonLabel());
         timer.setText(stage()==Stage.ENDED?"Terminé":format(remain()));
+        refreshDevGrowthButton();
         starTxt.setText("★ "+stars);
 
         float[] v={hunger,thirst,clean,affection,happy,energy};
@@ -588,6 +605,35 @@ public class MainActivity extends Activity {
         refreshIncident();
 
         if(stage()==Stage.ENDED)endLife();
+    }
+
+    void refreshDevGrowthButton(){
+        if(devGrowthBtn==null)return;
+        PetStage next=DevGrowth.nextStage(born,System.currentTimeMillis());
+        devGrowthBtn.setEnabled(next!=null);
+        devGrowthBtn.setAlpha(next!=null?1f:.5f);
+        String label=next!=null
+            ? "Dev · Grandir → "+PetSpecies.stageLabel(petSpecies,next)
+            : stage()==Stage.ENDED?"Dev · Cycle terminé":"Dev · Âge maximum (vieux)";
+        devGrowthBtn.setText(label);
+        devGrowthBtn.setContentDescription(label);
+    }
+
+    void advanceGrowthForTesting(){
+        if(!DevGrowth.ENABLED||sp==null)return;
+        long advancedBorn=DevGrowth.advance(sp,System.currentTimeMillis());
+        if(advancedBorn==born){
+            refreshDevGrowthButton();
+            return;
+        }
+        String previous=stageName();
+        born=advancedBorn;
+        // The existing age transition cancels old actions and reloads every pack.
+        syncVisualStage();
+        addHistory("Test développeur : "+previous+" → "+stageName()+".");
+        sp.edit().putString("historyLog",historyLog).apply();
+        refresh();
+        toast(pet+" passe au stade "+stageName()+".");
     }
 
     String sexSymbol(){
@@ -643,6 +689,15 @@ public class MainActivity extends Activity {
             active=false;
         }
         return active;
+    }
+
+    void updatePetVisibility(){
+        if(petView==null)return;
+        // Every renderer and layout callback uses the same rule. A cached image
+        // must never make the animal reappear at home during its promenade.
+        boolean visible=!promenadeActive() && displayedPetStage==petStage()
+                && petView.getDrawable()!=null;
+        petView.setVisibility(visible?View.VISIBLE:View.INVISIBLE);
     }
 
     void refreshWaterBowl(){
@@ -765,7 +820,7 @@ public class MainActivity extends Activity {
         if(specialPoseRes!=0){
             if(now<manualUntil && specialPoseStage==petStage() && renderSpecialPose()){
                 petView.setAlpha(1f);
-                petView.setVisibility(View.VISIBLE);
+                updatePetVisibility();
                 updatePetPosition();
                 return;
             }
@@ -775,8 +830,7 @@ public class MainActivity extends Activity {
         if(actionAnim!=ActionAnim.NONE){
             showActionAnimationFrame(now);
             petView.setAlpha(1f);
-            petView.setVisibility(displayedPetStage==petStage()
-                    && petView.getDrawable()!=null?View.VISIBLE:View.INVISIBLE);
+            updatePetVisibility();
             updatePetPosition();
             return;
         }
@@ -808,8 +862,7 @@ public class MainActivity extends Activity {
         }
 
         petView.setAlpha(1f);
-        petView.setVisibility(!promenadeActive() && displayedPetStage==petStage()
-                && petView.getDrawable()!=null?View.VISIBLE:View.INVISIBLE);
+        updatePetVisibility();
         petView.bringToFront();
         incidentView.bringToFront();
         moodLabel.bringToFront();
@@ -832,6 +885,8 @@ public class MainActivity extends Activity {
         manualUntil=0;
         manualFrame=0;
         walking=false;
+        callingToForeground=false;
+        walkStartedAt=0;
         walkMode=WalkMode.SIDE;
         travelDirection=TravelDirection.DOWN;
         idleDirection=TravelDirection.DOWN;
@@ -1157,7 +1212,7 @@ public class MainActivity extends Activity {
 
         petView.setImageBitmap(currentWalkFrames[walkFrameIndex]);
         displayedPetStage=expectedStage;
-        petView.setVisibility(View.VISIBLE);
+        updatePetVisibility();
         int advance=(games!=null?games.walkFrameAdvance():1);
         walkFrameIndex=(walkFrameIndex+advance)%currentWalkFrames.length;
         currentPetRes=0;
@@ -1193,7 +1248,7 @@ public class MainActivity extends Activity {
         try{
             petView.setImageResource(specialPoseRes);
             displayedPetStage=specialPoseStage;
-            petView.setVisibility(View.VISIBLE);
+            updatePetVisibility();
             currentPetRes=0;
             return true;
         }catch(Throwable err){
@@ -1314,7 +1369,7 @@ public class MainActivity extends Activity {
         }
         petView.setImageBitmap(actionFrames[actionFrameIndex]);
         displayedPetStage=petStage();
-        petView.setVisibility(View.VISIBLE);
+        updatePetVisibility();
         currentPetRes=0;
     }
 
@@ -1322,27 +1377,8 @@ public class MainActivity extends Activity {
     void fitSceneAndPet(){
         if(root==null||scene==null||root.getWidth()<=0||root.getHeight()<=0)return;
 
-        int fixedHeight=root.getPaddingTop()+root.getPaddingBottom();
-        for(int i=0;i<root.getChildCount();i++){
-            View child=root.getChildAt(i);
-            if(child==scene)continue;
-            if(child.getVisibility()==View.GONE)continue;
-            ViewGroup.LayoutParams raw=child.getLayoutParams();
-            int margins=0;
-            if(raw instanceof LinearLayout.LayoutParams){
-                LinearLayout.LayoutParams lp=(LinearLayout.LayoutParams)raw;
-                margins=lp.topMargin+lp.bottomMargin;
-            }
-            fixedHeight+=child.getMeasuredHeight()+margins;
-        }
-
-        int available=Math.max(dp(300),root.getHeight()-fixedHeight);
-        LinearLayout.LayoutParams sceneLp=(LinearLayout.LayoutParams)scene.getLayoutParams();
-        sceneLp.width=ViewGroup.LayoutParams.MATCH_PARENT;
-        sceneLp.height=available;
-        sceneLp.weight=0;
-        scene.setLayoutParams(sceneLp);
-
+        // LinearLayout allocates the remaining height through the scene's weight.
+        // Reusing compressed child measurements here would push controls off-screen.
         scene.post(()->{
             resizePetForScene();
             updatePetPosition();
@@ -1587,8 +1623,7 @@ public class MainActivity extends Activity {
         petView.setScaleX(scale);
         petView.setScaleY(scale);
         petView.setAlpha(1f);
-        petView.setVisibility(displayedPetStage==petStage()
-                && petView.getDrawable()!=null?View.VISIBLE:View.INVISIBLE);
+        updatePetVisibility();
         petView.bringToFront();
         incidentView.bringToFront();
         moodLabel.bringToFront();
@@ -1685,10 +1720,38 @@ public class MainActivity extends Activity {
             refresh();
         }
 
+        stopPetActivitiesForPromenade();
         Intent intent=new Intent(this,PromenadeActivity.class);
         intent.putExtra(PetProfileStore.EXTRA_SLOT,profileSlot);
         internalTransition=true;
         startActivity(intent);
+    }
+
+    void stopPetActivitiesForPromenade(){
+        if(games!=null)games.cancel();
+        if(gardenGames!=null)gardenGames.cancel();
+        walking=false;
+        callingToForeground=false;
+        walkStartedAt=0;
+        manualUntil=0;
+        directionalIdleUntil=0;
+        faceRecoveryUntil=0;
+        faceMoodUntil=0;
+        activeFaceMood=-1;
+        pendingFaceMood=-1;
+        moodApproach=false;
+        moodExitUp=false;
+        releaseWalkFrames();
+        releaseFaceMoodFrames();
+        releaseActionFrames();
+        clearSpecialPose();
+        actionAnim=ActionAnim.NONE;
+        actionUntil=0;
+        travelDirection=TravelDirection.DOWN;
+        idleDirection=TravelDirection.DOWN;
+        currentPetRes=0;
+        if(petView!=null)petView.setRotation(0f);
+        updatePetVisibility();
     }
 
     void actionsMenu(){
@@ -1891,6 +1954,10 @@ public class MainActivity extends Activity {
     void animateAuto(){
         if(scene==null||petView==null)return;
         syncVisualStage();
+        if(promenadeActive()){
+            updatePetVisibility();
+            return;
+        }
         long now=System.currentTimeMillis();
 
         if(games!=null && games.beforeAnimate(now))return;
@@ -2571,7 +2638,8 @@ public class MainActivity extends Activity {
 
     boolean keepCurrentImageIfSameStage(PetStage expectedStage){
         boolean safe=displayedPetStage==expectedStage && petView.getDrawable()!=null;
-        petView.setVisibility(safe?View.VISIBLE:View.INVISIBLE);
+        if(safe)updatePetVisibility();
+        else petView.setVisibility(View.INVISIBLE);
         return safe;
     }
 
@@ -2590,7 +2658,7 @@ public class MainActivity extends Activity {
         try{
             petView.setImageResource(res);
             displayedPetStage=expectedStage;
-            petView.setVisibility(View.VISIBLE);
+            updatePetVisibility();
             return true;
         }catch(Throwable err){
             markCharacterAssetInvalid(res,"pose","chargement impossible");

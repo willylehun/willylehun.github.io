@@ -138,6 +138,27 @@ def main():
     actual_paths = {path.resolve() for path in RUNTIME.glob("res*/drawable*/wolf_*") if path.is_file()}
     check(actual_paths == expected_paths,
           "Wolf resources exist outside the four age packs: " + str(sorted(str(p) for p in actual_paths-expected_paths)))
+
+    # The original cub sleep pose 1 visibly has two tails. Runtime pose 1 must
+    # use the entire correct same-age pose 3, rather than an invented outline
+    # or a tail-erasing colour key. Check provenance and decoded RGBA, since
+    # lossless WebP encoders may produce different bytes for identical pixels.
+    cub_sleep = assets["wolf_cub_sleep.webp"]
+    check(cub_sleep.get("runtime_frame_aliases") == {"1": 3},
+          "Cub sleeping pose 1 must explicitly alias the reviewed third pose")
+    check(cub_sleep["source_cells"] == [[647, 668, 780, 859],
+                                       [516, 668, 643, 859],
+                                       [647, 668, 780, 859]],
+          "Cub sleep frames must come from the reviewed same-age source cells")
+    check(cub_sleep.get("excluded_source_cells", [{}])[0].get("box") == [386, 668, 512, 859],
+          "The original double-tail source cell must be recorded as excluded")
+    with Image.open(local_path(cub_sleep["path"])) as image:
+        strip = image.convert("RGBA")
+        first = strip.crop((0, 0, FRAME, FRAME))
+        third = strip.crop((2 * FRAME, 0, 3 * FRAME, FRAME))
+        check(first.tobytes() == third.tobytes(),
+              "Cub sleeping pose 1 must preserve every RGBA pixel of the corrected pose 3")
+    print("Wolf tail regression: PASS — first cub sleep frame exactly matches the complete same-age third pose")
     print(f"Wolf sprite validation: PASS — 8 original sheets, 113 outputs, {total_frames} nonempty frames, no age/species mixing")
 
 
