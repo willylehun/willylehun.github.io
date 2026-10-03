@@ -1,0 +1,970 @@
+{
+  "schema_version": 1,
+  "coordinate_convention": "frame is 1-based; runtime and source-local x/y are 0-based; source.x/y are absolute original PNG coordinates",
+  "probes": [
+    {
+      "id": "cub_jump_2_63_122",
+      "age": "cub",
+      "resource": "wolf_cub_jump.webp",
+      "frame": 2,
+      "x": 114,
+      "y": 234,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "main",
+        "x": 985,
+        "y": 593,
+        "rgba": [
+          180,
+          180,
+          179,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "jump",
+        "cell_frame": 2,
+        "x": 63,
+        "y": 122,
+        "expected_alpha": 0
+      },
+      "note": "Printed grey floor below the raised body"
+    },
+    {
+      "id": "teen_walk_left_2_61_109",
+      "age": "teen",
+      "resource": "wolf_teen_walk_left.webp",
+      "frame": 2,
+      "x": 126,
+      "y": 231,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "main",
+        "x": 203,
+        "y": 402,
+        "rgba": [
+          187,
+          183,
+          180,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_left",
+        "cell_frame": 2,
+        "x": 61,
+        "y": 109,
+        "expected_alpha": 0
+      },
+      "note": "Printed grey ground between the paws"
+    },
+    {
+      "id": "adult_walk_left_2_43_128",
+      "age": "adult",
+      "resource": "wolf_adult_walk_left.webp",
+      "frame": 2,
+      "x": 107,
+      "y": 235,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "main",
+        "x": 175,
+        "y": 448,
+        "rgba": [
+          172,
+          173,
+          173,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_left",
+        "cell_frame": 2,
+        "x": 43,
+        "y": 128,
+        "expected_alpha": 0
+      },
+      "note": "Printed grey ground just below front paw"
+    },
+    {
+      "id": "old_walk_left_2_43_117",
+      "age": "old",
+      "resource": "wolf_old_walk_left.webp",
+      "frame": 2,
+      "x": 110,
+      "y": 231,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "main",
+        "x": 178,
+        "y": 432,
+        "rgba": [
+          187,
+          181,
+          179,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_left",
+        "cell_frame": 2,
+        "x": 43,
+        "y": 117,
+        "expected_alpha": 0
+      },
+      "note": "Printed grey ground below the forepaws"
+    },
+    {
+      "id": "teen_walk_down_2_53_142",
+      "age": "teen",
+      "resource": "wolf_teen_walk_down.webp",
+      "frame": 2,
+      "x": 121,
+      "y": 248,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "main",
+        "x": 989,
+        "y": 241,
+        "rgba": [
+          24,
+          24,
+          24,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_down",
+        "cell_frame": 2,
+        "x": 53,
+        "y": 142,
+        "expected_alpha": 0
+      },
+      "note": "Printed digit 2 below front paw"
+    },
+    {
+      "id": "teen_walk_down_4_53_142",
+      "age": "teen",
+      "resource": "wolf_teen_walk_down.webp",
+      "frame": 4,
+      "x": 129,
+      "y": 247,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "main",
+        "x": 1221,
+        "y": 241,
+        "rgba": [
+          162,
+          163,
+          165,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_down",
+        "cell_frame": 4,
+        "x": 53,
+        "y": 142,
+        "expected_alpha": 0
+      },
+      "note": "Printed digit 4 below front paw"
+    },
+    {
+      "id": "old_idle_up_1_130_125",
+      "age": "old",
+      "resource": "wolf_old_idle_up.png",
+      "frame": 1,
+      "x": 170,
+      "y": 188,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 720,
+        "y": 224,
+        "rgba": [
+          253,
+          253,
+          248,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "idle_up",
+        "cell_frame": 1,
+        "x": 130,
+        "y": 125,
+        "expected_alpha": 255
+      },
+      "note": "Restored light tail fur inside source outline"
+    },
+    {
+      "id": "old_walk_left_1_91_41",
+      "age": "old",
+      "resource": "wolf_old_walk_left.webp",
+      "frame": 1,
+      "x": 172,
+      "y": 119,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 105,
+        "y": 356,
+        "rgba": [
+          253,
+          253,
+          249,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_left",
+        "cell_frame": 1,
+        "x": 91,
+        "y": 41,
+        "expected_alpha": 255
+      },
+      "note": "Restored white tail tip inside source outline"
+    },
+    {
+      "id": "teen_walk_down_4_49_14",
+      "age": "teen",
+      "resource": "wolf_teen_walk_down.webp",
+      "frame": 4,
+      "x": 123,
+      "y": 46,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 1217,
+        "y": 113,
+        "rgba": [
+          252,
+          249,
+          240,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_down",
+        "cell_frame": 4,
+        "x": 49,
+        "y": 14,
+        "expected_alpha": 255
+      },
+      "note": "Restored white tail tip at top of frame"
+    },
+    {
+      "id": "teen_walk_down_2_63_131",
+      "age": "teen",
+      "resource": "wolf_teen_walk_down.webp",
+      "frame": 2,
+      "x": 136,
+      "y": 231,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 999,
+        "y": 230,
+        "rgba": [
+          255,
+          252,
+          239,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_down",
+        "cell_frame": 2,
+        "x": 63,
+        "y": 131,
+        "expected_alpha": 255
+      },
+      "note": "Cream toe next to digit 2 remains opaque"
+    },
+    {
+      "id": "teen_walk_down_4_62_132",
+      "age": "teen",
+      "resource": "wolf_teen_walk_down.webp",
+      "frame": 4,
+      "x": 143,
+      "y": 231,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 1230,
+        "y": 231,
+        "rgba": [
+          255,
+          250,
+          237,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_down",
+        "cell_frame": 4,
+        "x": 62,
+        "y": 132,
+        "expected_alpha": 255
+      },
+      "note": "Cream toe next to digit 4 remains opaque"
+    },
+    {
+      "id": "cub_idle_down_1_100_100",
+      "age": "cub",
+      "resource": "wolf_cub_idle_down.png",
+      "frame": 1,
+      "x": 147,
+      "y": 185,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 114,
+        "y": 199,
+        "rgba": [
+          230,
+          195,
+          165,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "idle_down",
+        "cell_frame": 1,
+        "x": 100,
+        "y": 100,
+        "expected_alpha": 255
+      },
+      "note": "Cream chest fur retained"
+    },
+    {
+      "id": "teen_idle_down_1_94_88",
+      "age": "teen",
+      "resource": "wolf_teen_idle_down.png",
+      "frame": 1,
+      "x": 148,
+      "y": 170,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 108,
+        "y": 187,
+        "rgba": [
+          255,
+          244,
+          227,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "idle_down",
+        "cell_frame": 1,
+        "x": 94,
+        "y": 88,
+        "expected_alpha": 255
+      },
+      "note": "Cream chest fur retained"
+    },
+    {
+      "id": "adult_idle_down_1_94_99",
+      "age": "adult",
+      "resource": "wolf_adult_idle_down.png",
+      "frame": 1,
+      "x": 149,
+      "y": 170,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 106,
+        "y": 200,
+        "rgba": [
+          252,
+          234,
+          211,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "idle_down",
+        "cell_frame": 1,
+        "x": 94,
+        "y": 99,
+        "expected_alpha": 255
+      },
+      "note": "Cream chest fur retained"
+    },
+    {
+      "id": "old_idle_down_1_90_102",
+      "age": "old",
+      "resource": "wolf_old_idle_down.png",
+      "frame": 1,
+      "x": 138,
+      "y": 170,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 103,
+        "y": 201,
+        "rgba": [
+          245,
+          222,
+          197,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "idle_down",
+        "cell_frame": 1,
+        "x": 90,
+        "y": 102,
+        "expected_alpha": 255
+      },
+      "note": "Cream chest fur retained"
+    },
+    {
+      "id": "old_idle_down_1_90_74",
+      "age": "old",
+      "resource": "wolf_old_idle_down.png",
+      "frame": 1,
+      "x": 138,
+      "y": 142,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 103,
+        "y": 173,
+        "rgba": [
+          212,
+          187,
+          167,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "idle_down",
+        "cell_frame": 1,
+        "x": 90,
+        "y": 74,
+        "expected_alpha": 255
+      },
+      "note": "White muzzle remains opaque"
+    },
+    {
+      "id": "cub_groom_foam_1_223_76",
+      "age": "cub",
+      "resource": "wolf_cub_groom_foam.webp",
+      "frame": 1,
+      "x": 196,
+      "y": 120,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "objects",
+        "x": 1146,
+        "y": 467,
+        "rgba": [
+          223,
+          223,
+          227,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "groom_foam",
+        "cell_frame": 1,
+        "x": 223,
+        "y": 76,
+        "expected_alpha": 0
+      },
+      "note": "Blue tinted checkerboard between bubbles"
+    },
+    {
+      "id": "teen_groom_foam_1_223_87",
+      "age": "teen",
+      "resource": "wolf_teen_groom_foam.webp",
+      "frame": 1,
+      "x": 193,
+      "y": 137,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "objects",
+        "x": 1147,
+        "y": 478,
+        "rgba": [
+          215,
+          216,
+          221,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "groom_foam",
+        "cell_frame": 1,
+        "x": 223,
+        "y": 87,
+        "expected_alpha": 0
+      },
+      "note": "Blue tinted checkerboard between bubbles"
+    },
+    {
+      "id": "adult_groom_foam_1_232_113",
+      "age": "adult",
+      "resource": "wolf_adult_groom_foam.webp",
+      "frame": 1,
+      "x": 186,
+      "y": 155,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "objects",
+        "x": 1104,
+        "y": 508,
+        "rgba": [
+          250,
+          251,
+          251,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "groom_foam",
+        "cell_frame": 1,
+        "x": 232,
+        "y": 113,
+        "expected_alpha": 0
+      },
+      "note": "Blue tinted checkerboard between bubbles"
+    },
+    {
+      "id": "old_groom_foam_1_237_120",
+      "age": "old",
+      "resource": "wolf_old_groom_foam.webp",
+      "frame": 1,
+      "x": 202,
+      "y": 151,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "objects",
+        "x": 1108,
+        "y": 508,
+        "rgba": [
+          229,
+          229,
+          229,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "groom_foam",
+        "cell_frame": 1,
+        "x": 237,
+        "y": 120,
+        "expected_alpha": 0
+      },
+      "note": "Blue tinted checkerboard between bubbles"
+    },
+    {
+      "id": "cub_soap_1_280_62",
+      "age": "cub",
+      "resource": "wolf_cub_soap.webp",
+      "frame": 1,
+      "x": 200,
+      "y": 117,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "objects",
+        "x": 853,
+        "y": 733,
+        "rgba": [
+          239,
+          248,
+          252,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "soap",
+        "cell_frame": 1,
+        "x": 280,
+        "y": 62,
+        "expected_alpha": 255
+      },
+      "note": "Real soap bubble remains opaque"
+    },
+    {
+      "id": "teen_soap_1_276_67",
+      "age": "teen",
+      "resource": "wolf_teen_soap.webp",
+      "frame": 1,
+      "x": 193,
+      "y": 129,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "objects",
+        "x": 850,
+        "y": 739,
+        "rgba": [
+          238,
+          250,
+          250,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "soap",
+        "cell_frame": 1,
+        "x": 276,
+        "y": 67,
+        "expected_alpha": 255
+      },
+      "note": "Real soap bubble remains opaque"
+    },
+    {
+      "id": "adult_soap_1_268_71",
+      "age": "adult",
+      "resource": "wolf_adult_soap.webp",
+      "frame": 1,
+      "x": 186,
+      "y": 129,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "objects",
+        "x": 804,
+        "y": 766,
+        "rgba": [
+          234,
+          250,
+          253,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "soap",
+        "cell_frame": 1,
+        "x": 268,
+        "y": 71,
+        "expected_alpha": 255
+      },
+      "note": "Real soap bubble remains opaque"
+    },
+    {
+      "id": "old_soap_1_268_67",
+      "age": "old",
+      "resource": "wolf_old_soap.webp",
+      "frame": 1,
+      "x": 192,
+      "y": 122,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "objects",
+        "x": 809,
+        "y": 754,
+        "rgba": [
+          246,
+          252,
+          254,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "soap",
+        "cell_frame": 1,
+        "x": 268,
+        "y": 67,
+        "expected_alpha": 255
+      },
+      "note": "Real soap bubble remains opaque"
+    },
+    {
+      "id": "teen_walk_left_1_66_58",
+      "age": "teen",
+      "resource": "wolf_teen_walk_left.webp",
+      "frame": 1,
+      "x": 129,
+      "y": 151,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 81,
+        "y": 351,
+        "rgba": [
+          50,
+          46,
+          47,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_left",
+        "cell_frame": 1,
+        "x": 66,
+        "y": 58,
+        "expected_alpha": 255
+      },
+      "note": "Original dark back outline next to the corrected fringe"
+    },
+    {
+      "id": "teen_walk_left_1_38_70",
+      "age": "teen",
+      "resource": "wolf_teen_walk_left.webp",
+      "frame": 1,
+      "x": 86,
+      "y": 169,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 53,
+        "y": 363,
+        "rgba": [
+          251,
+          247,
+          235,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_left",
+        "cell_frame": 1,
+        "x": 38,
+        "y": 70,
+        "expected_alpha": 255
+      },
+      "note": "Original pale muzzle next to the corrected fringe"
+    },
+    {
+      "id": "teen_walk_up_1_43_18",
+      "age": "teen",
+      "resource": "wolf_teen_walk_up.webp",
+      "frame": 1,
+      "x": 92,
+      "y": 54,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 58,
+        "y": 489,
+        "rgba": [
+          14,
+          8,
+          8,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_up",
+        "cell_frame": 1,
+        "x": 43,
+        "y": 18,
+        "expected_alpha": 255
+      },
+      "note": "Original black ear outline next to the corrected fringe"
+    },
+    {
+      "id": "teen_walk_up_1_40_118",
+      "age": "teen",
+      "resource": "wolf_teen_walk_up.webp",
+      "frame": 1,
+      "x": 87,
+      "y": 225,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "main",
+        "x": 55,
+        "y": 589,
+        "rgba": [
+          235,
+          243,
+          245,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_up",
+        "cell_frame": 1,
+        "x": 40,
+        "y": 118,
+        "expected_alpha": 0
+      },
+      "note": "Spurious light tick below the tail removed"
+    },
+    {
+      "id": "teen_walk_up_1_41_118",
+      "age": "teen",
+      "resource": "wolf_teen_walk_up.webp",
+      "frame": 1,
+      "x": 88,
+      "y": 225,
+      "expected_alpha": 0,
+      "kind": "background",
+      "source": {
+        "kind": "main",
+        "x": 56,
+        "y": 589,
+        "rgba": [
+          240,
+          248,
+          250,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_up",
+        "cell_frame": 1,
+        "x": 41,
+        "y": 118,
+        "expected_alpha": 0
+      },
+      "note": "Second pixel of spurious light tick below the tail removed"
+    },
+    {
+      "id": "teen_walk_up_1_43_103",
+      "age": "teen",
+      "resource": "wolf_teen_walk_up.webp",
+      "frame": 1,
+      "x": 92,
+      "y": 199,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 58,
+        "y": 574,
+        "rgba": [
+          253,
+          248,
+          226,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_up",
+        "cell_frame": 1,
+        "x": 43,
+        "y": 103,
+        "expected_alpha": 255
+      },
+      "note": "Original cream tail tip beside the removed tick"
+    },
+    {
+      "id": "teen_walk_up_1_80_109",
+      "age": "teen",
+      "resource": "wolf_teen_walk_up.webp",
+      "frame": 1,
+      "x": 155,
+      "y": 210,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 95,
+        "y": 580,
+        "rgba": [
+          252,
+          249,
+          234,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_up",
+        "cell_frame": 1,
+        "x": 80,
+        "y": 109,
+        "expected_alpha": 255
+      },
+      "note": "Original cream standing paw retained"
+    },
+    {
+      "id": "teen_walk_right_3_87_92",
+      "age": "teen",
+      "resource": "wolf_teen_walk_right.webp",
+      "frame": 3,
+      "x": 176,
+      "y": 205,
+      "expected_alpha": 255,
+      "kind": "protected",
+      "source": {
+        "kind": "main",
+        "x": 1113,
+        "y": 385,
+        "rgba": [
+          250,
+          246,
+          237,
+          255
+        ]
+      },
+      "source_alpha_probe": {
+        "cell_action": "walk_right",
+        "cell_frame": 3,
+        "x": 87,
+        "y": 92,
+        "expected_alpha": 255
+      },
+      "note": "Pale forward leg retained despite its faint source outline"
+    }
+  ],
+  "edge_samples": [
+    {
+      "id": "teen_back_antialias",
+      "age": "teen",
+      "source_kind": "main",
+      "cell_action": "walk_left",
+      "cell_frame": 1,
+      "x": 66,
+      "y": 57,
+      "rgba": [
+        21,
+        14,
+        15,
+        52
+      ],
+      "tolerance": 3,
+      "note": "Source (81,350) mixed RGB187,183,184 becomes translucent dark outline; neighbour (81,351) stays opaque black."
+    },
+    {
+      "id": "teen_ear_antialias",
+      "age": "teen",
+      "source_kind": "main",
+      "cell_action": "walk_up",
+      "cell_frame": 1,
+      "x": 42,
+      "y": 18,
+      "rgba": [
+        12,
+        10,
+        7,
+        108
+      ],
+      "tolerance": 3,
+      "note": "Source (57,489) mixed RGB149,148,146 becomes translucent dark outline; neighbour (58,489) stays opaque black."
+    }
+  ]
+}

@@ -1,0 +1,5662 @@
+{
+  "species": "leopard",
+  "frame_size": [
+    256,
+    256
+  ],
+  "frame_numbering": "1-based",
+  "box_format": "left,top,right-exclusive,bottom-exclusive; bounded neutral flood selection only",
+  "inspection": "Boxes are safety ROIs, NOT rectangles to erase. Remove only reviewed background connected to seed, respecting dark contours and keep_points. Never remove natural white/grey fur by global RGB threshold. Old opaque fur and semi-transparent outer halos were not made hole-removal targets: root is restoring RGB at alpha edges independently. Preserve muzzle/ears/belly/aged grey fur, care foam, soap, paws, speech bubbles and symbols.",
+  "findings": [
+    {
+      "age": "adult",
+      "resource": "leopard_adult_idle_down.png",
+      "action": "idle_down",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            95,
+            190
+          ],
+          "box": [
+            78,
+            171,
+            111,
+            206
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            212,
+            208,
+            205,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          148,
+          149
+        ],
+        [
+          162,
+          234
+        ],
+        [
+          111,
+          105
+        ],
+        [
+          143,
+          185
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "b102d898e58c3dc30221fd0741b281be04855b1141ac057fa9072c6e2f7507a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_idle_left.png",
+      "action": "idle_left",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            76,
+            200
+          ],
+          "box": [
+            60,
+            178,
+            91,
+            216
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            231,
+            227,
+            221,
+            255
+          ]
+        },
+        {
+          "seed": [
+            142,
+            219
+          ],
+          "box": [
+            135,
+            210,
+            149,
+            227
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            228,
+            226,
+            228,
+            255
+          ]
+        },
+        {
+          "seed": [
+            118,
+            224
+          ],
+          "box": [
+            111,
+            218,
+            124,
+            231
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            219,
+            214,
+            209,
+            255
+          ]
+        },
+        {
+          "seed": [
+            148,
+            236
+          ],
+          "box": [
+            142,
+            230,
+            153,
+            240
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            147,
+            148,
+            147,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          193,
+          136
+        ],
+        [
+          185,
+          174
+        ],
+        [
+          132,
+          219
+        ],
+        [
+          111,
+          229
+        ],
+        [
+          153,
+          233
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "615892db932b1d65a45ae526faa2aef9609527b4e4d937765767aff01abd7579"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_idle_right.png",
+      "action": "idle_right",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            79,
+            198
+          ],
+          "box": [
+            65,
+            180,
+            93,
+            212
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            229,
+            226,
+            221,
+            255
+          ]
+        },
+        {
+          "seed": [
+            140,
+            215
+          ],
+          "box": [
+            136,
+            208,
+            145,
+            222
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            210,
+            202,
+            201,
+            255
+          ]
+        },
+        {
+          "seed": [
+            119,
+            222
+          ],
+          "box": [
+            115,
+            216,
+            123,
+            224
+          ],
+          "zone": "Small opaque checkerboard triangle between rear paw and tan far leg; keep white paw below y224.",
+          "seed_rgba": [
+            255,
+            255,
+            251,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          201,
+          123
+        ],
+        [
+          181,
+          171
+        ],
+        [
+          132,
+          226
+        ],
+        [
+          113,
+          229
+        ],
+        [
+          125,
+          220
+        ],
+        [
+          117,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78d23677743c28ed29fc712c13bb1e174ffa2e98fbb547ac6ea0bf983117431d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_idle_up.png",
+      "action": "idle_up",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            157,
+            216
+          ],
+          "box": [
+            151,
+            207,
+            164,
+            225
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            198,
+            200,
+            201,
+            255
+          ]
+        },
+        {
+          "seed": [
+            156,
+            184
+          ],
+          "box": [
+            151,
+            176,
+            161,
+            192
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            232,
+            229,
+            232,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          91,
+          226
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "6d6fb874331582eb304f0e6886ee530cd79525eff7645dfbdc329932289ca7ac"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_jump.webp",
+      "action": "jump",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            72,
+            136
+          ],
+          "box": [
+            54,
+            116,
+            93,
+            153
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            214,
+            212,
+            213,
+            255
+          ]
+        },
+        {
+          "seed": [
+            111,
+            182
+          ],
+          "box": [
+            96,
+            169,
+            125,
+            193
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            211,
+            209,
+            205,
+            255
+          ]
+        },
+        {
+          "seed": [
+            65,
+            168
+          ],
+          "box": [
+            56,
+            164,
+            73,
+            175
+          ],
+          "zone": "White/gray triangular background under tail root, outside fur.",
+          "seed_rgba": [
+            244,
+            243,
+            234,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          207,
+          112
+        ],
+        [
+          165,
+          185
+        ],
+        [
+          132,
+          180
+        ],
+        [
+          65,
+          161
+        ],
+        [
+          75,
+          170
+        ],
+        [
+          73,
+          166
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "d2678fcdd341c5af75bc4c8d8a00f2e0d4635779104380de91ec9f0b296f973d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_jump.webp",
+      "action": "jump",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            60,
+            151
+          ],
+          "box": [
+            34,
+            135,
+            80,
+            168
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            228,
+            227,
+            223,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          215,
+          109
+        ],
+        [
+          61,
+          187
+        ],
+        [
+          197,
+          162
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "d2678fcdd341c5af75bc4c8d8a00f2e0d4635779104380de91ec9f0b296f973d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_jump.webp",
+      "action": "jump",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            75,
+            134
+          ],
+          "box": [
+            58,
+            113,
+            91,
+            147
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            209,
+            209,
+            208,
+            255
+          ]
+        },
+        {
+          "seed": [
+            119,
+            192
+          ],
+          "box": [
+            90,
+            167,
+            164,
+            207
+          ],
+          "zone": "Opaque background trapped in silhouette gap",
+          "seed_rgba": [
+            144,
+            142,
+            140,
+            255
+          ]
+        },
+        {
+          "seed": [
+            70,
+            162
+          ],
+          "box": [
+            63,
+            159,
+            78,
+            169
+          ],
+          "zone": "White/gray triangular background under tail root, outside fur.",
+          "seed_rgba": [
+            243,
+            245,
+            250,
+            255
+          ]
+        },
+        {
+          "seed": [
+            108,
+            188
+          ],
+          "box": [
+            104,
+            186,
+            113,
+            192
+          ],
+          "zone": "Detached dark gray dash: 12 pixels alpha>16, bbox[105,187,112,191]; not a paw or object.",
+          "seed_rgba": [
+            97,
+            95,
+            91,
+            255
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 54
+        }
+      ],
+      "keep_points": [
+        [
+          205,
+          113
+        ],
+        [
+          170,
+          136
+        ],
+        [
+          143,
+          185
+        ],
+        [
+          68,
+          158
+        ],
+        [
+          78,
+          164
+        ],
+        [
+          77,
+          169
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "d2678fcdd341c5af75bc4c8d8a00f2e0d4635779104380de91ec9f0b296f973d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            94,
+            172
+          ],
+          "box": [
+            82,
+            147,
+            105,
+            193
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            241,
+            242,
+            239,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            94,
+            171
+          ],
+          "box": [
+            82,
+            148,
+            105,
+            190
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            228,
+            227,
+            226,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            93,
+            172
+          ],
+          "box": [
+            81,
+            146,
+            105,
+            192
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            250,
+            250,
+            250,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            95,
+            172
+          ],
+          "box": [
+            82,
+            147,
+            108,
+            191
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            251,
+            250,
+            251,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            92,
+            172
+          ],
+          "box": [
+            80,
+            149,
+            106,
+            191
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            235,
+            235,
+            236,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            77,
+            175
+          ],
+          "box": [
+            66,
+            150,
+            90,
+            196
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            247,
+            248,
+            247,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          104,
+          157
+        ],
+        [
+          122,
+          157
+        ],
+        [
+          181,
+          127
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 7,
+      "regions": [
+        {
+          "seed": [
+            103,
+            162
+          ],
+          "box": [
+            93,
+            146,
+            111,
+            183
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            238,
+            237,
+            233,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          129,
+          154
+        ],
+        [
+          147,
+          154
+        ],
+        [
+          80,
+          180
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 8,
+      "regions": [
+        {
+          "seed": [
+            85,
+            161
+          ],
+          "box": [
+            65,
+            123,
+            104,
+            202
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            225,
+            221,
+            217,
+            255
+          ]
+        },
+        {
+          "seed": [
+            181,
+            133
+          ],
+          "box": [
+            167,
+            106,
+            208,
+            158
+          ],
+          "zone": "Rectangular checkerboard behind hearts at right of head; preserve hearts/ear",
+          "seed_rgba": [
+            229,
+            225,
+            223,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          140,
+          159
+        ],
+        [
+          125,
+          190
+        ],
+        [
+          96,
+          124
+        ],
+        [
+          176,
+          120
+        ],
+        [
+          196,
+          114
+        ],
+        [
+          193,
+          148
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 9,
+      "regions": [
+        {
+          "seed": [
+            93,
+            178
+          ],
+          "box": [
+            82,
+            152,
+            104,
+            197
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            235,
+            233,
+            231,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 10,
+      "regions": [
+        {
+          "seed": [
+            93,
+            176
+          ],
+          "box": [
+            81,
+            154,
+            104,
+            197
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            219,
+            219,
+            219,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 11,
+      "regions": [
+        {
+          "seed": [
+            99,
+            174
+          ],
+          "box": [
+            86,
+            151,
+            111,
+            194
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            226,
+            226,
+            226,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_moods.webp",
+      "action": "moods",
+      "frame": 12,
+      "regions": [
+        {
+          "seed": [
+            81,
+            178
+          ],
+          "box": [
+            69,
+            155,
+            92,
+            197
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            228,
+            228,
+            228,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          135,
+          165
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          134,
+          187
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "3b1323b03e0317f4ef9fe21082afaba2d98ff4f4bea84f5f5ad0737b6a81c3a0"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_down.webp",
+      "action": "run_down",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            97,
+            84
+          ],
+          "box": [
+            78,
+            70,
+            114,
+            100
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            221,
+            219,
+            218,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_down.webp",
+      "action": "run_down",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            107,
+            70
+          ],
+          "box": [
+            98,
+            62,
+            116,
+            79
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            233,
+            234,
+            229,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_down.webp",
+      "action": "run_down",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            97,
+            85
+          ],
+          "box": [
+            79,
+            70,
+            116,
+            101
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            214,
+            215,
+            212,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_down.webp",
+      "action": "run_down",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            143,
+            74
+          ],
+          "box": [
+            135,
+            68,
+            155,
+            80
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            241,
+            241,
+            241,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_down.webp",
+      "action": "run_down",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            164,
+            80
+          ],
+          "box": [
+            144,
+            64,
+            184,
+            96
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            248,
+            248,
+            248,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_down.webp",
+      "action": "run_down",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            103,
+            80
+          ],
+          "box": [
+            90,
+            66,
+            116,
+            94
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            243,
+            243,
+            243,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_left.webp",
+      "action": "run_left",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            120,
+            232
+          ],
+          "box": [
+            103,
+            224,
+            145,
+            239
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            169,
+            164,
+            162,
+            255
+          ]
+        },
+        {
+          "seed": [
+            146,
+            215
+          ],
+          "box": [
+            139,
+            206,
+            157,
+            227
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            228,
+            229,
+            226,
+            255
+          ]
+        },
+        {
+          "seed": [
+            115,
+            222
+          ],
+          "box": [
+            110,
+            215,
+            120,
+            228
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            251,
+            250,
+            246,
+            255
+          ]
+        },
+        {
+          "seed": [
+            120,
+            208
+          ],
+          "box": [
+            116,
+            202,
+            125,
+            215
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            212,
+            212,
+            205,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          56,
+          140
+        ],
+        [
+          90,
+          223
+        ],
+        [
+          130,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_left.webp",
+      "action": "run_left",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            113,
+            214
+          ],
+          "box": [
+            97,
+            200,
+            127,
+            226
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            224,
+            224,
+            222,
+            255
+          ]
+        },
+        {
+          "seed": [
+            148,
+            215
+          ],
+          "box": [
+            141,
+            208,
+            158,
+            225
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            219,
+            222,
+            221,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          65,
+          144
+        ],
+        [
+          74,
+          222
+        ],
+        [
+          161,
+          222
+        ],
+        [
+          132,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_left.webp",
+      "action": "run_left",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            120,
+            224
+          ],
+          "box": [
+            98,
+            200,
+            151,
+            236
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            148,
+            143,
+            140,
+            255
+          ]
+        },
+        {
+          "seed": [
+            153,
+            214
+          ],
+          "box": [
+            147,
+            207,
+            162,
+            223
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            237,
+            235,
+            234,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          50,
+          138
+        ],
+        [
+          161,
+          221
+        ],
+        [
+          133,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9",
+      "keep_polygons": [
+        [
+          [
+            132,
+            199
+          ],
+          [
+            141,
+            199
+          ],
+          [
+            141,
+            224
+          ],
+          [
+            131,
+            224
+          ],
+          [
+            127,
+            223
+          ],
+          [
+            125,
+            220
+          ],
+          [
+            125,
+            217
+          ],
+          [
+            128,
+            214
+          ],
+          [
+            131,
+            210
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect tan far leg and rounded pale paw tip; first-pass flood erased foreground inside outline."
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_left.webp",
+      "action": "run_left",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            116,
+            222
+          ],
+          "box": [
+            88,
+            198,
+            159,
+            238
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            176,
+            174,
+            170,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          65,
+          147
+        ],
+        [
+          69,
+          216
+        ],
+        [
+          134,
+          215
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9",
+      "keep_polygons": [
+        [
+          [
+            126,
+            198
+          ],
+          [
+            137,
+            198
+          ],
+          [
+            137,
+            224
+          ],
+          [
+            128,
+            224
+          ],
+          [
+            123,
+            222
+          ],
+          [
+            122,
+            220
+          ],
+          [
+            122,
+            216
+          ],
+          [
+            124,
+            213
+          ],
+          [
+            126,
+            210
+          ]
+        ],
+        [
+          [
+            124,
+            209
+          ],
+          [
+            127,
+            209
+          ],
+          [
+            127,
+            225
+          ],
+          [
+            123,
+            224
+          ],
+          [
+            120,
+            222
+          ],
+          [
+            119,
+            219
+          ],
+          [
+            119,
+            215
+          ],
+          [
+            120,
+            212
+          ],
+          [
+            122,
+            211
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect tan far leg and rounded pale paw tip; first-pass flood erased foreground inside outline."
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_left.webp",
+      "action": "run_left",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            114,
+            223
+          ],
+          "box": [
+            90,
+            200,
+            145,
+            236
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            177,
+            177,
+            175,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          69,
+          144
+        ],
+        [
+          79,
+          222
+        ],
+        [
+          156,
+          222
+        ],
+        [
+          133,
+          215
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_left.webp",
+      "action": "run_left",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            117,
+            225
+          ],
+          "box": [
+            102,
+            201,
+            141,
+            236
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            149,
+            148,
+            144,
+            255
+          ]
+        },
+        {
+          "seed": [
+            146,
+            215
+          ],
+          "box": [
+            141,
+            211,
+            153,
+            220
+          ],
+          "zone": "Opaque checkerboard right-side leg gap; ROI left>=141 avoids tan far leg.",
+          "seed_rgba": [
+            246,
+            240,
+            233,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          50,
+          136
+        ],
+        [
+          82,
+          218
+        ],
+        [
+          154,
+          226
+        ],
+        [
+          128,
+          215
+        ],
+        [
+          139,
+          217
+        ],
+        [
+          154,
+          223
+        ],
+        [
+          148,
+          208
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9",
+      "keep_polygons": [
+        [
+          [
+            127,
+            197
+          ],
+          [
+            135,
+            197
+          ],
+          [
+            135,
+            224
+          ],
+          [
+            128,
+            224
+          ],
+          [
+            125,
+            222
+          ],
+          [
+            123,
+            219
+          ],
+          [
+            123,
+            216
+          ],
+          [
+            125,
+            212
+          ],
+          [
+            127,
+            208
+          ]
+        ],
+        [
+          [
+            125,
+            210
+          ],
+          [
+            129,
+            210
+          ],
+          [
+            129,
+            225
+          ],
+          [
+            124,
+            224
+          ],
+          [
+            122,
+            222
+          ],
+          [
+            121,
+            220
+          ],
+          [
+            121,
+            216
+          ],
+          [
+            122,
+            214
+          ],
+          [
+            124,
+            212
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect tan far leg and rounded pale paw tip; first-pass flood erased foreground inside outline."
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_right.webp",
+      "action": "run_right",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            74,
+            178
+          ],
+          "box": [
+            58,
+            161,
+            90,
+            192
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            236,
+            236,
+            236,
+            255
+          ]
+        },
+        {
+          "seed": [
+            123,
+            215
+          ],
+          "box": [
+            107,
+            200,
+            141,
+            234
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            236,
+            238,
+            233,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          203,
+          134
+        ],
+        [
+          171,
+          159
+        ],
+        [
+          148,
+          220
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_right.webp",
+      "action": "run_right",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            74,
+            164
+          ],
+          "box": [
+            58,
+            149,
+            92,
+            177
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            221,
+            220,
+            223,
+            255
+          ]
+        },
+        {
+          "seed": [
+            116,
+            214
+          ],
+          "box": [
+            90,
+            200,
+            140,
+            226
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            221,
+            219,
+            218,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          202,
+          135
+        ],
+        [
+          80,
+          225
+        ],
+        [
+          144,
+          216
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_right.webp",
+      "action": "run_right",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            75,
+            169
+          ],
+          "box": [
+            59,
+            150,
+            92,
+            184
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            241,
+            241,
+            241,
+            255
+          ]
+        },
+        {
+          "seed": [
+            112,
+            231
+          ],
+          "box": [
+            101,
+            224,
+            123,
+            239
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            165,
+            163,
+            157,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          189,
+          140
+        ],
+        [
+          178,
+          202
+        ],
+        [
+          125,
+          220
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_right.webp",
+      "action": "run_right",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            77,
+            167
+          ],
+          "box": [
+            59,
+            147,
+            94,
+            182
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            230,
+            230,
+            228,
+            255
+          ]
+        },
+        {
+          "seed": [
+            71,
+            199
+          ],
+          "box": [
+            63,
+            193,
+            80,
+            206
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            206,
+            208,
+            201,
+            255
+          ]
+        },
+        {
+          "seed": [
+            104,
+            213
+          ],
+          "box": [
+            98,
+            208,
+            110,
+            218
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            223,
+            226,
+            219,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          185,
+          143
+        ],
+        [
+          176,
+          213
+        ],
+        [
+          120,
+          216
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_right.webp",
+      "action": "run_right",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            65,
+            172
+          ],
+          "box": [
+            49,
+            155,
+            79,
+            186
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            220,
+            214,
+            215,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          179,
+          143
+        ],
+        [
+          85,
+          225
+        ],
+        [
+          167,
+          196
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_right.webp",
+      "action": "run_right",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            113,
+            229
+          ],
+          "box": [
+            92,
+            206,
+            137,
+            239
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            157,
+            157,
+            152,
+            255
+          ]
+        },
+        {
+          "seed": [
+            76,
+            196
+          ],
+          "box": [
+            71,
+            191,
+            81,
+            201
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            236,
+            240,
+            234,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          201,
+          137
+        ],
+        [
+          88,
+          225
+        ],
+        [
+          147,
+          228
+        ],
+        [
+          113,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_up.webp",
+      "action": "run_up",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            133,
+            231
+          ],
+          "box": [
+            107,
+            222,
+            156,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            147,
+            151,
+            153,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          102,
+          211
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_up.webp",
+      "action": "run_up",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            157,
+            230
+          ],
+          "box": [
+            148,
+            220,
+            166,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            185,
+            185,
+            185,
+            227
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          149,
+          190
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_up.webp",
+      "action": "run_up",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            137,
+            230
+          ],
+          "box": [
+            108,
+            218,
+            159,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            170,
+            170,
+            170,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          104,
+          191
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_up.webp",
+      "action": "run_up",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            138,
+            225
+          ],
+          "box": [
+            117,
+            211,
+            157,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            154,
+            153,
+            153,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          106,
+          208
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_run_up.webp",
+      "action": "run_up",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            134,
+            233
+          ],
+          "box": [
+            111,
+            225,
+            157,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            166,
+            164,
+            165,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          148,
+          209
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_down.webp",
+      "action": "walk_down",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            97,
+            84
+          ],
+          "box": [
+            78,
+            70,
+            114,
+            100
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            221,
+            219,
+            218,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_down.webp",
+      "action": "walk_down",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            107,
+            70
+          ],
+          "box": [
+            98,
+            62,
+            116,
+            79
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            233,
+            234,
+            229,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_down.webp",
+      "action": "walk_down",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            97,
+            85
+          ],
+          "box": [
+            79,
+            70,
+            116,
+            101
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            214,
+            215,
+            212,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_down.webp",
+      "action": "walk_down",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            143,
+            74
+          ],
+          "box": [
+            135,
+            68,
+            155,
+            80
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            241,
+            241,
+            241,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_down.webp",
+      "action": "walk_down",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            164,
+            80
+          ],
+          "box": [
+            144,
+            64,
+            184,
+            96
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            248,
+            248,
+            248,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_down.webp",
+      "action": "walk_down",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            103,
+            80
+          ],
+          "box": [
+            90,
+            66,
+            116,
+            94
+          ],
+          "zone": "Checkerboard in the curved tail gap above head",
+          "seed_rgba": [
+            243,
+            243,
+            243,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          127,
+          176
+        ],
+        [
+          126,
+          186
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67aba3732ccb6ad89c5c3030015d542daa5fbfceb9c6cf63c2b0c1d1d9ff449d"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_left.webp",
+      "action": "walk_left",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            120,
+            232
+          ],
+          "box": [
+            103,
+            224,
+            145,
+            239
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            169,
+            164,
+            162,
+            255
+          ]
+        },
+        {
+          "seed": [
+            146,
+            215
+          ],
+          "box": [
+            139,
+            206,
+            157,
+            227
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            228,
+            229,
+            226,
+            255
+          ]
+        },
+        {
+          "seed": [
+            115,
+            222
+          ],
+          "box": [
+            110,
+            215,
+            120,
+            228
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            251,
+            250,
+            246,
+            255
+          ]
+        },
+        {
+          "seed": [
+            120,
+            208
+          ],
+          "box": [
+            116,
+            202,
+            125,
+            215
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            212,
+            212,
+            205,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          56,
+          140
+        ],
+        [
+          90,
+          223
+        ],
+        [
+          130,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_left.webp",
+      "action": "walk_left",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            113,
+            214
+          ],
+          "box": [
+            97,
+            200,
+            127,
+            226
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            224,
+            224,
+            222,
+            255
+          ]
+        },
+        {
+          "seed": [
+            148,
+            215
+          ],
+          "box": [
+            141,
+            208,
+            158,
+            225
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            219,
+            222,
+            221,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          65,
+          144
+        ],
+        [
+          74,
+          222
+        ],
+        [
+          161,
+          222
+        ],
+        [
+          132,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_left.webp",
+      "action": "walk_left",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            120,
+            224
+          ],
+          "box": [
+            98,
+            200,
+            151,
+            236
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            148,
+            143,
+            140,
+            255
+          ]
+        },
+        {
+          "seed": [
+            153,
+            214
+          ],
+          "box": [
+            147,
+            207,
+            162,
+            223
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            237,
+            235,
+            234,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          50,
+          138
+        ],
+        [
+          161,
+          221
+        ],
+        [
+          133,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9",
+      "keep_polygons": [
+        [
+          [
+            132,
+            199
+          ],
+          [
+            141,
+            199
+          ],
+          [
+            141,
+            224
+          ],
+          [
+            131,
+            224
+          ],
+          [
+            127,
+            223
+          ],
+          [
+            125,
+            220
+          ],
+          [
+            125,
+            217
+          ],
+          [
+            128,
+            214
+          ],
+          [
+            131,
+            210
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect tan far leg and rounded pale paw tip; first-pass flood erased foreground inside outline."
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_left.webp",
+      "action": "walk_left",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            116,
+            222
+          ],
+          "box": [
+            88,
+            198,
+            159,
+            238
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            176,
+            174,
+            170,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          65,
+          147
+        ],
+        [
+          69,
+          216
+        ],
+        [
+          134,
+          215
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9",
+      "keep_polygons": [
+        [
+          [
+            126,
+            198
+          ],
+          [
+            137,
+            198
+          ],
+          [
+            137,
+            224
+          ],
+          [
+            128,
+            224
+          ],
+          [
+            123,
+            222
+          ],
+          [
+            122,
+            220
+          ],
+          [
+            122,
+            216
+          ],
+          [
+            124,
+            213
+          ],
+          [
+            126,
+            210
+          ]
+        ],
+        [
+          [
+            124,
+            209
+          ],
+          [
+            127,
+            209
+          ],
+          [
+            127,
+            225
+          ],
+          [
+            123,
+            224
+          ],
+          [
+            120,
+            222
+          ],
+          [
+            119,
+            219
+          ],
+          [
+            119,
+            215
+          ],
+          [
+            120,
+            212
+          ],
+          [
+            122,
+            211
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect tan far leg and rounded pale paw tip; first-pass flood erased foreground inside outline."
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_left.webp",
+      "action": "walk_left",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            114,
+            223
+          ],
+          "box": [
+            90,
+            200,
+            145,
+            236
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            177,
+            177,
+            175,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          69,
+          144
+        ],
+        [
+          79,
+          222
+        ],
+        [
+          156,
+          222
+        ],
+        [
+          133,
+          215
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_left.webp",
+      "action": "walk_left",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            117,
+            225
+          ],
+          "box": [
+            102,
+            201,
+            141,
+            236
+          ],
+          "zone": "Checkerboard / opaque grey ground between paws; preserve the tan far leg",
+          "seed_rgba": [
+            149,
+            148,
+            144,
+            255
+          ]
+        },
+        {
+          "seed": [
+            146,
+            215
+          ],
+          "box": [
+            141,
+            211,
+            153,
+            220
+          ],
+          "zone": "Opaque checkerboard right-side leg gap; ROI left>=141 avoids tan far leg.",
+          "seed_rgba": [
+            246,
+            240,
+            233,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          50,
+          136
+        ],
+        [
+          82,
+          218
+        ],
+        [
+          154,
+          226
+        ],
+        [
+          128,
+          215
+        ],
+        [
+          139,
+          217
+        ],
+        [
+          154,
+          223
+        ],
+        [
+          148,
+          208
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "ecd22a85e962bdfa263830b30eb4d95e21b8b30c87bfb2b556503196cb2aeaf9",
+      "keep_polygons": [
+        [
+          [
+            127,
+            197
+          ],
+          [
+            135,
+            197
+          ],
+          [
+            135,
+            224
+          ],
+          [
+            128,
+            224
+          ],
+          [
+            125,
+            222
+          ],
+          [
+            123,
+            219
+          ],
+          [
+            123,
+            216
+          ],
+          [
+            125,
+            212
+          ],
+          [
+            127,
+            208
+          ]
+        ],
+        [
+          [
+            125,
+            210
+          ],
+          [
+            129,
+            210
+          ],
+          [
+            129,
+            225
+          ],
+          [
+            124,
+            224
+          ],
+          [
+            122,
+            222
+          ],
+          [
+            121,
+            220
+          ],
+          [
+            121,
+            216
+          ],
+          [
+            122,
+            214
+          ],
+          [
+            124,
+            212
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect tan far leg and rounded pale paw tip; first-pass flood erased foreground inside outline."
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_right.webp",
+      "action": "walk_right",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            74,
+            178
+          ],
+          "box": [
+            58,
+            161,
+            90,
+            192
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            236,
+            236,
+            236,
+            255
+          ]
+        },
+        {
+          "seed": [
+            123,
+            215
+          ],
+          "box": [
+            107,
+            200,
+            141,
+            234
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            236,
+            238,
+            233,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          203,
+          134
+        ],
+        [
+          171,
+          159
+        ],
+        [
+          148,
+          220
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_right.webp",
+      "action": "walk_right",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            74,
+            164
+          ],
+          "box": [
+            58,
+            149,
+            92,
+            177
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            221,
+            220,
+            223,
+            255
+          ]
+        },
+        {
+          "seed": [
+            116,
+            214
+          ],
+          "box": [
+            90,
+            200,
+            140,
+            226
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            221,
+            219,
+            218,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          202,
+          135
+        ],
+        [
+          80,
+          225
+        ],
+        [
+          144,
+          216
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_right.webp",
+      "action": "walk_right",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            75,
+            169
+          ],
+          "box": [
+            59,
+            150,
+            92,
+            184
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            241,
+            241,
+            241,
+            255
+          ]
+        },
+        {
+          "seed": [
+            112,
+            231
+          ],
+          "box": [
+            101,
+            224,
+            123,
+            239
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            165,
+            163,
+            157,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          189,
+          140
+        ],
+        [
+          178,
+          202
+        ],
+        [
+          125,
+          220
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_right.webp",
+      "action": "walk_right",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            77,
+            167
+          ],
+          "box": [
+            59,
+            147,
+            94,
+            182
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            230,
+            230,
+            228,
+            255
+          ]
+        },
+        {
+          "seed": [
+            71,
+            199
+          ],
+          "box": [
+            63,
+            193,
+            80,
+            206
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            206,
+            208,
+            201,
+            255
+          ]
+        },
+        {
+          "seed": [
+            104,
+            213
+          ],
+          "box": [
+            98,
+            208,
+            110,
+            218
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            223,
+            226,
+            219,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          185,
+          143
+        ],
+        [
+          176,
+          213
+        ],
+        [
+          120,
+          216
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_right.webp",
+      "action": "walk_right",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            65,
+            172
+          ],
+          "box": [
+            49,
+            155,
+            79,
+            186
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            220,
+            214,
+            215,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          179,
+          143
+        ],
+        [
+          85,
+          225
+        ],
+        [
+          167,
+          196
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_right.webp",
+      "action": "walk_right",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            113,
+            229
+          ],
+          "box": [
+            92,
+            206,
+            137,
+            239
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            157,
+            157,
+            152,
+            255
+          ]
+        },
+        {
+          "seed": [
+            76,
+            196
+          ],
+          "box": [
+            71,
+            191,
+            81,
+            201
+          ],
+          "zone": "Opaque checkerboard tail gap or grey patch below/between paws",
+          "seed_rgba": [
+            236,
+            240,
+            234,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          201,
+          137
+        ],
+        [
+          88,
+          225
+        ],
+        [
+          147,
+          228
+        ],
+        [
+          113,
+          214
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "c90b61780b2663cf02078baf900ac4c37f16cc75e940ff75eb9186fd2f5cbac9"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_up.webp",
+      "action": "walk_up",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            133,
+            231
+          ],
+          "box": [
+            107,
+            222,
+            156,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            147,
+            151,
+            153,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          102,
+          211
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_up.webp",
+      "action": "walk_up",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            157,
+            230
+          ],
+          "box": [
+            148,
+            220,
+            166,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            185,
+            185,
+            185,
+            227
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          149,
+          190
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_up.webp",
+      "action": "walk_up",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            137,
+            230
+          ],
+          "box": [
+            108,
+            218,
+            159,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            170,
+            170,
+            170,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          104,
+          191
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_up.webp",
+      "action": "walk_up",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            138,
+            225
+          ],
+          "box": [
+            117,
+            211,
+            157,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            154,
+            153,
+            153,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          106,
+          208
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "adult",
+      "resource": "leopard_adult_walk_up.webp",
+      "action": "walk_up",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            134,
+            233
+          ],
+          "box": [
+            111,
+            225,
+            157,
+            239
+          ],
+          "zone": "Opaque grey residual beneath feet/tail",
+          "seed_rgba": [
+            166,
+            164,
+            165,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          148,
+          209
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "67c0cfd7053f1897a1894ba23b18ee16a0b3eb0b584dc1b65cf6a0a2e1742519"
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 1,
+      "regions": [
+        {
+          "seed": [
+            93,
+            182
+          ],
+          "box": [
+            82,
+            162,
+            105,
+            200
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            221,
+            220,
+            216,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            83,
+            144
+          ],
+          [
+            83,
+            152
+          ],
+          [
+            87,
+            157
+          ],
+          [
+            94,
+            163
+          ],
+          [
+            103,
+            168
+          ],
+          [
+            113,
+            174
+          ],
+          [
+            129,
+            180
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            83,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            92,
+            178
+          ],
+          "box": [
+            80,
+            153,
+            103,
+            199
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            241,
+            240,
+            233,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            77,
+            144
+          ],
+          [
+            79,
+            151
+          ],
+          [
+            82,
+            157
+          ],
+          [
+            89,
+            162
+          ],
+          [
+            100,
+            167
+          ],
+          [
+            112,
+            173
+          ],
+          [
+            128,
+            180
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            77,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 3,
+      "regions": [
+        {
+          "seed": [
+            91,
+            180
+          ],
+          "box": [
+            79,
+            155,
+            101,
+            198
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            236,
+            234,
+            230,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            79,
+            145
+          ],
+          [
+            80,
+            152
+          ],
+          [
+            83,
+            158
+          ],
+          [
+            90,
+            163
+          ],
+          [
+            101,
+            169
+          ],
+          [
+            111,
+            174
+          ],
+          [
+            128,
+            180
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            79,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 4,
+      "regions": [
+        {
+          "seed": [
+            93,
+            178
+          ],
+          "box": [
+            81,
+            154,
+            104,
+            201
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            239,
+            237,
+            238,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            80,
+            144
+          ],
+          [
+            81,
+            151
+          ],
+          [
+            85,
+            157
+          ],
+          [
+            92,
+            162
+          ],
+          [
+            103,
+            168
+          ],
+          [
+            114,
+            175
+          ],
+          [
+            130,
+            181
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            80,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            90,
+            179
+          ],
+          "box": [
+            78,
+            151,
+            103,
+            199
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            229,
+            229,
+            228,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            79,
+            143
+          ],
+          [
+            80,
+            150
+          ],
+          [
+            83,
+            156
+          ],
+          [
+            90,
+            162
+          ],
+          [
+            101,
+            167
+          ],
+          [
+            112,
+            173
+          ],
+          [
+            129,
+            180
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            79,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 6,
+      "regions": [
+        {
+          "seed": [
+            76,
+            175
+          ],
+          "box": [
+            61,
+            155,
+            89,
+            205
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            238,
+            235,
+            238,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          115,
+          170
+        ],
+        [
+          100,
+          224
+        ],
+        [
+          180,
+          113
+        ],
+        [
+          162,
+          128
+        ],
+        [
+          95,
+          176
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            57,
+            146
+          ],
+          [
+            58,
+            154
+          ],
+          [
+            61,
+            161
+          ],
+          [
+            65,
+            167
+          ],
+          [
+            72,
+            172
+          ],
+          [
+            82,
+            177
+          ],
+          [
+            91,
+            180
+          ],
+          [
+            101,
+            190
+          ],
+          [
+            128,
+            193
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            57,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 7,
+      "regions": [
+        {
+          "seed": [
+            102,
+            174
+          ],
+          "box": [
+            92,
+            160,
+            112,
+            193
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            236,
+            236,
+            234,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          128,
+          162
+        ],
+        [
+          146,
+          170
+        ],
+        [
+          79,
+          189
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            88,
+            140
+          ],
+          [
+            88,
+            147
+          ],
+          [
+            93,
+            154
+          ],
+          [
+            96,
+            159
+          ],
+          [
+            103,
+            164
+          ],
+          [
+            113,
+            170
+          ],
+          [
+            128,
+            178
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            88,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 8,
+      "regions": [
+        {
+          "seed": [
+            86,
+            189
+          ],
+          "box": [
+            76,
+            175,
+            99,
+            202
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            229,
+            223,
+            218,
+            255
+          ]
+        },
+        {
+          "seed": [
+            69,
+            118
+          ],
+          "box": [
+            60,
+            97,
+            76,
+            134
+          ],
+          "zone": "Checkerboard between hearts, ear and tail; preserve white inside ear and red hearts",
+          "seed_rgba": [
+            216,
+            217,
+            217,
+            255
+          ]
+        },
+        {
+          "seed": [
+            86,
+            168
+          ],
+          "box": [
+            60,
+            131,
+            101,
+            179
+          ],
+          "zone": "Checkerboard between hearts, ear and tail; preserve white inside ear and red hearts",
+          "seed_rgba": [
+            230,
+            224,
+            219,
+            255
+          ]
+        },
+        {
+          "seed": [
+            59,
+            157
+          ],
+          "box": [
+            55,
+            155,
+            64,
+            164
+          ],
+          "zone": "Clearly residual backdrop under left lower heart; straight right edge x60 matches prior ROI. True pink heart ends y153. Preserve pink/white antialias above y155.",
+          "seed_rgba": [
+            221,
+            209,
+            197,
+            255
+          ]
+        },
+        {
+          "seed": [
+            59,
+            120
+          ],
+          "box": [
+            55,
+            117,
+            64,
+            123
+          ],
+          "zone": "Gray/white vertical backdrop bridge between two floating left hearts, x57..59, cut at prior ROI x60. Keep upper heart antialias y115-116 and lower heart antialias y123.",
+          "seed_rgba": [
+            246,
+            221,
+            215,
+            255
+          ]
+        },
+        {
+          "seed": [
+            56,
+            158
+          ],
+          "box": [
+            55,
+            155,
+            64,
+            164
+          ],
+          "zone": "Confirmed coloured antialias remnants inside the audited empty heart gap; heart edges lie outside these bounds.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 81
+        },
+        {
+          "seed": [
+            58,
+            163
+          ],
+          "box": [
+            55,
+            155,
+            64,
+            164
+          ],
+          "zone": "Confirmed coloured antialias remnants inside the audited empty heart gap; heart edges lie outside these bounds.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 81
+        },
+        {
+          "seed": [
+            55,
+            119
+          ],
+          "box": [
+            55,
+            117,
+            64,
+            123
+          ],
+          "zone": "Confirmed coloured antialias remnants inside the audited empty heart gap; heart edges lie outside these bounds.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 54
+        },
+        {
+          "seed": [
+            58,
+            119
+          ],
+          "box": [
+            55,
+            117,
+            64,
+            123
+          ],
+          "zone": "Confirmed coloured antialias remnants inside the audited empty heart gap; heart edges lie outside these bounds.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 54
+        }
+      ],
+      "keep_points": [
+        [
+          123,
+          173
+        ],
+        [
+          129,
+          193
+        ],
+        [
+          75,
+          123
+        ],
+        [
+          61,
+          102
+        ],
+        [
+          62,
+          139
+        ],
+        [
+          195,
+          133
+        ],
+        [
+          100,
+          160
+        ],
+        [
+          61,
+          152
+        ],
+        [
+          60,
+          153
+        ],
+        [
+          60,
+          114
+        ],
+        [
+          60,
+          125
+        ],
+        [
+          70,
+          118
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            72,
+            103
+          ],
+          [
+            71,
+            108
+          ],
+          [
+            70,
+            114
+          ],
+          [
+            70,
+            120
+          ],
+          [
+            71,
+            125
+          ],
+          [
+            73,
+            131
+          ],
+          [
+            75,
+            135
+          ],
+          [
+            78,
+            139
+          ],
+          [
+            79,
+            141
+          ],
+          [
+            78,
+            145
+          ],
+          [
+            77,
+            148
+          ],
+          [
+            78,
+            150
+          ],
+          [
+            81,
+            152
+          ],
+          [
+            83,
+            154
+          ],
+          [
+            83,
+            157
+          ],
+          [
+            86,
+            160
+          ],
+          [
+            89,
+            162
+          ],
+          [
+            92,
+            164
+          ],
+          [
+            96,
+            167
+          ],
+          [
+            105,
+            172
+          ],
+          [
+            122,
+            181
+          ],
+          [
+            136,
+            185
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            72,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 9,
+      "regions": [
+        {
+          "seed": [
+            91,
+            174
+          ],
+          "box": [
+            79,
+            151,
+            104,
+            199
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            228,
+            224,
+            222,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            77,
+            140
+          ],
+          [
+            78,
+            148
+          ],
+          [
+            81,
+            153
+          ],
+          [
+            89,
+            158
+          ],
+          [
+            100,
+            163
+          ],
+          [
+            111,
+            169
+          ],
+          [
+            129,
+            176
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            77,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 10,
+      "regions": [
+        {
+          "seed": [
+            91,
+            175
+          ],
+          "box": [
+            79,
+            149,
+            103,
+            198
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            241,
+            238,
+            235,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            78,
+            140
+          ],
+          [
+            79,
+            148
+          ],
+          [
+            82,
+            153
+          ],
+          [
+            89,
+            158
+          ],
+          [
+            101,
+            164
+          ],
+          [
+            112,
+            170
+          ],
+          [
+            129,
+            178
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            78,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 11,
+      "regions": [
+        {
+          "seed": [
+            96,
+            179
+          ],
+          "box": [
+            83,
+            156,
+            110,
+            198
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            221,
+            215,
+            213,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            86,
+            142
+          ],
+          [
+            86,
+            150
+          ],
+          [
+            87,
+            158
+          ],
+          [
+            93,
+            163
+          ],
+          [
+            100,
+            165
+          ],
+          [
+            113,
+            170
+          ],
+          [
+            130,
+            174
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            86,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_moods.webp",
+      "action": "moods",
+      "frame": 12,
+      "regions": [
+        {
+          "seed": [
+            78,
+            177
+          ],
+          "box": [
+            66,
+            156,
+            91,
+            199
+          ],
+          "zone": "Opaque white/checkerboard tail gap, not cheek or belly fur",
+          "seed_rgba": [
+            227,
+            225,
+            223,
+            255
+          ]
+        },
+        {
+          "seed": [
+            184,
+            114
+          ],
+          "box": [
+            177,
+            101,
+            191,
+            129
+          ],
+          "zone": "Rectangular white/grey background bridge from ear to blue sweat drop; keep ear and droplet",
+          "seed_rgba": [
+            219,
+            223,
+            228,
+            255
+          ]
+        },
+        {
+          "seed": [
+            178,
+            129
+          ],
+          "box": [
+            171,
+            120,
+            186,
+            136
+          ],
+          "zone": "Rectangular white/grey background bridge from ear to blue sweat drop; keep ear and droplet",
+          "seed_rgba": [
+            221,
+            228,
+            230,
+            255
+          ]
+        }
+      ],
+      "keep_points": [
+        [
+          132,
+          173
+        ],
+        [
+          148,
+          223
+        ],
+        [
+          133,
+          187
+        ],
+        [
+          126,
+          91
+        ],
+        [
+          173,
+          118
+        ],
+        [
+          195,
+          118
+        ],
+        [
+          166,
+          131
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "78eaff2cd72da1bf3f4832e2cb98c8e1e6779d0865defd4049719e3a6092a595",
+      "keep_polygons": [
+        [
+          [
+            70,
+            143
+          ],
+          [
+            72,
+            151
+          ],
+          [
+            76,
+            157
+          ],
+          [
+            84,
+            162
+          ],
+          [
+            95,
+            168
+          ],
+          [
+            110,
+            174
+          ],
+          [
+            128,
+            181
+          ],
+          [
+            160,
+            200
+          ],
+          [
+            160,
+            90
+          ],
+          [
+            70,
+            90
+          ]
+        ]
+      ],
+      "polygon_reason": "Protect full gray cheek/muzzle above its original outer contour; below/left is true trapped background. Geometry defined against original 256x256 frame."
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_rope_play.png",
+      "action": "rope_play",
+      "frame": 2,
+      "regions": [
+        {
+          "seed": [
+            22,
+            185
+          ],
+          "box": [
+            20,
+            177,
+            26,
+            192
+          ],
+          "zone": "Reviewed disconnected dark source remnant, separated from the tail; bounded 6x15 region only",
+          "seed_rgba": [
+            77,
+            44,
+            27,
+            214
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 90
+        }
+      ],
+      "keep_points": [],
+      "keep_effect_points": [],
+      "baseline_sha256": "1ceb5762cf345b86b460dc6425be03a872ee77116107aea62867bcbffa24f79d"
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_run_right.webp",
+      "action": "run_right",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            222,
+            164
+          ],
+          "box": [
+            221,
+            152,
+            228,
+            183
+          ],
+          "zone": "Disconnected vertical leftover mark to the right of the animal",
+          "seed_rgba": [
+            186,
+            196,
+            186,
+            26
+          ]
+        },
+        {
+          "seed": [
+            219,
+            163
+          ],
+          "box": [
+            218,
+            157,
+            228,
+            181
+          ],
+          "zone": "First-pass original scrap box began x221; faint left fringe remains x219..220. Existing scrap cleanup should cover this expanded ROI; all marks here are disconnected from animal.",
+          "seed_rgba": [
+            111,
+            130,
+            93,
+            41
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 240
+        },
+        {
+          "seed": [
+            220,
+            168
+          ],
+          "box": [
+            218,
+            157,
+            228,
+            181
+          ],
+          "zone": "First-pass original scrap box began x221; faint left fringe remains x219..220. Existing scrap cleanup should cover this expanded ROI; all marks here are disconnected from animal.",
+          "seed_rgba": [
+            163,
+            182,
+            157,
+            42
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 240
+        },
+        {
+          "seed": [
+            219,
+            173
+          ],
+          "box": [
+            218,
+            157,
+            228,
+            181
+          ],
+          "zone": "First-pass original scrap box began x221; faint left fringe remains x219..220. Existing scrap cleanup should cover this expanded ROI; all marks here are disconnected from animal.",
+          "seed_rgba": [
+            127,
+            139,
+            104,
+            22
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 240
+        },
+        {
+          "seed": [
+            226,
+            151
+          ],
+          "box": [
+            216,
+            148,
+            231,
+            187
+          ],
+          "zone": "Detached low-opacity remnants of the reviewed vertical scrap; no character pixels in this region.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 585
+        },
+        {
+          "seed": [
+            223,
+            153
+          ],
+          "box": [
+            216,
+            148,
+            231,
+            187
+          ],
+          "zone": "Detached low-opacity remnants of the reviewed vertical scrap; no character pixels in this region.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 585
+        },
+        {
+          "seed": [
+            219,
+            159
+          ],
+          "box": [
+            216,
+            148,
+            231,
+            187
+          ],
+          "zone": "Detached low-opacity remnants of the reviewed vertical scrap; no character pixels in this region.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 585
+        },
+        {
+          "seed": [
+            222,
+            169
+          ],
+          "box": [
+            216,
+            148,
+            231,
+            187
+          ],
+          "zone": "Detached low-opacity remnants of the reviewed vertical scrap; no character pixels in this region.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 585
+        }
+      ],
+      "keep_points": [
+        [
+          191,
+          147
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "d89c94e8d829f9db42a339da723f802fff7b8287a288e3cd7232e9444621396a"
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_walk_right.webp",
+      "action": "walk_right",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            222,
+            164
+          ],
+          "box": [
+            221,
+            152,
+            228,
+            183
+          ],
+          "zone": "Disconnected vertical leftover mark to the right of the animal",
+          "seed_rgba": [
+            186,
+            196,
+            186,
+            26
+          ]
+        },
+        {
+          "seed": [
+            219,
+            163
+          ],
+          "box": [
+            218,
+            157,
+            228,
+            181
+          ],
+          "zone": "First-pass original scrap box began x221; faint left fringe remains x219..220. Existing scrap cleanup should cover this expanded ROI; all marks here are disconnected from animal.",
+          "seed_rgba": [
+            111,
+            130,
+            93,
+            41
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 240
+        },
+        {
+          "seed": [
+            220,
+            168
+          ],
+          "box": [
+            218,
+            157,
+            228,
+            181
+          ],
+          "zone": "First-pass original scrap box began x221; faint left fringe remains x219..220. Existing scrap cleanup should cover this expanded ROI; all marks here are disconnected from animal.",
+          "seed_rgba": [
+            163,
+            182,
+            157,
+            42
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 240
+        },
+        {
+          "seed": [
+            219,
+            173
+          ],
+          "box": [
+            218,
+            157,
+            228,
+            181
+          ],
+          "zone": "First-pass original scrap box began x221; faint left fringe remains x219..220. Existing scrap cleanup should cover this expanded ROI; all marks here are disconnected from animal.",
+          "seed_rgba": [
+            127,
+            139,
+            104,
+            22
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 240
+        },
+        {
+          "seed": [
+            226,
+            151
+          ],
+          "box": [
+            216,
+            148,
+            231,
+            187
+          ],
+          "zone": "Detached low-opacity remnants of the reviewed vertical scrap; no character pixels in this region.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 585
+        },
+        {
+          "seed": [
+            223,
+            153
+          ],
+          "box": [
+            216,
+            148,
+            231,
+            187
+          ],
+          "zone": "Detached low-opacity remnants of the reviewed vertical scrap; no character pixels in this region.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 585
+        },
+        {
+          "seed": [
+            219,
+            159
+          ],
+          "box": [
+            216,
+            148,
+            231,
+            187
+          ],
+          "zone": "Detached low-opacity remnants of the reviewed vertical scrap; no character pixels in this region.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 585
+        },
+        {
+          "seed": [
+            222,
+            169
+          ],
+          "box": [
+            216,
+            148,
+            231,
+            187
+          ],
+          "zone": "Detached low-opacity remnants of the reviewed vertical scrap; no character pixels in this region.",
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 585
+        }
+      ],
+      "keep_points": [
+        [
+          191,
+          147
+        ]
+      ],
+      "keep_effect_points": [],
+      "baseline_sha256": "d89c94e8d829f9db42a339da723f802fff7b8287a288e3cd7232e9444621396a"
+    },
+    {
+      "age": "old",
+      "resource": "leopard_old_rope_play.png",
+      "action": "rope_play",
+      "frame": 5,
+      "regions": [
+        {
+          "seed": [
+            19,
+            188
+          ],
+          "box": [
+            16,
+            183,
+            23,
+            193
+          ],
+          "zone": "Detached dark mark left of tail: 20 pixels alpha>16; bbox[17,185,21,191]; maxalpha~101.",
+          "seed_rgba": [
+            10,
+            7,
+            5,
+            100
+          ],
+          "min_luma": 0,
+          "max_chroma": 255,
+          "max_pixels": 70
+        }
+      ],
+      "keep_points": [],
+      "keep_effect_points": [],
+      "baseline_sha256": "1ceb5762cf345b86b460dc6425be03a872ee77116107aea62867bcbffa24f79d"
+    }
+  ]
+}

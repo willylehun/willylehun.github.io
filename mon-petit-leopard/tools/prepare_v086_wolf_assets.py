@@ -16,7 +16,7 @@ import math
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source-assets" / "wolf-v086"
@@ -41,7 +41,7 @@ MAIN = {
         "idle_up": [(622, 99, 809, 248)],
         "walk_down": row([818, 934, 1050, 1166, 1282, 1401, 1525], 99, 234),
         "walk_left": row([13, 140, 264, 389, 513, 637, 764], 293, 425),
-        "walk_right": row([771, 897, 1022, 1148, 1274, 1399, 1524], 293, 425),
+        "walk_right": row([771, 900, 1023, 1147, 1272, 1394, 1523], 293, 425),
         "walk_up": row([13, 140, 264, 389, 513, 638, 764], 471, 620),
         "jump": row([771, 920, 1069, 1219, 1369, 1524], 471, 620),
         "eat": row([14, 134, 253, 376], 668, 859),
@@ -56,13 +56,13 @@ MAIN = {
         "idle_up": [(622, 99, 809, 248)],
         "walk_down": row([818, 934, 1050, 1166, 1282, 1401, 1525], 99, 247),
         "walk_left": row([13, 140, 264, 389, 513, 638, 764], 293, 425),
-        "walk_right": row([771, 897, 1022, 1148, 1274, 1399, 1524], 293, 425),
+        "walk_right": row([771, 900, 1024, 1147, 1272, 1394, 1524], 293, 425),
         "walk_up": row([13, 140, 264, 389, 513, 638, 764], 471, 620),
         "jump": row([771, 920, 1069, 1219, 1369, 1524], 471, 620),
         "eat": row([14, 134, 253, 376], 668, 859),
         "sleep": row([384, 514, 645, 782], 668, 859),
-        "moods": row([790, 914, 1033, 1151, 1272, 1394, 1523], 668, 778)
-                 + row([790, 914, 1033, 1151, 1272, 1394, 1523], 796, 916),
+        "moods": row([790, 914, 1032, 1150, 1272, 1392, 1523], 668, 778)
+                 + row([790, 914, 1032, 1150, 1272, 1392, 1523], 796, 916),
     },
     "adult": {
         "idle_down": [(12, 101, 201, 275)],
@@ -71,7 +71,7 @@ MAIN = {
         "idle_up": [(597, 101, 777, 275)],
         "walk_down": row([783, 886, 996, 1104, 1214, 1325, 1439], 101, 275),
         "walk_left": row([12, 130, 248, 366, 483, 600, 720], 320, 473),
-        "walk_right": row([728, 851, 968, 1084, 1201, 1318, 1438], 320, 473),
+        "walk_right": row([728, 849, 967, 1083, 1200, 1317, 1438], 320, 473),
         "walk_up": row([14, 131, 248, 365, 482, 599, 720], 518, 686),
         "jump": row([728, 869, 1009, 1152, 1293, 1438], 518, 686),
         "eat": row([14, 128, 240, 353], 732, 925),
@@ -86,7 +86,7 @@ MAIN = {
         "idle_up": [(590, 99, 763, 271)],
         "walk_down": row([772, 882, 991, 1104, 1213, 1323, 1439], 99, 270),
         "walk_left": row([12, 133, 250, 367, 485, 601, 720], 315, 457),
-        "walk_right": row([729, 849, 969, 1085, 1201, 1319, 1437], 315, 457),
+        "walk_right": row([729, 851, 967, 1085, 1202, 1318, 1437], 315, 457),
         "walk_up": row([14, 131, 248, 367, 483, 600, 720], 501, 655),
         "jump": row([729, 869, 1009, 1152, 1293, 1437], 501, 655),
         "eat": row([14, 128, 243, 356], 703, 910),
@@ -100,19 +100,78 @@ OBJECT_ACTIONS = ("bottle", "comb", "bowl", "fetch_mouse", "fetch_plush",
                   "fetch_ball", "fetch_tennis", "fetch_yarn", "groom_foam",
                   "rope_play", "scratcher_play", "soap", "towel")
 OBJECTS = {
-    "cub": row([14, 322, 620, 919, 1216, 1524], 105, 340)
-           + row([14, 322, 620, 919, 1216, 1524], 392, 623)
-           + [(164, 663, 560, 892), (574, 670, 961, 892), (971, 670, 1363, 892)],
-    "teen": row([14, 322, 620, 919, 1216, 1524], 105, 340)
-            + row([14, 322, 620, 919, 1216, 1524], 392, 623)
-            + [(164, 663, 560, 892), (574, 670, 961, 892), (971, 670, 1363, 892)],
-    "adult": row([10, 296, 582, 869, 1155, 1438], 99, 348)
-             + row([10, 296, 582, 869, 1155, 1438], 397, 647)
-             + [(150, 687, 525, 947), (534, 695, 909, 947), (920, 695, 1295, 947)],
-    "old": row([14, 305, 587, 869, 1147, 1438], 101, 341)
-           + row([14, 305, 587, 869, 1147, 1438], 389, 640)
-           + [(157, 681, 531, 925), (541, 689, 911, 925), (921, 689, 1285, 925)],
+    "cub": [(17,105,318,339),(327,105,616,339),(625,105,913,339),(923,105,1210,339),(1220,105,1521,339),
+            (17,391,318,622),(327,391,616,622),(625,391,912,622),(923,391,1210,622),(1220,391,1521,622),
+            (164,663,560,892),(573,671,960,892),(971,671,1363,892)],
+    "teen": [(17,105,316,338),(328,105,615,338),(626,105,912,338),(924,105,1209,338),(1221,105,1520,338),
+             (17,391,317,621),(328,391,615,621),(626,391,911,621),(924,391,1209,621),(1221,391,1520,621),
+             (164,663,560,892),(574,672,960,892),(972,672,1362,892)],
+    "adult": [(12,99,290,347),(300,99,576,347),(586,99,863,347),(872,99,1149,347),(1159,99,1436,347),
+              (12,395,291,647),(301,395,577,647),(586,395,863,647),(872,395,1148,647),(1158,395,1436,647),
+              (150,687,525,946),(536,695,907,946),(918,695,1295,946)],
+    "old": [(16,101,299,339),(309,101,580,339),(591,101,861,339),(871,101,1141,339),(1151,101,1434,339),
+            (16,388,299,639),(309,388,580,639),(590,388,861,639),(871,388,1141,639),(1151,388,1434,639),
+            (157,681,531,924),(541,687,908,924),(918,687,1286,924)],
 }
+
+# Audited source-space masks. The two teen walking labels touch the dark toe
+# outline, so removing an entire bottom row would also cut the toe itself.
+LABEL_MASKS = {
+    ("teen", "walk_down", 1): [(48,132),(54,132),(54,134),(56,135),(56,139),(54,141),(58,142),(58,145),(48,145),(48,141),(50,139),(52,137),(52,135),(48,135)],
+    ("teen", "walk_down", 3): [(52,132),(55,132),(55,135),(55,139),(57,140),(57,142),(55,142),(55,145),(52,145),(52,143),(48,143),(48,140),(49,138),(50,136),(51,135)],
+}
+
+# The original pale tail outline is open by one pixel at these three tips.
+# Exact inner-fur masks prevent a background flood through that source gap.
+# The small paw mask protects the cream toe adjacent to the printed numeral.
+FUR_PROTECT = {
+    ("old", "idle_up", 0): [[(117,118),(128,114),(138,109),(143,107),(144,112),(145,116),(145,126),(143,132),(142,136),(136,137),(127,137),(115,134),(119,129),(110,127),(113,124)]],
+    ("old", "walk_left", 0): [[(84,32),(89,31),(96,34),(101,38),(105,42),(109,47),(111,54),(107,57),(99,56),(93,52),(88,54),(84,50),(83,43),(83,37)]],
+    ("teen", "walk_down", 1): [[(57,128),(62,126),(69,128),(71,131),(69,134),(65,135),(61,134),(57,132)]],
+    ("teen", "walk_down", 3): [[(43,0),(47,0),(50,4),(55,7),(59,11),(60,14),(60,18),(57,22),(51,25),(48,22),(42,20),(39,15),(35,13),(35,9),(38,5)],[(57,128),(62,127),(68,129),(68,133),(65,135),(61,135),(57,133)]],
+    ("teen", "walk_right", 2): [[(80,86),(84,85),(89,88),(91,90),(91,94),(93,97),(96,100),(96,103),(93,105),(88,104),(83,101),(83,96),(80,94),(78,92)]],
+}
+
+# The flat grey marks below the feet are painted over the printed checkerboard.
+# These are source-space ground bands checked pose by pose, not a grey colour
+# key for the wolf. Enclosed light fur is never seeded as background.
+MAIN_GROUND = {
+    "cub": {"walk_down": 106, "walk_left": 100, "walk_right": 100, "walk_up": 115, "jump": 108},
+    "teen": {"walk_down": 113, "walk_left": 98, "walk_right": 98, "walk_up": 112, "jump": 110},
+    "adult": {"walk_down": 132, "walk_left": 110, "walk_right": 110, "walk_up": 125, "jump": 122},
+    "old": {"walk_down": 128, "walk_left": 106, "walk_right": 106, "walk_up": 114, "jump": 112},
+}
+TOY_ACTIONS = ("fetch_mouse", "fetch_ball", "fetch_tennis", "fetch_yarn", "rope_play")
+TOY_HOLE = {"cub": (78,170), "teen": (78,170), "adult": (75,185), "old": (75,185)}
+
+# Some care sheets tint the checkerboard blue between actual soap bubbles.
+# Each local zone is outside/right of the face. Explicit ellipse interiors
+# protect the supplied bubbles; their source colours are never repainted.
+# Tuples are (centre x, centre y, horizontal radius, vertical radius).
+CARE_BLUE = {
+    ('cub', 'soap'): ((235, 25, 310, 156), [[275.78, 42.86, 4.74, 4.74], [280.42, 62.13, 12.92, 12.92], [268.04, 85.42, 5.43, 5.43], [289.95, 111.8, 12.54, 12.54], [293.16, 146.65, 7.21, 7.21], [274.61, 137.61, 3.26, 3.26], [285, 130, 3, 3]]),
+    ('teen', 'soap'): ((234, 25, 308, 156), [[273, 47.5, 4.5, 4.5], [276.32, 66.99, 12.45, 12.45], [265.5, 87.8, 5, 5], [285.54, 112.07, 10.59, 10.59], [290.5, 150, 6.7, 6.7], [273.0, 137.0, 4.0, 4.0]]),
+    ('adult', 'soap'): ((230, 30, 304, 155), [[261.56, 48.58, 5.31, 5.31], [268.3, 70.56, 12.14, 12.14], [255, 85.5, 5.2, 5.2], [277.54, 107.19, 10.83, 10.83], [281.75, 143.52, 7.27, 7.27], [267.17, 126.04, 4.03, 4.03], [272.92, 159.83, 5.17, 5.17], [282.38, 192.19, 11.83, 11.83]]),
+    ('old', 'soap'): ((226, 30, 301, 166), [[263.5, 45.5, 5.2, 5.2], [268.4, 66.7, 13.78, 13.78], [279.34, 117.19, 12.56, 12.56], [285.43, 159.48, 8.15, 8.15], [276.76, 175.33, 6.09, 6.09]]),
+    ('cub', 'groom_foam'): ((202, 35, 266, 165), [[234.12, 58.15, 5.43, 5.43], [235.41, 78.27, 10.07, 10.07], [214.83, 106.96, 12.96, 12.96], [235.72, 142.87, 14.1, 14.1], [256.52, 130.78, 5.56, 5.56], [231.5, 167.5, 5.5, 5.5]]),
+    ('teen', 'groom_foam'): ((201, 35, 263, 165), [[232.7, 60.7, 4.8, 4.8], [233.7, 78.7, 10.4, 10.4], [213.3, 107.3, 13, 13], [233.3, 142.7, 14, 14], [254.7, 131, 5.4, 5.4], [228, 166.7, 5.3, 5.3]]),
+    ('adult', 'groom_foam'): ((202, 42, 272, 177), [[228.26, 68.38, 6.02, 6.02], [217.34, 90.6, 12.45, 12.45], [234.18, 171.86, 11.07, 11.07], [244.8, 157.22, 3.92, 3.92], [245.7, 187, 4.7, 4.7], [252.32, 210.43, 6.82, 6.82]]),
+    ('old', 'groom_foam'): ((200, 48, 258, 177), [[231.2, 72.41, 4.63, 4.63], [231.22, 92.1, 10.17, 10.17], [210.92, 119.39, 12.05, 12.05], [226.91, 148.38, 12.02, 12.02], [244.5, 137.3, 4.4, 4.4]]),
+}
+
+# The softly outlined foam clusters contain intentional white, unlike the
+# tinted checkerboard between them. Polygons stay inside the supplied clumps.
+CARE_FOAM = {
+    ("cub", "soap"): [(244,160),(253,157),(265,157),(274,161),(279,172),(275,181),(282,182),(288,191),(285,198),(278,201),(267,194),(254,187),(251,177)],
+    ("teen", "soap"): [(243,160),(253,156),(264,157),(272,162),(275,171),(273,180),(283,184),(285,194),(279,199),(267,192),(255,187),(250,176)],
+    ("adult", "soap"): [(238,164),(247,160),(251,157),(259,157),(265,162),(266,170),(270,175),(265,183),(263,195),(259,206),(255,211),(247,195),(244,178)],
+    ("old", "soap"): [(232,170),(243,166),(247,166),(250,169),(258,169),(265,174),(265,183),(273,185),(274,191),(270,198),(282,201),(285,210),(279,216),(272,216),(260,208),(249,197),(247,188)],
+    ("cub", "groom_foam"): [(195,171),(204,167),(211,168),(215,174),(220,176),(222,183),(218,189),(225,192),(230,201),(233,207),(229,214),(213,215),(207,207),(202,192)],
+    ("teen", "groom_foam"): [(194,171),(203,167),(210,168),(214,174),(219,177),(221,185),(218,191),(225,194),(230,202),(232,210),(226,215),(212,215),(207,207),(201,192)],
+    ("adult", "groom_foam"): [(211,179),(218,178),(223,182),(225,189),(233,191),(237,198),(237,207),(241,216),(248,224),(247,233),(240,240),(227,240),(221,230),(216,214),(210,196)],
+    ("old", "groom_foam"): [(191,184),(197,179),(203,181),(211,178),(216,181),(217,188),(222,190),(224,195),(221,200),(229,202),(230,211),(226,216),(233,220),(235,227),(236,229),(236,234),(232,238),(217,238),(211,228),(205,215),(201,200)],
+}
+
 
 
 def neighbors(y, x, h, w):
@@ -150,7 +209,96 @@ def components(mask):
     return labels, sorted(found, reverse=True)
 
 
-def extract(sheet, box, effects=False, floor_band=None):
+
+def shifted(a, dy, dx, fill=0):
+    """Read a neighbouring array without wrapping its opposite edge."""
+    out = np.full_like(a, fill)
+    h, w = a.shape[:2]
+    sy0, sy1 = max(0, dy), min(h, h + dy)
+    sx0, sx1 = max(0, dx), min(w, w + dx)
+    out[max(0, -dy):min(h, h - dy), max(0, -dx):min(w, w - dx)] = a[sy0:sy1, sx0:sx1]
+    return out
+
+def unmatte_exterior(im, original_rgb, protected):
+    """Remove checkerboard colour from the one-pixel exterior antialias ring.
+
+    The source outline was blended against an opaque checkerboard. Estimate the
+    original dark outline only from neighbouring pixels in the inward direction,
+    and estimate the checker colour only from already removed neutral pixels.
+    Interior pixels and explicit fur/foam protection masks remain byte-identical.
+    """
+    a = np.array(im)
+    rgb = original_rgb.astype(float)
+    mask = a[:, :, 3] > 0
+    labels, parts = components(mask)
+    body = labels == parts[0][1]
+    outside = ~mask
+    h, w = mask.shape
+    queue = deque()
+    exterior = np.zeros_like(mask)
+    edges = ([(0, x) for x in range(w)] + [(h - 1, x) for x in range(w)]
+             + [(y, 0) for y in range(h)] + [(y, w - 1) for y in range(h)])
+    for y, x in edges:
+        if outside[y, x] and not exterior[y, x]:
+            exterior[y, x] = True
+            queue.append((y, x))
+    while queue:
+        y, x = queue.popleft()
+        for ny, nx in neighbors(y, x, h, w):
+            if outside[ny, nx] and not exterior[ny, nx]:
+                exterior[ny, nx] = True
+                queue.append((ny, nx))
+    expanded = Image.fromarray((exterior * 255).astype("uint8")).filter(ImageFilter.MaxFilter(3))
+    border = body & (np.array(expanded) > 0)
+    inward_x = np.zeros_like(mask, float)
+    inward_y = inward_x.copy()
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            neighbour = shifted(exterior, dy, dx)
+            inward_x -= neighbour * dx
+            inward_y -= neighbour * dy
+
+    best_brightness = np.full(mask.shape, 999.)
+    foreground = np.zeros_like(rgb)
+    background_sum = np.zeros_like(rgb)
+    count = np.zeros(mask.shape, float)
+    for dy in range(-2, 3):
+        for dx in range(-2, 3):
+            if dy == dx == 0:
+                continue
+            colour = shifted(rgb, dy, dx)
+            valid = shifted(body, dy, dx)
+            brightness = colour.mean(axis=2)
+            aligned = ((dx * inward_x + dy * inward_y > 0)
+                       | ((inward_x == 0) & (inward_y == 0)))
+            better = valid & aligned & (brightness < best_brightness)
+            best_brightness[better] = brightness[better]
+            foreground[better] = colour[better]
+            neutral_background = (shifted(exterior, dy, dx)
+                                  & (colour.min(axis=2) >= 185)
+                                  & (colour.max(axis=2) - colour.min(axis=2) <= 20))
+            weight = 1 / (abs(dx) + abs(dy))
+            background_sum += colour * (neutral_background * weight)[:, :, None]
+            count += neutral_background * weight
+
+    background = background_sum / np.maximum(count, 1e-8)[:, :, None]
+    vector = background - foreground
+    opacity = (np.sum((background - rgb) * vector, axis=2)
+               / np.maximum(np.sum(vector * vector, axis=2), 1))
+    candidates = (border & ~protected & (rgb.min(axis=2) > 125)
+                  & (rgb.max(axis=2) - rgb.min(axis=2) < 35)
+                  & (best_brightness < 120) & (count > 0)
+                  & (rgb.mean(axis=2) > best_brightness + 25) & (opacity < .95))
+    opacity = np.clip(opacity, .001, 1)
+    colour = np.clip((rgb - (1 - opacity)[:, :, None] * background)
+                     / opacity[:, :, None], 0, 255)
+    a[candidates, :3] = np.rint(colour[candidates]).astype("uint8")
+    a[candidates, 3] = np.rint(opacity[candidates] * 255).astype("uint8")
+    a[candidates & (a[:, :, 3] < 12)] = 0
+    return Image.fromarray(a)
+
+
+def extract(sheet, box, effects=False, floor_band=None, erase_polygon=None, hole_seeds=(), care_blue=None, care_foam=None, protected_polygons=(), protect_closed_floor=False):
     """Remove only edge-connected neutral checkerboard, preserving white fur.
 
     White eyes, teeth, eyebrows and fur enclosed by the source drawing remain
@@ -161,22 +309,75 @@ def extract(sheet, box, effects=False, floor_band=None):
     high = rgb.max(axis=2)
     low = rgb.min(axis=2)
     neutral_light = (high - low <= 20) & (low >= 185)
+    matte_protected = np.zeros(neutral_light.shape, bool)
     green_frame = (rgb[:, :, 1] > rgb[:, :, 0] + 4) & (rgb[:, :, 1] > rgb[:, :, 2] + 8)
     # Printed green titles/borders may touch the crop edge. Interior green
     # question marks and the tennis ball are part of the supplied drawing.
     yy, xx = np.indices(neutral_light.shape)
+    if care_blue is not None:
+        zone, ellipses = care_blue
+        x0,y0,x1,y1 = zone
+        local = (xx >= x0) & (xx < x1) & (yy >= y0) & (yy < y1)
+        protected = np.zeros(neutral_light.shape, bool)
+        for cx,cy,rx,ry in ellipses:
+            protected |= ((xx-cx)/rx)**2 + ((yy-cy)/ry)**2 <= 1
+        if care_foam:
+            foam = Image.new("L", (rgba.shape[1], rgba.shape[0]))
+            ImageDraw.Draw(foam).polygon(care_foam, fill=255)
+            protected |= np.array(foam) > 0
+        blue_checker = (low >= 160) & (rgb[:,:,2] >= rgb[:,:,0]-3) & (rgb[:,:,1] >= rgb[:,:,0]-5)
+        neutral_light |= local & blue_checker & ~protected
+        neutral_light[protected] = False
     if floor_band is not None:
         # The floor shadow is printed over checkerboard on the toy poses.
         # Limit this extra key to the annotated ground band below the belly;
         # it never changes face, ear, eyebrow or tail extraction thresholds.
         neutral_light |= (yy >= floor_band) & (high - low <= 10) & (low >= 105)
-    border = (yy < 8) | (xx < 2) | (xx >= neutral_light.shape[1] - 2)
-    candidate = neutral_light | (green_frame & border)
+    if protect_closed_floor and floor_band is not None:
+        # A few pale toe outlines have a one-pixel gap. Seal only that topology
+        # when deciding which light pixels belong INSIDE the drawing. No RGB
+        # pixel is changed or synthesized, and exposed ground stays outside.
+        paint = (high-low > 12) | (low < 130)
+        paint[(xx < 2) | (xx >= rgba.shape[1]-2) | (yy < 1) | (yy >= rgba.shape[0]-1)] = False
+        sealed = Image.fromarray((paint*255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.MinFilter(3))
+        open_space = ~np.array(sealed).astype(bool)
+        outside = np.zeros_like(open_space)
+        q = deque([(int(y),int(x)) for y,x in zip(*np.nonzero(open_space & ((yy == 0)|(xx == 0)|(yy == rgba.shape[0]-1)|(xx == rgba.shape[1]-1))))])
+        for y,x in q: outside[y,x]=True
+        while q:
+            y,x=q.popleft()
+            for ny,nx in neighbors(y,x,*open_space.shape):
+                if open_space[ny,nx] and not outside[ny,nx]:
+                    outside[ny,nx]=True; q.append((ny,nx))
+        # Protect only the audited ground-height part of the original drawing.
+        # Added closing pixels are not foreground: otherwise the mask could
+        # bridge an isolated printed frame number to a toe, or keep checker
+        # pixels between hairs elsewhere on the body.
+        enclosed_original = ~outside & (~np.array(sealed).astype(bool) | paint)
+        neutral_light[enclosed_original & (yy >= floor_band)] = False
+    if care_blue is not None:
+        neutral_light[protected] = False
+        matte_protected |= protected
+    border = (yy < 8) | (yy >= neutral_light.shape[0] - 4) | (xx < 2) | (xx >= neutral_light.shape[1] - 2)
+    forced = np.zeros(neutral_light.shape, bool)
+    if erase_polygon:
+        mask = Image.new("L", (rgba.shape[1], rgba.shape[0]))
+        ImageDraw.Draw(mask).polygon(erase_polygon, fill=255)
+        forced = np.array(mask) > 0
+    candidate = neutral_light | (green_frame & border) | forced
+    if protected_polygons:
+        protection = Image.new("L", (rgba.shape[1], rgba.shape[0]))
+        draw = ImageDraw.Draw(protection)
+        for polygon in protected_polygons:
+            draw.polygon(polygon, fill=255)
+        candidate[np.array(protection) > 0] = False
+        matte_protected |= np.array(protection) > 0
     h, w = candidate.shape
     background = np.zeros((h, w), bool)
     queue = deque()
     for y, x in [(0, x) for x in range(w)] + [(h-1, x) for x in range(w)] \
-                + [(y, 0) for y in range(h)] + [(y, w-1) for y in range(h)]:
+                + [(y, 0) for y in range(h)] + [(y, w-1) for y in range(h)] \
+                + [(sy, sx) for sx, sy in hole_seeds]:
         if candidate[y, x] and not background[y, x]:
             background[y, x] = True
             queue.append((y, x))
@@ -186,23 +387,9 @@ def extract(sheet, box, effects=False, floor_band=None):
             if candidate[ny, nx] and not background[ny, nx]:
                 background[ny, nx] = True
                 queue.append((ny, nx))
-    # Closed gaps between paws can contain printed checkerboard even though
-    # they are not connected to the outside. Its alternating neutral grey and
-    # white cells differ from the smoothly shaded warm fur. Require all these
-    # independent checks before removing a closed patch; white eyebrows fail
-    # the neutral/alternating-tone tests and therefore remain intact.
-    enclosed_labels, enclosed = components(neutral_light & ~background)
-    for area, ident, bounds in enclosed:
-        if area < 35:
-            continue
-        values = rgb[enclosed_labels == ident]
-        luminance = values.mean(axis=1)
-        pure_grey = np.mean(values.max(axis=1) - values.min(axis=1) <= 3)
-        bright_fraction = np.mean(luminance > 234)
-        dark_fraction = np.mean(luminance < 220)
-        if pure_grey >= .80 and .20 <= bright_fraction <= .70 \
-                and dark_fraction >= .06 and luminance.std() >= 11:
-            background |= enclosed_labels == ident
+    # Closed white regions are never classified globally. The original white
+    # tail tips can have the same grey/white histogram as a checkerboard. Only
+    # explicitly audited background seed locations above may open a hole.
     rgba[background] = 0
     labels, comps = components(~background)
     if not comps:
@@ -219,7 +406,7 @@ def extract(sheet, box, effects=False, floor_band=None):
             if area >= 4 and not thin_border and bounds[1] < bottom - 3 and bounds[3] <= bottom + 1:
                 keep |= labels == ident
     rgba[~keep] = 0
-    return Image.fromarray(rgba)
+    return unmatte_exterior(Image.fromarray(rgba), rgb, matte_protected)
 
 
 def visible_area(im):
@@ -321,6 +508,34 @@ def without_scratcher(im, age):
     return Image.fromarray(arr)
 
 
+def extract_main_pose(sheet, age, action, frame_index):
+    """Public source-space extraction entry point, also used by pixel probes."""
+    return extract(sheet, MAIN[age][action][frame_index], action in ("sleep", "moods"),
+                   MAIN_GROUND[age].get(action), LABEL_MASKS.get((age, action, frame_index)),
+                   protected_polygons=FUR_PROTECT.get((age, action, frame_index), ()), protect_closed_floor=True)
+
+
+def object_ground(age, action):
+    box = OBJECTS[age][OBJECT_ACTIONS.index(action)]
+    height = box[3] - box[1]
+    if action in TOY_ACTIONS:
+        return round(height * .75)
+    # Audited bottom strips of seated care/plush poses contain a printed grey
+    # floor underneath the feet and tail, separate from the coloured drawing.
+    if action in ("bottle", "comb", "fetch_plush", "groom_foam", "soap", "towel"):
+        return height - 40
+    return None
+
+
+def extract_object_pose(sheet, age, action):
+    box = OBJECTS[age][OBJECT_ACTIONS.index(action)]
+    seeds = [TOY_HOLE[age]] if action in TOY_ACTIONS else []
+    value = extract(sheet, box, action in ("groom_foam", "soap"),
+                    object_ground(age, action), hole_seeds=seeds,
+                    care_blue=CARE_BLUE.get((age, action)), care_foam=CARE_FOAM.get((age, action)))
+    return without_scratcher(value, age) if action == "scratcher_play" else value
+
+
 def head_token(sheet, age):
     boxes = {"cub": (57, 104, 165, 201), "teen": (66, 99, 159, 184),
              "adult": (54, 99, 157, 198), "old": (46, 99, 159, 206)}
@@ -328,7 +543,7 @@ def head_token(sheet, age):
     # head first opens the white muzzle at the lower edge, making an ordinary
     # edge flood-fill incorrectly classify that white fur as background.
     full_box = MAIN[age]["idle_down"][0]
-    full = extract(sheet, full_box)
+    full = extract_main_pose(sheet, age, "idle_down", 0)
     b = boxes[age]
     head = full.crop((b[0] - full_box[0], b[1] - full_box[1],
                       b[2] - full_box[0], b[3] - full_box[1]))
@@ -377,6 +592,8 @@ def main():
                           "Run uses the six supplied walking poses, as for leopard movement.",
                           "Rope and scratcher each have one supplied pose; engine motion animates the interaction.",
                           "Detached bubbles and mood symbols are safely repositioned after body normalization.",
+                          "v0.8.7 cutout audit: printed borders/digits, annotated grey ground and blue checker gaps are excluded; closed white fur is preserved.",
+                          "Only the one-source-pixel exterior antialias ring is unmatted against adjacent checker colours; interior RGB is unchanged.",
                           "No drawing is shared across age packs or between species."]}
     for age in AGES:
         sheets = {}
@@ -392,12 +609,20 @@ def main():
         frames = {}
         records = {}
         for action, boxes in MAIN[age].items():
-            values = [extract(sheets["main"], b, action in ("sleep", "moods")) for b in boxes]
+            values = [extract_main_pose(sheets["main"], age, action, i) for i in range(len(boxes))]
             if action == "idle_left":
                 values = [ImageOps.mirror(values[0])]
             frames[action] = values
             records[action] = {"source": "main", "source_cells": boxes,
                                "derivation": "horizontal mirror of mislabeled source idle" if action == "idle_left" else "source poses"}
+            if action in MAIN_GROUND[age]:
+                records[action]["checker_shadow_cleanup_bands"] = [[0, MAIN_GROUND[age][action], b[2]-b[0], b[3]-b[1]] for b in boxes]
+            label_masks = {str(i+1): LABEL_MASKS[(age, action, i)] for i in range(len(boxes)) if (age, action, i) in LABEL_MASKS}
+            if label_masks:
+                records[action]["printed_label_masks"] = label_masks
+            protected_fur = {str(i+1): FUR_PROTECT[(age, action, i)] for i in range(len(boxes)) if (age, action, i) in FUR_PROTECT}
+            if protected_fur:
+                records[action]["protected_source_fur_polygons"] = protected_fur
 
         for direction in ("down", "left", "right", "up"):
             frames["run_" + direction] = frames["walk_" + direction]
@@ -406,16 +631,17 @@ def main():
         for action, box in zip(OBJECT_ACTIONS, OBJECTS[age]):
             if action == "bowl" or (action == "bottle" and age != "cub"):
                 continue
-            floor_band = round((box[3] - box[1]) * .75) if action in (
-                "fetch_mouse", "fetch_ball", "fetch_tennis", "fetch_yarn", "rope_play") else None
-            value = extract(sheets["objects"], box, action in ("groom_foam", "soap"), floor_band)
-            if action == "scratcher_play":
-                value = without_scratcher(value, age)
+            floor_band = object_ground(age, action)
+            value = extract_object_pose(sheets["objects"], age, action)
             frames[action] = [value]
             records[action] = {"source": "objects", "source_cells": [box],
                                "derivation": "fixed scratcher removed; one supplied wolf pose" if action == "scratcher_play" else "one supplied object interaction pose"}
             if floor_band is not None:
                 records[action]["checker_shadow_cleanup_band"] = [0, floor_band, box[2] - box[0], box[3] - box[1]]
+            if action in TOY_ACTIONS:
+                records[action]["audited_background_seed"] = list(TOY_HOLE[age])
+            if (age, action) in CARE_BLUE:
+                records[action]["blue_checker_cleanup"] = {"zone": CARE_BLUE[(age, action)][0], "protected_source_bubble_ellipses": CARE_BLUE[(age, action)][1], "protected_source_foam_polygon": CARE_FOAM[(age, action)]}
 
         # Use one feasible visual mass per age for every animation. Detached
         # mood/care icons do not count toward the character's mass. The lowest

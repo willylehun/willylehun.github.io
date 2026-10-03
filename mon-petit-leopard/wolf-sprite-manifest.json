@@ -101,7 +101,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "776ab93ce376fe2640dc03ea786467c7322812318ff4f5df50a5dc0a936ebd63",
+      "sha256": "ecdc4a7b823cbb62f2f544b1da28d0324de0a2291365cad30688b97eeed6586d",
       "source": "main",
       "source_cells": [
         [
@@ -120,7 +120,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "ab34cf59a9c2e7094fe90f8cd817fc780bdd262b7027d021519aef018318235c",
+      "sha256": "5741df1a3043808b235c0bd1d60227001f9f64c0fa1d08475855869cf2262bc9",
       "source": "main",
       "source_cells": [
         [
@@ -139,7 +139,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "07dc1a21b83677eb3e813f5f1512b8af02bc9bf2bd3a23a1f68954b27c827ce1",
+      "sha256": "04ba8f7d0614e41033dac142783d30144a51715f1f0faffef772879fcd65acc0",
       "source": "main",
       "source_cells": [
         [
@@ -158,7 +158,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "b6529861bdf1bd5067324ba87c239896d8b3d5c208bc3ea7b2ee23c5bf9b5424",
+      "sha256": "22c5c036154d8034cb067b5b7fe4e07df5d82abd445daf1784fd8d3b8f67f553",
       "source": "main",
       "source_cells": [
         [
@@ -177,7 +177,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "2ae7ba4d107344da972d8a0ed57b8bee3ecca0278abac4602a42755dd07c2b39",
+      "sha256": "600d2a241630f59d89108f71673809845dfc3fdf4acccd2c5a243e98edc305ba",
       "source": "main",
       "source_cells": [
         [
@@ -217,7 +217,45 @@
           234
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          106,
+          112,
+          135
+        ],
+        [
+          0,
+          106,
+          112,
+          135
+        ],
+        [
+          0,
+          106,
+          112,
+          135
+        ],
+        [
+          0,
+          106,
+          112,
+          135
+        ],
+        [
+          0,
+          106,
+          115,
+          135
+        ],
+        [
+          0,
+          106,
+          120,
+          135
+        ]
+      ]
     },
     "wolf_cub_walk_left.webp": {
       "age": "cub",
@@ -226,7 +264,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "58ebe3d202ac458eeebfa3fde230c02f8ed0e2cc0de95c8ff682a82c646ab3cb",
+      "sha256": "51044c99c1b355437d6f92c6014e6f146bd10c5ecb4f8ec1d62db5deb12845a1",
       "source": "main",
       "source_cells": [
         [
@@ -266,7 +304,45 @@
           425
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          100,
+          123,
+          132
+        ],
+        [
+          0,
+          100,
+          120,
+          132
+        ],
+        [
+          0,
+          100,
+          121,
+          132
+        ],
+        [
+          0,
+          100,
+          120,
+          132
+        ],
+        [
+          0,
+          100,
+          120,
+          132
+        ],
+        [
+          0,
+          100,
+          123,
+          132
+        ]
+      ]
     },
     "wolf_cub_walk_right.webp": {
       "age": "cub",
@@ -275,47 +351,85 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "4c9ca76ae488f703c887780c1ec2fd5aa5206c1f10ab4cc86c72b98a2c4d4d14",
+      "sha256": "0f7596f7d47610e1fe14c761e47e0d8568a400a092d13698c9d9a0f57f2c4a02",
       "source": "main",
       "source_cells": [
         [
           773,
           293,
-          895,
+          898,
           425
         ],
         [
-          899,
+          902,
           293,
-          1020,
+          1021,
           425
         ],
         [
-          1024,
+          1025,
           293,
-          1146,
+          1145,
           425
         ],
         [
-          1150,
+          1149,
           293,
-          1272,
+          1270,
           425
         ],
         [
-          1276,
+          1274,
           293,
-          1397,
+          1392,
           425
         ],
         [
-          1401,
+          1396,
           293,
-          1522,
+          1521,
           425
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          100,
+          125,
+          132
+        ],
+        [
+          0,
+          100,
+          119,
+          132
+        ],
+        [
+          0,
+          100,
+          120,
+          132
+        ],
+        [
+          0,
+          100,
+          121,
+          132
+        ],
+        [
+          0,
+          100,
+          118,
+          132
+        ],
+        [
+          0,
+          100,
+          125,
+          132
+        ]
+      ]
     },
     "wolf_cub_walk_up.webp": {
       "age": "cub",
@@ -324,7 +438,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "5cf3f03edb99a9de8534f1f4f7ee9b717931f55a947e9fad61b0b54f5e6c560e",
+      "sha256": "2ad4102005e6e0e10323468e08f12bfc9332d5f10489a56a49b78d8adc25b929",
       "source": "main",
       "source_cells": [
         [
@@ -364,7 +478,45 @@
           620
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          115,
+          123,
+          149
+        ],
+        [
+          0,
+          115,
+          120,
+          149
+        ],
+        [
+          0,
+          115,
+          121,
+          149
+        ],
+        [
+          0,
+          115,
+          120,
+          149
+        ],
+        [
+          0,
+          115,
+          121,
+          149
+        ],
+        [
+          0,
+          115,
+          122,
+          149
+        ]
+      ]
     },
     "wolf_cub_jump.webp": {
       "age": "cub",
@@ -373,7 +525,7 @@
       "frames": 5,
       "width": 1280,
       "height": 256,
-      "sha256": "09758c55800d69a6a1a2b5f2feab3cb9b0672afa619b87034719c5e13d005c5e",
+      "sha256": "d068d6aeec9f1845bb7f3a9c0a67500862257b07764f4c7eea4609e2875a1fe8",
       "source": "main",
       "source_cells": [
         [
@@ -407,7 +559,39 @@
           620
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          108,
+          145,
+          149
+        ],
+        [
+          0,
+          108,
+          145,
+          149
+        ],
+        [
+          0,
+          108,
+          146,
+          149
+        ],
+        [
+          0,
+          108,
+          146,
+          149
+        ],
+        [
+          0,
+          108,
+          151,
+          149
+        ]
+      ]
     },
     "wolf_cub_eat.webp": {
       "age": "cub",
@@ -416,7 +600,7 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "b37e55c4081a7e716037106632795cc0fcbd68c85a33e3ae5aad9f03f40fdf23",
+      "sha256": "4d637c9bed2b5691a7c2035c2900fe87db3a912205e3178492ad594e1e61ddd3",
       "source": "main",
       "source_cells": [
         [
@@ -447,7 +631,7 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "a4e34bc814cb04cccbe12c8cdaa48853fd59a01d1db2ef095169a6d543dc363d",
+      "sha256": "5249bec648c64e9b3dd8914064f9c39aecd2e40d7b23ef7993e7519d5772ea90",
       "source": "main",
       "source_cells": [
         [
@@ -478,7 +662,7 @@
       "frames": 12,
       "width": 3072,
       "height": 256,
-      "sha256": "ddc2d6bd41a488e0715e801bda8eb633eb856c2d35f68d857a3680041bc6dad3",
+      "sha256": "a20d0944812f705cb33d7b31faeac733e705bbc1327f5002bc4116647c0b02db",
       "source": "main",
       "source_cells": [
         [
@@ -563,7 +747,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "2ae7ba4d107344da972d8a0ed57b8bee3ecca0278abac4602a42755dd07c2b39",
+      "sha256": "600d2a241630f59d89108f71673809845dfc3fdf4acccd2c5a243e98edc305ba",
       "source": "main",
       "source_cells": [
         [
@@ -603,7 +787,45 @@
           234
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          106,
+          112,
+          135
+        ],
+        [
+          0,
+          106,
+          112,
+          135
+        ],
+        [
+          0,
+          106,
+          112,
+          135
+        ],
+        [
+          0,
+          106,
+          112,
+          135
+        ],
+        [
+          0,
+          106,
+          115,
+          135
+        ],
+        [
+          0,
+          106,
+          120,
+          135
+        ]
+      ]
     },
     "wolf_cub_run_left.webp": {
       "age": "cub",
@@ -612,7 +834,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "58ebe3d202ac458eeebfa3fde230c02f8ed0e2cc0de95c8ff682a82c646ab3cb",
+      "sha256": "51044c99c1b355437d6f92c6014e6f146bd10c5ecb4f8ec1d62db5deb12845a1",
       "source": "main",
       "source_cells": [
         [
@@ -652,7 +874,45 @@
           425
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          100,
+          123,
+          132
+        ],
+        [
+          0,
+          100,
+          120,
+          132
+        ],
+        [
+          0,
+          100,
+          121,
+          132
+        ],
+        [
+          0,
+          100,
+          120,
+          132
+        ],
+        [
+          0,
+          100,
+          120,
+          132
+        ],
+        [
+          0,
+          100,
+          123,
+          132
+        ]
+      ]
     },
     "wolf_cub_run_right.webp": {
       "age": "cub",
@@ -661,47 +921,85 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "4c9ca76ae488f703c887780c1ec2fd5aa5206c1f10ab4cc86c72b98a2c4d4d14",
+      "sha256": "0f7596f7d47610e1fe14c761e47e0d8568a400a092d13698c9d9a0f57f2c4a02",
       "source": "main",
       "source_cells": [
         [
           773,
           293,
-          895,
+          898,
           425
         ],
         [
-          899,
+          902,
           293,
-          1020,
+          1021,
           425
         ],
         [
-          1024,
+          1025,
           293,
-          1146,
+          1145,
           425
         ],
         [
-          1150,
+          1149,
           293,
-          1272,
+          1270,
           425
         ],
         [
-          1276,
+          1274,
           293,
-          1397,
+          1392,
           425
         ],
         [
-          1401,
+          1396,
           293,
-          1522,
+          1521,
           425
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          100,
+          125,
+          132
+        ],
+        [
+          0,
+          100,
+          119,
+          132
+        ],
+        [
+          0,
+          100,
+          120,
+          132
+        ],
+        [
+          0,
+          100,
+          121,
+          132
+        ],
+        [
+          0,
+          100,
+          118,
+          132
+        ],
+        [
+          0,
+          100,
+          125,
+          132
+        ]
+      ]
     },
     "wolf_cub_run_up.webp": {
       "age": "cub",
@@ -710,7 +1008,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "5cf3f03edb99a9de8534f1f4f7ee9b717931f55a947e9fad61b0b54f5e6c560e",
+      "sha256": "2ad4102005e6e0e10323468e08f12bfc9332d5f10489a56a49b78d8adc25b929",
       "source": "main",
       "source_cells": [
         [
@@ -750,7 +1048,45 @@
           620
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          115,
+          123,
+          149
+        ],
+        [
+          0,
+          115,
+          120,
+          149
+        ],
+        [
+          0,
+          115,
+          121,
+          149
+        ],
+        [
+          0,
+          115,
+          120,
+          149
+        ],
+        [
+          0,
+          115,
+          121,
+          149
+        ],
+        [
+          0,
+          115,
+          122,
+          149
+        ]
+      ]
     },
     "wolf_cub_bottle.webp": {
       "age": "cub",
@@ -759,17 +1095,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "55464dab45f3ea21076e73777308a4c6df112934e51467b2476ad3383fdaa667",
+      "sha256": "82b23e3be98718bbabfa726f38bacd4f21738c40ce1398614347226adf53f3ca",
       "source": "objects",
       "source_cells": [
         [
-          16,
+          17,
           105,
-          320,
-          340
+          318,
+          339
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        194,
+        301,
+        234
+      ]
     },
     "wolf_cub_comb.webp": {
       "age": "cub",
@@ -778,17 +1120,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "5f4c270b150469be25987675f51f1f1b0603e49d5b0bfeddb9690dc9a3a7a518",
+      "sha256": "4e468c7b9570e7716ccc251a55b5359f8a8babfd7a76482da1f4e1444c333449",
       "source": "objects",
       "source_cells": [
         [
-          324,
+          327,
           105,
-          618,
-          340
+          616,
+          339
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        194,
+        289,
+        234
+      ]
     },
     "wolf_cub_fetch_mouse.png": {
       "age": "cub",
@@ -797,22 +1145,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "929dfb76e7baa25b3bb3a9da62b7320cc4d910d8ddaacfe9d4e36500023cc97e",
+      "sha256": "828cb94addf71bdd3e19ae1fa7835a8486d533b2d6d730427f80911c8889f726",
       "source": "objects",
       "source_cells": [
         [
-          921,
+          923,
           105,
-          1214,
-          340
+          1210,
+          339
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         176,
-        293,
-        235
+        287,
+        234
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_cub_fetch_plush.png": {
@@ -822,17 +1174,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "547ba6725e9e028cbfa487dd67f79f50dd46656658458fddcb13201b41105802",
+      "sha256": "80293f6e732e28c6e8fd4c71877d501bc959b5c33e2422c7cf057a5143ee89e5",
       "source": "objects",
       "source_cells": [
         [
-          1218,
+          1220,
           105,
-          1522,
-          340
+          1521,
+          339
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        194,
+        301,
+        234
+      ]
     },
     "wolf_cub_fetch_ball.png": {
       "age": "cub",
@@ -841,22 +1199,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "0221351704b30d73c378801e8c784fc713b20db211d1d367166131799d54f41d",
+      "sha256": "f24a22bdf882e9425e22cc587d06cf9248fb17cd9082e9bb97f72ca56ac0040a",
       "source": "objects",
       "source_cells": [
         [
-          16,
-          392,
-          320,
-          623
+          17,
+          391,
+          318,
+          622
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         173,
-        304,
+        301,
         231
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_cub_fetch_tennis.png": {
@@ -866,22 +1228,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "b20c93cccbbe0b5fad31c3c89a02f1003fbe562ec0facb16919739a284f1f902",
+      "sha256": "bc6f86cdf648f8dcaa49569e120fb8faea2461ef92903ff092baf5b76edc9cff",
       "source": "objects",
       "source_cells": [
         [
-          324,
-          392,
-          618,
-          623
+          327,
+          391,
+          616,
+          622
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         173,
-        294,
+        289,
         231
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_cub_fetch_yarn.png": {
@@ -891,22 +1257,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "f5d37cbfef4d61ae7964dd1dca38472948a7b7739f2ab76ab911d83898a8e0e2",
+      "sha256": "e6cd8529818f8a77109664bbda5cb8a0b57d13970d2352d86f83370661e08957",
       "source": "objects",
       "source_cells": [
         [
-          622,
-          392,
-          917,
-          623
+          625,
+          391,
+          912,
+          622
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         173,
-        295,
+        287,
         231
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_cub_groom_foam.webp": {
@@ -916,17 +1286,127 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "6dfc78788518d351c8e868cd384c8d21f62c124be037c98c0a2808f2b7bd7ee4",
+      "sha256": "e066a453336bfd6a1f7b7531762e09b15c15819afe5ce87070fba15135225f81",
       "source": "objects",
       "source_cells": [
         [
-          921,
-          392,
-          1214,
-          623
+          923,
+          391,
+          1210,
+          622
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        191,
+        287,
+        231
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          202,
+          35,
+          266,
+          165
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            234.12,
+            58.15,
+            5.43,
+            5.43
+          ],
+          [
+            235.41,
+            78.27,
+            10.07,
+            10.07
+          ],
+          [
+            214.83,
+            106.96,
+            12.96,
+            12.96
+          ],
+          [
+            235.72,
+            142.87,
+            14.1,
+            14.1
+          ],
+          [
+            256.52,
+            130.78,
+            5.56,
+            5.56
+          ],
+          [
+            231.5,
+            167.5,
+            5.5,
+            5.5
+          ]
+        ],
+        "protected_source_foam_polygon": [
+          [
+            195,
+            171
+          ],
+          [
+            204,
+            167
+          ],
+          [
+            211,
+            168
+          ],
+          [
+            215,
+            174
+          ],
+          [
+            220,
+            176
+          ],
+          [
+            222,
+            183
+          ],
+          [
+            218,
+            189
+          ],
+          [
+            225,
+            192
+          ],
+          [
+            230,
+            201
+          ],
+          [
+            233,
+            207
+          ],
+          [
+            229,
+            214
+          ],
+          [
+            213,
+            215
+          ],
+          [
+            207,
+            207
+          ],
+          [
+            202,
+            192
+          ]
+        ]
+      }
     },
     "wolf_cub_rope_play.png": {
       "age": "cub",
@@ -935,22 +1415,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "acc7dee6d2e1925f6ffcc3466025951d9f16c1977e55dcc9a517c3239237467a",
+      "sha256": "0aaf0cbdcd5db9489b533d030645ebde73cd0a0a33b8e6f6feaf69fc240dc26a",
       "source": "objects",
       "source_cells": [
         [
-          1218,
-          392,
-          1522,
-          623
+          1220,
+          391,
+          1521,
+          622
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         173,
-        304,
+        301,
         231
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_cub_scratcher_play.webp": {
@@ -960,7 +1444,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "7f0454aa428256fb0e314656fb343a395cda86cc39dc9b5e1d76379993213847",
+      "sha256": "62585a086dff6777a5b78c0c4c9e22477b0eac47d490cbaad8a5b5df371ad065",
       "source": "objects",
       "source_cells": [
         [
@@ -979,17 +1463,129 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "3ef48693488ff6f0c027919c178146d30ed697281c1aee369bb2fd815c05e516",
+      "sha256": "5cf543a4393a02ae1f9d29ca13ffac2370cad58eeff7495f56e6e9ad4904e4bd",
       "source": "objects",
       "source_cells": [
         [
-          574,
-          670,
-          961,
+          573,
+          671,
+          960,
           892
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        181,
+        387,
+        221
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          235,
+          25,
+          310,
+          156
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            275.78,
+            42.86,
+            4.74,
+            4.74
+          ],
+          [
+            280.42,
+            62.13,
+            12.92,
+            12.92
+          ],
+          [
+            268.04,
+            85.42,
+            5.43,
+            5.43
+          ],
+          [
+            289.95,
+            111.8,
+            12.54,
+            12.54
+          ],
+          [
+            293.16,
+            146.65,
+            7.21,
+            7.21
+          ],
+          [
+            274.61,
+            137.61,
+            3.26,
+            3.26
+          ],
+          [
+            285,
+            130,
+            3,
+            3
+          ]
+        ],
+        "protected_source_foam_polygon": [
+          [
+            244,
+            160
+          ],
+          [
+            253,
+            157
+          ],
+          [
+            265,
+            157
+          ],
+          [
+            274,
+            161
+          ],
+          [
+            279,
+            172
+          ],
+          [
+            275,
+            181
+          ],
+          [
+            282,
+            182
+          ],
+          [
+            288,
+            191
+          ],
+          [
+            285,
+            198
+          ],
+          [
+            278,
+            201
+          ],
+          [
+            267,
+            194
+          ],
+          [
+            254,
+            187
+          ],
+          [
+            251,
+            177
+          ]
+        ]
+      }
     },
     "wolf_cub_towel.webp": {
       "age": "cub",
@@ -998,17 +1594,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "1801c116642d14434e3ad96f22fc46515b61204a02271a29890324346befc32a",
+      "sha256": "14b66c01b9b44f98dc7927c4360f437e7fde954cad52c1758f444d77937d6665",
       "source": "objects",
       "source_cells": [
         [
           971,
-          670,
+          671,
           1363,
           892
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        181,
+        392,
+        221
+      ]
     },
     "wolf_teen_idle_down.png": {
       "age": "teen",
@@ -1017,7 +1619,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "95b1194cda209866a9846c124f957304ea84b5cd8edf28de9299436eeed85a35",
+      "sha256": "c613cf87ddc2309ca8e18f7d1f149f7573cf1c665403fe764a3b91e476d0bf6f",
       "source": "main",
       "source_cells": [
         [
@@ -1036,7 +1638,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "f1d4f08dc6caa2ef022f4134d00a26f9bbe32aa291a48c4ca4d98b147a0dbf09",
+      "sha256": "ddf0a863bb6bb0ca98022a4edd4cd1d17901af562a990d7b816e57eb64c62fd2",
       "source": "main",
       "source_cells": [
         [
@@ -1055,7 +1657,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "4e129a1a4cf26eea7b181894d618ef0eafe6b99ba25d27b20ead1ffd6fcf92f2",
+      "sha256": "aeee56221e53bc6c1fc0bdaa5c0d9bb343ce947122c8dd77e136945526e6e109",
       "source": "main",
       "source_cells": [
         [
@@ -1074,7 +1676,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "d319215b9f7b247743412640812c709aae946d02dedfe28d260f1d5e2158bfda",
+      "sha256": "64da4ccb50274ac981508dacc7c20edde232b77b71fd39d62f932b3ec1ce1319",
       "source": "main",
       "source_cells": [
         [
@@ -1093,7 +1695,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "cdda3cac38818f2a548b2d3c7a0decbac2cfbab7d89e9564d585c142960dce6c",
+      "sha256": "001a5637189c36d7e6bd0c542a021f82ec450c05d7c98497657bdecd1c7009be",
       "source": "main",
       "source_cells": [
         [
@@ -1133,7 +1735,299 @@
           247
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          113,
+          112,
+          148
+        ],
+        [
+          0,
+          113,
+          112,
+          148
+        ],
+        [
+          0,
+          113,
+          112,
+          148
+        ],
+        [
+          0,
+          113,
+          112,
+          148
+        ],
+        [
+          0,
+          113,
+          115,
+          148
+        ],
+        [
+          0,
+          113,
+          120,
+          148
+        ]
+      ],
+      "printed_label_masks": {
+        "2": [
+          [
+            48,
+            132
+          ],
+          [
+            54,
+            132
+          ],
+          [
+            54,
+            134
+          ],
+          [
+            56,
+            135
+          ],
+          [
+            56,
+            139
+          ],
+          [
+            54,
+            141
+          ],
+          [
+            58,
+            142
+          ],
+          [
+            58,
+            145
+          ],
+          [
+            48,
+            145
+          ],
+          [
+            48,
+            141
+          ],
+          [
+            50,
+            139
+          ],
+          [
+            52,
+            137
+          ],
+          [
+            52,
+            135
+          ],
+          [
+            48,
+            135
+          ]
+        ],
+        "4": [
+          [
+            52,
+            132
+          ],
+          [
+            55,
+            132
+          ],
+          [
+            55,
+            135
+          ],
+          [
+            55,
+            139
+          ],
+          [
+            57,
+            140
+          ],
+          [
+            57,
+            142
+          ],
+          [
+            55,
+            142
+          ],
+          [
+            55,
+            145
+          ],
+          [
+            52,
+            145
+          ],
+          [
+            52,
+            143
+          ],
+          [
+            48,
+            143
+          ],
+          [
+            48,
+            140
+          ],
+          [
+            49,
+            138
+          ],
+          [
+            50,
+            136
+          ],
+          [
+            51,
+            135
+          ]
+        ]
+      },
+      "protected_source_fur_polygons": {
+        "2": [
+          [
+            [
+              57,
+              128
+            ],
+            [
+              62,
+              126
+            ],
+            [
+              69,
+              128
+            ],
+            [
+              71,
+              131
+            ],
+            [
+              69,
+              134
+            ],
+            [
+              65,
+              135
+            ],
+            [
+              61,
+              134
+            ],
+            [
+              57,
+              132
+            ]
+          ]
+        ],
+        "4": [
+          [
+            [
+              43,
+              0
+            ],
+            [
+              47,
+              0
+            ],
+            [
+              50,
+              4
+            ],
+            [
+              55,
+              7
+            ],
+            [
+              59,
+              11
+            ],
+            [
+              60,
+              14
+            ],
+            [
+              60,
+              18
+            ],
+            [
+              57,
+              22
+            ],
+            [
+              51,
+              25
+            ],
+            [
+              48,
+              22
+            ],
+            [
+              42,
+              20
+            ],
+            [
+              39,
+              15
+            ],
+            [
+              35,
+              13
+            ],
+            [
+              35,
+              9
+            ],
+            [
+              38,
+              5
+            ]
+          ],
+          [
+            [
+              57,
+              128
+            ],
+            [
+              62,
+              127
+            ],
+            [
+              68,
+              129
+            ],
+            [
+              68,
+              133
+            ],
+            [
+              65,
+              135
+            ],
+            [
+              61,
+              135
+            ],
+            [
+              57,
+              133
+            ]
+          ]
+        ]
+      }
     },
     "wolf_teen_walk_left.webp": {
       "age": "teen",
@@ -1142,7 +2036,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "308071e71b8471f3acdd98c3d0e9d251379cc16056249fc32f639eac938d0538",
+      "sha256": "e93bfd6cabed4855ab5a99e7c1e3e3a3fd550e2dfecd614178f71a0e1aea9e79",
       "source": "main",
       "source_cells": [
         [
@@ -1182,7 +2076,45 @@
           425
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          98,
+          123,
+          132
+        ],
+        [
+          0,
+          98,
+          120,
+          132
+        ],
+        [
+          0,
+          98,
+          121,
+          132
+        ],
+        [
+          0,
+          98,
+          120,
+          132
+        ],
+        [
+          0,
+          98,
+          121,
+          132
+        ],
+        [
+          0,
+          98,
+          122,
+          132
+        ]
+      ]
     },
     "wolf_teen_walk_right.webp": {
       "age": "teen",
@@ -1191,47 +2123,147 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "1b94ef4f6ab1b506864c90b2b64e409f3be3e0f47d9c6704760025d426cbcdfd",
+      "sha256": "533204b15f4079b8691922ce1b2a12534c527cdbfe4ab215085c76bf943ee89a",
       "source": "main",
       "source_cells": [
         [
           773,
           293,
-          895,
+          898,
           425
         ],
         [
-          899,
+          902,
           293,
-          1020,
+          1022,
           425
         ],
         [
-          1024,
+          1026,
           293,
-          1146,
+          1145,
           425
         ],
         [
-          1150,
+          1149,
           293,
-          1272,
+          1270,
           425
         ],
         [
-          1276,
+          1274,
           293,
-          1397,
+          1392,
           425
         ],
         [
-          1401,
+          1396,
           293,
           1522,
           425
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          98,
+          125,
+          132
+        ],
+        [
+          0,
+          98,
+          120,
+          132
+        ],
+        [
+          0,
+          98,
+          119,
+          132
+        ],
+        [
+          0,
+          98,
+          121,
+          132
+        ],
+        [
+          0,
+          98,
+          118,
+          132
+        ],
+        [
+          0,
+          98,
+          126,
+          132
+        ]
+      ],
+      "protected_source_fur_polygons": {
+        "3": [
+          [
+            [
+              80,
+              86
+            ],
+            [
+              84,
+              85
+            ],
+            [
+              89,
+              88
+            ],
+            [
+              91,
+              90
+            ],
+            [
+              91,
+              94
+            ],
+            [
+              93,
+              97
+            ],
+            [
+              96,
+              100
+            ],
+            [
+              96,
+              103
+            ],
+            [
+              93,
+              105
+            ],
+            [
+              88,
+              104
+            ],
+            [
+              83,
+              101
+            ],
+            [
+              83,
+              96
+            ],
+            [
+              80,
+              94
+            ],
+            [
+              78,
+              92
+            ]
+          ]
+        ]
+      }
     },
     "wolf_teen_walk_up.webp": {
       "age": "teen",
@@ -1240,7 +2272,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "b7ad88ad72ca5c58f6f5b1830906917351b8ac17831a5a765e30cfab84375b11",
+      "sha256": "d43e99501f9c195ad7f2dce7761462eb08d3dfb5c9db29067eaea7f5181cc684",
       "source": "main",
       "source_cells": [
         [
@@ -1280,7 +2312,45 @@
           620
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          112,
+          123,
+          149
+        ],
+        [
+          0,
+          112,
+          120,
+          149
+        ],
+        [
+          0,
+          112,
+          121,
+          149
+        ],
+        [
+          0,
+          112,
+          120,
+          149
+        ],
+        [
+          0,
+          112,
+          121,
+          149
+        ],
+        [
+          0,
+          112,
+          122,
+          149
+        ]
+      ]
     },
     "wolf_teen_jump.webp": {
       "age": "teen",
@@ -1289,7 +2359,7 @@
       "frames": 5,
       "width": 1280,
       "height": 256,
-      "sha256": "2dfbb23b87f35a6732f0a9388a1d352fd719617919130620cd141eb098bd5c2f",
+      "sha256": "a784355bf0bd3aad61db81e1664e95f87d6275a4233a1a78b41d7905174e7c75",
       "source": "main",
       "source_cells": [
         [
@@ -1323,7 +2393,39 @@
           620
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          110,
+          145,
+          149
+        ],
+        [
+          0,
+          110,
+          145,
+          149
+        ],
+        [
+          0,
+          110,
+          146,
+          149
+        ],
+        [
+          0,
+          110,
+          146,
+          149
+        ],
+        [
+          0,
+          110,
+          151,
+          149
+        ]
+      ]
     },
     "wolf_teen_eat.webp": {
       "age": "teen",
@@ -1332,7 +2434,7 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "497775b299e5cdaa11082070872ec5bf3949aca4fecc47df41f1607b83d1cae2",
+      "sha256": "eae3d3a5b85b7b5614d2a652ac183f00c26f4645b34f795f0989d18490a47817",
       "source": "main",
       "source_cells": [
         [
@@ -1363,7 +2465,7 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "b2e25a2a9b655def36f0477615e5aac4f8b532b902206cdd1ceb010c0da759c3",
+      "sha256": "1f8dade12634092537e459a3754503bb155c034b446032a19d66aaa08e1be553",
       "source": "main",
       "source_cells": [
         [
@@ -1394,7 +2496,7 @@
       "frames": 12,
       "width": 3072,
       "height": 256,
-      "sha256": "4ce22660480c5990e7b4cc67488450c09d8658c6b574b9228f8e513400223c8f",
+      "sha256": "6201b6727cc1f436e36191858754af08030704f8e5e6288de5f784509a6084fd",
       "source": "main",
       "source_cells": [
         [
@@ -1406,17 +2508,17 @@
         [
           916,
           668,
-          1031,
+          1030,
           778
         ],
         [
-          1035,
+          1034,
           668,
-          1149,
+          1148,
           778
         ],
         [
-          1153,
+          1152,
           668,
           1270,
           778
@@ -1424,11 +2526,11 @@
         [
           1274,
           668,
-          1392,
+          1390,
           778
         ],
         [
-          1396,
+          1394,
           668,
           1521,
           778
@@ -1442,17 +2544,17 @@
         [
           916,
           796,
-          1031,
+          1030,
           916
         ],
         [
-          1035,
+          1034,
           796,
-          1149,
+          1148,
           916
         ],
         [
-          1153,
+          1152,
           796,
           1270,
           916
@@ -1460,11 +2562,11 @@
         [
           1274,
           796,
-          1392,
+          1390,
           916
         ],
         [
-          1396,
+          1394,
           796,
           1521,
           916
@@ -1479,7 +2581,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "cdda3cac38818f2a548b2d3c7a0decbac2cfbab7d89e9564d585c142960dce6c",
+      "sha256": "001a5637189c36d7e6bd0c542a021f82ec450c05d7c98497657bdecd1c7009be",
       "source": "main",
       "source_cells": [
         [
@@ -1519,7 +2621,299 @@
           247
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          113,
+          112,
+          148
+        ],
+        [
+          0,
+          113,
+          112,
+          148
+        ],
+        [
+          0,
+          113,
+          112,
+          148
+        ],
+        [
+          0,
+          113,
+          112,
+          148
+        ],
+        [
+          0,
+          113,
+          115,
+          148
+        ],
+        [
+          0,
+          113,
+          120,
+          148
+        ]
+      ],
+      "printed_label_masks": {
+        "2": [
+          [
+            48,
+            132
+          ],
+          [
+            54,
+            132
+          ],
+          [
+            54,
+            134
+          ],
+          [
+            56,
+            135
+          ],
+          [
+            56,
+            139
+          ],
+          [
+            54,
+            141
+          ],
+          [
+            58,
+            142
+          ],
+          [
+            58,
+            145
+          ],
+          [
+            48,
+            145
+          ],
+          [
+            48,
+            141
+          ],
+          [
+            50,
+            139
+          ],
+          [
+            52,
+            137
+          ],
+          [
+            52,
+            135
+          ],
+          [
+            48,
+            135
+          ]
+        ],
+        "4": [
+          [
+            52,
+            132
+          ],
+          [
+            55,
+            132
+          ],
+          [
+            55,
+            135
+          ],
+          [
+            55,
+            139
+          ],
+          [
+            57,
+            140
+          ],
+          [
+            57,
+            142
+          ],
+          [
+            55,
+            142
+          ],
+          [
+            55,
+            145
+          ],
+          [
+            52,
+            145
+          ],
+          [
+            52,
+            143
+          ],
+          [
+            48,
+            143
+          ],
+          [
+            48,
+            140
+          ],
+          [
+            49,
+            138
+          ],
+          [
+            50,
+            136
+          ],
+          [
+            51,
+            135
+          ]
+        ]
+      },
+      "protected_source_fur_polygons": {
+        "2": [
+          [
+            [
+              57,
+              128
+            ],
+            [
+              62,
+              126
+            ],
+            [
+              69,
+              128
+            ],
+            [
+              71,
+              131
+            ],
+            [
+              69,
+              134
+            ],
+            [
+              65,
+              135
+            ],
+            [
+              61,
+              134
+            ],
+            [
+              57,
+              132
+            ]
+          ]
+        ],
+        "4": [
+          [
+            [
+              43,
+              0
+            ],
+            [
+              47,
+              0
+            ],
+            [
+              50,
+              4
+            ],
+            [
+              55,
+              7
+            ],
+            [
+              59,
+              11
+            ],
+            [
+              60,
+              14
+            ],
+            [
+              60,
+              18
+            ],
+            [
+              57,
+              22
+            ],
+            [
+              51,
+              25
+            ],
+            [
+              48,
+              22
+            ],
+            [
+              42,
+              20
+            ],
+            [
+              39,
+              15
+            ],
+            [
+              35,
+              13
+            ],
+            [
+              35,
+              9
+            ],
+            [
+              38,
+              5
+            ]
+          ],
+          [
+            [
+              57,
+              128
+            ],
+            [
+              62,
+              127
+            ],
+            [
+              68,
+              129
+            ],
+            [
+              68,
+              133
+            ],
+            [
+              65,
+              135
+            ],
+            [
+              61,
+              135
+            ],
+            [
+              57,
+              133
+            ]
+          ]
+        ]
+      }
     },
     "wolf_teen_run_left.webp": {
       "age": "teen",
@@ -1528,7 +2922,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "308071e71b8471f3acdd98c3d0e9d251379cc16056249fc32f639eac938d0538",
+      "sha256": "e93bfd6cabed4855ab5a99e7c1e3e3a3fd550e2dfecd614178f71a0e1aea9e79",
       "source": "main",
       "source_cells": [
         [
@@ -1568,7 +2962,45 @@
           425
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          98,
+          123,
+          132
+        ],
+        [
+          0,
+          98,
+          120,
+          132
+        ],
+        [
+          0,
+          98,
+          121,
+          132
+        ],
+        [
+          0,
+          98,
+          120,
+          132
+        ],
+        [
+          0,
+          98,
+          121,
+          132
+        ],
+        [
+          0,
+          98,
+          122,
+          132
+        ]
+      ]
     },
     "wolf_teen_run_right.webp": {
       "age": "teen",
@@ -1577,47 +3009,147 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "1b94ef4f6ab1b506864c90b2b64e409f3be3e0f47d9c6704760025d426cbcdfd",
+      "sha256": "533204b15f4079b8691922ce1b2a12534c527cdbfe4ab215085c76bf943ee89a",
       "source": "main",
       "source_cells": [
         [
           773,
           293,
-          895,
+          898,
           425
         ],
         [
-          899,
+          902,
           293,
-          1020,
+          1022,
           425
         ],
         [
-          1024,
+          1026,
           293,
-          1146,
+          1145,
           425
         ],
         [
-          1150,
+          1149,
           293,
-          1272,
+          1270,
           425
         ],
         [
-          1276,
+          1274,
           293,
-          1397,
+          1392,
           425
         ],
         [
-          1401,
+          1396,
           293,
           1522,
           425
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          98,
+          125,
+          132
+        ],
+        [
+          0,
+          98,
+          120,
+          132
+        ],
+        [
+          0,
+          98,
+          119,
+          132
+        ],
+        [
+          0,
+          98,
+          121,
+          132
+        ],
+        [
+          0,
+          98,
+          118,
+          132
+        ],
+        [
+          0,
+          98,
+          126,
+          132
+        ]
+      ],
+      "protected_source_fur_polygons": {
+        "3": [
+          [
+            [
+              80,
+              86
+            ],
+            [
+              84,
+              85
+            ],
+            [
+              89,
+              88
+            ],
+            [
+              91,
+              90
+            ],
+            [
+              91,
+              94
+            ],
+            [
+              93,
+              97
+            ],
+            [
+              96,
+              100
+            ],
+            [
+              96,
+              103
+            ],
+            [
+              93,
+              105
+            ],
+            [
+              88,
+              104
+            ],
+            [
+              83,
+              101
+            ],
+            [
+              83,
+              96
+            ],
+            [
+              80,
+              94
+            ],
+            [
+              78,
+              92
+            ]
+          ]
+        ]
+      }
     },
     "wolf_teen_run_up.webp": {
       "age": "teen",
@@ -1626,7 +3158,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "b7ad88ad72ca5c58f6f5b1830906917351b8ac17831a5a765e30cfab84375b11",
+      "sha256": "d43e99501f9c195ad7f2dce7761462eb08d3dfb5c9db29067eaea7f5181cc684",
       "source": "main",
       "source_cells": [
         [
@@ -1666,7 +3198,45 @@
           620
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          112,
+          123,
+          149
+        ],
+        [
+          0,
+          112,
+          120,
+          149
+        ],
+        [
+          0,
+          112,
+          121,
+          149
+        ],
+        [
+          0,
+          112,
+          120,
+          149
+        ],
+        [
+          0,
+          112,
+          121,
+          149
+        ],
+        [
+          0,
+          112,
+          122,
+          149
+        ]
+      ]
     },
     "wolf_teen_comb.webp": {
       "age": "teen",
@@ -1675,17 +3245,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "7227a2df07712b3cdbf5e16335b8c6a74adb808ebfc40c681ba9c47b467a2b4d",
+      "sha256": "6ccb9e247d435c47fc8cf518227fc1d6d605e2b4adbcf702a3000e72a1b7bf4f",
       "source": "objects",
       "source_cells": [
         [
-          324,
+          328,
           105,
-          618,
-          340
+          615,
+          338
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        193,
+        287,
+        233
+      ]
     },
     "wolf_teen_fetch_mouse.png": {
       "age": "teen",
@@ -1694,22 +3270,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "c75619030902734101d9afccb905e2f325ee258159df345101d34269a041656c",
+      "sha256": "40b80ae7842ba08bfcd933cf4a74bc1bd2bef2c40d5fb08730f7340dc969fab1",
       "source": "objects",
       "source_cells": [
         [
-          921,
+          924,
           105,
-          1214,
-          340
+          1209,
+          338
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        176,
-        293,
-        235
+        175,
+        285,
+        233
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_teen_fetch_plush.png": {
@@ -1719,17 +3299,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "d3ae94dd4600aab3867052d3633a8de3ad8765abc1cfcb9890da7308a111cbc8",
+      "sha256": "8af659a0cb081065aa09bf8990ac0e8be491040912e65e0cf635373a72390759",
       "source": "objects",
       "source_cells": [
         [
-          1218,
+          1221,
           105,
-          1522,
-          340
+          1520,
+          338
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        193,
+        299,
+        233
+      ]
     },
     "wolf_teen_fetch_ball.png": {
       "age": "teen",
@@ -1738,22 +3324,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "a3b4f71d463f361f7664ebb03304f61eb3cbd4b3419bea362e3249991ffbefb0",
+      "sha256": "a84d06835eec4782076768ca8a82194acb2dfe5b88e03fbbcb94d63e1c67e841",
       "source": "objects",
       "source_cells": [
         [
-          16,
-          392,
-          320,
-          623
+          17,
+          391,
+          317,
+          621
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        173,
-        304,
-        231
+        172,
+        300,
+        230
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_teen_fetch_tennis.png": {
@@ -1763,22 +3353,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "d0fc39fcf86edfa661895b938d0afa4f93b099d2f85ae058e4bf321568468b2d",
+      "sha256": "da56649c0b1525511f80ace5eb5c5f8794d12eed2429c62067957c462778ed53",
       "source": "objects",
       "source_cells": [
         [
-          324,
-          392,
-          618,
-          623
+          328,
+          391,
+          615,
+          621
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        173,
-        294,
-        231
+        172,
+        287,
+        230
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_teen_fetch_yarn.png": {
@@ -1788,22 +3382,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "32f0816f83063e270e12d2d6e44188c2ef91e801738a7b895ac06ba86c7c3cd1",
+      "sha256": "ad754d95e9b42c2279966ebee38821523e38537dbf415b08f1c5b940cec04166",
       "source": "objects",
       "source_cells": [
         [
-          622,
-          392,
-          917,
-          623
+          626,
+          391,
+          911,
+          621
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        173,
-        295,
-        231
+        172,
+        285,
+        230
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_teen_groom_foam.webp": {
@@ -1813,17 +3411,127 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "7fdb188f86b696f0e90bb314125865f35c05e085f676fc11ccb6489c6af803d1",
+      "sha256": "d647617f943fcd4341087f5652a93cdbae8bf059c4e6912218f40d65ab0e8750",
       "source": "objects",
       "source_cells": [
         [
-          921,
-          392,
-          1214,
-          623
+          924,
+          391,
+          1209,
+          621
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        190,
+        285,
+        230
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          201,
+          35,
+          263,
+          165
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            232.7,
+            60.7,
+            4.8,
+            4.8
+          ],
+          [
+            233.7,
+            78.7,
+            10.4,
+            10.4
+          ],
+          [
+            213.3,
+            107.3,
+            13,
+            13
+          ],
+          [
+            233.3,
+            142.7,
+            14,
+            14
+          ],
+          [
+            254.7,
+            131,
+            5.4,
+            5.4
+          ],
+          [
+            228,
+            166.7,
+            5.3,
+            5.3
+          ]
+        ],
+        "protected_source_foam_polygon": [
+          [
+            194,
+            171
+          ],
+          [
+            203,
+            167
+          ],
+          [
+            210,
+            168
+          ],
+          [
+            214,
+            174
+          ],
+          [
+            219,
+            177
+          ],
+          [
+            221,
+            185
+          ],
+          [
+            218,
+            191
+          ],
+          [
+            225,
+            194
+          ],
+          [
+            230,
+            202
+          ],
+          [
+            232,
+            210
+          ],
+          [
+            226,
+            215
+          ],
+          [
+            212,
+            215
+          ],
+          [
+            207,
+            207
+          ],
+          [
+            201,
+            192
+          ]
+        ]
+      }
     },
     "wolf_teen_rope_play.png": {
       "age": "teen",
@@ -1832,22 +3540,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "8e8f5ba3cd4e2ce445103a6736848a82543aaf1a9f9eeec9a9514e58faf6c24b",
+      "sha256": "4b86da4ca507205e7067915bf9e4af73c5cbbe4e2398b2c349f54887affc1839",
       "source": "objects",
       "source_cells": [
         [
-          1218,
-          392,
-          1522,
-          623
+          1221,
+          391,
+          1520,
+          621
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        173,
-        304,
-        231
+        172,
+        299,
+        230
+      ],
+      "audited_background_seed": [
+        78,
+        170
       ]
     },
     "wolf_teen_scratcher_play.webp": {
@@ -1857,7 +3569,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "194fb3b9b80af5c13604b65ddd9fb57f606e7496cc9641b3648970b39b2adc00",
+      "sha256": "727cbf7bb2330c738b5f760bded014cca9af664f0d04712a469965c69be860ca",
       "source": "objects",
       "source_cells": [
         [
@@ -1876,17 +3588,119 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "639b815678817c234a388fa1724e3f5d82531afccd7b55665520197bd074a3fc",
+      "sha256": "f16ef5420b3b735703916a771b9c7dd44a4bebbf06c9839163997af224eec080",
       "source": "objects",
       "source_cells": [
         [
           574,
-          670,
-          961,
+          672,
+          960,
           892
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        180,
+        386,
+        220
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          234,
+          25,
+          308,
+          156
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            273,
+            47.5,
+            4.5,
+            4.5
+          ],
+          [
+            276.32,
+            66.99,
+            12.45,
+            12.45
+          ],
+          [
+            265.5,
+            87.8,
+            5,
+            5
+          ],
+          [
+            285.54,
+            112.07,
+            10.59,
+            10.59
+          ],
+          [
+            290.5,
+            150,
+            6.7,
+            6.7
+          ],
+          [
+            273.0,
+            137.0,
+            4.0,
+            4.0
+          ]
+        ],
+        "protected_source_foam_polygon": [
+          [
+            243,
+            160
+          ],
+          [
+            253,
+            156
+          ],
+          [
+            264,
+            157
+          ],
+          [
+            272,
+            162
+          ],
+          [
+            275,
+            171
+          ],
+          [
+            273,
+            180
+          ],
+          [
+            283,
+            184
+          ],
+          [
+            285,
+            194
+          ],
+          [
+            279,
+            199
+          ],
+          [
+            267,
+            192
+          ],
+          [
+            255,
+            187
+          ],
+          [
+            250,
+            176
+          ]
+        ]
+      }
     },
     "wolf_teen_towel.webp": {
       "age": "teen",
@@ -1895,17 +3709,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "805511d93d2160c299685f5aaa349830ca44b49cbe0d43576c8109797e1e4da9",
+      "sha256": "aa604a1409ec1885e2112878ac55cb591bc44aaf0f164164b740a3cc736423ce",
       "source": "objects",
       "source_cells": [
         [
-          971,
-          670,
-          1363,
+          972,
+          672,
+          1362,
           892
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        180,
+        390,
+        220
+      ]
     },
     "wolf_adult_idle_down.png": {
       "age": "adult",
@@ -1914,7 +3734,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "7dc44366064997d06172ba6aa0b07f52177c44aa06597836d9f9e6afa19de0f9",
+      "sha256": "b6661298d0d370ef8a2ba937e5df2ec234d17beae94409bb2cf4aeccfd5056f1",
       "source": "main",
       "source_cells": [
         [
@@ -1933,7 +3753,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "0a9e3f600f5607dded3b9c27b5e8544fcd2f0309de1ca7ca39df6fd642d64b39",
+      "sha256": "dd2e1cd247a896f0bf1cecdd1570df67dd31466ee03d2f028dccb01f80b949b3",
       "source": "main",
       "source_cells": [
         [
@@ -1952,7 +3772,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "6d04725028ff7f04160558116f83a96315d2c0368efbd3c2482377ba1883d661",
+      "sha256": "08e63e686f645113c1be2f44fac8cf781830b6e71fb2ed22413fd418c8640d8e",
       "source": "main",
       "source_cells": [
         [
@@ -1971,7 +3791,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "642822fed7a39cc7bea34837fd787a5bae8e86a1a6968e9cf6ed4b0144d7a219",
+      "sha256": "6b512ac8077eaddfd8f25b47de620612c74626f073ee9e34413ca196c97db694",
       "source": "main",
       "source_cells": [
         [
@@ -1990,7 +3810,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "7d211ae0bcd90a04dcfc3b76913da6242b405a542e247d5c30a906905942fff5",
+      "sha256": "98fe286af7679ad3341459ddba7d63a843483b603321ced83b0c7a457bd9299a",
       "source": "main",
       "source_cells": [
         [
@@ -2030,7 +3850,45 @@
           275
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          132,
+          99,
+          174
+        ],
+        [
+          0,
+          132,
+          106,
+          174
+        ],
+        [
+          0,
+          132,
+          104,
+          174
+        ],
+        [
+          0,
+          132,
+          106,
+          174
+        ],
+        [
+          0,
+          132,
+          107,
+          174
+        ],
+        [
+          0,
+          132,
+          110,
+          174
+        ]
+      ]
     },
     "wolf_adult_walk_left.webp": {
       "age": "adult",
@@ -2039,7 +3897,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "aa1815c02f26441ca44d04e04990752f8f13fcf5e015ba41dbc5d625bf4f29c1",
+      "sha256": "6a2429287c602fdaaa8881f4bf7b67a6e28bdbd3b03c66801a4d4ea51b7a41b9",
       "source": "main",
       "source_cells": [
         [
@@ -2079,7 +3937,45 @@
           473
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          110,
+          114,
+          153
+        ],
+        [
+          0,
+          110,
+          114,
+          153
+        ],
+        [
+          0,
+          110,
+          114,
+          153
+        ],
+        [
+          0,
+          110,
+          113,
+          153
+        ],
+        [
+          0,
+          110,
+          113,
+          153
+        ],
+        [
+          0,
+          110,
+          116,
+          153
+        ]
+      ]
     },
     "wolf_adult_walk_right.webp": {
       "age": "adult",
@@ -2088,47 +3984,85 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "ebc34d15668c8f24c83f99a30833a14b6c460849e416083fae21c75b583faaeb",
+      "sha256": "71c80bc4f5098182116c766973fd1ee2f862fe102813eb8961f19fcd5ef3798c",
       "source": "main",
       "source_cells": [
         [
           730,
           320,
-          849,
+          847,
           473
         ],
         [
-          853,
+          851,
           320,
-          966,
+          965,
           473
         ],
         [
-          970,
+          969,
           320,
-          1082,
+          1081,
           473
         ],
         [
-          1086,
+          1085,
           320,
-          1199,
+          1198,
           473
         ],
         [
-          1203,
+          1202,
           320,
-          1316,
+          1315,
           473
         ],
         [
-          1320,
+          1319,
           320,
           1436,
           473
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          110,
+          117,
+          153
+        ],
+        [
+          0,
+          110,
+          114,
+          153
+        ],
+        [
+          0,
+          110,
+          112,
+          153
+        ],
+        [
+          0,
+          110,
+          113,
+          153
+        ],
+        [
+          0,
+          110,
+          113,
+          153
+        ],
+        [
+          0,
+          110,
+          117,
+          153
+        ]
+      ]
     },
     "wolf_adult_walk_up.webp": {
       "age": "adult",
@@ -2137,7 +4071,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "8a9dc604ed7edcd59f2d6a16be01e328962c3f24b0c89bb513260021fdbb5733",
+      "sha256": "6a88de2f20d73c9cfd39a75cd88265c6e217ed14f317aa2e2bf799f940ea84b8",
       "source": "main",
       "source_cells": [
         [
@@ -2177,7 +4111,45 @@
           686
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          117,
+          168
+        ]
+      ]
     },
     "wolf_adult_jump.webp": {
       "age": "adult",
@@ -2186,7 +4158,7 @@
       "frames": 5,
       "width": 1280,
       "height": 256,
-      "sha256": "9bfc6084649be52d316e9ddc773fb5a8fe39d0d441ffa212e0e9f669befb36e5",
+      "sha256": "5ba3a2895692dea0af9115f1acf3f507ee5a6821545d1a2e8c5025c8375521b4",
       "source": "main",
       "source_cells": [
         [
@@ -2220,7 +4192,39 @@
           686
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          122,
+          137,
+          168
+        ],
+        [
+          0,
+          122,
+          136,
+          168
+        ],
+        [
+          0,
+          122,
+          139,
+          168
+        ],
+        [
+          0,
+          122,
+          137,
+          168
+        ],
+        [
+          0,
+          122,
+          141,
+          168
+        ]
+      ]
     },
     "wolf_adult_eat.webp": {
       "age": "adult",
@@ -2229,7 +4233,7 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "e5059adc8063a3d49737530733956a9d3892042c41dbda61ca0b93d20fffb089",
+      "sha256": "c83350a8d3fe1267345554074b93f70f1f46a3b7f5f578843ffab11ef7031236",
       "source": "main",
       "source_cells": [
         [
@@ -2260,7 +4264,7 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "977962d9804a1e1bde853be507b91d9b452e40cf7898d2579728d8f6db988e1c",
+      "sha256": "96081edec9def110d70bc6d4d6402615f2bbf5ca78f79f21140d2c712f3ca268",
       "source": "main",
       "source_cells": [
         [
@@ -2291,7 +4295,7 @@
       "frames": 12,
       "width": 3072,
       "height": 256,
-      "sha256": "5472f2030684757cb0b6f15e43d2cc1d04707b05cc9f2b4f8a4588663f6cfcf9",
+      "sha256": "da2976327dd7449f6e7febca22b3a9bc9a3395f7ac585d710b1409b6c278449e",
       "source": "main",
       "source_cells": [
         [
@@ -2376,7 +4380,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "7d211ae0bcd90a04dcfc3b76913da6242b405a542e247d5c30a906905942fff5",
+      "sha256": "98fe286af7679ad3341459ddba7d63a843483b603321ced83b0c7a457bd9299a",
       "source": "main",
       "source_cells": [
         [
@@ -2416,7 +4420,45 @@
           275
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          132,
+          99,
+          174
+        ],
+        [
+          0,
+          132,
+          106,
+          174
+        ],
+        [
+          0,
+          132,
+          104,
+          174
+        ],
+        [
+          0,
+          132,
+          106,
+          174
+        ],
+        [
+          0,
+          132,
+          107,
+          174
+        ],
+        [
+          0,
+          132,
+          110,
+          174
+        ]
+      ]
     },
     "wolf_adult_run_left.webp": {
       "age": "adult",
@@ -2425,7 +4467,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "aa1815c02f26441ca44d04e04990752f8f13fcf5e015ba41dbc5d625bf4f29c1",
+      "sha256": "6a2429287c602fdaaa8881f4bf7b67a6e28bdbd3b03c66801a4d4ea51b7a41b9",
       "source": "main",
       "source_cells": [
         [
@@ -2465,7 +4507,45 @@
           473
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          110,
+          114,
+          153
+        ],
+        [
+          0,
+          110,
+          114,
+          153
+        ],
+        [
+          0,
+          110,
+          114,
+          153
+        ],
+        [
+          0,
+          110,
+          113,
+          153
+        ],
+        [
+          0,
+          110,
+          113,
+          153
+        ],
+        [
+          0,
+          110,
+          116,
+          153
+        ]
+      ]
     },
     "wolf_adult_run_right.webp": {
       "age": "adult",
@@ -2474,47 +4554,85 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "ebc34d15668c8f24c83f99a30833a14b6c460849e416083fae21c75b583faaeb",
+      "sha256": "71c80bc4f5098182116c766973fd1ee2f862fe102813eb8961f19fcd5ef3798c",
       "source": "main",
       "source_cells": [
         [
           730,
           320,
-          849,
+          847,
           473
         ],
         [
-          853,
+          851,
           320,
-          966,
+          965,
           473
         ],
         [
-          970,
+          969,
           320,
-          1082,
+          1081,
           473
         ],
         [
-          1086,
+          1085,
           320,
-          1199,
+          1198,
           473
         ],
         [
-          1203,
+          1202,
           320,
-          1316,
+          1315,
           473
         ],
         [
-          1320,
+          1319,
           320,
           1436,
           473
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          110,
+          117,
+          153
+        ],
+        [
+          0,
+          110,
+          114,
+          153
+        ],
+        [
+          0,
+          110,
+          112,
+          153
+        ],
+        [
+          0,
+          110,
+          113,
+          153
+        ],
+        [
+          0,
+          110,
+          113,
+          153
+        ],
+        [
+          0,
+          110,
+          117,
+          153
+        ]
+      ]
     },
     "wolf_adult_run_up.webp": {
       "age": "adult",
@@ -2523,7 +4641,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "8a9dc604ed7edcd59f2d6a16be01e328962c3f24b0c89bb513260021fdbb5733",
+      "sha256": "6a88de2f20d73c9cfd39a75cd88265c6e217ed14f317aa2e2bf799f940ea84b8",
       "source": "main",
       "source_cells": [
         [
@@ -2563,7 +4681,45 @@
           686
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          113,
+          168
+        ],
+        [
+          0,
+          125,
+          117,
+          168
+        ]
+      ]
     },
     "wolf_adult_comb.webp": {
       "age": "adult",
@@ -2572,17 +4728,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "22a2f6a3fb801565c4591abcb6bbb3791e9644ffc742631ce54f6a7782541f17",
+      "sha256": "3c42ad2d390950ee5f2ce225a4ac3efdbb8dbb641f579f4454b5b6e1ec162894",
       "source": "objects",
       "source_cells": [
         [
-          298,
+          300,
           99,
-          580,
-          348
+          576,
+          347
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        208,
+        276,
+        248
+      ]
     },
     "wolf_adult_fetch_mouse.png": {
       "age": "adult",
@@ -2591,22 +4753,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "d33f3552d6fb523fff98910540ca1d6b3e23af37adfb61e514ebf66f22f90a97",
+      "sha256": "db82fe3bc235fb8b39c0c94e67475846c6992d0abdde5b87014e34a28c91f412",
       "source": "objects",
       "source_cells": [
         [
-          871,
+          872,
           99,
-          1153,
-          348
+          1149,
+          347
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        187,
-        282,
-        249
+        186,
+        277,
+        248
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_adult_fetch_plush.png": {
@@ -2616,17 +4782,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "861a41e8f566e39c52922245217fbb2f0ce2f2ae24f2adb63b327138e4261a4a",
+      "sha256": "92ec09bc349c9102842c74d2247ef3f3271562ab66dc486bc0b124fc4dca71a2",
       "source": "objects",
       "source_cells": [
         [
-          1157,
+          1159,
           99,
           1436,
-          348
+          347
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        208,
+        277,
+        248
+      ]
     },
     "wolf_adult_fetch_ball.png": {
       "age": "adult",
@@ -2635,22 +4807,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "7e4c7ae5192ca658117aa9bc43987bfa31a29be1aa6af498a8cc0eeea475f415",
+      "sha256": "2744207cbd1efda5ac1ed9e9d49c2aa19ed7571e130282e614db0388c447c30a",
       "source": "objects",
       "source_cells": [
         [
           12,
-          397,
-          294,
+          395,
+          291,
           647
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        188,
-        282,
-        250
+        189,
+        279,
+        252
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_adult_fetch_tennis.png": {
@@ -2660,22 +4836,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "3d7d8b1ccaf44a078f292161cfda6a5087f5c3488c3e0e07cdc6e978b7bcb316",
+      "sha256": "ac18b902b9cbee3106acf3af0fd5f2963596eae7d67902809e8407fbb7e35813",
       "source": "objects",
       "source_cells": [
         [
-          298,
-          397,
-          580,
+          301,
+          395,
+          577,
           647
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        188,
-        282,
-        250
+        189,
+        276,
+        252
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_adult_fetch_yarn.png": {
@@ -2685,22 +4865,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "1d5c306183f205a7ba604bfc08d439dddc373507180a2c60626f97930d385ec3",
+      "sha256": "52602b2a7d0faf38db141911c39369ab01d5907415d27db37efe2d150ee613c2",
       "source": "objects",
       "source_cells": [
         [
-          584,
-          397,
-          867,
+          586,
+          395,
+          863,
           647
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        188,
-        283,
-        250
+        189,
+        277,
+        252
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_adult_groom_foam.webp": {
@@ -2710,17 +4894,131 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "b93cba59e9c54c8e3b534a2f1247edf19dd61a3ab2c0e712a82ddb97e33b3561",
+      "sha256": "43b2e03d5172ab12524a414becadf8ca23b1994ba8f58fa7d19a2e4aeb9b4799",
       "source": "objects",
       "source_cells": [
         [
-          871,
-          397,
-          1153,
+          872,
+          395,
+          1148,
           647
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        212,
+        276,
+        252
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          202,
+          42,
+          272,
+          177
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            228.26,
+            68.38,
+            6.02,
+            6.02
+          ],
+          [
+            217.34,
+            90.6,
+            12.45,
+            12.45
+          ],
+          [
+            234.18,
+            171.86,
+            11.07,
+            11.07
+          ],
+          [
+            244.8,
+            157.22,
+            3.92,
+            3.92
+          ],
+          [
+            245.7,
+            187,
+            4.7,
+            4.7
+          ],
+          [
+            252.32,
+            210.43,
+            6.82,
+            6.82
+          ]
+        ],
+        "protected_source_foam_polygon": [
+          [
+            211,
+            179
+          ],
+          [
+            218,
+            178
+          ],
+          [
+            223,
+            182
+          ],
+          [
+            225,
+            189
+          ],
+          [
+            233,
+            191
+          ],
+          [
+            237,
+            198
+          ],
+          [
+            237,
+            207
+          ],
+          [
+            241,
+            216
+          ],
+          [
+            248,
+            224
+          ],
+          [
+            247,
+            233
+          ],
+          [
+            240,
+            240
+          ],
+          [
+            227,
+            240
+          ],
+          [
+            221,
+            230
+          ],
+          [
+            216,
+            214
+          ],
+          [
+            210,
+            196
+          ]
+        ]
+      }
     },
     "wolf_adult_rope_play.png": {
       "age": "adult",
@@ -2729,12 +5027,12 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "38936c24bdda7cef509cb1755647244888057c1ff54b8202f8baba29e47ab376",
+      "sha256": "fcc00e43f04893b778db012fbef159e67e453e5ea1fe96d37641c5ca550f9674",
       "source": "objects",
       "source_cells": [
         [
-          1157,
-          397,
+          1158,
+          395,
           1436,
           647
         ]
@@ -2742,9 +5040,13 @@
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        188,
-        279,
-        250
+        189,
+        278,
+        252
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_adult_scratcher_play.webp": {
@@ -2754,14 +5056,14 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "0c73bb7d237728f28b55c7a730b4d94a0ee44f8771d62388909e79499e449233",
+      "sha256": "caccaaaaf778c5bcb824828971fab16c44fb0c775190e00962cddcbce4298e96",
       "source": "objects",
       "source_cells": [
         [
           150,
           687,
           525,
-          947
+          946
         ]
       ],
       "derivation": "fixed scratcher removed; one supplied wolf pose"
@@ -2773,17 +5075,135 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "66cdf6f35230b4ee30b53f4c50fa0e2d5fbf19453a2874e34328a50f3893caea",
+      "sha256": "50c84e048b2ab8ecf483ec816a376fdfc964d689e185701fd53026b5c6c01a49",
       "source": "objects",
       "source_cells": [
         [
-          534,
+          536,
           695,
-          909,
-          947
+          907,
+          946
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        211,
+        371,
+        251
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          230,
+          30,
+          304,
+          155
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            261.56,
+            48.58,
+            5.31,
+            5.31
+          ],
+          [
+            268.3,
+            70.56,
+            12.14,
+            12.14
+          ],
+          [
+            255,
+            85.5,
+            5.2,
+            5.2
+          ],
+          [
+            277.54,
+            107.19,
+            10.83,
+            10.83
+          ],
+          [
+            281.75,
+            143.52,
+            7.27,
+            7.27
+          ],
+          [
+            267.17,
+            126.04,
+            4.03,
+            4.03
+          ],
+          [
+            272.92,
+            159.83,
+            5.17,
+            5.17
+          ],
+          [
+            282.38,
+            192.19,
+            11.83,
+            11.83
+          ]
+        ],
+        "protected_source_foam_polygon": [
+          [
+            238,
+            164
+          ],
+          [
+            247,
+            160
+          ],
+          [
+            251,
+            157
+          ],
+          [
+            259,
+            157
+          ],
+          [
+            265,
+            162
+          ],
+          [
+            266,
+            170
+          ],
+          [
+            270,
+            175
+          ],
+          [
+            265,
+            183
+          ],
+          [
+            263,
+            195
+          ],
+          [
+            259,
+            206
+          ],
+          [
+            255,
+            211
+          ],
+          [
+            247,
+            195
+          ],
+          [
+            244,
+            178
+          ]
+        ]
+      }
     },
     "wolf_adult_towel.webp": {
       "age": "adult",
@@ -2792,17 +5212,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "ea0918a759908bcaae2fa0c59dc77e3f458e332b33db9bb3ed163e72d929e165",
+      "sha256": "ce3e8b92337e5c756f9db5bb09347cbed04e2ed72e1e3c42c377dabc03e1cd97",
       "source": "objects",
       "source_cells": [
         [
-          920,
+          918,
           695,
           1295,
-          947
+          946
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        211,
+        377,
+        251
+      ]
     },
     "wolf_old_idle_down.png": {
       "age": "old",
@@ -2811,7 +5237,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "2bc7469054ce98128f3ad29a8fdfe1117a690424a922b14ac16377a724d81587",
+      "sha256": "9124007ca4a30265bd51cd56ae3b7e61f993435bb19c0e117a7eedb88729aedc",
       "source": "main",
       "source_cells": [
         [
@@ -2830,7 +5256,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "e7f3de8f0bc50d4f5b64b9fa1f181b455a117f40ec804020879b890a99ad86c1",
+      "sha256": "98ce6dbba4a2385075d02ccd49b2a4936c0a5e2e71491ec39fc355da64a99238",
       "source": "main",
       "source_cells": [
         [
@@ -2849,7 +5275,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "5421febcff58cc7864fc459a36099fb68f61b4c5df0052d5dc7088159656f142",
+      "sha256": "f2c677d023337b9d59616e4fd7c9356e5fd6699f28c8798fe6ae1dabbe5bbfaa",
       "source": "main",
       "source_cells": [
         [
@@ -2868,7 +5294,7 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "2a2edbdf6664c91e873e1e05050a9ce4e154de10be4158c2772025dfa27b6381",
+      "sha256": "ee2ba7018b6a4d8186983ba5916c39170704ea8447bab203c7d93c326fb08109",
       "source": "main",
       "source_cells": [
         [
@@ -2878,7 +5304,73 @@
           271
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "protected_source_fur_polygons": {
+        "1": [
+          [
+            [
+              117,
+              118
+            ],
+            [
+              128,
+              114
+            ],
+            [
+              138,
+              109
+            ],
+            [
+              143,
+              107
+            ],
+            [
+              144,
+              112
+            ],
+            [
+              145,
+              116
+            ],
+            [
+              145,
+              126
+            ],
+            [
+              143,
+              132
+            ],
+            [
+              142,
+              136
+            ],
+            [
+              136,
+              137
+            ],
+            [
+              127,
+              137
+            ],
+            [
+              115,
+              134
+            ],
+            [
+              119,
+              129
+            ],
+            [
+              110,
+              127
+            ],
+            [
+              113,
+              124
+            ]
+          ]
+        ]
+      }
     },
     "wolf_old_walk_down.webp": {
       "age": "old",
@@ -2887,7 +5379,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "51456b941b392b4ca636a3953c3c4a8cd4c392b4178872686eb1ea889462861f",
+      "sha256": "455221e7da41ab5d1b7d605fed2093fb365a90b9593a721b383a16d1f554f9c0",
       "source": "main",
       "source_cells": [
         [
@@ -2927,7 +5419,45 @@
           270
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          128,
+          106,
+          171
+        ],
+        [
+          0,
+          128,
+          105,
+          171
+        ],
+        [
+          0,
+          128,
+          109,
+          171
+        ],
+        [
+          0,
+          128,
+          105,
+          171
+        ],
+        [
+          0,
+          128,
+          106,
+          171
+        ],
+        [
+          0,
+          128,
+          112,
+          171
+        ]
+      ]
     },
     "wolf_old_walk_left.webp": {
       "age": "old",
@@ -2936,7 +5466,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "07c786576e853aac883432d5c865fb355938de103615e9f8c5128f7dad4560a7",
+      "sha256": "ef3765b3d02825731a8ca0c4ef4b3fedf945a196b6bb47035c42d50ba2b78df0",
       "source": "main",
       "source_cells": [
         [
@@ -2976,7 +5506,107 @@
           457
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          106,
+          117,
+          142
+        ],
+        [
+          0,
+          106,
+          113,
+          142
+        ],
+        [
+          0,
+          106,
+          113,
+          142
+        ],
+        [
+          0,
+          106,
+          114,
+          142
+        ],
+        [
+          0,
+          106,
+          112,
+          142
+        ],
+        [
+          0,
+          106,
+          115,
+          142
+        ]
+      ],
+      "protected_source_fur_polygons": {
+        "1": [
+          [
+            [
+              84,
+              32
+            ],
+            [
+              89,
+              31
+            ],
+            [
+              96,
+              34
+            ],
+            [
+              101,
+              38
+            ],
+            [
+              105,
+              42
+            ],
+            [
+              109,
+              47
+            ],
+            [
+              111,
+              54
+            ],
+            [
+              107,
+              57
+            ],
+            [
+              99,
+              56
+            ],
+            [
+              93,
+              52
+            ],
+            [
+              88,
+              54
+            ],
+            [
+              84,
+              50
+            ],
+            [
+              83,
+              43
+            ],
+            [
+              83,
+              37
+            ]
+          ]
+        ]
+      }
     },
     "wolf_old_walk_right.webp": {
       "age": "old",
@@ -2985,23 +5615,23 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "ea6f4df8ab439eaba9867a695d20eb894b928497778d06bed3e17f3aaea80d65",
+      "sha256": "e83762e2d1fa634b1cfcf0608e2de7265a8125d4adbf3e6815f5fee6d6b958d5",
       "source": "main",
       "source_cells": [
         [
           731,
           315,
-          847,
+          849,
           457
         ],
         [
-          851,
+          853,
           315,
-          967,
+          965,
           457
         ],
         [
-          971,
+          969,
           315,
           1083,
           457
@@ -3009,23 +5639,61 @@
         [
           1087,
           315,
-          1199,
+          1200,
           457
         ],
         [
-          1203,
+          1204,
           315,
-          1317,
+          1316,
           457
         ],
         [
-          1321,
+          1320,
           315,
           1435,
           457
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          106,
+          118,
+          142
+        ],
+        [
+          0,
+          106,
+          112,
+          142
+        ],
+        [
+          0,
+          106,
+          114,
+          142
+        ],
+        [
+          0,
+          106,
+          113,
+          142
+        ],
+        [
+          0,
+          106,
+          112,
+          142
+        ],
+        [
+          0,
+          106,
+          115,
+          142
+        ]
+      ]
     },
     "wolf_old_walk_up.webp": {
       "age": "old",
@@ -3034,7 +5702,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "7dd139a2f414e6837e805da2d6ac0969ff71dc13587314df171279e3c1122152",
+      "sha256": "68c89eb7f50cbcb5adc068cc4dcda7123cadf140c8e4e31f3c58e3f8731b43f9",
       "source": "main",
       "source_cells": [
         [
@@ -3074,7 +5742,45 @@
           655
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          114,
+          113,
+          154
+        ],
+        [
+          0,
+          114,
+          113,
+          154
+        ],
+        [
+          0,
+          114,
+          115,
+          154
+        ],
+        [
+          0,
+          114,
+          112,
+          154
+        ],
+        [
+          0,
+          114,
+          113,
+          154
+        ],
+        [
+          0,
+          114,
+          116,
+          154
+        ]
+      ]
     },
     "wolf_old_jump.webp": {
       "age": "old",
@@ -3083,7 +5789,7 @@
       "frames": 5,
       "width": 1280,
       "height": 256,
-      "sha256": "06bd6c01e036fb786d42e70ad7b842fdac2acc266529697c1a87dc729b2c29a9",
+      "sha256": "f4b25c0d6079dc52bba8bbf26b6a0dbcd4cae07de508fd4c7f8025f66ae2f1ac",
       "source": "main",
       "source_cells": [
         [
@@ -3117,7 +5823,39 @@
           655
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          112,
+          136,
+          154
+        ],
+        [
+          0,
+          112,
+          136,
+          154
+        ],
+        [
+          0,
+          112,
+          139,
+          154
+        ],
+        [
+          0,
+          112,
+          137,
+          154
+        ],
+        [
+          0,
+          112,
+          140,
+          154
+        ]
+      ]
     },
     "wolf_old_eat.webp": {
       "age": "old",
@@ -3126,7 +5864,7 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "a88db8c421a7213daea154f0e77ae54afd999654b1eb0176b19c9fcc811710b7",
+      "sha256": "959229adb3924ca5d4ee0f1db9d470323cfe4372472cad55e4556f6ac4979efd",
       "source": "main",
       "source_cells": [
         [
@@ -3157,7 +5895,7 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "d37980211493d8d057c3c7a1a874140b0a9e47d3242db3f6d68e75a00b4ede04",
+      "sha256": "167fce09267d58bd43718a1f5fd18d9c0e1705c9a632c2344464d4b1db36a0f4",
       "source": "main",
       "source_cells": [
         [
@@ -3188,7 +5926,7 @@
       "frames": 12,
       "width": 3072,
       "height": 256,
-      "sha256": "4d7e7f37242de22868c8e061f50e79bd53659f917b60c5a0c261c35759c69846",
+      "sha256": "4df8e7b8fd0c3127bdcabc5847af8e875f004ed45ee3ea625206b4680e38e25c",
       "source": "main",
       "source_cells": [
         [
@@ -3273,7 +6011,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "51456b941b392b4ca636a3953c3c4a8cd4c392b4178872686eb1ea889462861f",
+      "sha256": "455221e7da41ab5d1b7d605fed2093fb365a90b9593a721b383a16d1f554f9c0",
       "source": "main",
       "source_cells": [
         [
@@ -3313,7 +6051,45 @@
           270
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          128,
+          106,
+          171
+        ],
+        [
+          0,
+          128,
+          105,
+          171
+        ],
+        [
+          0,
+          128,
+          109,
+          171
+        ],
+        [
+          0,
+          128,
+          105,
+          171
+        ],
+        [
+          0,
+          128,
+          106,
+          171
+        ],
+        [
+          0,
+          128,
+          112,
+          171
+        ]
+      ]
     },
     "wolf_old_run_left.webp": {
       "age": "old",
@@ -3322,7 +6098,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "07c786576e853aac883432d5c865fb355938de103615e9f8c5128f7dad4560a7",
+      "sha256": "ef3765b3d02825731a8ca0c4ef4b3fedf945a196b6bb47035c42d50ba2b78df0",
       "source": "main",
       "source_cells": [
         [
@@ -3362,7 +6138,107 @@
           457
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          106,
+          117,
+          142
+        ],
+        [
+          0,
+          106,
+          113,
+          142
+        ],
+        [
+          0,
+          106,
+          113,
+          142
+        ],
+        [
+          0,
+          106,
+          114,
+          142
+        ],
+        [
+          0,
+          106,
+          112,
+          142
+        ],
+        [
+          0,
+          106,
+          115,
+          142
+        ]
+      ],
+      "protected_source_fur_polygons": {
+        "1": [
+          [
+            [
+              84,
+              32
+            ],
+            [
+              89,
+              31
+            ],
+            [
+              96,
+              34
+            ],
+            [
+              101,
+              38
+            ],
+            [
+              105,
+              42
+            ],
+            [
+              109,
+              47
+            ],
+            [
+              111,
+              54
+            ],
+            [
+              107,
+              57
+            ],
+            [
+              99,
+              56
+            ],
+            [
+              93,
+              52
+            ],
+            [
+              88,
+              54
+            ],
+            [
+              84,
+              50
+            ],
+            [
+              83,
+              43
+            ],
+            [
+              83,
+              37
+            ]
+          ]
+        ]
+      }
     },
     "wolf_old_run_right.webp": {
       "age": "old",
@@ -3371,23 +6247,23 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "ea6f4df8ab439eaba9867a695d20eb894b928497778d06bed3e17f3aaea80d65",
+      "sha256": "e83762e2d1fa634b1cfcf0608e2de7265a8125d4adbf3e6815f5fee6d6b958d5",
       "source": "main",
       "source_cells": [
         [
           731,
           315,
-          847,
+          849,
           457
         ],
         [
-          851,
+          853,
           315,
-          967,
+          965,
           457
         ],
         [
-          971,
+          969,
           315,
           1083,
           457
@@ -3395,23 +6271,61 @@
         [
           1087,
           315,
-          1199,
+          1200,
           457
         ],
         [
-          1203,
+          1204,
           315,
-          1317,
+          1316,
           457
         ],
         [
-          1321,
+          1320,
           315,
           1435,
           457
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          106,
+          118,
+          142
+        ],
+        [
+          0,
+          106,
+          112,
+          142
+        ],
+        [
+          0,
+          106,
+          114,
+          142
+        ],
+        [
+          0,
+          106,
+          113,
+          142
+        ],
+        [
+          0,
+          106,
+          112,
+          142
+        ],
+        [
+          0,
+          106,
+          115,
+          142
+        ]
+      ]
     },
     "wolf_old_run_up.webp": {
       "age": "old",
@@ -3420,7 +6334,7 @@
       "frames": 6,
       "width": 1536,
       "height": 256,
-      "sha256": "7dd139a2f414e6837e805da2d6ac0969ff71dc13587314df171279e3c1122152",
+      "sha256": "68c89eb7f50cbcb5adc068cc4dcda7123cadf140c8e4e31f3c58e3f8731b43f9",
       "source": "main",
       "source_cells": [
         [
@@ -3460,7 +6374,45 @@
           655
         ]
       ],
-      "derivation": "supplied walk sequence played at run cadence"
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          114,
+          113,
+          154
+        ],
+        [
+          0,
+          114,
+          113,
+          154
+        ],
+        [
+          0,
+          114,
+          115,
+          154
+        ],
+        [
+          0,
+          114,
+          112,
+          154
+        ],
+        [
+          0,
+          114,
+          113,
+          154
+        ],
+        [
+          0,
+          114,
+          116,
+          154
+        ]
+      ]
     },
     "wolf_old_comb.webp": {
       "age": "old",
@@ -3469,17 +6421,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "93453055aa415e27cf6746798fffa8ee99479cc97e6d5f365507322074fc9e59",
+      "sha256": "5b20436d4613a64bcfa72512424c41a10441faec5dbaa9a3fd8cd01726d26d27",
       "source": "objects",
       "source_cells": [
         [
-          307,
+          309,
           101,
-          585,
-          341
+          580,
+          339
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        198,
+        271,
+        238
+      ]
     },
     "wolf_old_fetch_mouse.png": {
       "age": "old",
@@ -3488,22 +6446,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "ff4a62553c4c307c206cb17b303a0983906f2ae1eec48562f0b2d07f2c9707e7",
+      "sha256": "cb2f8e0c79a446419db67db33f1e224b46abd11c963c1dceea5e1298b1a0d205",
       "source": "objects",
       "source_cells": [
         [
           871,
           101,
-          1145,
-          341
+          1141,
+          339
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
-        180,
-        274,
-        240
+        178,
+        270,
+        238
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_old_fetch_plush.png": {
@@ -3513,17 +6475,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "8f6df43d039afcd5537fbf3b83dda4d8e9c9578defac12a123015f136fe61c26",
+      "sha256": "060170317c3e367a45cbf3a5a2588232d7c7e70ad647da1723eab2763f8d8744",
       "source": "objects",
       "source_cells": [
         [
-          1149,
+          1151,
           101,
-          1436,
-          341
+          1434,
+          339
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        198,
+        283,
+        238
+      ]
     },
     "wolf_old_fetch_ball.png": {
       "age": "old",
@@ -3532,22 +6500,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "afdd256963bb789838c4388f41653c5b28e273548a5d89310f9b9d8c153738d1",
+      "sha256": "72e3c89063d43e4b6bdbd29dfce6b20b4473add843641854555f647fd73e8622",
       "source": "objects",
       "source_cells": [
         [
           16,
-          389,
-          303,
-          640
+          388,
+          299,
+          639
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         188,
-        287,
+        283,
         251
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_old_fetch_tennis.png": {
@@ -3557,22 +6529,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "b99c75a8fecff93a5aa51867847f241487ff939a109ebefbaccb2e1c5e2fee6b",
+      "sha256": "fa21854e69bdbe160e4b8af316e790142ff6dff03dd99f3205602ed922a2829a",
       "source": "objects",
       "source_cells": [
         [
-          307,
-          389,
-          585,
-          640
+          309,
+          388,
+          580,
+          639
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         188,
-        278,
+        271,
         251
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_old_fetch_yarn.png": {
@@ -3582,22 +6558,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "d6e98acd561c90c0578091d48f3b03b659b0fbe1c1ab718b217469b57dc288b4",
+      "sha256": "83af7a5b9db9828d240afbcb96dc604aad48ef2df13d74635eb7fbfbf1f9c550",
       "source": "objects",
       "source_cells": [
         [
-          589,
-          389,
-          867,
-          640
+          590,
+          388,
+          861,
+          639
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         188,
-        278,
+        271,
         251
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_old_groom_foam.webp": {
@@ -3607,17 +6587,149 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "cc74dccb45d011114d0718407928d47b761d3e0705791ebf37a06aeb63a47b2c",
+      "sha256": "c97e6aff75401e0f4def83d3a2c935899e59f440632fef5c9af357200bcc9a0a",
       "source": "objects",
       "source_cells": [
         [
           871,
-          389,
-          1145,
-          640
+          388,
+          1141,
+          639
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        211,
+        270,
+        251
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          200,
+          48,
+          258,
+          177
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            231.2,
+            72.41,
+            4.63,
+            4.63
+          ],
+          [
+            231.22,
+            92.1,
+            10.17,
+            10.17
+          ],
+          [
+            210.92,
+            119.39,
+            12.05,
+            12.05
+          ],
+          [
+            226.91,
+            148.38,
+            12.02,
+            12.02
+          ],
+          [
+            244.5,
+            137.3,
+            4.4,
+            4.4
+          ]
+        ],
+        "protected_source_foam_polygon": [
+          [
+            191,
+            184
+          ],
+          [
+            197,
+            179
+          ],
+          [
+            203,
+            181
+          ],
+          [
+            211,
+            178
+          ],
+          [
+            216,
+            181
+          ],
+          [
+            217,
+            188
+          ],
+          [
+            222,
+            190
+          ],
+          [
+            224,
+            195
+          ],
+          [
+            221,
+            200
+          ],
+          [
+            229,
+            202
+          ],
+          [
+            230,
+            211
+          ],
+          [
+            226,
+            216
+          ],
+          [
+            233,
+            220
+          ],
+          [
+            235,
+            227
+          ],
+          [
+            236,
+            229
+          ],
+          [
+            236,
+            234
+          ],
+          [
+            232,
+            238
+          ],
+          [
+            217,
+            238
+          ],
+          [
+            211,
+            228
+          ],
+          [
+            205,
+            215
+          ],
+          [
+            201,
+            200
+          ]
+        ]
+      }
     },
     "wolf_old_rope_play.png": {
       "age": "old",
@@ -3626,22 +6738,26 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "7026bafaa4c4b3bfe4e0ce852d59f54973271461e599d1dfe0b6cdcac08380dd",
+      "sha256": "1719eca9f0fa580ca99bc2d7d227e95467c12a9b43f15331de8e6e15ee0d43a0",
       "source": "objects",
       "source_cells": [
         [
-          1149,
-          389,
-          1436,
-          640
+          1151,
+          388,
+          1434,
+          639
         ]
       ],
       "derivation": "one supplied object interaction pose",
       "checker_shadow_cleanup_band": [
         0,
         188,
-        287,
+        283,
         251
+      ],
+      "audited_background_seed": [
+        75,
+        185
       ]
     },
     "wolf_old_scratcher_play.webp": {
@@ -3651,14 +6767,14 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "1a77ae2ff86d57d59dc04e34c4363ecef8db4cc607c931122535041c09263b2d",
+      "sha256": "ec60ed63fae2b3b560afaa0e2c64341ed052e32a0c6d8f0bf485f806e6ed4eec",
       "source": "objects",
       "source_cells": [
         [
           157,
           681,
           531,
-          925
+          924
         ]
       ],
       "derivation": "fixed scratcher removed; one supplied wolf pose"
@@ -3670,17 +6786,133 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "b538e3d9ab7779920a6e810a641f5102f340c309bce7faafff3221744a689eac",
+      "sha256": "f6e66499884d80399f12303a04a108c7adfa2c038cc700dad811849f4b8be502",
       "source": "objects",
       "source_cells": [
         [
           541,
-          689,
-          911,
-          925
+          687,
+          908,
+          924
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        197,
+        367,
+        237
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          226,
+          30,
+          301,
+          166
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            263.5,
+            45.5,
+            5.2,
+            5.2
+          ],
+          [
+            268.4,
+            66.7,
+            13.78,
+            13.78
+          ],
+          [
+            279.34,
+            117.19,
+            12.56,
+            12.56
+          ],
+          [
+            285.43,
+            159.48,
+            8.15,
+            8.15
+          ],
+          [
+            276.76,
+            175.33,
+            6.09,
+            6.09
+          ]
+        ],
+        "protected_source_foam_polygon": [
+          [
+            232,
+            170
+          ],
+          [
+            243,
+            166
+          ],
+          [
+            247,
+            166
+          ],
+          [
+            250,
+            169
+          ],
+          [
+            258,
+            169
+          ],
+          [
+            265,
+            174
+          ],
+          [
+            265,
+            183
+          ],
+          [
+            273,
+            185
+          ],
+          [
+            274,
+            191
+          ],
+          [
+            270,
+            198
+          ],
+          [
+            282,
+            201
+          ],
+          [
+            285,
+            210
+          ],
+          [
+            279,
+            216
+          ],
+          [
+            272,
+            216
+          ],
+          [
+            260,
+            208
+          ],
+          [
+            249,
+            197
+          ],
+          [
+            247,
+            188
+          ]
+        ]
+      }
     },
     "wolf_old_towel.webp": {
       "age": "old",
@@ -3689,17 +6921,23 @@
       "frames": 1,
       "width": 256,
       "height": 256,
-      "sha256": "13c4aeca5df899aaaa8d55c86f140bdf8cdecd3d83074cbd1988bc952d587812",
+      "sha256": "9b05d34e97a3a927daedfbdb47c1a66d4fe8d296b9c803137c3665abfdfdb848",
       "source": "objects",
       "source_cells": [
         [
-          921,
-          689,
-          1285,
-          925
+          918,
+          687,
+          1286,
+          924
         ]
       ],
-      "derivation": "one supplied object interaction pose"
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        197,
+        368,
+        237
+      ]
     }
   },
   "portraits": {
@@ -3719,7 +6957,7 @@
         ]
       ],
       "derivation": "head crop of same-age idle_down",
-      "sha256": "bfd42a570e36a33a5a9c52721687357dddaf288609ada1986d143c2ef17f9e93"
+      "sha256": "06cceb0fee8193288cc84ae332bdcde20c2c00ed76c502bc8412ca8363993c4e"
     },
     "wolf_teen_promenade_token.png": {
       "age": "teen",
@@ -3737,7 +6975,7 @@
         ]
       ],
       "derivation": "head crop of same-age idle_down",
-      "sha256": "8d7a185bed6194678f46b3de4f8eeb652555b9c7d7fed868dab4e9decd57d845"
+      "sha256": "c3fe694c7b0e7aa318ef3acba2bdf5702098e217b4bf4eea4cb7ec3224a75d16"
     },
     "wolf_adult_promenade_token.png": {
       "age": "adult",
@@ -3755,7 +6993,7 @@
         ]
       ],
       "derivation": "head crop of same-age idle_down",
-      "sha256": "ea4e234557d0eb217511341c9efd7029339247abe34b0c91a6fcc50d0f2e1708"
+      "sha256": "0c22366585abc541d9448d00dcb50ecac8ba5ba599e430687e21275246c223b1"
     },
     "wolf_old_promenade_token.png": {
       "age": "old",
@@ -3773,7 +7011,7 @@
         ]
       ],
       "derivation": "head crop of same-age idle_down",
-      "sha256": "b4dc4e31fe3c45b0c559a8777649a85876e81f726d9aa5e26cde7b19464b35b8"
+      "sha256": "932ad44a00b8e1734bb6a4213818d80c8d98a55609c119610d08d6d7392ad321"
     }
   },
   "notes": [
@@ -3783,26 +7021,28 @@
     "Run uses the six supplied walking poses, as for leopard movement.",
     "Rope and scratcher each have one supplied pose; engine motion animates the interaction.",
     "Detached bubbles and mood symbols are safely repositioned after body normalization.",
+    "v0.8.7 cutout audit: printed borders/digits, annotated grey ground and blue checker gaps are excluded; closed white fur is preserved.",
+    "Only the one-source-pixel exterior antialias ring is unmatted against adjacent checker colours; interior RGB is unchanged.",
     "No drawing is shared across age packs or between species."
   ],
   "normalization": {
     "cub": {
-      "largest_component_target_area": 17694,
+      "largest_component_target_area": 17439,
       "baseline": 240,
       "method": "same largest-component visual mass for every pose, safe complete silhouette"
     },
     "teen": {
-      "largest_component_target_area": 15021,
+      "largest_component_target_area": 15175,
       "baseline": 240,
       "method": "same largest-component visual mass for every pose, safe complete silhouette"
     },
     "adult": {
-      "largest_component_target_area": 13929,
+      "largest_component_target_area": 13896,
       "baseline": 240,
       "method": "same largest-component visual mass for every pose, safe complete silhouette"
     },
     "old": {
-      "largest_component_target_area": 16402,
+      "largest_component_target_area": 16275,
       "baseline": 240,
       "method": "same largest-component visual mass for every pose, safe complete silhouette"
     }

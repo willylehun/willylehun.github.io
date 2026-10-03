@@ -134,39 +134,18 @@ def _alpha_bbox(im:Image.Image):
     return im.getchannel("A").getbbox()
 
 def _decontaminate_alpha_edges(im:Image.Image)->Image.Image:
-    """Supprime les halos de détourage sans rogner le personnage."""
+    """Nettoie seulement l'alpha résiduel, sans repeindre les vrais contours.
+
+    Les anciennes passes propageaient les couleurs des pixels opaques à tous
+    les pixels semi-transparents. Cela effaçait notamment les traits noirs
+    des oreilles et étalait le pelage gris du vieux léopard en halo.
+    Les RGB d'origine doivent rester inchangés tant que le pixel est visible.
+    Les poches de fond sont corrigées séparément, dans des zones annotées.
+    """
     arr=np.array(im.convert("RGBA")).copy()
     alpha=arr[:,:,3]
     arr[alpha<=2]=0
-    alpha=arr[:,:,3]
     arr[:,:,3][alpha>=250]=255
-    alpha=arr[:,:,3]
-
-    solid=alpha>=235
-    pending=(alpha>2)&(alpha<235)
-    filled=solid.copy()
-    h,w=alpha.shape
-
-    for _ in range(8):
-        sums=np.zeros((h,w,3),dtype=np.int32)
-        counts=np.zeros((h,w),dtype=np.int16)
-        for dy,dx in ((-1,0),(1,0),(0,-1),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)):
-            ys0=max(0,-dy); ys1=min(h,h-dy)
-            xs0=max(0,-dx); xs1=min(w,w-dx)
-            yd0=ys0+dy; yd1=ys1+dy
-            xd0=xs0+dx; xd1=xs1+dx
-            m=filled[ys0:ys1,xs0:xs1]
-            if not m.any():
-                continue
-            rgb=arr[ys0:ys1,xs0:xs1,:3].astype(np.int32)
-            sums[yd0:yd1,xd0:xd1]+=rgb*m[:,:,None]
-            counts[yd0:yd1,xd0:xd1]+=m.astype(np.int16)
-        take=pending & (~filled) & (counts>0)
-        if not take.any():
-            break
-        arr[take,:3]=(sums[take]/counts[take,None]).astype(np.uint8)
-        filled[take]=True
-
     arr[arr[:,:,3]==0,:3]=0
     return Image.fromarray(arr,"RGBA")
 
