@@ -43,10 +43,20 @@ public class PromenadeLifecycleGraphicsTest {
  @Test public void lionFemaleTeen(){scenario(PetSpecies.LION,"female",MainActivity.PetStage.TEEN,MainActivity.CUB+10_000L);}
  @Test public void lionFemaleAdult(){scenario(PetSpecies.LION,"female",MainActivity.PetStage.ADULT,MainActivity.CUB+MainActivity.TEEN+10_000L);}
  @Test public void lionFemaleOld(){scenario(PetSpecies.LION,"female",MainActivity.PetStage.OLD,MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+10_000L);}
+ @Test public void foxCub(){scenario(PetSpecies.FOX,MainActivity.PetStage.CUB,10_000L);}
+ @Test public void foxTeen(){scenario(PetSpecies.FOX,MainActivity.PetStage.TEEN,MainActivity.CUB+10_000L);}
+ @Test public void foxAdult(){scenario(PetSpecies.FOX,MainActivity.PetStage.ADULT,MainActivity.CUB+MainActivity.TEEN+10_000L);}
+ @Test public void foxOld(){scenario(PetSpecies.FOX,MainActivity.PetStage.OLD,MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+10_000L);}
+ @Test public void bearCub(){scenario(PetSpecies.BEAR,MainActivity.PetStage.CUB,10_000L);}
+ @Test public void bearTeen(){scenario(PetSpecies.BEAR,MainActivity.PetStage.TEEN,MainActivity.CUB+10_000L);}
+ @Test public void bearAdult(){scenario(PetSpecies.BEAR,MainActivity.PetStage.ADULT,MainActivity.CUB+MainActivity.TEEN+10_000L);}
+ @Test public void bearOld(){scenario(PetSpecies.BEAR,MainActivity.PetStage.OLD,MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT+10_000L);}
 
  void scenario(String species,MainActivity.PetStage stage,long age){scenario(species,"female",stage,age);}
 
  void scenario(String species,String sex,MainActivity.PetStage stage,long age){
+  boolean expandedChecks=PetSpecies.LION.equals(species)||PetSpecies.FOX.equals(species)||PetSpecies.BEAR.equals(species);
+  String capturePrefix=species+(PetSpecies.LION.equals(species)?"-"+sex:"")+"-"+stage.name().toLowerCase(Locale.ROOT);
   Context app=RuntimeEnvironment.getApplication();
   for(String prefs:new String[]{"pet_profiles_v079","pet","pet_0"})app.getSharedPreferences(prefs,Context.MODE_PRIVATE).edit().clear().commit();
   PetProfileStore.ensureMigrated(app);
@@ -62,7 +72,7 @@ public class PromenadeLifecycleGraphicsTest {
   assertEquals(View.VISIBLE,main.petView.getVisibility());
   assertTrue("Real animal must affect the initial native scene",animalPixels(main)>100);
   alphaIsPreserved(main,"initial");
-  if(PetSpecies.LION.equals(species))AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
+  if(expandedChecks)AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
 
   List<String> failures=new ArrayList<>();
   main.startPromenade(null);
@@ -79,7 +89,7 @@ public class PromenadeLifecycleGraphicsTest {
   assertTrue("Promenade portrait preserves transparency",trip.mapView.token.hasAlpha());
   assertEquals(0,Color.alpha(trip.mapView.token.getPixel(0,0)));
   if(!PetSpecies.LEOPARD.equals(species))assertTrue(trip.getResources().getResourceEntryName(trip.mapView.tokenRes).startsWith(species+(PetSpecies.LION.equals(species)?"_"+sex:"")+"_"+stage.name().toLowerCase(Locale.ROOT)+"_"));
-  if(PetSpecies.LION.equals(species))TigerIntegrationGraphicsTest.capture(trip,"lion-"+sex+"-"+stage.name().toLowerCase(Locale.ROOT)+"-promenade");
+  if(expandedChecks)TigerIntegrationGraphicsTest.capture(trip,capturePrefix+"-promenade");
   assertTrue(main.promenadeActive());
   Button back=findButton(trip.getWindow().getDecorView(),"Retour au jardin");
   assertNotNull(back); assertTrue(back.performClick());
@@ -90,7 +100,7 @@ public class PromenadeLifecycleGraphicsTest {
   main.updatePetPosition(); checkHidden(main,"position-update",failures);
   main.animateAuto(); checkHidden(main,"animation-tick",failures);
   main.root.requestLayout(); settle(main); checkHidden(main,"layout-pass",failures);
-  if(PetSpecies.LION.equals(species)){
+  if(expandedChecks){
    String[] rooms={"salon","cuisine","bain","jardin"};
    for(int roomIndex=0;roomIndex<rooms.length;roomIndex++){
     assertTrue(main.roomsBtn.performClick());
@@ -102,6 +112,8 @@ public class PromenadeLifecycleGraphicsTest {
     settle(main);checkHidden(main,"room-"+rooms[roomIndex],failures);
    }
   }
+  if(PetSpecies.FOX.equals(species)||PetSpecies.BEAR.equals(species))
+      TigerIntegrationGraphicsTest.capture(main,capturePrefix+"-promenade-home-empty");
 
   // Activity recreation while the profile still records a running promenade.
   controller.pause().stop().destroy();
@@ -118,11 +130,13 @@ public class PromenadeLifecycleGraphicsTest {
   assertEquals("Animal returns after the trip",View.VISIBLE,main.petView.getVisibility());
   assertTrue("Returned animal must affect the native scene",animalPixels(main)>100);
   alphaIsPreserved(main,"returned");
-  if(PetSpecies.LION.equals(species))AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
+  if(expandedChecks)AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
+  if(PetSpecies.FOX.equals(species)||PetSpecies.BEAR.equals(species))
+      TigerIntegrationGraphicsTest.capture(main,capturePrefix+"-promenade-home-returned");
   main.handler.removeCallbacksAndMessages(null);
   controller.pause().stop().destroy();
   assertTrue(species+" "+stage+": "+failures,failures.isEmpty());
-  System.out.println("NATIVE_LIFECYCLE_OK species="+species+" sex="+sex+" stage="+stage+" checks="+(PetSpecies.LION.equals(species)?10:6)+" drawable-alpha=true");
+  System.out.println("NATIVE_LIFECYCLE_OK species="+species+" sex="+sex+" stage="+stage+" checks="+(expandedChecks?10:6)+" drawable-alpha=true");
  }
 
  static void settle(Activity activity){

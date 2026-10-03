@@ -230,6 +230,46 @@ LION_IDENTITY_TEST = r"""
 """
 
 
+FOREST_IDENTITY_TEST = r"""
+    static void forestIdentitySwitch(String fromSpecies,String fromSex,String toSpecies,String toSex,int stage){
+        for(boolean away:new boolean[]{false,true}){
+            MainActivity a=actor(fromSpecies,fromSex,stage);
+            if(away)depart(a);
+            int previousIdle=a.idleDownDrawable();
+            a.showWalkFrame(MainActivity.WalkMode.FRONT);
+            a.loadFaceMoodFrames();
+            a.loadActionFrames(MainActivity.ActionAnim.JUMP);
+            a.specialPoseRes=CareSprites.forStage(fromSpecies,fromSex,a.petStage()).soap;
+            a.specialPoseStage=a.petStage();
+            a.manualUntil=System.currentTimeMillis()+1000L;
+            a.walking=true;
+            int livingCancels=a.games.cancels,gardenCancels=a.gardenGames.cancels;
+            a.petSpecies=toSpecies;a.petSex=toSex;
+            a.syncVisualStage();
+            check(a.visualPack==CharacterSprites.forStage(toSpecies,toSex,a.petStage()),
+                "same-age animal switch selects the target animal's exact pack singleton");
+            check(a.currentWalkFrames==null&&a.faceMoodFrames==null&&a.actionFrames==null,
+                "same-age animal switch clears prior movement, mood and action images");
+            check(a.specialPoseRes==0&&!a.walking&&a.manualUntil==0,
+                "same-age animal switch clears the previous care pose and pending movement");
+            check(a.games.cancels>livingCancels&&a.gardenGames.cancels>gardenCancels,
+                "same-age animal switch cancels both former games");
+            check(a.petView.getDrawable()==null,"previous animal image is discarded immediately");
+            a.ensurePetImage();
+            check(a.idleDownDrawable()!=previousIdle,"different species have different age-specific idle resources");
+            if(away){
+                hidden(a,"animal switch preserves absence during promenade");
+                a.sp.edit().putLong("promenadeStart",System.currentTimeMillis()-PromenadeActivity.DURATION_MS-1000L).apply();
+                a.ensurePetImage();
+            }
+            visible(a,"selected animal renders at home or after its timed return");
+            check(((Integer)a.petView.getDrawable()).intValue()==CharacterSprites.forStage(toSpecies,toSex,a.petStage()).idleDown,
+                "return after a same-age animal switch never reuses the previous animal image");
+        }
+    }
+"""
+
+
 TEST = r"""package com.byw.monpetitleopard;
 import java.util.*;
 
@@ -374,6 +414,7 @@ final class PromenadeVisibilityContract {
             "return loads grown species-specific idle image");
     }
     EXTRA_IDENTITY_TEST
+    EXTRA_SPECIES_TEST
     public static void main(String[] args){
         for(String[] variant:new String[][]{VARIANTS})for(int stage=0;stage<4;stage++){
             String species=variant[0],sex=variant[1];
@@ -383,6 +424,7 @@ final class PromenadeVisibilityContract {
             ageTransitionWhileAway(species,sex,stage);
             EXTRA_IDENTITY_CALL
         }
+        EXTRA_SPECIES_CALL
         if(!failures.isEmpty()){
             for(String failure:failures)System.err.println("FAIL: "+failure);
             throw new AssertionError(failures.size()+" of "+checks+" promenade visibility assertions failed");
@@ -432,8 +474,8 @@ def run(source_ref=None):
         "CharacterSprites", "GameSprites", "CareSprites", "GardenSprites", "PetSpecies", "SpriteMotion",
     ]}
     # A source-ref regression must use exactly the species and overloads that
-    # existed in that tree. The current tree includes both lion appearances.
-    species = [name for name in ("leopard", "wolf", "tiger", "lion")
+    # existed in that tree. The current tree includes both lion appearances, fox and bear.
+    species = [name for name in ("leopard", "wolf", "tiger", "lion", "fox", "bear")
                if f"R.drawable.{name}_" in production["CharacterSprites"]]
     variants = [(name, sex) for name in species
                 for sex in (("male", "female") if name == "lion" else ("male",))]
@@ -443,6 +485,13 @@ def run(source_ref=None):
     contract = contract.replace("EXTRA_IDENTITY_TEST", LION_IDENTITY_TEST if "lion" in species else "")
     contract = contract.replace("EXTRA_IDENTITY_CALL",
         'if("lion".equals(species))lionIdentitySwitch(sex,stage);' if "lion" in species else "")
+    forest_available = {"fox", "bear"}.issubset(species)
+    contract = contract.replace("EXTRA_SPECIES_TEST", FOREST_IDENTITY_TEST if forest_available else "")
+    contract = contract.replace("EXTRA_SPECIES_CALL", r'''for(String[] pair:new String[][]{
+        {"leopard","male","fox","female"},{"fox","female","leopard","male"},
+        {"fox","male","bear","female"},{"bear","female","fox","male"},
+        {"lion","female","bear","male"},{"bear","male","lion","female"}})
+        for(int stage=0;stage<4;stage++)forestIdentitySwitch(pair[0],pair[1],pair[2],pair[3],stage);''' if forest_available else "")
     if "String species,String sex,MainActivity.PetStage stage" not in production["CharacterSprites"]:
         contract = contract.replace("forStage(species,sex,", "forStage(species,")
         support = support.replace("forStage(species,sex,", "forStage(species,")

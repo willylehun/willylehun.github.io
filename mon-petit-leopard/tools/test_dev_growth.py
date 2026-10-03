@@ -1,7 +1,7 @@
 """Execute the developer growth control, persistence and real click handler.
 
 Compiles production Java with recording UI stubs. Boundary cases use a fixed
-clock; profile cases exercise the actual six-slot store and all four species, including both lion sexes.
+clock; profile cases exercise the actual six-slot store and all six species, including both lion sexes.
 """
 
 import argparse
@@ -63,12 +63,14 @@ final class DevGrowthContract {
         System.out.println("Growth boundaries: 15 cases, exact stage starts and no OLD/ENDED advance: PASS");
     }
 
-    static MemoryContext populated(){
+    static MemoryContext populated(int batch){
         MemoryContext context=new MemoryContext();
         PetProfileStore.ensureMigrated(context);
         long now=System.currentTimeMillis();
-        String[] species={"leopard","wolf","tiger","lion","lion","leopard"};
-        String[] sexes={"male","female","male","male","female","female"};
+        String[] species=batch==0?new String[]{"leopard","wolf","tiger","lion","lion","leopard"}:
+            new String[]{"fox","fox","bear","bear","lion","lion"};
+        String[] sexes=batch==0?new String[]{"male","female","male","male","female","female"}:
+            new String[]{"male","female","male","female","male","female"};
         for(int slot=0;slot<PetProfileStore.MAX_PROFILES;slot++){
             PetProfileStore.createAnimal(context,slot,species[slot],sexes[slot],"Test "+slot);
             context.pet(slot).edit().putLong("born",now-1000L)
@@ -83,7 +85,10 @@ final class DevGrowthContract {
     }
 
     static void profilesAndClickHandler(){
-        MemoryContext context=populated();
+        for(int batch=0;batch<2;batch++)profilesAndClickHandler(populated(batch));
+        System.out.println("Growth clicks: twelve profiles across six species and both sexes, 36 transitions, persistence/isolation and 240 bounded taps: PASS");
+    }
+    static void profilesAndClickHandler(MemoryContext context){
         for(int slot=0;slot<PetProfileStore.MAX_PROFILES;slot++){
             MainActivity activity=new MainActivity(context,slot);
             for(MainActivity.PetStage expected:new MainActivity.PetStage[]{
@@ -138,11 +143,10 @@ final class DevGrowthContract {
         ended.advanceGrowthForTesting();
         equal(context.snapshot(),snapshot,"completed profile is never revived");
         equal(ended.syncCalls,0,"completed profile is not visually restarted");
-        System.out.println("Growth clicks: six profiles across four species and both lion sexes, 18 transitions, persistence/isolation and 120 bounded taps: PASS");
     }
 
     static void disabledControl(){
-        MemoryContext context=populated();
+        MemoryContext context=populated(0);
         MainActivity activity=new MainActivity(context,0);
         Map<String,Map<String,?>> snapshot=context.snapshot();
         check(DevGrowth.nextStage(activity.born,System.currentTimeMillis())==null,

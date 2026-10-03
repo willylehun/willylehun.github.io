@@ -60,6 +60,24 @@ final class GardenSprites {
     private static final Pack TIGER_OLD=new Pack("tiger",MainActivity.PetStage.OLD,
         R.drawable.tiger_old_scratcher_play,1);
 
+    private static final Pack FOX_CUB=new Pack("fox",MainActivity.PetStage.CUB,
+        R.drawable.fox_cub_scratcher_play,1);
+    private static final Pack FOX_TEEN=new Pack("fox",MainActivity.PetStage.TEEN,
+        R.drawable.fox_teen_scratcher_play,1);
+    private static final Pack FOX_ADULT=new Pack("fox",MainActivity.PetStage.ADULT,
+        R.drawable.fox_adult_scratcher_play,1);
+    private static final Pack FOX_OLD=new Pack("fox",MainActivity.PetStage.OLD,
+        R.drawable.fox_old_scratcher_play,1);
+
+    private static final Pack BEAR_CUB=new Pack("bear",MainActivity.PetStage.CUB,
+        R.drawable.bear_cub_scratcher_play,1);
+    private static final Pack BEAR_TEEN=new Pack("bear",MainActivity.PetStage.TEEN,
+        R.drawable.bear_teen_scratcher_play,1);
+    private static final Pack BEAR_ADULT=new Pack("bear",MainActivity.PetStage.ADULT,
+        R.drawable.bear_adult_scratcher_play,1);
+    private static final Pack BEAR_OLD=new Pack("bear",MainActivity.PetStage.OLD,
+        R.drawable.bear_old_scratcher_play,1);
+
     private static final Pack LION_MALE_CUB=new Pack("lion","male",MainActivity.PetStage.CUB,
         R.drawable.lion_male_cub_scratcher_play,1);
     private static final Pack LION_MALE_TEEN=new Pack("lion","male",MainActivity.PetStage.TEEN,
@@ -101,6 +119,24 @@ final class GardenSprites {
                 case OLD:return TIGER_OLD;
             }
             throw new IllegalStateException("Aucun pack jardin tigre pour l'âge "+stage);
+        }
+        if("fox".equals(species)){
+            switch(stage){
+                case CUB:return FOX_CUB;
+                case TEEN:return FOX_TEEN;
+                case ADULT:return FOX_ADULT;
+                case OLD:return FOX_OLD;
+            }
+            throw new IllegalStateException("Aucun pack jardin renard pour l'âge "+stage);
+        }
+        if("bear".equals(species)){
+            switch(stage){
+                case CUB:return BEAR_CUB;
+                case TEEN:return BEAR_TEEN;
+                case ADULT:return BEAR_ADULT;
+                case OLD:return BEAR_OLD;
+            }
+            throw new IllegalStateException("Aucun pack jardin ours pour l'âge "+stage);
         }
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);

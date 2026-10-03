@@ -1,12 +1,13 @@
 # Packs de sprites — Mon Petit Léopard
 
-## Contrat actuel — v0.8.10
+## Contrat actuel — v0.8.11
 
-Les quatre espèces utilisent le même moteur de jeu et des ressources indépendantes.
+Les six espèces utilisent le même moteur de jeu et des ressources indépendantes.
 Le nom `leopard` reste celui des sauvegardes historiques ; `wolf` identifie le loup
-et `tiger` le tigre. Le lion et la lionne appartiennent à la même espèce `lion` ;
-leur sexe enregistré (`male` ou `female`) sélectionne leur apparence. L'ajout du
-lion ne migre ni n'efface les profils existants.
+et `tiger` le tigre. `fox` identifie le renard et `bear` l'ours brun.
+Le lion et la lionne appartiennent à la même espèce `lion` ;
+leur sexe enregistré (`male` ou `female`) sélectionne leur apparence. Les nouveaux
+animaux utilisent les profils existants sans migration ni effacement.
 
 | Espèce / apparence | Petit | Ado | Adulte | Vieux |
 | --- | --- | --- | --- | --- |
@@ -15,25 +16,28 @@ lion ne migre ni n'efface les profils existants.
 | Tigre | `res-tiger-cub` | `res-tiger-teen` | `res-tiger-adult` | `res-tiger-old` |
 | Lion mâle | `res-lion-male-cub` | `res-lion-male-teen` | `res-lion-male-adult` | `res-lion-male-old` |
 | Lionne | `res-lion-female-cub` | `res-lion-female-teen` | `res-lion-female-adult` | `res-lion-female-old` |
+| Renard | `res-fox-cub` | `res-fox-teen` | `res-fox-adult` | `res-fox-old` |
+| Ours brun | `res-bear-cub` | `res-bear-teen` | `res-bear-adult` | `res-bear-old` |
 
 Chaque frame runtime fait **256 × 256 px**, avec des marges transparentes.
 Haut montre le dos, bas montre la face. Les marches gauche et droite utilisent
 leurs images distinctes. Les chargeurs refusent les espèces inconnues et ne
 substituent jamais une espèce, un sexe ou un âge lorsqu'une ressource manque.
-Les anciennes signatures sans sexe restent disponibles pour les trois espèces
-historiques ; une requête de sprites lion sans sexe valide est rejetée.
+Les signatures sans sexe restent disponibles pour les espèces qui ne possèdent
+pas de variante visuelle mâle/femelle ; une requête de sprites lion sans sexe
+valide est rejetée.
 
-| Animation | Léopard | Loup | Tigre | Lion et lionne, chacun |
-| --- | ---: | ---: | ---: | ---: |
-| Idle, par direction | 1 | 1 | 1 | 1 |
-| Marche et course, par direction | 6 | 6 | 6 | 6 |
-| Saut | 5 | 5 | 5 | 5 |
-| Mange / dort | 3 | 3 | 3 | 3 |
-| Humeurs | 12 | 12 | 12 | 12 |
-| Rapport d'objet / soin | 1 | 1 | 1 | 1 |
-| Corde | 5 | 1 | 1 | 1 |
-| Griffoir | 2 | 1 | 1 | 1 |
-| Biberon, petit uniquement | 1 | 1 | 1 | 1 |
+| Animation | Léopard | Chaque autre apparence : loup, tigre, lion, lionne, renard, ours |
+| --- | ---: | ---: |
+| Idle, par direction | 1 | 1 |
+| Marche et course, par direction | 6 | 6 |
+| Saut | 5 | 5 |
+| Mange / dort | 3 | 3 |
+| Humeurs | 12 | 12 |
+| Rapport d'objet / soin | 1 | 1 |
+| Corde | 5 | 1 |
+| Griffoir | 2 | 1 |
+| Biberon, petit uniquement | 1 | 1 |
 
 Les huit planches loup originales sont conservées dans `source-assets/wolf-v086/`.
 `tools/prepare_v086_wolf_assets.py` prépare leurs découpes et la vraie transparence,
@@ -44,16 +48,44 @@ uniques : le moteur fournit le mouvement sans inventer de nouvelles images.
 
 Le choix d'animal, l'en-tête, les étapes sexe/nom et le jeton de promenade suivent
 l'espèce, le sexe et l'âge du profil. Les besoins, restrictions par âge, objets,
-récompenses, goûts, lassitude et durées restent communs aux quatre espèces. Les
+récompenses, goûts, lassitude et durées restent communs aux six espèces. Les
 activités visuelles en cours sont arrêtées lorsque le pack change, y compris lors
 d'un changement de sexe du lion à âge identique, pour ne conserver aucun ancien sprite.
 
 Le test `test_wolf_behavior.py` conserve son nom historique et vérifie désormais
-les quatre espèces et les deux sexes. Les validateurs `validate_wolf_sprite_packs.py`,
+les six espèces et les deux sexes. Les validateurs `validate_wolf_sprite_packs.py`,
 `validate_tiger_sprite_packs.py` et `validate_lion_sprite_packs.py` complètent les
-contrats du léopard. Le workflow prépare les quatre espèces avant les tests et le
+contrats du léopard ; `validate_forest_sprite_packs.py` contrôle le renard et l'ours.
+Le workflow prépare les six espèces avant les tests et le
 build. Les manifestes par espèce
 décrivent la provenance des découpes.
+
+### Intégration du renard et de l'ours brun v0.8.11
+
+Le choix initial propose Léopard, Loup, Tigre, Lion, Renard et Ours. Le parcours
+de choix du sexe et du nom, les six emplacements, les sauvegardes et les règles
+de reproduction restent partagés. Le renard et l'ours utilisent chacun quatre
+apparences d'âge ; leurs deux sexes utilisent les mêmes images fournies, tout
+en conservant leur sexe dans le profil. Les apparences du lion restent séparées.
+
+Les seize PNG originaux sont conservés sans modification dans
+`source-assets/fox-v0811/` et `source-assets/bear-v0811/`, avec noms et empreintes
+dans leurs `sources.json`. Les deux planches du petit renard font 1448 × 1086 px ;
+les autres sources font 1536 × 1024 px. Chaque géométrie de découpe correspond à
+sa planche, sans découpage proportionnel aveugle ni substitution d'une autre espèce.
+
+`prepare_v0811_fox_assets.py` et `prepare_v0811_bear_assets.py` préparent chacun
+quatre packs totalisant 113 fichiers : 109 ressources de jeu et quatre portraits de
+promenade. Leurs manifestes `{fox,bear}-sprite-manifest.json` conservent provenance,
+découpes, orientations et empreintes. L'option `--check` vérifie la reconstruction
+sans modifier les ressources. Les poses de marche, humeurs, soins, jeux et objets
+sont normalisées sur le même canevas runtime que les animaux existants.
+
+Les chargeurs utilisent toujours l'espèce et l'âge du profil actif. Aucun
+coefficient de besoin, de préférence, de récompense, de durée ou de restriction
+par âge n'est ajouté pour le renard ou l'ours. Les tests comparent les effets des
+objets au léopard et suivent les transitions de profil, de croissance et de
+promenade, y compris le retour à la maison.
 
 ### Intégration du lion et de la lionne v0.8.10
 
@@ -135,7 +167,7 @@ d'historique sont sauvegardés, puis les actions précédentes sont annulées et
 les packs ainsi que le portrait sont actualisés immédiatement.
 
 `tools/test_promenade_visibility.py` couvre les retours anticipés, les callbacks
-de rendu et la fin de promenade pour les quatre espèces aux quatre âges, ainsi
+de rendu et la fin de promenade pour les six espèces aux quatre âges, ainsi
 que les changements d'apparence entre lion mâle et lionne à âge identique.
 `tools/test_dev_growth.py` couvre les frontières d'âge, les profils mixtes, la
 sauvegarde et l'inactivité du bouton au dernier stade. Ces tests font partie de

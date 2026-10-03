@@ -497,16 +497,16 @@ assert 'getSharedPreferences("pet",Context.MODE_PRIVATE)' in profiles
 assert 'copyAll(legacy,target)' in profiles
 assert 'createLeopard' in profiles
 assert 'PetSpecies.iconRes(species(context,slot),sex(context,slot),age)' in profiles
-for animal in ['leopard','wolf','tiger','lion_male','lion_female']:
+for animal in ['leopard','wolf','tiger','lion_male','lion_female','fox','bear']:
     for age in ['cub','teen','adult','old']:
         assert f'R.drawable.{animal}_{age}_idle_down' in species
 
 assert 'Choisis ton animal' in chooser
-# The four compact cards obtain their visible titles from the species registry.
+# The six compact cards obtain their visible titles from the species registry.
 assert 'name.setText(PetSpecies.label(species));' in chooser
 assert 'Léopard' in species
 assert re.findall(r'addAnimalCard\(choices,slot,\d,PetSpecies\.(\w+)\)',chooser)==[
-    'LEOPARD','WOLF','TIGER','LION']
+    'LEOPARD','WOLF','TIGER','LION','FOX','BEAR']
 assert 'Choisis le sexe de l’animal' in chooser
 assert '♂  Mâle' in chooser and '♀  Femelle' in chooser
 assert 'Quel est son nom ?' in chooser

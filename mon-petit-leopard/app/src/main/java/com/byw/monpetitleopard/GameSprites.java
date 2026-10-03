@@ -164,6 +164,62 @@ final class GameSprites {
         R.drawable.tiger_old_fetch_yarn,R.drawable.tiger_old_fetch_mouse,
         R.drawable.tiger_old_fetch_plush,R.drawable.tiger_old_rope_play,1);
 
+    private static final Pack FOX_CUB=new Pack("fox",MainActivity.PetStage.CUB,
+        R.drawable.fox_cub_run_down,R.drawable.fox_cub_run_left,
+        R.drawable.fox_cub_run_right,R.drawable.fox_cub_run_up,
+        R.drawable.fox_cub_fetch_ball,R.drawable.fox_cub_fetch_tennis,
+        R.drawable.fox_cub_fetch_yarn,R.drawable.fox_cub_fetch_mouse,
+        R.drawable.fox_cub_fetch_plush,R.drawable.fox_cub_rope_play,1);
+
+    private static final Pack FOX_TEEN=new Pack("fox",MainActivity.PetStage.TEEN,
+        R.drawable.fox_teen_run_down,R.drawable.fox_teen_run_left,
+        R.drawable.fox_teen_run_right,R.drawable.fox_teen_run_up,
+        R.drawable.fox_teen_fetch_ball,R.drawable.fox_teen_fetch_tennis,
+        R.drawable.fox_teen_fetch_yarn,R.drawable.fox_teen_fetch_mouse,
+        R.drawable.fox_teen_fetch_plush,R.drawable.fox_teen_rope_play,1);
+
+    private static final Pack FOX_ADULT=new Pack("fox",MainActivity.PetStage.ADULT,
+        R.drawable.fox_adult_run_down,R.drawable.fox_adult_run_left,
+        R.drawable.fox_adult_run_right,R.drawable.fox_adult_run_up,
+        R.drawable.fox_adult_fetch_ball,R.drawable.fox_adult_fetch_tennis,
+        R.drawable.fox_adult_fetch_yarn,R.drawable.fox_adult_fetch_mouse,
+        R.drawable.fox_adult_fetch_plush,R.drawable.fox_adult_rope_play,1);
+
+    private static final Pack FOX_OLD=new Pack("fox",MainActivity.PetStage.OLD,
+        R.drawable.fox_old_run_down,R.drawable.fox_old_run_left,
+        R.drawable.fox_old_run_right,R.drawable.fox_old_run_up,
+        R.drawable.fox_old_fetch_ball,R.drawable.fox_old_fetch_tennis,
+        R.drawable.fox_old_fetch_yarn,R.drawable.fox_old_fetch_mouse,
+        R.drawable.fox_old_fetch_plush,R.drawable.fox_old_rope_play,1);
+
+    private static final Pack BEAR_CUB=new Pack("bear",MainActivity.PetStage.CUB,
+        R.drawable.bear_cub_run_down,R.drawable.bear_cub_run_left,
+        R.drawable.bear_cub_run_right,R.drawable.bear_cub_run_up,
+        R.drawable.bear_cub_fetch_ball,R.drawable.bear_cub_fetch_tennis,
+        R.drawable.bear_cub_fetch_yarn,R.drawable.bear_cub_fetch_mouse,
+        R.drawable.bear_cub_fetch_plush,R.drawable.bear_cub_rope_play,1);
+
+    private static final Pack BEAR_TEEN=new Pack("bear",MainActivity.PetStage.TEEN,
+        R.drawable.bear_teen_run_down,R.drawable.bear_teen_run_left,
+        R.drawable.bear_teen_run_right,R.drawable.bear_teen_run_up,
+        R.drawable.bear_teen_fetch_ball,R.drawable.bear_teen_fetch_tennis,
+        R.drawable.bear_teen_fetch_yarn,R.drawable.bear_teen_fetch_mouse,
+        R.drawable.bear_teen_fetch_plush,R.drawable.bear_teen_rope_play,1);
+
+    private static final Pack BEAR_ADULT=new Pack("bear",MainActivity.PetStage.ADULT,
+        R.drawable.bear_adult_run_down,R.drawable.bear_adult_run_left,
+        R.drawable.bear_adult_run_right,R.drawable.bear_adult_run_up,
+        R.drawable.bear_adult_fetch_ball,R.drawable.bear_adult_fetch_tennis,
+        R.drawable.bear_adult_fetch_yarn,R.drawable.bear_adult_fetch_mouse,
+        R.drawable.bear_adult_fetch_plush,R.drawable.bear_adult_rope_play,1);
+
+    private static final Pack BEAR_OLD=new Pack("bear",MainActivity.PetStage.OLD,
+        R.drawable.bear_old_run_down,R.drawable.bear_old_run_left,
+        R.drawable.bear_old_run_right,R.drawable.bear_old_run_up,
+        R.drawable.bear_old_fetch_ball,R.drawable.bear_old_fetch_tennis,
+        R.drawable.bear_old_fetch_yarn,R.drawable.bear_old_fetch_mouse,
+        R.drawable.bear_old_fetch_plush,R.drawable.bear_old_rope_play,1);
+
     private static final Pack LION_MALE_CUB=new Pack("lion","male",MainActivity.PetStage.CUB,
         R.drawable.lion_male_cub_run_down,R.drawable.lion_male_cub_run_left,
         R.drawable.lion_male_cub_run_right,R.drawable.lion_male_cub_run_up,
@@ -243,6 +299,24 @@ final class GameSprites {
                 case OLD:return TIGER_OLD;
             }
             throw new IllegalStateException("Aucun pack de jeu tigre pour l'âge "+stage);
+        }
+        if("fox".equals(species)){
+            switch(stage){
+                case CUB:return FOX_CUB;
+                case TEEN:return FOX_TEEN;
+                case ADULT:return FOX_ADULT;
+                case OLD:return FOX_OLD;
+            }
+            throw new IllegalStateException("Aucun pack de jeu renard pour l'âge "+stage);
+        }
+        if("bear".equals(species)){
+            switch(stage){
+                case CUB:return BEAR_CUB;
+                case TEEN:return BEAR_TEEN;
+                case ADULT:return BEAR_ADULT;
+                case OLD:return BEAR_OLD;
+            }
+            throw new IllegalStateException("Aucun pack de jeu ours pour l'âge "+stage);
         }
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);

@@ -1,0 +1,50 @@
+{
+  "cub": {
+    "main": {
+      "file": "bear_cub_main_source.png",
+      "original_upload": "Image ChatGPT 3 oct. 2026, 18_26_55-1.png",
+      "sha256": "268c4f2ce7f2b14ba0eeeafd0ca169e3041b636040b40b18a7c866b4466b83f1"
+    },
+    "objects": {
+      "file": "bear_cub_objects_source.png",
+      "original_upload": "Image ChatGPT 3 oct. 2026, 18_26_57-2.png",
+      "sha256": "b99141fb7a6f54a5e2ba62ca53d0fd4af0de856af15a7a21640fe9fd8485f60e"
+    }
+  },
+  "teen": {
+    "main": {
+      "file": "bear_teen_main_source.png",
+      "original_upload": "Image ChatGPT 3 oct. 2026, 18_31_37-1.png",
+      "sha256": "2f5bf0ee15c5c89864f0b090cb18b39b485db21713787d245cc446fbeb439ba0"
+    },
+    "objects": {
+      "file": "bear_teen_objects_source.png",
+      "original_upload": "Image ChatGPT 3 oct. 2026, 18_31_38-2.png",
+      "sha256": "709d2c0521da0b33b3361b4bb579b6cab49858e2332d54311333d6f3f6869e04"
+    }
+  },
+  "adult": {
+    "main": {
+      "file": "bear_adult_main_source.png",
+      "original_upload": "Planche de sprites complète _ Ours adulte.png",
+      "sha256": "511329c3ca51fdff8edf08fc5c44233de83e1751dc9d1913b2c350fe2914f5f8"
+    },
+    "objects": {
+      "file": "bear_adult_objects_source.png",
+      "original_upload": "Planche d’assets de l’ours adulte(1).png",
+      "sha256": "83485b73bc6f6d862e65344c130077e74769e5fd0cbce6e99068bb63c01c7cbd"
+    }
+  },
+  "old": {
+    "main": {
+      "file": "bear_old_main_source.png",
+      "original_upload": "0e11b4fa-1b9b-4d9d-9184-3b41fa243124.png",
+      "sha256": "5b50cc8931e75d50e9a056c3355a2aa3d2392f0c37cfa94239eb8f42acbb4343"
+    },
+    "objects": {
+      "file": "bear_old_objects_source.png",
+      "original_upload": "Planche d’assets d’un vieil ours brun(1).png",
+      "sha256": "545c6fe1ff09e505a6355d578a7efec8a546b8fb2e3f403780edcb4e70ef1aa3"
+    }
+  }
+}

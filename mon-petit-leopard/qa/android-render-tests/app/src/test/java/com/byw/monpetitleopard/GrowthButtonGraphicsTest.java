@@ -28,6 +28,10 @@ public class GrowthButtonGraphicsTest {
  @Test public void lionFemaleGrowthButtonAndActions(){growth(PetSpecies.LION,"female",false);}
  @Test public void lionMaleGrowthDuringPromenade(){growth(PetSpecies.LION,"male",true);}
  @Test public void lionFemaleGrowthDuringPromenade(){growth(PetSpecies.LION,"female",true);}
+ @Test public void foxGrowthButtonAndActions(){growth(PetSpecies.FOX,false);}
+ @Test public void bearGrowthButtonAndActions(){growth(PetSpecies.BEAR,false);}
+ @Test public void foxGrowthDuringPromenade(){growth(PetSpecies.FOX,true);}
+ @Test public void bearGrowthDuringPromenade(){growth(PetSpecies.BEAR,true);}
 
  void growth(String species,boolean trip){growth(species,"female",trip);}
 
@@ -70,7 +74,8 @@ public class GrowthButtonGraphicsTest {
     assertEquals(stages[i],main.displayedPetStage);assertEquals(View.VISIBLE,main.petView.getVisibility());
     PromenadeLifecycleGraphicsTest.alphaIsPreserved(main,"growth-"+stages[i]);
     assertTrue(PromenadeLifecycleGraphicsTest.animalPixels(main)>100);
-    if(PetSpecies.LION.equals(species))AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
+    if(PetSpecies.LION.equals(species)||PetSpecies.FOX.equals(species)||PetSpecies.BEAR.equals(species))
+        AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
     capture(main,capturePrefix+"-"+stages[i].name().toLowerCase());
    }
   }
@@ -80,7 +85,8 @@ public class GrowthButtonGraphicsTest {
    capture(main,capturePrefix+"-promenade-home-empty");
    main.sp.edit().putLong("promenadeStart",System.currentTimeMillis()-PromenadeActivity.DURATION_MS-1000L).commit();main.ticker.run();main.animateAuto();PromenadeLifecycleGraphicsTest.settle(main);
    assertEquals(View.VISIBLE,main.petView.getVisibility());assertEquals(MainActivity.PetStage.OLD,main.displayedPetStage);PromenadeLifecycleGraphicsTest.alphaIsPreserved(main,"grown-trip-return");
-   if(PetSpecies.LION.equals(species))AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
+   if(PetSpecies.LION.equals(species)||PetSpecies.FOX.equals(species)||PetSpecies.BEAR.equals(species))
+       AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
   }
   main.handler.removeCallbacksAndMessages(null);controller.pause().stop().destroy();
   controller=Robolectric.buildActivity(MainActivity.class,intent).create().start().resume().visible();main=controller.get();PromenadeLifecycleGraphicsTest.settle(main);

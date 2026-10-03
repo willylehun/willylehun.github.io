@@ -6,12 +6,16 @@ final class PetSpecies {
     static final String WOLF="wolf";
     static final String TIGER="tiger";
     static final String LION="lion";
+    static final String FOX="fox";
+    static final String BEAR="bear";
 
     static String normalize(String species){
         if(species!=null){
             if(WOLF.equalsIgnoreCase(species.trim()))return WOLF;
             if(TIGER.equalsIgnoreCase(species.trim()))return TIGER;
             if(LION.equalsIgnoreCase(species.trim()))return LION;
+            if(FOX.equalsIgnoreCase(species.trim()))return FOX;
+            if(BEAR.equalsIgnoreCase(species.trim()))return BEAR;
         }
         return LEOPARD;
     }
@@ -19,6 +23,8 @@ final class PetSpecies {
     static boolean isWolf(String species){return WOLF.equals(normalize(species));}
     static boolean isTiger(String species){return TIGER.equals(normalize(species));}
     static boolean isLion(String species){return LION.equals(normalize(species));}
+    static boolean isFox(String species){return FOX.equals(normalize(species));}
+    static boolean isBear(String species){return BEAR.equals(normalize(species));}
 
     /** A lion's sex selects an independent sprite pack; it must never be guessed. */
     static String requireLionSex(String sex){
@@ -32,6 +38,8 @@ final class PetSpecies {
     }
 
     static String label(String species){
+        if(isFox(species))return "Renard";
+        if(isBear(species))return "Ours";
         if(isLion(species))return "Lion";
         if(isTiger(species))return "Tigre";
         return isWolf(species)?"Loup":"Léopard";
@@ -43,18 +51,24 @@ final class PetSpecies {
     }
 
     static String pluralLabel(String species){
+        if(isFox(species))return "Renards";
+        if(isBear(species))return "Ours";
         if(isLion(species))return "Lions et lionnes";
         if(isTiger(species))return "Tigres";
         return isWolf(species)?"Loups":"Léopards";
     }
 
     static String emoji(String species){
+        if(isFox(species))return "🦊";
+        if(isBear(species))return "🐻";
         if(isLion(species))return "🦁";
         if(isTiger(species))return "🐅";
         return isWolf(species)?"🐺":"🐆";
     }
 
     static String defaultName(String species){
+        if(isFox(species))return "Rouky";
+        if(isBear(species))return "Balou";
         if(isLion(species))return "Simba";
         if(isTiger(species))return "Tigrou";
         return isWolf(species)?"Lou":"Léo";
@@ -66,6 +80,22 @@ final class PetSpecies {
     }
 
     static String stageLabel(String species,MainActivity.PetStage stage){
+        if(isFox(species)){
+            switch(stage){
+                case CUB:return "Renardeau";
+                case TEEN:return "Renard ado";
+                case ADULT:return "Renard adulte";
+                default:return "Vieux renard";
+            }
+        }
+        if(isBear(species)){
+            switch(stage){
+                case CUB:return "Ourson";
+                case TEEN:return "Ours ado";
+                case ADULT:return "Ours adulte";
+                default:return "Vieil ours";
+            }
+        }
         if(isLion(species)){
             switch(stage){
                 case CUB:return "Lionceau";
@@ -128,6 +158,18 @@ final class PetSpecies {
 
     static int iconRes(String species,long age){
         if(isLion(species))throw new IllegalArgumentException("Le portrait du lion exige son sexe");
+        if(isFox(species)){
+            if(age<MainActivity.CUB)return R.drawable.fox_cub_idle_down;
+            if(age<MainActivity.CUB+MainActivity.TEEN)return R.drawable.fox_teen_idle_down;
+            if(age<MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT)return R.drawable.fox_adult_idle_down;
+            return R.drawable.fox_old_idle_down;
+        }
+        if(isBear(species)){
+            if(age<MainActivity.CUB)return R.drawable.bear_cub_idle_down;
+            if(age<MainActivity.CUB+MainActivity.TEEN)return R.drawable.bear_teen_idle_down;
+            if(age<MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT)return R.drawable.bear_adult_idle_down;
+            return R.drawable.bear_old_idle_down;
+        }
         if(isTiger(species)){
             if(age<MainActivity.CUB)return R.drawable.tiger_cub_idle_down;
             if(age<MainActivity.CUB+MainActivity.TEEN)return R.drawable.tiger_teen_idle_down;
@@ -164,6 +206,18 @@ final class PetSpecies {
 
     static int promenadeTokenRes(String species,long age){
         if(isLion(species))throw new IllegalArgumentException("Le portrait de promenade du lion exige son sexe");
+        if(isFox(species)){
+            if(age<MainActivity.CUB)return R.drawable.fox_cub_promenade_token;
+            if(age<MainActivity.CUB+MainActivity.TEEN)return R.drawable.fox_teen_promenade_token;
+            if(age<MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT)return R.drawable.fox_adult_promenade_token;
+            return R.drawable.fox_old_promenade_token;
+        }
+        if(isBear(species)){
+            if(age<MainActivity.CUB)return R.drawable.bear_cub_promenade_token;
+            if(age<MainActivity.CUB+MainActivity.TEEN)return R.drawable.bear_teen_promenade_token;
+            if(age<MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT)return R.drawable.bear_adult_promenade_token;
+            return R.drawable.bear_old_promenade_token;
+        }
         if(isTiger(species)){
             if(age<MainActivity.CUB)return R.drawable.tiger_cub_promenade_token;
             if(age<MainActivity.CUB+MainActivity.TEEN)return R.drawable.tiger_teen_promenade_token;

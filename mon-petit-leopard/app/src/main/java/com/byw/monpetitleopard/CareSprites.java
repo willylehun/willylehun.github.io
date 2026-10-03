@@ -92,6 +92,38 @@ final class CareSprites {
         R.drawable.tiger_old_groom_foam,R.drawable.tiger_old_soap,
         R.drawable.tiger_old_comb,R.drawable.tiger_old_towel);
 
+    private static final Pack FOX_CUB=new Pack("fox",MainActivity.PetStage.CUB,
+        R.drawable.fox_cub_groom_foam,R.drawable.fox_cub_soap,
+        R.drawable.fox_cub_comb,R.drawable.fox_cub_towel);
+
+    private static final Pack FOX_TEEN=new Pack("fox",MainActivity.PetStage.TEEN,
+        R.drawable.fox_teen_groom_foam,R.drawable.fox_teen_soap,
+        R.drawable.fox_teen_comb,R.drawable.fox_teen_towel);
+
+    private static final Pack FOX_ADULT=new Pack("fox",MainActivity.PetStage.ADULT,
+        R.drawable.fox_adult_groom_foam,R.drawable.fox_adult_soap,
+        R.drawable.fox_adult_comb,R.drawable.fox_adult_towel);
+
+    private static final Pack FOX_OLD=new Pack("fox",MainActivity.PetStage.OLD,
+        R.drawable.fox_old_groom_foam,R.drawable.fox_old_soap,
+        R.drawable.fox_old_comb,R.drawable.fox_old_towel);
+
+    private static final Pack BEAR_CUB=new Pack("bear",MainActivity.PetStage.CUB,
+        R.drawable.bear_cub_groom_foam,R.drawable.bear_cub_soap,
+        R.drawable.bear_cub_comb,R.drawable.bear_cub_towel);
+
+    private static final Pack BEAR_TEEN=new Pack("bear",MainActivity.PetStage.TEEN,
+        R.drawable.bear_teen_groom_foam,R.drawable.bear_teen_soap,
+        R.drawable.bear_teen_comb,R.drawable.bear_teen_towel);
+
+    private static final Pack BEAR_ADULT=new Pack("bear",MainActivity.PetStage.ADULT,
+        R.drawable.bear_adult_groom_foam,R.drawable.bear_adult_soap,
+        R.drawable.bear_adult_comb,R.drawable.bear_adult_towel);
+
+    private static final Pack BEAR_OLD=new Pack("bear",MainActivity.PetStage.OLD,
+        R.drawable.bear_old_groom_foam,R.drawable.bear_old_soap,
+        R.drawable.bear_old_comb,R.drawable.bear_old_towel);
+
     private static final Pack LION_MALE_CUB=new Pack("lion","male",MainActivity.PetStage.CUB,
         R.drawable.lion_male_cub_groom_foam,R.drawable.lion_male_cub_soap,
         R.drawable.lion_male_cub_comb,R.drawable.lion_male_cub_towel);
@@ -148,6 +180,24 @@ final class CareSprites {
             }
             throw new IllegalStateException("Aucun pack de soins tigre pour l'âge "+stage);
         }
+        if("fox".equals(species)){
+            switch(stage){
+                case CUB:return FOX_CUB;
+                case TEEN:return FOX_TEEN;
+                case ADULT:return FOX_ADULT;
+                case OLD:return FOX_OLD;
+            }
+            throw new IllegalStateException("Aucun pack de soins renard pour l'âge "+stage);
+        }
+        if("bear".equals(species)){
+            switch(stage){
+                case CUB:return BEAR_CUB;
+                case TEEN:return BEAR_TEEN;
+                case ADULT:return BEAR_ADULT;
+                case OLD:return BEAR_OLD;
+            }
+            throw new IllegalStateException("Aucun pack de soins ours pour l'âge "+stage);
+        }
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);
         switch(stage){
@@ -184,6 +234,8 @@ final class CareSprites {
         if("lion".equals(species))throw new IllegalArgumentException("Le biberon du lion exige son sexe");
         if("leopard".equals(species))return bottle(stage);
         if("tiger".equals(species))return stage==MainActivity.PetStage.CUB?R.drawable.tiger_cub_bottle:0;
+        if("fox".equals(species))return stage==MainActivity.PetStage.CUB?R.drawable.fox_cub_bottle:0;
+        if("bear".equals(species))return stage==MainActivity.PetStage.CUB?R.drawable.bear_cub_bottle:0;
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);
         return stage==MainActivity.PetStage.CUB?R.drawable.wolf_cub_bottle:0;

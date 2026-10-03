@@ -15,7 +15,7 @@ import java.util.Locale;
 import org.robolectric.Robolectric;
 import org.robolectric.android.controller.ActivityController;
 
-/** Shared real-object and native-render scenario for tiger and sexed lion packs. */
+/** Shared real-object and native-render scenario for tiger, sexed lion, fox and bear packs. */
 final class AnimalActionGraphicsScenario {
     static void run(Context app,String species,String sex,MainActivity.PetStage stage,long age) {
         PetProfileStore.createAnimal(app,0,species,sex,"Actions QA");

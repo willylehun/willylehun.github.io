@@ -13,8 +13,8 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 55
-        versionName '0.8.10-graphics-qa'
+        versionCode 56
+        versionName '0.8.11-graphics-qa'
     }
     sourceSets {
         main {
@@ -24,7 +24,9 @@ android {
                     'res-wolf-cub', 'res-wolf-teen', 'res-wolf-adult', 'res-wolf-old',
                     'res-tiger-cub', 'res-tiger-teen', 'res-tiger-adult', 'res-tiger-old',
                     'res-lion-male-cub', 'res-lion-male-teen', 'res-lion-male-adult', 'res-lion-male-old',
-                    'res-lion-female-cub', 'res-lion-female-teen', 'res-lion-female-adult', 'res-lion-female-old']
+                    'res-lion-female-cub', 'res-lion-female-teen', 'res-lion-female-adult', 'res-lion-female-old',
+                    'res-fox-cub', 'res-fox-teen', 'res-fox-adult', 'res-fox-old',
+                    'res-bear-cub', 'res-bear-teen', 'res-bear-adult', 'res-bear-old']
                     .collect { "${qaSourceRoot}/app/src/main/${it}" }
         }
     }

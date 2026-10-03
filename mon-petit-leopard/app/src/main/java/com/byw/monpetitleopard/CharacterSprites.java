@@ -181,6 +181,70 @@ final class CharacterSprites {
         R.drawable.tiger_old_jump,R.drawable.tiger_old_eat,
         R.drawable.tiger_old_sleep,R.drawable.tiger_old_moods);
 
+    private static final Pack FOX_CUB=new Pack("fox",MainActivity.PetStage.CUB,"res-fox-cub",
+        R.drawable.fox_cub_idle_down,R.drawable.fox_cub_idle_left,
+        R.drawable.fox_cub_idle_right,R.drawable.fox_cub_idle_up,
+        R.drawable.fox_cub_walk_down,R.drawable.fox_cub_walk_left,
+        R.drawable.fox_cub_walk_right,R.drawable.fox_cub_walk_up,
+        R.drawable.fox_cub_jump,R.drawable.fox_cub_eat,
+        R.drawable.fox_cub_sleep,R.drawable.fox_cub_moods);
+
+    private static final Pack FOX_TEEN=new Pack("fox",MainActivity.PetStage.TEEN,"res-fox-teen",
+        R.drawable.fox_teen_idle_down,R.drawable.fox_teen_idle_left,
+        R.drawable.fox_teen_idle_right,R.drawable.fox_teen_idle_up,
+        R.drawable.fox_teen_walk_down,R.drawable.fox_teen_walk_left,
+        R.drawable.fox_teen_walk_right,R.drawable.fox_teen_walk_up,
+        R.drawable.fox_teen_jump,R.drawable.fox_teen_eat,
+        R.drawable.fox_teen_sleep,R.drawable.fox_teen_moods);
+
+    private static final Pack FOX_ADULT=new Pack("fox",MainActivity.PetStage.ADULT,"res-fox-adult",
+        R.drawable.fox_adult_idle_down,R.drawable.fox_adult_idle_left,
+        R.drawable.fox_adult_idle_right,R.drawable.fox_adult_idle_up,
+        R.drawable.fox_adult_walk_down,R.drawable.fox_adult_walk_left,
+        R.drawable.fox_adult_walk_right,R.drawable.fox_adult_walk_up,
+        R.drawable.fox_adult_jump,R.drawable.fox_adult_eat,
+        R.drawable.fox_adult_sleep,R.drawable.fox_adult_moods);
+
+    private static final Pack FOX_OLD=new Pack("fox",MainActivity.PetStage.OLD,"res-fox-old",
+        R.drawable.fox_old_idle_down,R.drawable.fox_old_idle_left,
+        R.drawable.fox_old_idle_right,R.drawable.fox_old_idle_up,
+        R.drawable.fox_old_walk_down,R.drawable.fox_old_walk_left,
+        R.drawable.fox_old_walk_right,R.drawable.fox_old_walk_up,
+        R.drawable.fox_old_jump,R.drawable.fox_old_eat,
+        R.drawable.fox_old_sleep,R.drawable.fox_old_moods);
+
+    private static final Pack BEAR_CUB=new Pack("bear",MainActivity.PetStage.CUB,"res-bear-cub",
+        R.drawable.bear_cub_idle_down,R.drawable.bear_cub_idle_left,
+        R.drawable.bear_cub_idle_right,R.drawable.bear_cub_idle_up,
+        R.drawable.bear_cub_walk_down,R.drawable.bear_cub_walk_left,
+        R.drawable.bear_cub_walk_right,R.drawable.bear_cub_walk_up,
+        R.drawable.bear_cub_jump,R.drawable.bear_cub_eat,
+        R.drawable.bear_cub_sleep,R.drawable.bear_cub_moods);
+
+    private static final Pack BEAR_TEEN=new Pack("bear",MainActivity.PetStage.TEEN,"res-bear-teen",
+        R.drawable.bear_teen_idle_down,R.drawable.bear_teen_idle_left,
+        R.drawable.bear_teen_idle_right,R.drawable.bear_teen_idle_up,
+        R.drawable.bear_teen_walk_down,R.drawable.bear_teen_walk_left,
+        R.drawable.bear_teen_walk_right,R.drawable.bear_teen_walk_up,
+        R.drawable.bear_teen_jump,R.drawable.bear_teen_eat,
+        R.drawable.bear_teen_sleep,R.drawable.bear_teen_moods);
+
+    private static final Pack BEAR_ADULT=new Pack("bear",MainActivity.PetStage.ADULT,"res-bear-adult",
+        R.drawable.bear_adult_idle_down,R.drawable.bear_adult_idle_left,
+        R.drawable.bear_adult_idle_right,R.drawable.bear_adult_idle_up,
+        R.drawable.bear_adult_walk_down,R.drawable.bear_adult_walk_left,
+        R.drawable.bear_adult_walk_right,R.drawable.bear_adult_walk_up,
+        R.drawable.bear_adult_jump,R.drawable.bear_adult_eat,
+        R.drawable.bear_adult_sleep,R.drawable.bear_adult_moods);
+
+    private static final Pack BEAR_OLD=new Pack("bear",MainActivity.PetStage.OLD,"res-bear-old",
+        R.drawable.bear_old_idle_down,R.drawable.bear_old_idle_left,
+        R.drawable.bear_old_idle_right,R.drawable.bear_old_idle_up,
+        R.drawable.bear_old_walk_down,R.drawable.bear_old_walk_left,
+        R.drawable.bear_old_walk_right,R.drawable.bear_old_walk_up,
+        R.drawable.bear_old_jump,R.drawable.bear_old_eat,
+        R.drawable.bear_old_sleep,R.drawable.bear_old_moods);
+
     private static final Pack LION_MALE_CUB=new Pack("lion","male",MainActivity.PetStage.CUB,"res-lion-male-cub",
         R.drawable.lion_male_cub_idle_down,R.drawable.lion_male_cub_idle_left,
         R.drawable.lion_male_cub_idle_right,R.drawable.lion_male_cub_idle_up,
@@ -268,6 +332,24 @@ final class CharacterSprites {
                 case OLD:return TIGER_OLD;
             }
             throw new IllegalStateException("Aucun pack tigre pour l'âge "+stage);
+        }
+        if("fox".equals(species)){
+            switch(stage){
+                case CUB:return FOX_CUB;
+                case TEEN:return FOX_TEEN;
+                case ADULT:return FOX_ADULT;
+                case OLD:return FOX_OLD;
+            }
+            throw new IllegalStateException("Aucun pack renard pour l'âge "+stage);
+        }
+        if("bear".equals(species)){
+            switch(stage){
+                case CUB:return BEAR_CUB;
+                case TEEN:return BEAR_TEEN;
+                case ADULT:return BEAR_ADULT;
+                case OLD:return BEAR_OLD;
+            }
+            throw new IllegalStateException("Aucun pack ours pour l'âge "+stage);
         }
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);
