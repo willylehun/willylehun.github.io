@@ -4,18 +4,30 @@ final class GameSprites {
     static final int FRAME_SIZE=256;
 
     static final class Pack {
+        final String species;
         final MainActivity.PetStage stage;
         final int runDown,runLeft,runRight,runUp;
         final int fetchBall,fetchTennis,fetchYarn,fetchMouse,fetchPlush,ropePlay;
+        final int ropeFrames;
 
         Pack(MainActivity.PetStage stage,
              int runDown,int runLeft,int runRight,int runUp,
              int fetchBall,int fetchTennis,int fetchYarn,int fetchMouse,int fetchPlush,
              int ropePlay){
+            this("leopard",stage,runDown,runLeft,runRight,runUp,
+                fetchBall,fetchTennis,fetchYarn,fetchMouse,fetchPlush,ropePlay,5);
+        }
+
+        Pack(String species,MainActivity.PetStage stage,
+             int runDown,int runLeft,int runRight,int runUp,
+             int fetchBall,int fetchTennis,int fetchYarn,int fetchMouse,int fetchPlush,
+             int ropePlay,int ropeFrames){
+            this.species=species;
             this.stage=stage;
             this.runDown=runDown;this.runLeft=runLeft;this.runRight=runRight;this.runUp=runUp;
             this.fetchBall=fetchBall;this.fetchTennis=fetchTennis;this.fetchYarn=fetchYarn;
             this.fetchMouse=fetchMouse;this.fetchPlush=fetchPlush;this.ropePlay=ropePlay;
+            this.ropeFrames=ropeFrames;
         }
 
         int run(MainActivity.TravelDirection direction){
@@ -48,7 +60,7 @@ final class GameSprites {
 
         int expectedWidth(int res){
             if(ownsRun(res))return FRAME_SIZE*6;
-            if(res==ropePlay)return FRAME_SIZE*5;
+            if(res==ropePlay)return FRAME_SIZE*ropeFrames;
             if(ownsPose(res))return FRAME_SIZE;
             return -1;
         }
@@ -86,6 +98,47 @@ final class GameSprites {
         R.drawable.leopard_old_fetch_ball,R.drawable.leopard_old_fetch_tennis,
         R.drawable.leopard_old_fetch_yarn,R.drawable.leopard_old_fetch_mouse,
         R.drawable.leopard_old_fetch_plush,R.drawable.leopard_old_rope_play);
+
+    private static final Pack WOLF_CUB=new Pack("wolf",MainActivity.PetStage.CUB,
+        R.drawable.wolf_cub_run_down,R.drawable.wolf_cub_run_left,
+        R.drawable.wolf_cub_run_right,R.drawable.wolf_cub_run_up,
+        R.drawable.wolf_cub_fetch_ball,R.drawable.wolf_cub_fetch_tennis,
+        R.drawable.wolf_cub_fetch_yarn,R.drawable.wolf_cub_fetch_mouse,
+        R.drawable.wolf_cub_fetch_plush,R.drawable.wolf_cub_rope_play,1);
+
+    private static final Pack WOLF_TEEN=new Pack("wolf",MainActivity.PetStage.TEEN,
+        R.drawable.wolf_teen_run_down,R.drawable.wolf_teen_run_left,
+        R.drawable.wolf_teen_run_right,R.drawable.wolf_teen_run_up,
+        R.drawable.wolf_teen_fetch_ball,R.drawable.wolf_teen_fetch_tennis,
+        R.drawable.wolf_teen_fetch_yarn,R.drawable.wolf_teen_fetch_mouse,
+        R.drawable.wolf_teen_fetch_plush,R.drawable.wolf_teen_rope_play,1);
+
+    private static final Pack WOLF_ADULT=new Pack("wolf",MainActivity.PetStage.ADULT,
+        R.drawable.wolf_adult_run_down,R.drawable.wolf_adult_run_left,
+        R.drawable.wolf_adult_run_right,R.drawable.wolf_adult_run_up,
+        R.drawable.wolf_adult_fetch_ball,R.drawable.wolf_adult_fetch_tennis,
+        R.drawable.wolf_adult_fetch_yarn,R.drawable.wolf_adult_fetch_mouse,
+        R.drawable.wolf_adult_fetch_plush,R.drawable.wolf_adult_rope_play,1);
+
+    private static final Pack WOLF_OLD=new Pack("wolf",MainActivity.PetStage.OLD,
+        R.drawable.wolf_old_run_down,R.drawable.wolf_old_run_left,
+        R.drawable.wolf_old_run_right,R.drawable.wolf_old_run_up,
+        R.drawable.wolf_old_fetch_ball,R.drawable.wolf_old_fetch_tennis,
+        R.drawable.wolf_old_fetch_yarn,R.drawable.wolf_old_fetch_mouse,
+        R.drawable.wolf_old_fetch_plush,R.drawable.wolf_old_rope_play,1);
+
+    static Pack forStage(String species,MainActivity.PetStage stage){
+        if("leopard".equals(species))return forStage(stage);
+        if(!"wolf".equals(species))
+            throw new IllegalArgumentException("Espèce inconnue : "+species);
+        switch(stage){
+            case CUB:return WOLF_CUB;
+            case TEEN:return WOLF_TEEN;
+            case ADULT:return WOLF_ADULT;
+            case OLD:return WOLF_OLD;
+        }
+        throw new IllegalStateException("Aucun pack de jeu loup pour l'âge "+stage);
+    }
 
     static Pack forStage(MainActivity.PetStage stage){
         switch(stage){

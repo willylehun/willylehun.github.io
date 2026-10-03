@@ -126,6 +126,7 @@ public class PromenadeActivity extends Activity {
     }
 
     void updateProgress(){
+        if(sp==null||mapView==null)return;
         long now=System.currentTimeMillis();
         long start=sp.getLong("promenadeStart",now);
         boolean active=sp.getBoolean("promenadeActive",false);
@@ -157,7 +158,8 @@ public class PromenadeActivity extends Activity {
     final class PromenadeView extends View {
         final Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
         final Bitmap map=BitmapFactory.decodeResource(getResources(),R.drawable.promenade_map);
-        final Bitmap token=BitmapFactory.decodeResource(getResources(),R.drawable.promenade_token);
+        Bitmap token;
+        int tokenRes=0;
         float progress=0f;
 
         final float[][] route={
@@ -192,6 +194,13 @@ public class PromenadeActivity extends Activity {
 
         void setProgress(float value){
             progress=Math.max(0f,Math.min(1f,value));
+            String species=PetProfileStore.species(PromenadeActivity.this,profileSlot);
+            long age=Math.max(0L,System.currentTimeMillis()-sp.getLong("born",System.currentTimeMillis()));
+            int nextToken=PetSpecies.promenadeTokenRes(species,age);
+            if(tokenRes!=nextToken){
+                token=BitmapFactory.decodeResource(getResources(),nextToken);
+                tokenRes=nextToken;
+            }
             invalidate();
         }
 

@@ -1,0 +1,50 @@
+{
+  "cub": {
+    "main": {
+      "file": "wolf_cub_main_source.png",
+      "original_filename": "Image ChatGPT 2 oct. 2026, 23_34_33-1(2).png",
+      "sha256": "f3cac494d3e891a0370ea0af05b13c0853aa9c3ed65b4e2b2406aea1e714ad5c"
+    },
+    "objects": {
+      "file": "wolf_cub_objects_source.png",
+      "original_filename": "Image ChatGPT 2 oct. 2026, 23_34_34-2(2).png",
+      "sha256": "f5fb680b00522e0cd09c4c6bf770cb672b658e2fc7bfeeb33672a327d63ef939"
+    }
+  },
+  "teen": {
+    "main": {
+      "file": "wolf_teen_main_source.png",
+      "original_filename": "Image ChatGPT 2 oct. 2026, 23_34_49(2).png",
+      "sha256": "ba7c2fbb944a66297cb271400e2f34b23556d0acbd1c59def0c25081e9b7291a"
+    },
+    "objects": {
+      "file": "wolf_teen_objects_source.png",
+      "original_filename": "Image ChatGPT 2 oct. 2026, 23_34_46(2).png",
+      "sha256": "b3c684e42cc3fe3f7f6818dce7e540f08a5e4456e91ddffeaa0c3909909d8405"
+    }
+  },
+  "adult": {
+    "main": {
+      "file": "wolf_adult_main_source.png",
+      "original_filename": "Image ChatGPT 2 oct. 2026, 23_35_05-1(2).png",
+      "sha256": "df49b78f47f970b5360736f0767f532f116655476d9705280e5d44ac5eb30f9a"
+    },
+    "objects": {
+      "file": "wolf_adult_objects_source.png",
+      "original_filename": "Image ChatGPT 2 oct. 2026, 23_35_06-2(2).png",
+      "sha256": "d2d7e8db2de7f65747ec3c61e9767e84c36edfc0279382e47ffd435ae41b5eb0"
+    }
+  },
+  "old": {
+    "main": {
+      "file": "wolf_old_main_source.png",
+      "original_filename": "Image ChatGPT 2 oct. 2026, 23_35_14-1(2).png",
+      "sha256": "0310a5b61415db1ccb94fe826f79934989a0f978f84c1ecb8ae3e0278aa04859"
+    },
+    "objects": {
+      "file": "wolf_old_objects_source.png",
+      "original_filename": "Image ChatGPT 2 oct. 2026, 23_35_15-2(2).png",
+      "sha256": "68b4da7ead846ed4b6a4eeda9006bbf60bb5cc5aea3cb242a289cb1b80d3260f"
+    }
+  }
+}

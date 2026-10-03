@@ -50,47 +50,53 @@ jobs:
         run: python mon-petit-leopard/tools/prepare_v076_promenade_assets.py
       - name: Prepare garden scratcher assets
         run: python mon-petit-leopard/tools/prepare_v078_garden_assets.py
+      - name: Prepare wolf sprite packs
+        run: python mon-petit-leopard/tools/prepare_v086_wolf_assets.py
       - name: Sprite contract tests
         run: python mon-petit-leopard/tools/test_sprite_contract.py
       - name: Food preference behavior tests
         run: python mon-petit-leopard/tools/test_food_preference.py
+      - name: Wolf behavior and profile tests
+        run: python mon-petit-leopard/tools/test_wolf_behavior.py
       - name: Validate sprite packs
         run: python mon-petit-leopard/tools/validate_sprite_packs.py
+      - name: Validate wolf sprite packs
+        run: python mon-petit-leopard/tools/validate_wolf_sprite_packs.py
       - name: Build APK
         run: gradle -p mon-petit-leopard assembleDebug
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.8.5
+          name: mon-petit-leopard-v0.8.6
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.5.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.6.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.8.5"
+          TAG="mon-petit-leopard-v0.8.6"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.8.5 — Reproduction selon l’âge" \
-              --notes "v0.8.5 : la reproduction est désormais réservée aux animaux aux stades ado, adulte et vieux. Les léopardeaux sont exclus du menu et des listes de parents, et l’éligibilité des deux parents est revérifiée au moment de la naissance. Toutes les fonctions v0.8.4 sont conservées."
+              --title "Mon Petit Léopard v0.8.6 — Léopard ou loup" \
+              --notes "v0.8.6 : ajoute le loup au choix initial et aux nouveaux profils, avec quatre âges distincts issus des huit planches fournies. Les besoins, objets, soins, jeux, promenades et règles de reproduction sont communs au léopard et au loup. Les anciens profils léopard sont conservés. Les louveteaux et les léopardeaux ne peuvent pas se reproduire ; les deux parents doivent être de la même espèce, de sexes opposés et avoir un âge autorisé. Les portraits et le jeton de promenade suivent l’espèce et l’âge."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.5.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.6.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.8.5 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.8.6 APK [skip ci]"
             git push
           fi

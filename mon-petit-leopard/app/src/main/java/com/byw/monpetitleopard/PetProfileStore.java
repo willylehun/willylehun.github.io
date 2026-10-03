@@ -76,8 +76,9 @@ final class PetProfileStore {
     }
 
     static String name(Context context,int slot){
-        return context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE)
-            .getString(nameKey(slot),"Léo");
+        String name=context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE)
+            .getString(nameKey(slot),PetSpecies.defaultName(species(context,slot)));
+        return name==null||name.trim().isEmpty()?PetSpecies.defaultName(species(context,slot)):name;
     }
 
     static String sex(Context context,int slot){
@@ -86,12 +87,12 @@ final class PetProfileStore {
     }
 
     static String species(Context context,int slot){
-        return context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE)
-            .getString(typeKey(slot),"leopard");
+        return PetSpecies.normalize(context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE)
+            .getString(typeKey(slot),PetSpecies.LEOPARD));
     }
 
     static String speciesLabel(Context context,int slot){
-        return "leopard".equals(species(context,slot))?"Léopard":species(context,slot);
+        return PetSpecies.label(species(context,slot));
     }
 
     static boolean reproductionAgeEligible(Context context,int slot){
@@ -107,20 +108,23 @@ final class PetProfileStore {
         if(!reproductionAgeEligible(context,a)||!reproductionAgeEligible(context,b))return false;
         String sa=sex(context,a),sb=sex(context,b);
         if(sa==null||sb==null||sa.isEmpty()||sb.isEmpty()||sa.equals(sb))return false;
+        if(!(("male".equals(sa)&&"female".equals(sb))||
+                ("female".equals(sa)&&"male".equals(sb))))return false;
         return species(context,a).equals(species(context,b));
     }
 
     static void setSex(Context context,int slot,String sex){
-        if(!validSlot(slot))return;
+        if(!validSlot(slot)||!exists(context,slot))return;
+        String cleanSex=("female".equals(sex)||"male".equals(sex))?sex:"";
         context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE).edit()
-            .putString(sexKey(slot),sex==null?"":sex).apply();
+            .putString(sexKey(slot),cleanSex).apply();
         context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE).edit()
-            .putString("sex",sex==null?"":sex).apply();
+            .putString("sex",cleanSex).apply();
     }
 
     static void updateName(Context context,int slot,String name){
         if(!validSlot(slot)||!exists(context,slot))return;
-        String clean=(name==null||name.trim().isEmpty())?"Léo":name.trim();
+        String clean=(name==null||name.trim().isEmpty())?PetSpecies.defaultName(species(context,slot)):name.trim();
         context.getSharedPreferences(META_PREFS,Context.MODE_PRIVATE).edit()
             .putString(nameKey(slot),clean).apply();
         context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE).edit()
@@ -128,7 +132,11 @@ final class PetProfileStore {
     }
 
     static void createLeopard(Context context,int slot,String sex,String name){
-        createProfile(context,slot,"leopard",sex,name,-1,-1);
+        createAnimal(context,slot,PetSpecies.LEOPARD,sex,name);
+    }
+
+    static void createAnimal(Context context,int slot,String species,String sex,String name){
+        createProfile(context,slot,PetSpecies.normalize(species),sex,name,-1,-1);
     }
 
     static String createOffspring(Context context,int slot,int parentA,int parentB,String name){
@@ -140,12 +148,15 @@ final class PetProfileStore {
         return sex;
     }
 
-    private static void createProfile(Context context,int slot,String type,String sex,String name,int parentA,int parentB){
+    private static synchronized void createProfile(Context context,int slot,String type,String sex,String name,int parentA,int parentB){
         if(!validSlot(slot))throw new IllegalArgumentException("slot invalide");
+        if(exists(context,slot))throw new IllegalStateException("emplacement déjà occupé");
+        if((parentA>=0||parentB>=0)&&!compatibleParents(context,parentA,parentB))
+            throw new IllegalArgumentException("parents incompatibles");
         long now=System.currentTimeMillis();
-        String clean=(name==null||name.trim().isEmpty())?"Léo":name.trim();
+        String cleanType=PetSpecies.normalize(type);
+        String clean=(name==null||name.trim().isEmpty())?PetSpecies.defaultName(cleanType):name.trim();
         String cleanSex=("female".equals(sex)||"male".equals(sex))?sex:"";
-        String cleanType=(type==null||type.trim().isEmpty())?"leopard":type.trim();
         SharedPreferences pet=context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE);
         SharedPreferences.Editor pe=pet.edit().clear()
             .putLong("born",now).putLong("last",now)
@@ -166,14 +177,11 @@ final class PetProfileStore {
     }
 
     static int iconRes(Context context,int slot){
-        if(!exists(context,slot))return R.drawable.leopard_cub_idle_down;
+        if(!exists(context,slot))return PetSpecies.iconRes(PetSpecies.LEOPARD,0L);
         SharedPreferences p=context.getSharedPreferences(petPrefsName(slot),Context.MODE_PRIVATE);
         long born=p.getLong("born",System.currentTimeMillis());
         long age=Math.max(0L,System.currentTimeMillis()-born);
-        if(age<MainActivity.CUB)return R.drawable.leopard_cub_idle_down;
-        if(age<MainActivity.CUB+MainActivity.TEEN)return R.drawable.leopard_teen_idle_down;
-        if(age<MainActivity.CUB+MainActivity.TEEN+MainActivity.ADULT)return R.drawable.leopard_adult_idle_down;
-        return R.drawable.leopard_old_idle_down;
+        return PetSpecies.iconRes(species(context,slot),age);
     }
 
     static String sexLabel(String sex){

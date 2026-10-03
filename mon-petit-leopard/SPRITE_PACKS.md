@@ -1,5 +1,53 @@
 # Packs de sprites — Mon Petit Léopard
 
+## Contrat actuel — v0.8.6
+
+Les deux espèces utilisent le même moteur de jeu et des ressources indépendantes.
+Le nom `leopard` reste celui des sauvegardes historiques ; `wolf` identifie le loup.
+
+| Espèce | Louveteau / léopardeau | Ado | Adulte | Vieux |
+| --- | --- | --- | --- | --- |
+| Léopard | `res-cub` | `res-teen` | `res-adult` | `res-old` |
+| Loup | `res-wolf-cub` | `res-wolf-teen` | `res-wolf-adult` | `res-wolf-old` |
+
+Chaque frame runtime fait **256 × 256 px**, avec des marges transparentes.
+Haut montre le dos, bas montre la face. Les marches gauche et droite utilisent
+leurs images distinctes. Les chargeurs refusent les espèces inconnues et ne
+substituent jamais une espèce ou un âge lorsqu'une ressource manque.
+
+| Animation | Léopard | Loup |
+| --- | ---: | ---: |
+| Idle, par direction | 1 | 1 |
+| Marche et course, par direction | 6 | 6 |
+| Saut | 5 | 5 |
+| Mange / dort | 3 | 3 |
+| Humeurs | 12 | 12 |
+| Rapport d'objet / soin | 1 | 1 |
+| Corde | 5 | 1, traction animée par le moteur |
+| Griffoir | 2 | 1, mouvement animé par le moteur |
+| Biberon, petit uniquement | 1 | 1 |
+
+Les huit planches loup originales sont conservées dans `source-assets/wolf-v086/`.
+`tools/prepare_v086_wolf_assets.py` prépare leurs découpes et la vraie transparence,
+normalise les canevas et crée quatre portraits tête pour le jeton de promenade.
+La course reprend les six poses de marche de la même espèce et du même âge, jouées
+à la cadence du jeu. Les poses uniques de corde et de griffoir restent des poses
+uniques : le moteur fournit le mouvement sans inventer de nouvelles images.
+
+Le choix d'animal, l'en-tête, les étapes sexe/nom et le jeton de promenade suivent
+l'espèce et l'âge du profil. Les besoins, restrictions par âge, objets, récompenses,
+goûts, lassitude et durées restent communs aux deux espèces. Les activités visuelles
+en cours sont arrêtées au changement d'âge pour ne conserver aucun ancien sprite.
+
+Les tests `test_wolf_behavior.py` et `validate_wolf_sprite_packs.py` complètent les
+contrats existants. Le workflow prépare les deux espèces avant les tests et le
+build. Le manifeste `wolf-sprite-manifest.json` décrit la provenance des découpes.
+
+## Historique des contrats antérieurs
+
+Les sections ci-dessous décrivent les anciennes étapes de normalisation. Le
+contrat runtime actuel de 256 px ci-dessus remplace leurs dimensions historiques.
+
 Les sprites du personnage sont séparés physiquement et logiquement par âge.
 
 ## Zones Android
