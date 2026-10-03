@@ -6,10 +6,14 @@ on:
     paths:
       - 'mon-petit-leopard/**'
       - '.github/workflows/mon-petit-leopard-android.yml'
+      - '_config.yml'
+      - '.nojekyll'
   pull_request:
     paths:
       - 'mon-petit-leopard/**'
       - '.github/workflows/mon-petit-leopard-android.yml'
+      - '_config.yml'
+      - '.nojekyll'
   workflow_dispatch:
 
 permissions:
@@ -58,13 +62,17 @@ jobs:
         run: python mon-petit-leopard/tools/prepare_v089_tiger_assets.py
       - name: Prepare lion and lioness sprite packs
         run: python mon-petit-leopard/tools/prepare_v0810_lion_assets.py
+      - name: Prepare fox sprite packs
+        run: python mon-petit-leopard/tools/prepare_v0811_fox_assets.py
+      - name: Prepare brown bear sprite packs
+        run: python mon-petit-leopard/tools/prepare_v0811_bear_assets.py
       - name: Repair leopard sprite cutouts
         run: python mon-petit-leopard/tools/prepare_v087_cutout_assets.py
       - name: Sprite contract tests
         run: python mon-petit-leopard/tools/test_sprite_contract.py
       - name: Food preference behavior tests
         run: python mon-petit-leopard/tools/test_food_preference.py
-      - name: Four-species behavior and profile tests
+      - name: Six-species behavior and profile tests
         run: python mon-petit-leopard/tools/test_wolf_behavior.py
       - name: Promenade visibility regression tests
         run: python mon-petit-leopard/tools/test_promenade_visibility.py
@@ -78,6 +86,8 @@ jobs:
         run: python mon-petit-leopard/tools/validate_tiger_sprite_packs.py
       - name: Validate lion and lioness sprite packs
         run: python mon-petit-leopard/tools/validate_lion_sprite_packs.py
+      - name: Validate fox and brown bear sprite packs
+        run: python mon-petit-leopard/tools/validate_forest_sprite_packs.py
       - name: Validate sprite cutouts
         run: python mon-petit-leopard/tools/validate_cutout_assets.py
       - name: Android rendering and lifecycle tests
@@ -86,7 +96,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.8.10-android-tests
+          name: mon-petit-leopard-v0.8.11-android-tests
           path: |
             mon-petit-leopard/qa/android-render-tests/app/build/reports/tests/
             mon-petit-leopard/qa/android-render-tests/app/build/test-results/
@@ -97,36 +107,54 @@ jobs:
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: mon-petit-leopard-v0.8.10
+          name: mon-petit-leopard-v0.8.11
           path: mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk
       - name: Prepare downloadable APK
-        if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p downloads
-          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.10.apk
+          cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard-v0.8.11.apk
           cp mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk downloads/mon-petit-leopard.apk
+      - name: Build filtered Pages site
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site
+      - name: Verify Pages downloads and size
+        run: |
+          python mon-petit-leopard/tools/validate_pages_output.py \
+            --site-dir _site \
+            --compiled-apk mon-petit-leopard/app/build/outputs/apk/debug/app-debug.apk \
+            --version 0.8.11 \
+            --report mon-petit-leopard/build/pages-verification.json
+      - name: Upload Pages verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mon-petit-leopard-v0.8.11-pages-verification
+          path: mon-petit-leopard/build/pages-verification.json
+          if-no-files-found: ignore
       - name: Publish GitHub Release APK
         if: github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="mon-petit-leopard-v0.8.10"
+          TAG="mon-petit-leopard-v0.8.11"
           if gh release view "$TAG" >/dev/null 2>&1; then
             gh release upload "$TAG" downloads/mon-petit-leopard.apk --clobber
           else
             gh release create "$TAG" downloads/mon-petit-leopard.apk \
-              --title "Mon Petit Léopard v0.8.10 — Le lion et la lionne rejoignent les animaux" \
-              --notes "v0.8.10 : ajoute le lion au choix initial et distingue le lion mâle de la lionne à leurs quatre âges, dans les mouvements, humeurs, objets, profils et portraits de promenade. Les quatre espèces partagent les mêmes besoins, actions, jeux, goûts, durées et règles de reproduction. Préserve les sauvegardes par profil et les correctifs des versions précédentes."
+              --title "Mon Petit Léopard v0.8.11 — Le renard et l’ours rejoignent les animaux" \
+              --notes "v0.8.11 : ajoute le renard et l’ours brun au choix initial, avec leurs sprites et portraits propres aux quatre âges. Les six espèces partagent les mêmes besoins, objets, actions, soins, jeux, goûts, durées, promenades et règles de reproduction. Conserve les apparences mâle/femelle du lion, les sauvegardes par profil et les correctifs des versions précédentes."
           fi
       - name: Publish direct-download APK
         if: github.ref == 'refs/heads/main'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.10.apk
+          git add downloads/mon-petit-leopard.apk downloads/mon-petit-leopard-v0.8.11.apk
           if git diff --cached --quiet; then
             echo "APK unchanged"
           else
-            git commit -m "Publie Mon Petit Leopard v0.8.10 APK [skip ci]"
+            git commit -m "Publie Mon Petit Leopard v0.8.11 APK [skip ci]"
             git push
           fi

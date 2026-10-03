@@ -33,6 +33,8 @@ python mon-petit-leopard/tools/prepare_v086_wolf_assets.py
 python mon-petit-leopard/tools/prepare_v087_cutout_assets.py
 python mon-petit-leopard/tools/prepare_v089_tiger_assets.py
 python mon-petit-leopard/tools/prepare_v0810_lion_assets.py
+python mon-petit-leopard/tools/prepare_v0811_fox_assets.py
+python mon-petit-leopard/tools/prepare_v0811_bear_assets.py
 gradle -p mon-petit-leopard/qa/android-render-tests --no-daemon :app:testDebugUnitTest
 ```
 
@@ -42,12 +44,13 @@ local `local.properties` de ce projet de test.
 
 Le harness lit `../../app/src/main` par défaut. Pour comparer un autre checkout
 préparé, passer `-PqaSourceRoot=/chemin/absolu/mon-petit-leopard` et lancer
-`:app:clean` avant de changer cette source. Le harness actuel utilise les quatre
+`:app:clean` avant de changer cette source. Le harness actuel utilise les six
 espèces, dont les deux apparences sexuées du lion, et nécessite les sources
-v0.8.10 ou suivantes. Pour comparer une version
+v0.8.11 ou suivantes. Pour comparer une version
 antérieure, utiliser le harness du commit correspondant dans une copie isolée :
 celui de v0.8.8 ne référence pas encore le tigre et celui de v0.8.9 ne référence
-pas encore le lion. Pour reproduire la régression
+pas encore le lion ; celui de v0.8.10 ne référence pas encore le renard et l’ours.
+Pour reproduire la régression
 v0.8.7 avec le harness v0.8.8, conserver seulement ses suites
 `PromenadeLifecycleGraphicsTest.java` et `NativeGraphicsSmokeTest.java`.
 
@@ -55,19 +58,21 @@ Rapports et captures sont produits sous `app/build/` et exclus du dépôt :
 
 - `reports/tests/testDebugUnitTest/index.html` : rapport lisible ;
 - `test-results/testDebugUnitTest/` : résultats JUnit XML ;
-- `native-captures/` : captures des quatre âges et des deux sexes du lion, des portraits de
-  promenade, de la maison vide, des six profils mixtes et des petits écrans.
+- `native-captures/` : captures des quatre âges des animaux, des deux sexes du lion,
+  des portraits de promenade, de la maison vide et du retour du renard et de l’ours,
+  des six profils mixtes et des petits écrans.
 
 ## Couverture
 
 | Suite | Vérification réelle |
 | --- | --- |
 | `NativeGraphicsSmokeTest` | Décodage d'un sprite avec alpha, dessin d'un `ImageView` sur un fond opaque, conservation des coins transparents. |
-| `PromenadeLifecycleGraphicsTest` | Les quatre espèces aux quatre âges, avec deux parcours par âge pour les lions : départ, pause/arrêt, activité promenade, portrait de la bonne espèce, du bon sexe et du bon âge, clic sur Retour au jardin, reprise anticipée, mise en page, animation, recréation de l'activité et échéance. Pour chaque lion et lionne, visite des quatre pièces via le menu pendant la promenade. |
-| `GrowthButtonGraphicsTest` | Clic sur le bouton Dev pour les trois passages d'âge, nouvelle image, annulation du soin et de l'appel en cours, maintien du sommeil, besoins et compétences conservés, espèce et âge persistés après recréation, bouton désactivé au stade vieux. Les trois clics sont aussi testés pendant une promenade, pour les quatre espèces et les deux sexes du lion. Le rendu du lion est comparé aux images du pack sexué après la croissance et au retour. |
+| `PromenadeLifecycleGraphicsTest` | Les six espèces aux quatre âges, avec deux parcours par âge pour les lions : départ, pause/arrêt, activité promenade, portrait de la bonne espèce, du bon sexe et du bon âge, clic sur Retour au jardin, reprise anticipée, mise en page, animation, recréation de l'activité et échéance. Pour chaque lion, lionne, renard et ours, visite des quatre pièces via le menu pendant la promenade. |
+| `GrowthButtonGraphicsTest` | Clic sur le bouton Dev pour les trois passages d'âge, nouvelle image, annulation du soin et de l'appel en cours, maintien du sommeil, besoins et compétences conservés, espèce et âge persistés après recréation, bouton désactivé au stade vieux. Les trois clics sont aussi testés pendant une promenade, pour les six espèces et les deux sexes du lion. Le rendu du lion, de la lionne, du renard et de l’ours est comparé aux images de leur propre pack après la croissance et au retour. |
 | `CompactGrowthLayoutTest` | Bouton Dev et trois commandes du bas entièrement visibles et utilisables à 360 × 640, 320 × 568 et 320 × 480 dp. |
 | `TigerIntegrationGraphicsTest` | Aux quatre âges : poses, six images de marche et de course dans chaque direction, manger/sauter/dormir, douze humeurs, quatre soins et disponibilité du biberon. Utilisation réelle des objets : repas, quatre jouets rapportés et corde dans le salon et le jardin, griffoir et repos. Adoption initiale complète à 320 × 480 dp puis réouverture ; descendance tigre avec conservation de l'espèce, des parents et des profils léopard/loup existants. |
 | `LionIntegrationGraphicsTest` | Huit variantes sexe × âge soumises au même scénario d’objets et de rendu que le tigre. Adoptions mâle et femelle par les contrôles réels à 320 × 480 dp, deux portraits au choix du sexe et bon portrait au nom/à la réouverture. Neuf visites parmi six profils mixtes, croissance limitée au profil actif et comparaison intégrale des cinq autres sauvegardes. Reproduction entre lions de sexes opposés, refus des autres espèces, sexe du bébé conservé et propre pack rechargé après fermeture. |
+| `ForestIntegrationGraphicsTest` | Les quatre âges du renard et de l’ours utilisent le scénario commun d’objets et de rendu. Les six cartes initiales sont atteintes par de vrais gestes de défilement à 320 × 480 dp, avec vérification de chaque portrait. Adoption tactile d’une renarde et d’un ours, choix du sexe, nom et double réouverture. Dix visites parmi six espèces enregistrées, croissance du renard et de l’ours limitée au profil actif. Naissance dans chaque nouvelle espèce, refus des croisements interespèces, parents et cinq sauvegardes voisines conservés. |
 
 Pour la maison vide, le test dessine la scène complète avec son état réel, puis
 avec l'animal explicitement masqué. Pendant la promenade, **aucun pixel ne doit
@@ -78,8 +83,8 @@ composé, en plus de la visibilité du `View`.
 Le fond transparent des images affichées est également composé sur deux couleurs
 contrastées par le `Canvas` Android natif, avant le départ et après le retour.
 
-Le scénario commun `AnimalActionGraphicsScenario`, utilisé par le tigre et
-les huit variantes du lion, compare les pixels du bitmap effectivement affiché
+Le scénario commun `AnimalActionGraphicsScenario`, utilisé par le tigre,
+les huit variantes du lion, le renard et l’ours, compare les pixels du bitmap effectivement affiché
 à la frame attendue de son propre pack d’espèce, de sexe et d’âge. Chaque image est ensuite
 composée avec le `Canvas` natif pour vérifier qu'elle peint un animal visible et
 conserve sa marge transparente. Les jeux utilisent les véritables contrôleurs
@@ -90,6 +95,15 @@ réellement `ACTION_DOWN` puis `ACTION_UP` au centre visible des contrôles. Ava
 chaque contact, le test révèle le contrôle si nécessaire et vérifie ses limites
 complètes à 320 × 480 dp. Les deux portraits au choix du sexe sont également
 comparés aux bitmaps du bon pack et doivent être entièrement accessibles.
+
+Les nouvelles adoptions du renard et de l’ours utilisent une suite complète
+`ACTION_DOWN` / `ACTION_MOVE` / `ACTION_UP` pour atteindre les cartes et boutons
+hors écran, puis `ACTION_DOWN` / `ACTION_UP` pour les activer. Le test ne déplace
+pas le `ScrollView` par son API et n’appelle pas les gestionnaires d’adoption.
+Chaque contrôle doit être entièrement visible dans la fenêtre réelle avant le
+contact ; le défilement ne doit créer aucun profil ni lancer d’activité. Les
+prévisualisations du choix de sexe, du nom et du profil sont comparées aux
+bitmaps du renard ou de l’ours, qui partagent leur artwork entre sexes.
 
 ## Régression reproduite
 
@@ -170,3 +184,49 @@ Cette validation locale reste celle de la **copie candidate**, antérieure aux
 dernières retouches des contours de trois poses de griffoir mâles. Le gate CI
 doit donc rejouer les 52 scénarios sur les ressources définitives avant fusion
 et publication ; ses rapports et captures correspondent au commit publié.
+
+## Vérification v0.8.11
+
+La suite comprend **77 tests**, en conservant les 52 scénarios v0.8.10 :
+
+- 28 parcours de promenade : les quatre âges des six espèces, avec les deux
+  apparences du lion ;
+- 14 scénarios de croissance : les trois passages d’âge à la maison et pendant
+  une promenade pour chaque apparence ;
+- 3 petits écrans et 1 contrôle de rendu natif de base ;
+- 6 scénarios d’intégration du tigre et 12 du lion ;
+- 13 scénarios d’intégration du renard et de l’ours : 8 parcours d’actions,
+  2 adoptions, 1 parcours de profils mixtes et 2 naissances.
+
+Les attentes déterministes du profil « Actions QA » restent inchangées : depuis
+une joie de 30, le rapport de la balle de tennis donne 58,8, la laine 42, la
+souris 44 et la peluche 22,5. Le soin progresse à 30,6 et le jeu rend l’objet puis
+revient à l’état inactif. Ces attentes s’appliquent aux quatre âges des deux
+nouveaux animaux, dans le salon comme dans le jardin.
+
+La validation locale doit utiliser une copie immuable des sources et des
+ressources préparées. Les résultats JUnit doivent comprendre les **77 tests de
+la passe complète**, sans mélanger les XML d’une passe filtrée avec des résultats
+anciens. Le gate GitHub réexécute la suite complète après la préparation des
+ressources définitives et avant la compilation de l’APK ; les rapports, XML et
+captures de ce run constituent la preuve correspondant au commit publié.
+
+Le 3 octobre 2026, la passe locale complète sur une copie candidate a réussi :
+**77 tests, 0 échec, 0 erreur, 0 ignoré**, en 54,986 secondes d’exécution native
+(1 minute 6 secondes pour Gradle). Les 854 empreintes d’entrée contrôlées avant
+et après cette passe sont inchangées. Les 106 captures comprennent les nouveaux
+écrans d’adoption et les huit packs du renard et de l’ours ; 21 captures ont été
+examinées visuellement : six choix initiaux avant/après défilement, choix du sexe
+et confirmation des deux espèces, leurs quatre âges, leurs portraits de vieux
+en promenade, le jardin vide puis leur retour et les six profils distincts.
+Aucune anomalie de disposition ou de routage visuel n’a été observée dans ces
+captures.
+
+Cette passe reste une validation **candidate**, avant les dernières retouches
+de pixels. Sa préparation locale par copie superposée avait conservé quatre
+anciens fichiers PNG de sommeil en conflit avec les WebP préparés : ils ont été
+archivés avant la passe réussie, sans changement du code ni des tests. Vingt-huit
+anciens noms de ressources léopard inutilisés subsistent dans cette copie ; la
+validation finale repart des dossiers historiques préparés exactement et le
+gate CI recrée les ressources depuis les sources. Les résultats de cette copie
+ne remplacent donc pas le gate complet sur le commit définitif.

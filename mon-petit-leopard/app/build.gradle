@@ -8,8 +8,8 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 55
-        versionName '0.8.10'
+        versionCode 56
+        versionName '0.8.11'
     }
 
     sourceSets {
@@ -37,7 +37,15 @@ android {
                 'src/main/res-lion-female-cub',
                 'src/main/res-lion-female-teen',
                 'src/main/res-lion-female-adult',
-                'src/main/res-lion-female-old'
+                'src/main/res-lion-female-old',
+                'src/main/res-fox-cub',
+                'src/main/res-fox-teen',
+                'src/main/res-fox-adult',
+                'src/main/res-fox-old',
+                'src/main/res-bear-cub',
+                'src/main/res-bear-teen',
+                'src/main/res-bear-adult',
+                'src/main/res-bear-old'
             ]
         }
     }
@@ -48,4 +56,4 @@ android {
     }
 }
 
-// All four species share the same game rules; lion packs also preserve the profile's sex.
+// All six species share the same game rules; lion packs also preserve the profile's sex.

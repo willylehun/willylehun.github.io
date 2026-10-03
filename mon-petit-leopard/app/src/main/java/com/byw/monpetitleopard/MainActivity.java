@@ -2397,7 +2397,7 @@ public class MainActivity extends Activity {
         if(!PetProfileStore.reproductionAgeEligible(this,profileSlot)){
             new AlertDialog.Builder(this)
                 .setTitle("Reproduction")
-                .setMessage("La reproduction est disponible uniquement aux stades ado, adulte et vieux. Les léopardeaux, les louveteaux, les tigreaux et les lionceaux ne peuvent pas se reproduire.")
+                .setMessage("La reproduction est disponible uniquement aux stades ado, adulte et vieux. Les léopardeaux, les louveteaux, les tigreaux, les lionceaux, les renardeaux et les oursons ne peuvent pas se reproduire.")
                 .setPositiveButton("OK",null).show();
             return;
         }

@@ -163,7 +163,7 @@ public class PetChooserActivity extends Activity {
 
         GridLayout choices=new GridLayout(this);
         choices.setColumnCount(2);
-        choices.setRowCount(2);
+        choices.setRowCount(3);
         choices.setAlignmentMode(GridLayout.ALIGN_BOUNDS);
         choices.setUseDefaultMargins(false);
         root.addView(choices,new LinearLayout.LayoutParams(
@@ -172,6 +172,8 @@ public class PetChooserActivity extends Activity {
         addAnimalCard(choices,slot,1,PetSpecies.WOLF);
         addAnimalCard(choices,slot,2,PetSpecies.TIGER);
         addAnimalCard(choices,slot,3,PetSpecies.LION);
+        addAnimalCard(choices,slot,4,PetSpecies.FOX);
+        addAnimalCard(choices,slot,5,PetSpecies.BEAR);
 
         if(PetProfileStore.count(this)>0){
             Button back=button("← Retour aux animaux");
@@ -320,7 +322,8 @@ public class PetChooserActivity extends Activity {
         ip.setMargins(0,dp(10),0,dp(14));
         root.addView(input,ip);
 
-        String article=PetSpecies.isLion(species)&&"female".equals(sex)?"cette ":"ce ";
+        String article=PetSpecies.isLion(species)&&"female".equals(sex)?"cette ":
+            PetSpecies.isBear(species)?"cet ":"ce ";
         Button confirm=button("Adopter "+article+PetSpecies.label(species,sex).toLowerCase(Locale.FRANCE));
         root.addView(confirm,new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,dp(58)));

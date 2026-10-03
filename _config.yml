@@ -1,0 +1,24 @@
+# Keep Android sources and sprite sheets in GitHub, outside the published site.
+# GitHub Pages builds this repository with Jekyll 3.10.
+theme: null
+
+include:
+  - .well-known
+
+exclude:
+  - mon-petit-leopard/app
+  - mon-petit-leopard/source-assets
+  - mon-petit-leopard/qa
+  - mon-petit-leopard/tools
+  - mon-petit-leopard/archive
+  - mon-petit-leopard/build
+  - "mon-petit-leopard/*.md"
+  - "mon-petit-leopard/*.json"
+  - "mon-petit-leopard/*.gradle"
+  - mon-petit-leopard/gradle.properties
+
+# Preserve existing static files instead of generating pages from repository docs.
+optional_front_matter:
+  enabled: false
+readme_index:
+  enabled: false

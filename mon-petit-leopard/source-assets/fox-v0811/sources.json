@@ -1,0 +1,50 @@
+{
+  "cub": {
+    "main": {
+      "file": "fox_cub_main_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 18_19_48-1.png",
+      "sha256": "e4aaa4f9f7eef01630c0df5134c8e8669ed20b92a42f9f604cf81a9b633f4514"
+    },
+    "objects": {
+      "file": "fox_cub_objects_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 18_19_49-2.png",
+      "sha256": "0917dafb93becb6e361788113aa8711c03b03c78e3fe2ee2dab3ffa57bc74ff9"
+    }
+  },
+  "teen": {
+    "main": {
+      "file": "fox_teen_main_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 18_19_55-1.png",
+      "sha256": "d24d70427f63ec5901c0e939cd462d3fa6f0e188090aad178b43b7959ea62c5c"
+    },
+    "objects": {
+      "file": "fox_teen_objects_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 18_19_56-2.png",
+      "sha256": "09e59471419633df282c9d5b85940014df81256fdaac1b9140eb19d56f3d43c1"
+    }
+  },
+  "adult": {
+    "main": {
+      "file": "fox_adult_main_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 18_20_07-1.png",
+      "sha256": "2b9c242680bb7b1081755b00a076a4d7248c774078f823ebfc4549e5213db90c"
+    },
+    "objects": {
+      "file": "fox_adult_objects_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 18_20_08-2.png",
+      "sha256": "56715952a00ec716f9d70010a1691e4051044850896d64863f69644b1f9c881f"
+    }
+  },
+  "old": {
+    "main": {
+      "file": "fox_old_main_source.png",
+      "original_filename": "Feuille de sprites du vieux renard әскәр(1).png",
+      "sha256": "5254150bf5364fba59869e917bf73657e6c24404f53fd5cac89a45a54d292a2b"
+    },
+    "objects": {
+      "file": "fox_old_objects_source.png",
+      "original_filename": "Planche d’assets du vieux renard geschniegelt(1).png",
+      "sha256": "63e1352fb5ea620b56a78caebc8380fbe6f5c602452009d4b5511e85c2bf15b4"
+    }
+  }
+}
