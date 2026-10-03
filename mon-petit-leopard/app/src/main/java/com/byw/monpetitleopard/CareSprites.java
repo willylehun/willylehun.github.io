@@ -70,8 +70,33 @@ final class CareSprites {
         R.drawable.wolf_old_groom_foam,R.drawable.wolf_old_soap,
         R.drawable.wolf_old_comb,R.drawable.wolf_old_towel);
 
+    private static final Pack TIGER_CUB=new Pack("tiger",MainActivity.PetStage.CUB,
+        R.drawable.tiger_cub_groom_foam,R.drawable.tiger_cub_soap,
+        R.drawable.tiger_cub_comb,R.drawable.tiger_cub_towel);
+
+    private static final Pack TIGER_TEEN=new Pack("tiger",MainActivity.PetStage.TEEN,
+        R.drawable.tiger_teen_groom_foam,R.drawable.tiger_teen_soap,
+        R.drawable.tiger_teen_comb,R.drawable.tiger_teen_towel);
+
+    private static final Pack TIGER_ADULT=new Pack("tiger",MainActivity.PetStage.ADULT,
+        R.drawable.tiger_adult_groom_foam,R.drawable.tiger_adult_soap,
+        R.drawable.tiger_adult_comb,R.drawable.tiger_adult_towel);
+
+    private static final Pack TIGER_OLD=new Pack("tiger",MainActivity.PetStage.OLD,
+        R.drawable.tiger_old_groom_foam,R.drawable.tiger_old_soap,
+        R.drawable.tiger_old_comb,R.drawable.tiger_old_towel);
+
     static Pack forStage(String species,MainActivity.PetStage stage){
         if("leopard".equals(species))return forStage(stage);
+        if("tiger".equals(species)){
+            switch(stage){
+                case CUB:return TIGER_CUB;
+                case TEEN:return TIGER_TEEN;
+                case ADULT:return TIGER_ADULT;
+                case OLD:return TIGER_OLD;
+            }
+            throw new IllegalStateException("Aucun pack de soins tigre pour l'âge "+stage);
+        }
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);
         switch(stage){
@@ -99,6 +124,7 @@ final class CareSprites {
 
     static int bottle(String species,MainActivity.PetStage stage){
         if("leopard".equals(species))return bottle(stage);
+        if("tiger".equals(species))return stage==MainActivity.PetStage.CUB?R.drawable.tiger_cub_bottle:0;
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);
         return stage==MainActivity.PetStage.CUB?R.drawable.wolf_cub_bottle:0;

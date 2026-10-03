@@ -1,31 +1,33 @@
 # Packs de sprites — Mon Petit Léopard
 
-## Contrat actuel — v0.8.8
+## Contrat actuel — v0.8.9
 
-Les deux espèces utilisent le même moteur de jeu et des ressources indépendantes.
-Le nom `leopard` reste celui des sauvegardes historiques ; `wolf` identifie le loup.
+Les trois espèces utilisent le même moteur de jeu et des ressources indépendantes.
+Le nom `leopard` reste celui des sauvegardes historiques ; `wolf` identifie le loup
+et `tiger` le tigre. L'ajout du tigre ne migre ni n'efface les profils existants.
 
-| Espèce | Louveteau / léopardeau | Ado | Adulte | Vieux |
+| Espèce | Petit | Ado | Adulte | Vieux |
 | --- | --- | --- | --- | --- |
 | Léopard | `res-cub` | `res-teen` | `res-adult` | `res-old` |
 | Loup | `res-wolf-cub` | `res-wolf-teen` | `res-wolf-adult` | `res-wolf-old` |
+| Tigre | `res-tiger-cub` | `res-tiger-teen` | `res-tiger-adult` | `res-tiger-old` |
 
 Chaque frame runtime fait **256 × 256 px**, avec des marges transparentes.
 Haut montre le dos, bas montre la face. Les marches gauche et droite utilisent
 leurs images distinctes. Les chargeurs refusent les espèces inconnues et ne
 substituent jamais une espèce ou un âge lorsqu'une ressource manque.
 
-| Animation | Léopard | Loup |
-| --- | ---: | ---: |
-| Idle, par direction | 1 | 1 |
-| Marche et course, par direction | 6 | 6 |
-| Saut | 5 | 5 |
-| Mange / dort | 3 | 3 |
-| Humeurs | 12 | 12 |
-| Rapport d'objet / soin | 1 | 1 |
-| Corde | 5 | 1, traction animée par le moteur |
-| Griffoir | 2 | 1, mouvement animé par le moteur |
-| Biberon, petit uniquement | 1 | 1 |
+| Animation | Léopard | Loup | Tigre |
+| --- | ---: | ---: | ---: |
+| Idle, par direction | 1 | 1 | 1 |
+| Marche et course, par direction | 6 | 6 | 6 |
+| Saut | 5 | 5 | 5 |
+| Mange / dort | 3 | 3 | 3 |
+| Humeurs | 12 | 12 | 12 |
+| Rapport d'objet / soin | 1 | 1 | 1 |
+| Corde | 5 | 1, traction animée par le moteur | 1, traction animée par le moteur |
+| Griffoir | 2 | 1, mouvement animé par le moteur | 1, mouvement animé par le moteur |
+| Biberon, petit uniquement | 1 | 1 | 1 |
 
 Les huit planches loup originales sont conservées dans `source-assets/wolf-v086/`.
 `tools/prepare_v086_wolf_assets.py` prépare leurs découpes et la vraie transparence,
@@ -36,12 +38,34 @@ uniques : le moteur fournit le mouvement sans inventer de nouvelles images.
 
 Le choix d'animal, l'en-tête, les étapes sexe/nom et le jeton de promenade suivent
 l'espèce et l'âge du profil. Les besoins, restrictions par âge, objets, récompenses,
-goûts, lassitude et durées restent communs aux deux espèces. Les activités visuelles
+goûts, lassitude et durées restent communs aux trois espèces. Les activités visuelles
 en cours sont arrêtées au changement d'âge pour ne conserver aucun ancien sprite.
 
-Les tests `test_wolf_behavior.py` et `validate_wolf_sprite_packs.py` complètent les
-contrats existants. Le workflow prépare les deux espèces avant les tests et le
-build. Le manifeste `wolf-sprite-manifest.json` décrit la provenance des découpes.
+Le test `test_wolf_behavior.py` conserve son nom historique et vérifie désormais
+les trois espèces. Les validateurs `validate_wolf_sprite_packs.py` et
+`validate_tiger_sprite_packs.py` complètent les contrats du léopard. Le workflow
+prépare les trois espèces avant les tests et le build. Les manifestes par espèce
+décrivent la provenance des découpes.
+
+### Intégration du tigre v0.8.9
+
+Le choix initial propose Léopard, Loup et Tigre, puis le sexe et le nom. Les six
+emplacements restent communs aux trois espèces. Le tigre utilise les quatre stades
+existants : Tigreau, Tigre ado, Tigre adulte et Vieux tigre. Les naissances entre
+deux tigres compatibles créent un tigreau avec son propre profil.
+
+Les huit PNG fournis sont conservés sans modification dans
+`source-assets/tiger-v089/`. `tools/prepare_v089_tiger_assets.py` extrait les poses
+avec des coordonnées propres à chaque planche et prépare la transparence réelle.
+Les quatre dossiers contiennent 109 ressources de jeu et quatre portraits de
+promenade au total ; `tiger-sprite-manifest.json` conserve les sources, découpes
+et empreintes. Les poses gauche mal étiquetées sur les planches sont orientées
+correctement ; les marches gauche et droite restent leurs séquences distinctes.
+
+Le tigre emprunte les mêmes chemins d'action que le léopard pour l'alimentation,
+la gamelle d'eau, les soins, les caresses, les jeux du salon et du jardin, la corde,
+le griffoir, le sommeil et la promenade. Aucun coefficient de besoin, goût, durée,
+récompense ou restriction par âge n'est ajouté pour cette espèce.
 
 ### Retour de promenade, sommeil et test de croissance v0.8.8
 
@@ -67,7 +91,7 @@ d'historique sont sauvegardés, puis les actions précédentes sont annulées et
 les packs ainsi que le portrait sont actualisés immédiatement.
 
 `tools/test_promenade_visibility.py` couvre les retours anticipés, les callbacks
-de rendu et la fin de promenade pour les deux espèces aux quatre âges.
+de rendu et la fin de promenade pour les trois espèces aux quatre âges.
 `tools/test_dev_growth.py` couvre les frontières d'âge, les profils mixtes, la
 sauvegarde et l'inactivité du bouton au dernier stade. Ces tests font partie de
 la validation CI avant publication.

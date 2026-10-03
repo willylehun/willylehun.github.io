@@ -8,8 +8,8 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 53
-        versionName '0.8.8'
+        versionCode 54
+        versionName '0.8.9'
     }
 
     sourceSets {
@@ -25,7 +25,11 @@ android {
                 'src/main/res-wolf-cub',
                 'src/main/res-wolf-teen',
                 'src/main/res-wolf-adult',
-                'src/main/res-wolf-old'
+                'src/main/res-wolf-old',
+                'src/main/res-tiger-cub',
+                'src/main/res-tiger-teen',
+                'src/main/res-tiger-adult',
+                'src/main/res-tiger-old'
             ]
         }
     }
@@ -36,4 +40,4 @@ android {
     }
 }
 
-// Both species use the same game rules and separate, validated sprite packs.
+// All three species use the same game rules and separate, validated sprite packs.

@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Locale;
 
 public class PetChooserActivity extends Activity {
     LinearLayout root;
@@ -157,14 +158,15 @@ public class PetChooserActivity extends Activity {
         }
         resetRoot();
         root.addView(title("Choisis ton animal"));
-        root.addView(subtitle("Léopard ou loup : choisis ton nouveau compagnon."));
+        root.addView(subtitle("Léopard, loup ou tigre : choisis ton nouveau compagnon."));
 
         LinearLayout choices=new LinearLayout(this);
-        choices.setOrientation(LinearLayout.HORIZONTAL);
+        choices.setOrientation(LinearLayout.VERTICAL);
         root.addView(choices,new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
         addAnimalCard(choices,slot,PetSpecies.LEOPARD);
         addAnimalCard(choices,slot,PetSpecies.WOLF);
+        addAnimalCard(choices,slot,PetSpecies.TIGER);
 
         if(PetProfileStore.count(this)>0){
             Button back=button("← Retour aux animaux");
@@ -176,37 +178,43 @@ public class PetChooserActivity extends Activity {
 
     void addAnimalCard(LinearLayout choices,int slot,String species){
         LinearLayout card=new LinearLayout(this);
-        card.setOrientation(LinearLayout.VERTICAL);
-        card.setGravity(Gravity.CENTER);
-        card.setPadding(dp(8),dp(14),dp(8),dp(14));
+        card.setOrientation(LinearLayout.HORIZONTAL);
+        card.setGravity(Gravity.CENTER_VERTICAL);
+        card.setPadding(dp(12),dp(8),dp(12),dp(8));
         card.setBackground(cardBackground());
         LinearLayout.LayoutParams cp=new LinearLayout.LayoutParams(
-            0,dp(250),1f);
-        cp.setMargins(dp(5),dp(8),dp(5),dp(18));
+            ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        cp.setMargins(dp(5),0,dp(5),dp(10));
         choices.addView(card,cp);
 
         ImageView icon=new ImageView(this);
         icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
         icon.setImageResource(PetSpecies.iconRes(species,0L));
-        card.addView(icon,new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,dp(152)));
+        card.addView(icon,new LinearLayout.LayoutParams(dp(96),dp(96)));
+
+        LinearLayout labels=new LinearLayout(this);
+        labels.setOrientation(LinearLayout.VERTICAL);
+        labels.setGravity(Gravity.CENTER_VERTICAL);
+        labels.setPadding(dp(12),0,0,0);
+        card.addView(labels,new LinearLayout.LayoutParams(
+            0,ViewGroup.LayoutParams.WRAP_CONTENT,1f));
 
         TextView name=new TextView(this);
         name.setText(PetSpecies.label(species));
         name.setTextColor(Color.rgb(61,49,36));
         name.setTextSize(22);
         name.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
-        name.setGravity(Gravity.CENTER);
-        card.addView(name);
+        name.setGravity(Gravity.START);
+        labels.addView(name);
 
         TextView ready=new TextView(this);
         ready.setText(PetSpecies.stageLabel(species,MainActivity.PetStage.CUB));
         ready.setTextColor(Color.rgb(96,112,59));
         ready.setTextSize(13);
-        ready.setGravity(Gravity.CENTER);
-        card.addView(ready);
+        ready.setGravity(Gravity.START);
+        labels.addView(ready);
 
-        card.setContentDescription("Adopter un "+(PetSpecies.isWolf(species)?"loup":"léopard"));
+        card.setContentDescription("Adopter un "+PetSpecies.label(species).toLowerCase(Locale.FRANCE));
         card.setOnClickListener(v->showSexChoice(slot,true,species));
     }
 
@@ -265,7 +273,7 @@ public class PetChooserActivity extends Activity {
         ip.setMargins(0,dp(10),0,dp(14));
         root.addView(input,ip);
 
-        Button confirm=button("Adopter ce "+(PetSpecies.isWolf(species)?"loup":"léopard"));
+        Button confirm=button("Adopter ce "+PetSpecies.label(species).toLowerCase(Locale.FRANCE));
         root.addView(confirm,new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,dp(58)));
         confirm.setOnClickListener(v->{

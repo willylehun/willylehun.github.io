@@ -127,8 +127,45 @@ final class GameSprites {
         R.drawable.wolf_old_fetch_yarn,R.drawable.wolf_old_fetch_mouse,
         R.drawable.wolf_old_fetch_plush,R.drawable.wolf_old_rope_play,1);
 
+    private static final Pack TIGER_CUB=new Pack("tiger",MainActivity.PetStage.CUB,
+        R.drawable.tiger_cub_run_down,R.drawable.tiger_cub_run_left,
+        R.drawable.tiger_cub_run_right,R.drawable.tiger_cub_run_up,
+        R.drawable.tiger_cub_fetch_ball,R.drawable.tiger_cub_fetch_tennis,
+        R.drawable.tiger_cub_fetch_yarn,R.drawable.tiger_cub_fetch_mouse,
+        R.drawable.tiger_cub_fetch_plush,R.drawable.tiger_cub_rope_play,1);
+
+    private static final Pack TIGER_TEEN=new Pack("tiger",MainActivity.PetStage.TEEN,
+        R.drawable.tiger_teen_run_down,R.drawable.tiger_teen_run_left,
+        R.drawable.tiger_teen_run_right,R.drawable.tiger_teen_run_up,
+        R.drawable.tiger_teen_fetch_ball,R.drawable.tiger_teen_fetch_tennis,
+        R.drawable.tiger_teen_fetch_yarn,R.drawable.tiger_teen_fetch_mouse,
+        R.drawable.tiger_teen_fetch_plush,R.drawable.tiger_teen_rope_play,1);
+
+    private static final Pack TIGER_ADULT=new Pack("tiger",MainActivity.PetStage.ADULT,
+        R.drawable.tiger_adult_run_down,R.drawable.tiger_adult_run_left,
+        R.drawable.tiger_adult_run_right,R.drawable.tiger_adult_run_up,
+        R.drawable.tiger_adult_fetch_ball,R.drawable.tiger_adult_fetch_tennis,
+        R.drawable.tiger_adult_fetch_yarn,R.drawable.tiger_adult_fetch_mouse,
+        R.drawable.tiger_adult_fetch_plush,R.drawable.tiger_adult_rope_play,1);
+
+    private static final Pack TIGER_OLD=new Pack("tiger",MainActivity.PetStage.OLD,
+        R.drawable.tiger_old_run_down,R.drawable.tiger_old_run_left,
+        R.drawable.tiger_old_run_right,R.drawable.tiger_old_run_up,
+        R.drawable.tiger_old_fetch_ball,R.drawable.tiger_old_fetch_tennis,
+        R.drawable.tiger_old_fetch_yarn,R.drawable.tiger_old_fetch_mouse,
+        R.drawable.tiger_old_fetch_plush,R.drawable.tiger_old_rope_play,1);
+
     static Pack forStage(String species,MainActivity.PetStage stage){
         if("leopard".equals(species))return forStage(stage);
+        if("tiger".equals(species)){
+            switch(stage){
+                case CUB:return TIGER_CUB;
+                case TEEN:return TIGER_TEEN;
+                case ADULT:return TIGER_ADULT;
+                case OLD:return TIGER_OLD;
+            }
+            throw new IllegalStateException("Aucun pack de jeu tigre pour l'âge "+stage);
+        }
         if(!"wolf".equals(species))
             throw new IllegalArgumentException("Espèce inconnue : "+species);
         switch(stage){

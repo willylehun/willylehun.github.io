@@ -19,8 +19,10 @@ import org.robolectric.annotation.*;
 public class GrowthButtonGraphicsTest {
  @Test public void leopardGrowthButtonAndActions(){growth(PetSpecies.LEOPARD,false);}
  @Test public void wolfGrowthButtonAndActions(){growth(PetSpecies.WOLF,false);}
+ @Test public void tigerGrowthButtonAndActions(){growth(PetSpecies.TIGER,false);}
  @Test public void leopardGrowthDuringPromenade(){growth(PetSpecies.LEOPARD,true);}
  @Test public void wolfGrowthDuringPromenade(){growth(PetSpecies.WOLF,true);}
+ @Test public void tigerGrowthDuringPromenade(){growth(PetSpecies.TIGER,true);}
 
  void growth(String species,boolean trip){
   Context app=RuntimeEnvironment.getApplication();
@@ -72,6 +74,7 @@ public class GrowthButtonGraphicsTest {
   main.handler.removeCallbacksAndMessages(null);controller.pause().stop().destroy();
   controller=Robolectric.buildActivity(MainActivity.class,intent).create().start().resume().visible();main=controller.get();PromenadeLifecycleGraphicsTest.settle(main);
   assertEquals(MainActivity.PetStage.OLD,main.petStage());assertFalse(main.devGrowthBtn.isEnabled());assertEquals(oldBorn,main.born);
+  assertEquals(species,main.petSpecies);assertEquals(species,PetProfileStore.species(main,0));
   main.handler.removeCallbacksAndMessages(null);controller.pause().stop().destroy();
   System.out.println("NATIVE_DEV_GROWTH_OK species="+species+" promenade="+trip+" clicks=3 old-disabled=true restart-persisted=true");
  }

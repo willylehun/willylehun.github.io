@@ -1,0 +1,50 @@
+{
+  "cub": {
+    "main": {
+      "file": "tiger_cub_main_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 11_28_01-1(1).png",
+      "sha256": "57484bc67ef7ab9885e6f44a2ea09a0115bcd7ba92052fe379b97c7178b061d6"
+    },
+    "objects": {
+      "file": "tiger_cub_objects_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 11_28_02-2(1).png",
+      "sha256": "ca401b27d4117d3c062997b62a87bf3f69e101ca645a1e1139d2970083bc23a1"
+    }
+  },
+  "teen": {
+    "main": {
+      "file": "tiger_teen_main_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 11_28_08-1(1).png",
+      "sha256": "953e10668cd2e3057f003e5f781695a9c19877a3a1021b255fd5c60eda8ce9cd"
+    },
+    "objects": {
+      "file": "tiger_teen_objects_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 11_28_09-2(1).png",
+      "sha256": "4eb240681b5ac763e9b4dc0cbe0e66776564392fa3aae8992eaa32d4a865a6ed"
+    }
+  },
+  "adult": {
+    "main": {
+      "file": "tiger_adult_main_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 13_06_44-1(1).png",
+      "sha256": "8116da4b3ef2f247fe0c76023117d7aed73c3fcb070726a4850c373c8121dd7e"
+    },
+    "objects": {
+      "file": "tiger_adult_objects_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 13_06_45-2(1).png",
+      "sha256": "23fdb2f0b52334e46555a2ccaef03462be36d139364c72dfc0ae37963e64433a"
+    }
+  },
+  "old": {
+    "main": {
+      "file": "tiger_old_main_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 13_06_52-1(1).png",
+      "sha256": "135c39746cebfbd59212eabb3f7dc77fd88aab7e62b062b640ad511fe891f5ae"
+    },
+    "objects": {
+      "file": "tiger_old_objects_source.png",
+      "original_filename": "Image ChatGPT 3 oct. 2026, 13_06_53-2(1).png",
+      "sha256": "02d53ab2a2ca2096af32c395ad0036d7df8ff7d47c0570089f20d6660b431bcc"
+    }
+  }
+}

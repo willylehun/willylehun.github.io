@@ -1,0 +1,9607 @@
+{
+  "version": "0.8.9",
+  "species": "tiger",
+  "frame_size": 256,
+  "safe_margin": 16,
+  "sources": {
+    "cub": {
+      "main": {
+        "file": "tiger_cub_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 11_28_01-1(1).png",
+        "sha256": "57484bc67ef7ab9885e6f44a2ea09a0115bcd7ba92052fe379b97c7178b061d6",
+        "path": "source-assets/tiger-v089/tiger_cub_main_source.png",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "objects": {
+        "file": "tiger_cub_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 11_28_02-2(1).png",
+        "sha256": "ca401b27d4117d3c062997b62a87bf3f69e101ca645a1e1139d2970083bc23a1",
+        "path": "source-assets/tiger-v089/tiger_cub_objects_source.png",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      }
+    },
+    "teen": {
+      "main": {
+        "file": "tiger_teen_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 11_28_08-1(1).png",
+        "sha256": "953e10668cd2e3057f003e5f781695a9c19877a3a1021b255fd5c60eda8ce9cd",
+        "path": "source-assets/tiger-v089/tiger_teen_main_source.png",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "objects": {
+        "file": "tiger_teen_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 11_28_09-2(1).png",
+        "sha256": "4eb240681b5ac763e9b4dc0cbe0e66776564392fa3aae8992eaa32d4a865a6ed",
+        "path": "source-assets/tiger-v089/tiger_teen_objects_source.png",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      }
+    },
+    "adult": {
+      "main": {
+        "file": "tiger_adult_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 13_06_44-1(1).png",
+        "sha256": "8116da4b3ef2f247fe0c76023117d7aed73c3fcb070726a4850c373c8121dd7e",
+        "path": "source-assets/tiger-v089/tiger_adult_main_source.png",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "objects": {
+        "file": "tiger_adult_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 13_06_45-2(1).png",
+        "sha256": "23fdb2f0b52334e46555a2ccaef03462be36d139364c72dfc0ae37963e64433a",
+        "path": "source-assets/tiger-v089/tiger_adult_objects_source.png",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      }
+    },
+    "old": {
+      "main": {
+        "file": "tiger_old_main_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 13_06_52-1(1).png",
+        "sha256": "135c39746cebfbd59212eabb3f7dc77fd88aab7e62b062b640ad511fe891f5ae",
+        "path": "source-assets/tiger-v089/tiger_old_main_source.png",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "objects": {
+        "file": "tiger_old_objects_source.png",
+        "original_filename": "Image ChatGPT 3 oct. 2026, 13_06_53-2(1).png",
+        "sha256": "02d53ab2a2ca2096af32c395ad0036d7df8ff7d47c0570089f20d6660b431bcc",
+        "path": "source-assets/tiger-v089/tiger_old_objects_source.png",
+        "dimensions": [
+          1536,
+          1024
+        ]
+      }
+    }
+  },
+  "assets": {
+    "tiger_cub_idle_down.png": {
+      "age": "cub",
+      "action": "idle_down",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_idle_down.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "6d14dd9b1ee21a4a0fa98af73829c712b64e9bd5b41cb91d2afc432a7049b3cb",
+      "source": "main",
+      "source_cells": [
+        [
+          13,
+          98,
+          211,
+          253
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_cub_idle_left.png": {
+      "age": "cub",
+      "action": "idle_left",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_idle_left.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "8ba435e5716181e1653f5546f2b13e243fb949bc69ad0a2e73e633dd22a811e8",
+      "source": "main",
+      "source_cells": [
+        [
+          220,
+          98,
+          411,
+          253
+        ]
+      ],
+      "derivation": "horizontal mirror of mislabeled source idle"
+    },
+    "tiger_cub_idle_right.png": {
+      "age": "cub",
+      "action": "idle_right",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_idle_right.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "7fc38219359470e3b4d1b75722ef51fd04acc1b59c84b34c37c58cda9c76e1f4",
+      "source": "main",
+      "source_cells": [
+        [
+          418,
+          98,
+          613,
+          253
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_cub_idle_up.png": {
+      "age": "cub",
+      "action": "idle_up",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_idle_up.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "23b408239806842fc30e9ece3be5b19c95838ed0827de2cfe7fe2163e7b8beb7",
+      "source": "main",
+      "source_cells": [
+        [
+          621,
+          98,
+          811,
+          253
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_cub_walk_down.webp": {
+      "age": "cub",
+      "action": "walk_down",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_walk_down.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "1446e7f89ae0e8ec1f989b251f9baf4417a238556e16a7cd25fc7516acb1903b",
+      "source": "main",
+      "source_cells": [
+        [
+          819,
+          98,
+          930,
+          252
+        ],
+        [
+          934,
+          98,
+          1046,
+          252
+        ],
+        [
+          1050,
+          98,
+          1164,
+          252
+        ],
+        [
+          1168,
+          98,
+          1279,
+          252
+        ],
+        [
+          1283,
+          98,
+          1399,
+          252
+        ],
+        [
+          1403,
+          98,
+          1523,
+          252
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          112,
+          111,
+          154
+        ],
+        [
+          0,
+          112,
+          112,
+          154
+        ],
+        [
+          0,
+          112,
+          114,
+          154
+        ],
+        [
+          0,
+          112,
+          111,
+          154
+        ],
+        [
+          0,
+          112,
+          116,
+          154
+        ],
+        [
+          0,
+          112,
+          120,
+          154
+        ]
+      ]
+    },
+    "tiger_cub_walk_left.webp": {
+      "age": "cub",
+      "action": "walk_left",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_walk_left.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "4e08ce68c7b132f7212d2fb5dce578a37e529f604b4f4f75748766d19f453aeb",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          295,
+          138,
+          427
+        ],
+        [
+          142,
+          295,
+          260,
+          427
+        ],
+        [
+          264,
+          295,
+          384,
+          427
+        ],
+        [
+          388,
+          295,
+          509,
+          427
+        ],
+        [
+          513,
+          295,
+          633,
+          427
+        ],
+        [
+          637,
+          295,
+          761,
+          427
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          95,
+          123,
+          132
+        ],
+        [
+          0,
+          95,
+          118,
+          132
+        ],
+        [
+          0,
+          95,
+          120,
+          132
+        ],
+        [
+          0,
+          95,
+          121,
+          132
+        ],
+        [
+          0,
+          95,
+          120,
+          132
+        ],
+        [
+          0,
+          95,
+          124,
+          132
+        ]
+      ]
+    },
+    "tiger_cub_walk_right.webp": {
+      "age": "cub",
+      "action": "walk_right",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_walk_right.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "92ae22a273866daa59d6ed003b5d180af36924f3cf18bef46f6995cd7a45b599",
+      "source": "main",
+      "source_cells": [
+        [
+          772,
+          295,
+          897,
+          427
+        ],
+        [
+          901,
+          295,
+          1021,
+          427
+        ],
+        [
+          1025,
+          295,
+          1144,
+          427
+        ],
+        [
+          1148,
+          295,
+          1270,
+          427
+        ],
+        [
+          1274,
+          295,
+          1392,
+          427
+        ],
+        [
+          1396,
+          295,
+          1522,
+          427
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          95,
+          125,
+          132
+        ],
+        [
+          0,
+          95,
+          120,
+          132
+        ],
+        [
+          0,
+          95,
+          119,
+          132
+        ],
+        [
+          0,
+          95,
+          122,
+          132
+        ],
+        [
+          0,
+          95,
+          118,
+          132
+        ],
+        [
+          0,
+          95,
+          126,
+          132
+        ]
+      ]
+    },
+    "tiger_cub_walk_up.webp": {
+      "age": "cub",
+      "action": "walk_up",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_walk_up.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "6d01ebe86af6b2b3b80af5e2abe76b3259657260fb2c5df9cec5c8e2c95a6ead",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          471,
+          138,
+          620
+        ],
+        [
+          142,
+          471,
+          260,
+          620
+        ],
+        [
+          264,
+          471,
+          385,
+          620
+        ],
+        [
+          389,
+          471,
+          509,
+          620
+        ],
+        [
+          513,
+          471,
+          633,
+          620
+        ],
+        [
+          637,
+          471,
+          762,
+          620
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          112,
+          123,
+          149
+        ],
+        [
+          0,
+          112,
+          118,
+          149
+        ],
+        [
+          0,
+          112,
+          121,
+          149
+        ],
+        [
+          0,
+          112,
+          120,
+          149
+        ],
+        [
+          0,
+          112,
+          120,
+          149
+        ],
+        [
+          0,
+          112,
+          125,
+          149
+        ]
+      ]
+    },
+    "tiger_cub_jump.webp": {
+      "age": "cub",
+      "action": "jump",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_jump.webp",
+      "frames": 5,
+      "width": 1280,
+      "height": 256,
+      "sha256": "05eb76112a38871aa3df520edcfc6ff121b0276154f37911f8fae804c767ad97",
+      "source": "main",
+      "source_cells": [
+        [
+          772,
+          471,
+          915,
+          620
+        ],
+        [
+          919,
+          471,
+          1065,
+          620
+        ],
+        [
+          1069,
+          471,
+          1215,
+          620
+        ],
+        [
+          1219,
+          471,
+          1368,
+          620
+        ],
+        [
+          1372,
+          471,
+          1521,
+          620
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          110,
+          143,
+          149
+        ],
+        [
+          0,
+          110,
+          146,
+          149
+        ],
+        [
+          0,
+          110,
+          146,
+          149
+        ],
+        [
+          0,
+          110,
+          149,
+          149
+        ],
+        [
+          0,
+          110,
+          149,
+          149
+        ]
+      ],
+      "printed_label_masks": {
+        "5": [
+          [
+            71,
+            134
+          ],
+          [
+            78,
+            134
+          ],
+          [
+            78,
+            135
+          ],
+          [
+            80,
+            135
+          ],
+          [
+            81,
+            137
+          ],
+          [
+            81,
+            147
+          ],
+          [
+            71,
+            147
+          ]
+        ]
+      }
+    },
+    "tiger_cub_eat.webp": {
+      "age": "cub",
+      "action": "eat",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_eat.webp",
+      "frames": 3,
+      "width": 768,
+      "height": 256,
+      "sha256": "4e92155db651f80724c3ce5544cc77130fa120eea64bb6b1b0f340b32e4431f8",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          664,
+          131,
+          857
+        ],
+        [
+          135,
+          664,
+          253,
+          857
+        ],
+        [
+          257,
+          664,
+          373,
+          857
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_cub_sleep.webp": {
+      "age": "cub",
+      "action": "sleep",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_sleep.webp",
+      "frames": 3,
+      "width": 768,
+      "height": 256,
+      "sha256": "0d451a7326b5df25a7a33874eb714a0215c15877aac38809a09d2bac52a65f75",
+      "source": "main",
+      "source_cells": [
+        [
+          385,
+          664,
+          509,
+          857
+        ],
+        [
+          513,
+          664,
+          641,
+          857
+        ],
+        [
+          645,
+          664,
+          779,
+          857
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_cub_moods.webp": {
+      "age": "cub",
+      "action": "moods",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_moods.webp",
+      "frames": 12,
+      "width": 3072,
+      "height": 256,
+      "sha256": "61105ca970a6cfb0a13e8baf1bd840ed595125f6ae69cef00ed41a11fbbe6fa5",
+      "source": "main",
+      "source_cells": [
+        [
+          790,
+          664,
+          911,
+          775
+        ],
+        [
+          915,
+          664,
+          1031,
+          775
+        ],
+        [
+          1035,
+          664,
+          1148,
+          775
+        ],
+        [
+          1152,
+          664,
+          1268,
+          775
+        ],
+        [
+          1272,
+          664,
+          1390,
+          775
+        ],
+        [
+          1394,
+          664,
+          1522,
+          775
+        ],
+        [
+          790,
+          796,
+          911,
+          911
+        ],
+        [
+          915,
+          796,
+          1031,
+          911
+        ],
+        [
+          1035,
+          796,
+          1148,
+          911
+        ],
+        [
+          1152,
+          796,
+          1268,
+          911
+        ],
+        [
+          1272,
+          796,
+          1390,
+          911
+        ],
+        [
+          1394,
+          796,
+          1522,
+          911
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_cub_run_down.webp": {
+      "age": "cub",
+      "action": "run_down",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_run_down.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "1446e7f89ae0e8ec1f989b251f9baf4417a238556e16a7cd25fc7516acb1903b",
+      "source": "main",
+      "source_cells": [
+        [
+          819,
+          98,
+          930,
+          252
+        ],
+        [
+          934,
+          98,
+          1046,
+          252
+        ],
+        [
+          1050,
+          98,
+          1164,
+          252
+        ],
+        [
+          1168,
+          98,
+          1279,
+          252
+        ],
+        [
+          1283,
+          98,
+          1399,
+          252
+        ],
+        [
+          1403,
+          98,
+          1523,
+          252
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          112,
+          111,
+          154
+        ],
+        [
+          0,
+          112,
+          112,
+          154
+        ],
+        [
+          0,
+          112,
+          114,
+          154
+        ],
+        [
+          0,
+          112,
+          111,
+          154
+        ],
+        [
+          0,
+          112,
+          116,
+          154
+        ],
+        [
+          0,
+          112,
+          120,
+          154
+        ]
+      ]
+    },
+    "tiger_cub_run_left.webp": {
+      "age": "cub",
+      "action": "run_left",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_run_left.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "4e08ce68c7b132f7212d2fb5dce578a37e529f604b4f4f75748766d19f453aeb",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          295,
+          138,
+          427
+        ],
+        [
+          142,
+          295,
+          260,
+          427
+        ],
+        [
+          264,
+          295,
+          384,
+          427
+        ],
+        [
+          388,
+          295,
+          509,
+          427
+        ],
+        [
+          513,
+          295,
+          633,
+          427
+        ],
+        [
+          637,
+          295,
+          761,
+          427
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          95,
+          123,
+          132
+        ],
+        [
+          0,
+          95,
+          118,
+          132
+        ],
+        [
+          0,
+          95,
+          120,
+          132
+        ],
+        [
+          0,
+          95,
+          121,
+          132
+        ],
+        [
+          0,
+          95,
+          120,
+          132
+        ],
+        [
+          0,
+          95,
+          124,
+          132
+        ]
+      ]
+    },
+    "tiger_cub_run_right.webp": {
+      "age": "cub",
+      "action": "run_right",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_run_right.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "92ae22a273866daa59d6ed003b5d180af36924f3cf18bef46f6995cd7a45b599",
+      "source": "main",
+      "source_cells": [
+        [
+          772,
+          295,
+          897,
+          427
+        ],
+        [
+          901,
+          295,
+          1021,
+          427
+        ],
+        [
+          1025,
+          295,
+          1144,
+          427
+        ],
+        [
+          1148,
+          295,
+          1270,
+          427
+        ],
+        [
+          1274,
+          295,
+          1392,
+          427
+        ],
+        [
+          1396,
+          295,
+          1522,
+          427
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          95,
+          125,
+          132
+        ],
+        [
+          0,
+          95,
+          120,
+          132
+        ],
+        [
+          0,
+          95,
+          119,
+          132
+        ],
+        [
+          0,
+          95,
+          122,
+          132
+        ],
+        [
+          0,
+          95,
+          118,
+          132
+        ],
+        [
+          0,
+          95,
+          126,
+          132
+        ]
+      ]
+    },
+    "tiger_cub_run_up.webp": {
+      "age": "cub",
+      "action": "run_up",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_run_up.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "6d01ebe86af6b2b3b80af5e2abe76b3259657260fb2c5df9cec5c8e2c95a6ead",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          471,
+          138,
+          620
+        ],
+        [
+          142,
+          471,
+          260,
+          620
+        ],
+        [
+          264,
+          471,
+          385,
+          620
+        ],
+        [
+          389,
+          471,
+          509,
+          620
+        ],
+        [
+          513,
+          471,
+          633,
+          620
+        ],
+        [
+          637,
+          471,
+          762,
+          620
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          112,
+          123,
+          149
+        ],
+        [
+          0,
+          112,
+          118,
+          149
+        ],
+        [
+          0,
+          112,
+          121,
+          149
+        ],
+        [
+          0,
+          112,
+          120,
+          149
+        ],
+        [
+          0,
+          112,
+          120,
+          149
+        ],
+        [
+          0,
+          112,
+          125,
+          149
+        ]
+      ]
+    },
+    "tiger_cub_bottle.webp": {
+      "age": "cub",
+      "action": "bottle",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_bottle.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "a92226b684706875de39920787614da127622f657ac83a7627c475341e444d05",
+      "source": "objects",
+      "source_cells": [
+        [
+          17,
+          105,
+          318,
+          339
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        194,
+        301,
+        234
+      ]
+    },
+    "tiger_cub_comb.webp": {
+      "age": "cub",
+      "action": "comb",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_comb.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "8e32fa9ac9e4535c95071d5bc162eba20c0d82fd83f8810edeaa3e874ce6aa51",
+      "source": "objects",
+      "source_cells": [
+        [
+          328,
+          105,
+          616,
+          339
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        194,
+        288,
+        234
+      ]
+    },
+    "tiger_cub_fetch_mouse.png": {
+      "age": "cub",
+      "action": "fetch_mouse",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_fetch_mouse.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "1ed9ad4d88bace0762e3511b52452d51c5305bf48d92a925e916439be7c53b42",
+      "source": "objects",
+      "source_cells": [
+        [
+          923,
+          105,
+          1210,
+          339
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        176,
+        287,
+        234
+      ]
+    },
+    "tiger_cub_fetch_plush.png": {
+      "age": "cub",
+      "action": "fetch_plush",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_fetch_plush.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "acadbf243f216d8913ab52faa0be7ec1b17314682c59891ea075d3f1b0429e05",
+      "source": "objects",
+      "source_cells": [
+        [
+          1220,
+          105,
+          1521,
+          339
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        194,
+        301,
+        234
+      ]
+    },
+    "tiger_cub_fetch_ball.png": {
+      "age": "cub",
+      "action": "fetch_ball",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_fetch_ball.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "e421618b26de4f5d89861e8deb265c913c216bc63babad869e342a6eb89abd20",
+      "source": "objects",
+      "source_cells": [
+        [
+          17,
+          391,
+          318,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        173,
+        301,
+        231
+      ]
+    },
+    "tiger_cub_fetch_tennis.png": {
+      "age": "cub",
+      "action": "fetch_tennis",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_fetch_tennis.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "e227bbeebcf9c9f7e83d49ba4e26ce8c07ff0af8b256347b3bf4705511181f6c",
+      "source": "objects",
+      "source_cells": [
+        [
+          328,
+          391,
+          616,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        173,
+        288,
+        231
+      ]
+    },
+    "tiger_cub_fetch_yarn.png": {
+      "age": "cub",
+      "action": "fetch_yarn",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_fetch_yarn.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "e068af9cefc151dd8e76ece07afc0a0d7f96ff45a3d6337730c0725b2da5249a",
+      "source": "objects",
+      "source_cells": [
+        [
+          625,
+          391,
+          913,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        173,
+        288,
+        231
+      ]
+    },
+    "tiger_cub_groom_foam.webp": {
+      "age": "cub",
+      "action": "groom_foam",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_groom_foam.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "2d066d4b607a8b306646a4523a8b482b4c6ae1b6c6eec041ce51e0e3995eb554",
+      "source": "objects",
+      "source_cells": [
+        [
+          923,
+          391,
+          1210,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        191,
+        287,
+        231
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          0,
+          0,
+          287,
+          231
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            33.5,
+            69.5,
+            12.8,
+            12.8
+          ],
+          [
+            35.5,
+            90.5,
+            3.4,
+            4.1
+          ],
+          [
+            47,
+            109.5,
+            7.8,
+            7.8
+          ],
+          [
+            62.6,
+            120.1,
+            3.1,
+            3.1
+          ],
+          [
+            73.4,
+            24,
+            4.6,
+            6.2
+          ],
+          [
+            77,
+            18.2,
+            3.2,
+            3.2
+          ],
+          [
+            128.4,
+            12.5,
+            3.8,
+            3.8
+          ],
+          [
+            129.9,
+            18.4,
+            2.1,
+            2.1
+          ],
+          [
+            235,
+            71.8,
+            4.6,
+            4.6
+          ],
+          [
+            235.8,
+            96.2,
+            12.5,
+            12.5
+          ],
+          [
+            229.9,
+            120.1,
+            4.1,
+            5.0
+          ],
+          [
+            254.9,
+            133.0,
+            3.5,
+            3.5
+          ],
+          [
+            235.9,
+            152.0,
+            12.9,
+            12.9
+          ],
+          [
+            229.6,
+            170.4,
+            4.5,
+            4.5
+          ]
+        ],
+        "protected_source_foam_polygons": [
+          [
+            [
+              79,
+              33
+            ],
+            [
+              86,
+              27
+            ],
+            [
+              90,
+              21
+            ],
+            [
+              90,
+              17
+            ],
+            [
+              96,
+              12
+            ],
+            [
+              104,
+              12
+            ],
+            [
+              109,
+              15
+            ],
+            [
+              113,
+              15
+            ],
+            [
+              118,
+              20
+            ],
+            [
+              118,
+              26
+            ],
+            [
+              127,
+              27
+            ],
+            [
+              130,
+              30
+            ],
+            [
+              131,
+              35
+            ],
+            [
+              126,
+              39
+            ],
+            [
+              119,
+              40
+            ],
+            [
+              116,
+              45
+            ],
+            [
+              118,
+              49
+            ],
+            [
+              116,
+              54
+            ],
+            [
+              110,
+              57
+            ],
+            [
+              101,
+              54
+            ],
+            [
+              101,
+              62
+            ],
+            [
+              99,
+              67
+            ],
+            [
+              95,
+              69
+            ],
+            [
+              92,
+              67
+            ],
+            [
+              92,
+              61
+            ],
+            [
+              88,
+              62
+            ],
+            [
+              84,
+              59
+            ],
+            [
+              82,
+              54
+            ],
+            [
+              77,
+              54
+            ],
+            [
+              75,
+              49
+            ],
+            [
+              74,
+              44
+            ],
+            [
+              78,
+              39
+            ]
+          ],
+          [
+            [
+              101,
+              162
+            ],
+            [
+              107,
+              162
+            ],
+            [
+              111,
+              167
+            ],
+            [
+              117,
+              167
+            ],
+            [
+              120,
+              172
+            ],
+            [
+              122,
+              177
+            ],
+            [
+              119,
+              181
+            ],
+            [
+              113,
+              182
+            ],
+            [
+              110,
+              178
+            ],
+            [
+              108,
+              185
+            ],
+            [
+              102,
+              186
+            ],
+            [
+              98,
+              182
+            ],
+            [
+              97,
+              176
+            ],
+            [
+              91,
+              178
+            ],
+            [
+              90,
+              173
+            ],
+            [
+              92,
+              167
+            ],
+            [
+              97,
+              166
+            ]
+          ],
+          [
+            [
+              80,
+              200
+            ],
+            [
+              87,
+              198
+            ],
+            [
+              93,
+              200
+            ],
+            [
+              95,
+              205
+            ],
+            [
+              94,
+              210
+            ],
+            [
+              99,
+              211
+            ],
+            [
+              101,
+              216
+            ],
+            [
+              99,
+              222
+            ],
+            [
+              93,
+              224
+            ],
+            [
+              88,
+              222
+            ],
+            [
+              83,
+              223
+            ],
+            [
+              77,
+              221
+            ],
+            [
+              72,
+              221
+            ],
+            [
+              71,
+              217
+            ],
+            [
+              71,
+              211
+            ],
+            [
+              76,
+              208
+            ]
+          ],
+          [
+            [
+              190,
+              166
+            ],
+            [
+              197,
+              164
+            ],
+            [
+              202,
+              168
+            ],
+            [
+              205,
+              169
+            ],
+            [
+              209,
+              167
+            ],
+            [
+              216,
+              170
+            ],
+            [
+              220,
+              177
+            ],
+            [
+              219,
+              182
+            ],
+            [
+              225,
+              184
+            ],
+            [
+              226,
+              190
+            ],
+            [
+              223,
+              195
+            ],
+            [
+              231,
+              199
+            ],
+            [
+              231,
+              204
+            ],
+            [
+              237,
+              207
+            ],
+            [
+              238,
+              212
+            ],
+            [
+              235,
+              215
+            ],
+            [
+              228,
+              216
+            ],
+            [
+              223,
+              219
+            ],
+            [
+              217,
+              217
+            ],
+            [
+              220,
+              210
+            ],
+            [
+              217,
+              202
+            ],
+            [
+              208,
+              199
+            ],
+            [
+              200,
+              196
+            ],
+            [
+              197,
+              181
+            ]
+          ]
+        ]
+      }
+    },
+    "tiger_cub_rope_play.png": {
+      "age": "cub",
+      "action": "rope_play",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_rope_play.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "3983b9b2c7a906f5fcf406f09d75fc25eb95057e8156149fca6a9bb5aaec82be",
+      "source": "objects",
+      "source_cells": [
+        [
+          1220,
+          391,
+          1521,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        173,
+        301,
+        231
+      ]
+    },
+    "tiger_cub_scratcher_play.webp": {
+      "age": "cub",
+      "action": "scratcher_play",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_scratcher_play.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "aae4a7f32e6fc8f5d6d0c73c4c266871a18b3f6cb2de8c07bafb8dd8e62a6512",
+      "source": "objects",
+      "source_cells": [
+        [
+          164,
+          671,
+          560,
+          892
+        ]
+      ],
+      "derivation": "fixed scratcher removed; one supplied tiger pose",
+      "retained_source_silhouette": [
+        [
+          0,
+          0
+        ],
+        [
+          226,
+          0
+        ],
+        [
+          226,
+          45
+        ],
+        [
+          229,
+          49
+        ],
+        [
+          230,
+          53
+        ],
+        [
+          229,
+          57
+        ],
+        [
+          231,
+          59
+        ],
+        [
+          232,
+          64
+        ],
+        [
+          230,
+          69
+        ],
+        [
+          231,
+          72
+        ],
+        [
+          229,
+          75
+        ],
+        [
+          235,
+          73
+        ],
+        [
+          241,
+          74
+        ],
+        [
+          248,
+          78
+        ],
+        [
+          252,
+          83
+        ],
+        [
+          255,
+          90
+        ],
+        [
+          255,
+          96
+        ],
+        [
+          253,
+          100
+        ],
+        [
+          250,
+          104
+        ],
+        [
+          246,
+          109
+        ],
+        [
+          242,
+          114
+        ],
+        [
+          238,
+          119
+        ],
+        [
+          234,
+          124
+        ],
+        [
+          230,
+          129
+        ],
+        [
+          225,
+          134
+        ],
+        [
+          218,
+          138
+        ],
+        [
+          209,
+          142
+        ],
+        [
+          202,
+          145
+        ],
+        [
+          200,
+          157
+        ],
+        [
+          194,
+          166
+        ],
+        [
+          190,
+          173
+        ],
+        [
+          191,
+          221
+        ],
+        [
+          0,
+          221
+        ]
+      ],
+      "printed_header_cleanup_height": 0,
+      "protected_source_fur_polygons": [],
+      "audited_background_seeds": [
+        [
+          211,
+          156
+        ]
+      ],
+      "checker_shadow_cleanup_band": [
+        0,
+        176,
+        396,
+        221
+      ]
+    },
+    "tiger_cub_soap.webp": {
+      "age": "cub",
+      "action": "soap",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_soap.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "bf9f4bab31a32bb1c3ab1016610ebb06f268a76c425df1789df2eb75ee3a22af",
+      "source": "objects",
+      "source_cells": [
+        [
+          573,
+          671,
+          960,
+          892
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        181,
+        387,
+        221
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          0,
+          0,
+          387,
+          221
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            273.1,
+            54.1,
+            5.1,
+            5.1
+          ],
+          [
+            282.9,
+            76.0,
+            12.5,
+            12.5
+          ],
+          [
+            268.3,
+            92.6,
+            4.4,
+            5.5
+          ],
+          [
+            288.6,
+            126.0,
+            9.0,
+            9.0
+          ],
+          [
+            282.1,
+            155.6,
+            13.0,
+            13.0
+          ],
+          [
+            283.6,
+            175.7,
+            3.0,
+            3.8
+          ],
+          [
+            122.7,
+            203.9,
+            8.2,
+            8.2
+          ],
+          [
+            198.7,
+            207.6,
+            8.0,
+            8.0
+          ]
+        ],
+        "protected_source_foam_polygons": [
+          [
+            [
+              246,
+              157
+            ],
+            [
+              251,
+              159
+            ],
+            [
+              254,
+              160
+            ],
+            [
+              256,
+              155
+            ],
+            [
+              260,
+              155
+            ],
+            [
+              264,
+              160
+            ],
+            [
+              268,
+              160
+            ],
+            [
+              273,
+              164
+            ],
+            [
+              275,
+              168
+            ],
+            [
+              274,
+              174
+            ],
+            [
+              269,
+              178
+            ],
+            [
+              274,
+              181
+            ],
+            [
+              281,
+              182
+            ],
+            [
+              284,
+              188
+            ],
+            [
+              281,
+              194
+            ],
+            [
+              277,
+              197
+            ],
+            [
+              270,
+              198
+            ],
+            [
+              265,
+              194
+            ],
+            [
+              263,
+              190
+            ],
+            [
+              255,
+              190
+            ],
+            [
+              251,
+              178
+            ]
+          ]
+        ]
+      }
+    },
+    "tiger_cub_towel.webp": {
+      "age": "cub",
+      "action": "towel",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_towel.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "0170e6862adb616ea2672e2d76780c006ba5dcae16830f2ab097177897478b2c",
+      "source": "objects",
+      "source_cells": [
+        [
+          971,
+          671,
+          1363,
+          892
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        181,
+        392,
+        221
+      ]
+    },
+    "tiger_teen_idle_down.png": {
+      "age": "teen",
+      "action": "idle_down",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_idle_down.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "6b7b3eaab07079c4e929fcd624323f8e035c186d0eee32539cbbd1b9ffe9ff28",
+      "source": "main",
+      "source_cells": [
+        [
+          13,
+          97,
+          211,
+          249
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_teen_idle_left.png": {
+      "age": "teen",
+      "action": "idle_left",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_idle_left.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "2a86b142a7d7bb1ece9c5eb148ca117fa9bc1ee4f29115db724213c018f4e19a",
+      "source": "main",
+      "source_cells": [
+        [
+          220,
+          97,
+          411,
+          249
+        ]
+      ],
+      "derivation": "horizontal mirror of mislabeled source idle"
+    },
+    "tiger_teen_idle_right.png": {
+      "age": "teen",
+      "action": "idle_right",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_idle_right.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "b22544fb09c9936058ad3e9e918513d0ef527f22f44bd1fcc30c2ee1cb398ca0",
+      "source": "main",
+      "source_cells": [
+        [
+          419,
+          97,
+          613,
+          249
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_teen_idle_up.png": {
+      "age": "teen",
+      "action": "idle_up",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_idle_up.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "78210bc687a5c80a67722eb293c85aadde6b0986014e28b146efdcafb1b4a56d",
+      "source": "main",
+      "source_cells": [
+        [
+          622,
+          97,
+          811,
+          249
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_teen_walk_down.webp": {
+      "age": "teen",
+      "action": "walk_down",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_walk_down.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "b5c1e7ca6a54b944e31c0c81e65123aa4d5e03ae99f3b7a2accccd99c1fd2015",
+      "source": "main",
+      "source_cells": [
+        [
+          820,
+          97,
+          930,
+          248
+        ],
+        [
+          934,
+          97,
+          1047,
+          248
+        ],
+        [
+          1051,
+          97,
+          1163,
+          248
+        ],
+        [
+          1167,
+          97,
+          1279,
+          248
+        ],
+        [
+          1283,
+          97,
+          1400,
+          248
+        ],
+        [
+          1404,
+          97,
+          1523,
+          248
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          119,
+          110,
+          151
+        ],
+        [
+          0,
+          119,
+          113,
+          151
+        ],
+        [
+          0,
+          119,
+          112,
+          151
+        ],
+        [
+          0,
+          119,
+          112,
+          151
+        ],
+        [
+          0,
+          119,
+          117,
+          151
+        ],
+        [
+          0,
+          119,
+          119,
+          151
+        ]
+      ],
+      "printed_label_masks": {
+        "2": [
+          [
+            52,
+            137
+          ],
+          [
+            63,
+            137
+          ],
+          [
+            63,
+            149
+          ],
+          [
+            52,
+            149
+          ]
+        ],
+        "5": [
+          [
+            49,
+            136
+          ],
+          [
+            54,
+            136
+          ],
+          [
+            56,
+            137
+          ],
+          [
+            58,
+            137
+          ],
+          [
+            59,
+            140
+          ],
+          [
+            59,
+            149
+          ],
+          [
+            49,
+            149
+          ]
+        ],
+        "6": [
+          [
+            49,
+            137
+          ],
+          [
+            60,
+            137
+          ],
+          [
+            60,
+            149
+          ],
+          [
+            49,
+            149
+          ]
+        ]
+      }
+    },
+    "tiger_teen_walk_left.webp": {
+      "age": "teen",
+      "action": "walk_left",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_walk_left.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "7ea854fa653864d9277724cfff3bf31e3c30bb8a53b525e8a70e1ffe3cbdda49",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          292,
+          138,
+          426
+        ],
+        [
+          142,
+          292,
+          261,
+          426
+        ],
+        [
+          265,
+          292,
+          386,
+          426
+        ],
+        [
+          390,
+          292,
+          511,
+          426
+        ],
+        [
+          515,
+          292,
+          633,
+          426
+        ],
+        [
+          637,
+          292,
+          762,
+          426
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          93,
+          123,
+          134
+        ],
+        [
+          0,
+          93,
+          119,
+          134
+        ],
+        [
+          0,
+          93,
+          121,
+          134
+        ],
+        [
+          0,
+          93,
+          121,
+          134
+        ],
+        [
+          0,
+          93,
+          118,
+          134
+        ],
+        [
+          0,
+          93,
+          125,
+          134
+        ]
+      ]
+    },
+    "tiger_teen_walk_right.webp": {
+      "age": "teen",
+      "action": "walk_right",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_walk_right.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "3f1b561ea851c413517a512eb0ac81f2f720111324346bb2b3525382b9e0dbd8",
+      "source": "main",
+      "source_cells": [
+        [
+          772,
+          292,
+          898,
+          426
+        ],
+        [
+          902,
+          292,
+          1021,
+          426
+        ],
+        [
+          1025,
+          292,
+          1145,
+          426
+        ],
+        [
+          1149,
+          292,
+          1270,
+          426
+        ],
+        [
+          1274,
+          292,
+          1392,
+          426
+        ],
+        [
+          1396,
+          292,
+          1522,
+          426
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          93,
+          126,
+          134
+        ],
+        [
+          0,
+          93,
+          119,
+          134
+        ],
+        [
+          0,
+          93,
+          120,
+          134
+        ],
+        [
+          0,
+          93,
+          121,
+          134
+        ],
+        [
+          0,
+          93,
+          118,
+          134
+        ],
+        [
+          0,
+          93,
+          126,
+          134
+        ]
+      ]
+    },
+    "tiger_teen_walk_up.webp": {
+      "age": "teen",
+      "action": "walk_up",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_walk_up.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "f176436d54a37bacafa207237169684708525f752e9e873c927779a5e989a57a",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          470,
+          138,
+          619
+        ],
+        [
+          142,
+          470,
+          261,
+          619
+        ],
+        [
+          265,
+          470,
+          386,
+          619
+        ],
+        [
+          390,
+          470,
+          510,
+          619
+        ],
+        [
+          514,
+          470,
+          633,
+          619
+        ],
+        [
+          637,
+          470,
+          762,
+          619
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          111,
+          123,
+          149
+        ],
+        [
+          0,
+          111,
+          119,
+          149
+        ],
+        [
+          0,
+          111,
+          121,
+          149
+        ],
+        [
+          0,
+          111,
+          120,
+          149
+        ],
+        [
+          0,
+          111,
+          119,
+          149
+        ],
+        [
+          0,
+          111,
+          125,
+          149
+        ]
+      ]
+    },
+    "tiger_teen_jump.webp": {
+      "age": "teen",
+      "action": "jump",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_jump.webp",
+      "frames": 5,
+      "width": 1280,
+      "height": 256,
+      "sha256": "51010f5dee854956e4c693996d7e504842aff0c7c99110d7d85f58a927a48513",
+      "source": "main",
+      "source_cells": [
+        [
+          772,
+          470,
+          917,
+          619
+        ],
+        [
+          921,
+          470,
+          1065,
+          619
+        ],
+        [
+          1069,
+          470,
+          1215,
+          619
+        ],
+        [
+          1219,
+          470,
+          1367,
+          619
+        ],
+        [
+          1371,
+          470,
+          1522,
+          619
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          112,
+          145,
+          149
+        ],
+        [
+          0,
+          112,
+          144,
+          149
+        ],
+        [
+          0,
+          112,
+          146,
+          149
+        ],
+        [
+          0,
+          112,
+          148,
+          149
+        ],
+        [
+          0,
+          112,
+          151,
+          149
+        ]
+      ]
+    },
+    "tiger_teen_eat.webp": {
+      "age": "teen",
+      "action": "eat",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_eat.webp",
+      "frames": 3,
+      "width": 768,
+      "height": 256,
+      "sha256": "75348da0c9d82b5642d1e93f5344f07a7e3093ab99bf2fafed51bb151a6b7036",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          665,
+          130,
+          858
+        ],
+        [
+          134,
+          665,
+          250,
+          858
+        ],
+        [
+          254,
+          665,
+          375,
+          858
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_teen_sleep.webp": {
+      "age": "teen",
+      "action": "sleep",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_sleep.webp",
+      "frames": 3,
+      "width": 768,
+      "height": 256,
+      "sha256": "aceed4d7df750c8306f5e218389a0a0e5c76c99125dece0e529e163150a5131c",
+      "source": "main",
+      "source_cells": [
+        [
+          386,
+          665,
+          510,
+          858
+        ],
+        [
+          514,
+          665,
+          642,
+          858
+        ],
+        [
+          646,
+          665,
+          781,
+          858
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_teen_moods.webp": {
+      "age": "teen",
+      "action": "moods",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_moods.webp",
+      "frames": 12,
+      "width": 3072,
+      "height": 256,
+      "sha256": "8cddc2b4de238d3e582ed5178f6702b2d5327a251d3b80f6f20fa0284f09b37a",
+      "source": "main",
+      "source_cells": [
+        [
+          791,
+          665,
+          911,
+          774
+        ],
+        [
+          915,
+          665,
+          1031,
+          774
+        ],
+        [
+          1035,
+          665,
+          1148,
+          774
+        ],
+        [
+          1152,
+          665,
+          1269,
+          774
+        ],
+        [
+          1273,
+          665,
+          1390,
+          774
+        ],
+        [
+          1394,
+          665,
+          1522,
+          774
+        ],
+        [
+          791,
+          795,
+          911,
+          911
+        ],
+        [
+          915,
+          795,
+          1031,
+          911
+        ],
+        [
+          1035,
+          795,
+          1148,
+          911
+        ],
+        [
+          1152,
+          795,
+          1269,
+          911
+        ],
+        [
+          1273,
+          795,
+          1390,
+          911
+        ],
+        [
+          1394,
+          795,
+          1522,
+          911
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_teen_run_down.webp": {
+      "age": "teen",
+      "action": "run_down",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_run_down.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "b5c1e7ca6a54b944e31c0c81e65123aa4d5e03ae99f3b7a2accccd99c1fd2015",
+      "source": "main",
+      "source_cells": [
+        [
+          820,
+          97,
+          930,
+          248
+        ],
+        [
+          934,
+          97,
+          1047,
+          248
+        ],
+        [
+          1051,
+          97,
+          1163,
+          248
+        ],
+        [
+          1167,
+          97,
+          1279,
+          248
+        ],
+        [
+          1283,
+          97,
+          1400,
+          248
+        ],
+        [
+          1404,
+          97,
+          1523,
+          248
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          119,
+          110,
+          151
+        ],
+        [
+          0,
+          119,
+          113,
+          151
+        ],
+        [
+          0,
+          119,
+          112,
+          151
+        ],
+        [
+          0,
+          119,
+          112,
+          151
+        ],
+        [
+          0,
+          119,
+          117,
+          151
+        ],
+        [
+          0,
+          119,
+          119,
+          151
+        ]
+      ],
+      "printed_label_masks": {
+        "2": [
+          [
+            52,
+            137
+          ],
+          [
+            63,
+            137
+          ],
+          [
+            63,
+            149
+          ],
+          [
+            52,
+            149
+          ]
+        ],
+        "5": [
+          [
+            49,
+            136
+          ],
+          [
+            54,
+            136
+          ],
+          [
+            56,
+            137
+          ],
+          [
+            58,
+            137
+          ],
+          [
+            59,
+            140
+          ],
+          [
+            59,
+            149
+          ],
+          [
+            49,
+            149
+          ]
+        ],
+        "6": [
+          [
+            49,
+            137
+          ],
+          [
+            60,
+            137
+          ],
+          [
+            60,
+            149
+          ],
+          [
+            49,
+            149
+          ]
+        ]
+      }
+    },
+    "tiger_teen_run_left.webp": {
+      "age": "teen",
+      "action": "run_left",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_run_left.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "7ea854fa653864d9277724cfff3bf31e3c30bb8a53b525e8a70e1ffe3cbdda49",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          292,
+          138,
+          426
+        ],
+        [
+          142,
+          292,
+          261,
+          426
+        ],
+        [
+          265,
+          292,
+          386,
+          426
+        ],
+        [
+          390,
+          292,
+          511,
+          426
+        ],
+        [
+          515,
+          292,
+          633,
+          426
+        ],
+        [
+          637,
+          292,
+          762,
+          426
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          93,
+          123,
+          134
+        ],
+        [
+          0,
+          93,
+          119,
+          134
+        ],
+        [
+          0,
+          93,
+          121,
+          134
+        ],
+        [
+          0,
+          93,
+          121,
+          134
+        ],
+        [
+          0,
+          93,
+          118,
+          134
+        ],
+        [
+          0,
+          93,
+          125,
+          134
+        ]
+      ]
+    },
+    "tiger_teen_run_right.webp": {
+      "age": "teen",
+      "action": "run_right",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_run_right.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "3f1b561ea851c413517a512eb0ac81f2f720111324346bb2b3525382b9e0dbd8",
+      "source": "main",
+      "source_cells": [
+        [
+          772,
+          292,
+          898,
+          426
+        ],
+        [
+          902,
+          292,
+          1021,
+          426
+        ],
+        [
+          1025,
+          292,
+          1145,
+          426
+        ],
+        [
+          1149,
+          292,
+          1270,
+          426
+        ],
+        [
+          1274,
+          292,
+          1392,
+          426
+        ],
+        [
+          1396,
+          292,
+          1522,
+          426
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          93,
+          126,
+          134
+        ],
+        [
+          0,
+          93,
+          119,
+          134
+        ],
+        [
+          0,
+          93,
+          120,
+          134
+        ],
+        [
+          0,
+          93,
+          121,
+          134
+        ],
+        [
+          0,
+          93,
+          118,
+          134
+        ],
+        [
+          0,
+          93,
+          126,
+          134
+        ]
+      ]
+    },
+    "tiger_teen_run_up.webp": {
+      "age": "teen",
+      "action": "run_up",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_run_up.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "f176436d54a37bacafa207237169684708525f752e9e873c927779a5e989a57a",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          470,
+          138,
+          619
+        ],
+        [
+          142,
+          470,
+          261,
+          619
+        ],
+        [
+          265,
+          470,
+          386,
+          619
+        ],
+        [
+          390,
+          470,
+          510,
+          619
+        ],
+        [
+          514,
+          470,
+          633,
+          619
+        ],
+        [
+          637,
+          470,
+          762,
+          619
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          111,
+          123,
+          149
+        ],
+        [
+          0,
+          111,
+          119,
+          149
+        ],
+        [
+          0,
+          111,
+          121,
+          149
+        ],
+        [
+          0,
+          111,
+          120,
+          149
+        ],
+        [
+          0,
+          111,
+          119,
+          149
+        ],
+        [
+          0,
+          111,
+          125,
+          149
+        ]
+      ]
+    },
+    "tiger_teen_comb.webp": {
+      "age": "teen",
+      "action": "comb",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_comb.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "9f457dd1d82f1c49450a62de5361df9c9885784e7177327b6338736af8c032a8",
+      "source": "objects",
+      "source_cells": [
+        [
+          328,
+          105,
+          616,
+          339
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        194,
+        288,
+        234
+      ]
+    },
+    "tiger_teen_fetch_mouse.png": {
+      "age": "teen",
+      "action": "fetch_mouse",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_fetch_mouse.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "33fcce522fa830fb7529b5c5dc9fc47e3018ecd9a76f66baf4c567e8d2fa0688",
+      "source": "objects",
+      "source_cells": [
+        [
+          923,
+          105,
+          1210,
+          339
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        176,
+        287,
+        234
+      ]
+    },
+    "tiger_teen_fetch_plush.png": {
+      "age": "teen",
+      "action": "fetch_plush",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_fetch_plush.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "3a542ceed3270facf02aee92057569d1ade12fe31c08a8e4cee94fa9b40a1e66",
+      "source": "objects",
+      "source_cells": [
+        [
+          1220,
+          105,
+          1521,
+          339
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        194,
+        301,
+        234
+      ]
+    },
+    "tiger_teen_fetch_ball.png": {
+      "age": "teen",
+      "action": "fetch_ball",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_fetch_ball.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "476684d7717b586497eb2712ba89cc5dd18ef8e855b3306dc1f56fe43bfd66fb",
+      "source": "objects",
+      "source_cells": [
+        [
+          17,
+          391,
+          318,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        173,
+        301,
+        231
+      ]
+    },
+    "tiger_teen_fetch_tennis.png": {
+      "age": "teen",
+      "action": "fetch_tennis",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_fetch_tennis.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "f5fc0f2592b00a8dcaf3bd219edbdc9ce700e964504368e77a9cbc7cd5a884dd",
+      "source": "objects",
+      "source_cells": [
+        [
+          328,
+          391,
+          616,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        173,
+        288,
+        231
+      ]
+    },
+    "tiger_teen_fetch_yarn.png": {
+      "age": "teen",
+      "action": "fetch_yarn",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_fetch_yarn.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "bb7dcc70910e576e835c85d73179209135e87e2cfb97483686d3b64ad15c78c7",
+      "source": "objects",
+      "source_cells": [
+        [
+          625,
+          391,
+          913,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        173,
+        288,
+        231
+      ]
+    },
+    "tiger_teen_groom_foam.webp": {
+      "age": "teen",
+      "action": "groom_foam",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_groom_foam.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "8ff7b0f2a8ec40376f93fe63fd1e307fb8424dacfbc9e010f7ad938c0dd4c128",
+      "source": "objects",
+      "source_cells": [
+        [
+          923,
+          391,
+          1210,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        191,
+        287,
+        231
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          0,
+          0,
+          287,
+          231
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            75.2,
+            20.0,
+            7.7,
+            7.7
+          ],
+          [
+            63.2,
+            35.3,
+            5.5,
+            5.5
+          ],
+          [
+            93.8,
+            11.2,
+            2.7,
+            3.7
+          ],
+          [
+            27.4,
+            77.1,
+            3.4,
+            3.4
+          ],
+          [
+            41.7,
+            96.1,
+            12.7,
+            12.7
+          ],
+          [
+            59.7,
+            115.0,
+            5.7,
+            5.7
+          ],
+          [
+            235.3,
+            61.0,
+            4.3,
+            4.8
+          ],
+          [
+            235.7,
+            83.0,
+            9.4,
+            9.4
+          ],
+          [
+            215.5,
+            108.1,
+            12.2,
+            12.2
+          ],
+          [
+            237.2,
+            144.1,
+            13.1,
+            13.1
+          ],
+          [
+            257.9,
+            133.7,
+            4.5,
+            4.5
+          ],
+          [
+            230.0,
+            167.0,
+            4.7,
+            4.7
+          ]
+        ],
+        "protected_source_foam_polygons": [
+          [
+            [
+              72,
+              49
+            ],
+            [
+              76,
+              46
+            ],
+            [
+              82,
+              44
+            ],
+            [
+              82,
+              37
+            ],
+            [
+              87,
+              33
+            ],
+            [
+              90,
+              32
+            ],
+            [
+              91,
+              29
+            ],
+            [
+              96,
+              28
+            ],
+            [
+              96,
+              25
+            ],
+            [
+              102,
+              22
+            ],
+            [
+              111,
+              22
+            ],
+            [
+              116,
+              25
+            ],
+            [
+              117,
+              24
+            ],
+            [
+              122,
+              27
+            ],
+            [
+              122,
+              31
+            ],
+            [
+              125,
+              30
+            ],
+            [
+              127,
+              31
+            ],
+            [
+              127,
+              36
+            ],
+            [
+              123,
+              39
+            ],
+            [
+              119,
+              41
+            ],
+            [
+              119,
+              45
+            ],
+            [
+              113,
+              47
+            ],
+            [
+              107,
+              46
+            ],
+            [
+              103,
+              50
+            ],
+            [
+              97,
+              50
+            ],
+            [
+              95,
+              55
+            ],
+            [
+              89,
+              55
+            ],
+            [
+              89,
+              61
+            ],
+            [
+              91,
+              60
+            ],
+            [
+              96,
+              62
+            ],
+            [
+              99,
+              65
+            ],
+            [
+              98,
+              69
+            ],
+            [
+              93,
+              73
+            ],
+            [
+              87,
+              75
+            ],
+            [
+              83,
+              72
+            ],
+            [
+              80,
+              71
+            ],
+            [
+              78,
+              65
+            ],
+            [
+              74,
+              64
+            ],
+            [
+              72,
+              60
+            ],
+            [
+              68,
+              58
+            ],
+            [
+              69,
+              53
+            ]
+          ],
+          [
+            [
+              98,
+              157
+            ],
+            [
+              105,
+              157
+            ],
+            [
+              109,
+              162
+            ],
+            [
+              115,
+              162
+            ],
+            [
+              118,
+              166
+            ],
+            [
+              117,
+              171
+            ],
+            [
+              114,
+              173
+            ],
+            [
+              116,
+              177
+            ],
+            [
+              113,
+              181
+            ],
+            [
+              107,
+              179
+            ],
+            [
+              104,
+              185
+            ],
+            [
+              98,
+              186
+            ],
+            [
+              94,
+              183
+            ],
+            [
+              91,
+              183
+            ],
+            [
+              89,
+              179
+            ],
+            [
+              86,
+              178
+            ],
+            [
+              86,
+              171
+            ],
+            [
+              91,
+              168
+            ],
+            [
+              90,
+              163
+            ],
+            [
+              94,
+              159
+            ]
+          ],
+          [
+            [
+              81,
+              199
+            ],
+            [
+              87,
+              199
+            ],
+            [
+              92,
+              203
+            ],
+            [
+              92,
+              209
+            ],
+            [
+              99,
+              211
+            ],
+            [
+              101,
+              216
+            ],
+            [
+              98,
+              222
+            ],
+            [
+              94,
+              224
+            ],
+            [
+              90,
+              224
+            ],
+            [
+              85,
+              222
+            ],
+            [
+              80,
+              222
+            ],
+            [
+              74,
+              222
+            ],
+            [
+              71,
+              218
+            ],
+            [
+              70,
+              213
+            ],
+            [
+              73,
+              208
+            ],
+            [
+              77,
+              207
+            ]
+          ],
+          [
+            [
+              190,
+              165
+            ],
+            [
+              197,
+              163
+            ],
+            [
+              202,
+              165
+            ],
+            [
+              206,
+              165
+            ],
+            [
+              210,
+              169
+            ],
+            [
+              211,
+              173
+            ],
+            [
+              216,
+              174
+            ],
+            [
+              220,
+              181
+            ],
+            [
+              220,
+              185
+            ],
+            [
+              225,
+              187
+            ],
+            [
+              225,
+              193
+            ],
+            [
+              220,
+              197
+            ],
+            [
+              223,
+              201
+            ],
+            [
+              228,
+              202
+            ],
+            [
+              231,
+              207
+            ],
+            [
+              231,
+              214
+            ],
+            [
+              228,
+              219
+            ],
+            [
+              222,
+              221
+            ],
+            [
+              217,
+              219
+            ],
+            [
+              219,
+              214
+            ],
+            [
+              217,
+              207
+            ],
+            [
+              211,
+              202
+            ],
+            [
+              203,
+              198
+            ],
+            [
+              199,
+              183
+            ]
+          ]
+        ]
+      }
+    },
+    "tiger_teen_rope_play.png": {
+      "age": "teen",
+      "action": "rope_play",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_rope_play.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "1d5857a5216525f7f19af696c74bbeb71b7e6d24914895ec5f749137df0e973c",
+      "source": "objects",
+      "source_cells": [
+        [
+          1220,
+          391,
+          1521,
+          622
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        173,
+        301,
+        231
+      ]
+    },
+    "tiger_teen_scratcher_play.webp": {
+      "age": "teen",
+      "action": "scratcher_play",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_scratcher_play.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "cf14b98951e048728ceb59462768f8ee5517b7d55bf8143c06fd7210b6780493",
+      "source": "objects",
+      "source_cells": [
+        [
+          164,
+          660,
+          560,
+          892
+        ]
+      ],
+      "derivation": "fixed scratcher removed; one supplied tiger pose",
+      "retained_source_silhouette": [
+        [
+          0,
+          0
+        ],
+        [
+          238,
+          0
+        ],
+        [
+          238,
+          48
+        ],
+        [
+          241,
+          50
+        ],
+        [
+          240,
+          57
+        ],
+        [
+          238,
+          60
+        ],
+        [
+          240,
+          63
+        ],
+        [
+          239,
+          66
+        ],
+        [
+          237,
+          68
+        ],
+        [
+          244,
+          67
+        ],
+        [
+          250,
+          69
+        ],
+        [
+          255,
+          72
+        ],
+        [
+          259,
+          77
+        ],
+        [
+          262,
+          83
+        ],
+        [
+          263,
+          89
+        ],
+        [
+          262,
+          94
+        ],
+        [
+          259,
+          99
+        ],
+        [
+          255,
+          104
+        ],
+        [
+          250,
+          109
+        ],
+        [
+          246,
+          114
+        ],
+        [
+          242,
+          120
+        ],
+        [
+          240,
+          126
+        ],
+        [
+          235,
+          132
+        ],
+        [
+          229,
+          138
+        ],
+        [
+          222,
+          143
+        ],
+        [
+          212,
+          147
+        ],
+        [
+          204,
+          150
+        ],
+        [
+          200,
+          160
+        ],
+        [
+          196,
+          166
+        ],
+        [
+          196,
+          187
+        ],
+        [
+          200,
+          201
+        ],
+        [
+          200,
+          232
+        ],
+        [
+          0,
+          232
+        ]
+      ],
+      "printed_header_cleanup_height": 12,
+      "protected_source_fur_polygons": [],
+      "audited_background_seeds": [
+        [
+          211,
+          161
+        ],
+        [
+          197,
+          191
+        ]
+      ],
+      "checker_shadow_cleanup_band": [
+        0,
+        187,
+        396,
+        232
+      ]
+    },
+    "tiger_teen_soap.webp": {
+      "age": "teen",
+      "action": "soap",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_soap.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "82eb0db5fc4e7d39b65042dbef8fcb2a4408dce60469ebacd720ff9184f1ea73",
+      "source": "objects",
+      "source_cells": [
+        [
+          573,
+          671,
+          960,
+          892
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        181,
+        387,
+        221
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          0,
+          0,
+          387,
+          221
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            272.7,
+            46.4,
+            4.4,
+            4.4
+          ],
+          [
+            277.4,
+            65.7,
+            13.8,
+            13.8
+          ],
+          [
+            265.2,
+            88.9,
+            5.0,
+            5.0
+          ],
+          [
+            286.1,
+            112.7,
+            10.5,
+            10.5
+          ],
+          [
+            274.3,
+            137.8,
+            3.0,
+            3.0
+          ],
+          [
+            290.4,
+            154.6,
+            6.4,
+            6.4
+          ],
+          [
+            287.7,
+            182.5,
+            8.4,
+            8.4
+          ],
+          [
+            120.3,
+            200.0,
+            8.6,
+            8.6
+          ],
+          [
+            194.6,
+            205.3,
+            7.6,
+            7.6
+          ],
+          [
+            279.6,
+            163.9,
+            7.0,
+            7.0
+          ]
+        ],
+        "protected_source_foam_polygons": [
+          [
+            [
+              256,
+              164
+            ],
+            [
+              257,
+              159
+            ],
+            [
+              261,
+              156
+            ],
+            [
+              266,
+              156
+            ],
+            [
+              269,
+              159
+            ],
+            [
+              271,
+              163
+            ],
+            [
+              275,
+              165
+            ],
+            [
+              276,
+              169
+            ],
+            [
+              273,
+              173
+            ],
+            [
+              269,
+              175
+            ],
+            [
+              273,
+              178
+            ],
+            [
+              277,
+              179
+            ],
+            [
+              277,
+              182
+            ],
+            [
+              281,
+              184
+            ],
+            [
+              284,
+              189
+            ],
+            [
+              283,
+              194
+            ],
+            [
+              279,
+              197
+            ],
+            [
+              273,
+              198
+            ],
+            [
+              269,
+              196
+            ],
+            [
+              270,
+              191
+            ],
+            [
+              267,
+              186
+            ],
+            [
+              263,
+              182
+            ],
+            [
+              262,
+              177
+            ],
+            [
+              258,
+              173
+            ]
+          ]
+        ]
+      }
+    },
+    "tiger_teen_towel.webp": {
+      "age": "teen",
+      "action": "towel",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_towel.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "02d685dee70676626000d028deafb5dfca00986cfa5f7ffb74b2319c211040be",
+      "source": "objects",
+      "source_cells": [
+        [
+          971,
+          671,
+          1363,
+          892
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        181,
+        392,
+        221
+      ]
+    },
+    "tiger_adult_idle_down.png": {
+      "age": "adult",
+      "action": "idle_down",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_idle_down.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "d4fb8d452150d2c3684d8a135af48783d98a35f68b79bc6cdd34b8ec642f4c56",
+      "source": "main",
+      "source_cells": [
+        [
+          12,
+          100,
+          213,
+          272
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_adult_idle_left.png": {
+      "age": "adult",
+      "action": "idle_left",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_idle_left.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "9cd04677fa701b182762013446cfc722d4d2966721c90fa3b5907b4084b7bbf9",
+      "source": "main",
+      "source_cells": [
+        [
+          222,
+          100,
+          416,
+          272
+        ]
+      ],
+      "derivation": "horizontal mirror of mislabeled source idle"
+    },
+    "tiger_adult_idle_right.png": {
+      "age": "adult",
+      "action": "idle_right",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_idle_right.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "682cd79701b001094184b4b29f37b319da94dcff5538071f85deab3191d07085",
+      "source": "main",
+      "source_cells": [
+        [
+          424,
+          100,
+          620,
+          272
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_adult_idle_up.png": {
+      "age": "adult",
+      "action": "idle_up",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_idle_up.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "10eb867c8cccff06f8dde4b354bfa33c14ba0bbf2c8e6f4ba6e6c6dc6fa2e5be",
+      "source": "main",
+      "source_cells": [
+        [
+          627,
+          100,
+          819,
+          272
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_adult_walk_down.webp": {
+      "age": "adult",
+      "action": "walk_down",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_walk_down.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "724b21dac26f3972689db313c0dcc46afab8301757f53497dcec902d9b000a72",
+      "source": "main",
+      "source_cells": [
+        [
+          827,
+          100,
+          935,
+          272
+        ],
+        [
+          939,
+          100,
+          1052,
+          272
+        ],
+        [
+          1056,
+          100,
+          1168,
+          272
+        ],
+        [
+          1172,
+          100,
+          1285,
+          272
+        ],
+        [
+          1289,
+          100,
+          1403,
+          272
+        ],
+        [
+          1407,
+          100,
+          1525,
+          272
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          137,
+          108,
+          172
+        ],
+        [
+          0,
+          137,
+          113,
+          172
+        ],
+        [
+          0,
+          137,
+          112,
+          172
+        ],
+        [
+          0,
+          137,
+          113,
+          172
+        ],
+        [
+          0,
+          137,
+          114,
+          172
+        ],
+        [
+          0,
+          137,
+          118,
+          172
+        ]
+      ]
+    },
+    "tiger_adult_walk_left.webp": {
+      "age": "adult",
+      "action": "walk_left",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_walk_left.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "173209fb38debd678d77396bbcff114d2857920348edde6123e1ad5a6c0039b8",
+      "source": "main",
+      "source_cells": [
+        [
+          14,
+          313,
+          140,
+          450
+        ],
+        [
+          144,
+          313,
+          257,
+          450
+        ],
+        [
+          261,
+          313,
+          384,
+          450
+        ],
+        [
+          388,
+          313,
+          512,
+          450
+        ],
+        [
+          516,
+          313,
+          635,
+          450
+        ],
+        [
+          639,
+          313,
+          763,
+          450
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          92,
+          126,
+          137
+        ],
+        [
+          0,
+          92,
+          113,
+          137
+        ],
+        [
+          0,
+          92,
+          123,
+          137
+        ],
+        [
+          0,
+          92,
+          124,
+          137
+        ],
+        [
+          0,
+          92,
+          119,
+          137
+        ],
+        [
+          0,
+          92,
+          124,
+          137
+        ]
+      ]
+    },
+    "tiger_adult_walk_right.webp": {
+      "age": "adult",
+      "action": "walk_right",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_walk_right.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "952e2a30371477c7e4cc2a87823e895d999565bed15409ef9518de225f8665d2",
+      "source": "main",
+      "source_cells": [
+        [
+          773,
+          313,
+          899,
+          450
+        ],
+        [
+          903,
+          313,
+          1022,
+          450
+        ],
+        [
+          1026,
+          313,
+          1147,
+          450
+        ],
+        [
+          1151,
+          313,
+          1269,
+          450
+        ],
+        [
+          1273,
+          313,
+          1393,
+          450
+        ],
+        [
+          1397,
+          313,
+          1524,
+          450
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          92,
+          126,
+          137
+        ],
+        [
+          0,
+          92,
+          119,
+          137
+        ],
+        [
+          0,
+          92,
+          121,
+          137
+        ],
+        [
+          0,
+          92,
+          118,
+          137
+        ],
+        [
+          0,
+          92,
+          120,
+          137
+        ],
+        [
+          0,
+          92,
+          127,
+          137
+        ]
+      ]
+    },
+    "tiger_adult_walk_up.webp": {
+      "age": "adult",
+      "action": "walk_up",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_walk_up.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "d5239d9c01c9c3be9d1b722dcfb4dc101e4035fa5923e401a6563a57a5aeccb3",
+      "source": "main",
+      "source_cells": [
+        [
+          14,
+          492,
+          139,
+          653
+        ],
+        [
+          143,
+          492,
+          257,
+          653
+        ],
+        [
+          261,
+          492,
+          383,
+          653
+        ],
+        [
+          387,
+          492,
+          508,
+          653
+        ],
+        [
+          512,
+          492,
+          631,
+          653
+        ],
+        [
+          635,
+          492,
+          761,
+          653
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          119,
+          125,
+          161
+        ],
+        [
+          0,
+          119,
+          114,
+          161
+        ],
+        [
+          0,
+          119,
+          122,
+          161
+        ],
+        [
+          0,
+          119,
+          121,
+          161
+        ],
+        [
+          0,
+          119,
+          119,
+          161
+        ],
+        [
+          0,
+          119,
+          126,
+          161
+        ]
+      ]
+    },
+    "tiger_adult_jump.webp": {
+      "age": "adult",
+      "action": "jump",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_jump.webp",
+      "frames": 5,
+      "width": 1280,
+      "height": 256,
+      "sha256": "63bf7c132d1a7e90434e09c75571b27268b48e1eaaf9323e2040a4fea7e4c358",
+      "source": "main",
+      "source_cells": [
+        [
+          772,
+          492,
+          915,
+          653
+        ],
+        [
+          919,
+          492,
+          1070,
+          653
+        ],
+        [
+          1074,
+          492,
+          1217,
+          653
+        ],
+        [
+          1221,
+          492,
+          1372,
+          653
+        ],
+        [
+          1376,
+          492,
+          1524,
+          653
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          118,
+          143,
+          161
+        ],
+        [
+          0,
+          118,
+          151,
+          161
+        ],
+        [
+          0,
+          118,
+          143,
+          161
+        ],
+        [
+          0,
+          118,
+          151,
+          161
+        ],
+        [
+          0,
+          118,
+          148,
+          161
+        ]
+      ]
+    },
+    "tiger_adult_eat.webp": {
+      "age": "adult",
+      "action": "eat",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_eat.webp",
+      "frames": 3,
+      "width": 768,
+      "height": 256,
+      "sha256": "2d27c64620f6b026aeb9b7d64ffe4e85b2d89f6329b7747f1860f06d01e86df4",
+      "source": "main",
+      "source_cells": [
+        [
+          16,
+          693,
+          129,
+          885
+        ],
+        [
+          133,
+          693,
+          251,
+          885
+        ],
+        [
+          255,
+          693,
+          371,
+          885
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_adult_sleep.webp": {
+      "age": "adult",
+      "action": "sleep",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_sleep.webp",
+      "frames": 3,
+      "width": 768,
+      "height": 256,
+      "sha256": "5b91d6c56d91c3275ab8bd279675e4f561c6f02935dab8b1fde2c00faa90e662",
+      "source": "main",
+      "source_cells": [
+        [
+          382,
+          693,
+          508,
+          885
+        ],
+        [
+          512,
+          693,
+          640,
+          885
+        ],
+        [
+          644,
+          693,
+          780,
+          885
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_adult_moods.webp": {
+      "age": "adult",
+      "action": "moods",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_moods.webp",
+      "frames": 12,
+      "width": 3072,
+      "height": 256,
+      "sha256": "444879cbce1c8908a6924b48e905657bf10e3e12c924148b9afa18e6f835c045",
+      "source": "main",
+      "source_cells": [
+        [
+          790,
+          693,
+          907,
+          793
+        ],
+        [
+          911,
+          693,
+          1026,
+          793
+        ],
+        [
+          1030,
+          693,
+          1147,
+          793
+        ],
+        [
+          1151,
+          693,
+          1270,
+          793
+        ],
+        [
+          1274,
+          693,
+          1394,
+          793
+        ],
+        [
+          1398,
+          693,
+          1521,
+          793
+        ],
+        [
+          790,
+          814,
+          907,
+          919
+        ],
+        [
+          911,
+          814,
+          1026,
+          919
+        ],
+        [
+          1030,
+          814,
+          1147,
+          919
+        ],
+        [
+          1151,
+          814,
+          1270,
+          919
+        ],
+        [
+          1274,
+          814,
+          1394,
+          919
+        ],
+        [
+          1398,
+          814,
+          1521,
+          919
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_adult_run_down.webp": {
+      "age": "adult",
+      "action": "run_down",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_run_down.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "724b21dac26f3972689db313c0dcc46afab8301757f53497dcec902d9b000a72",
+      "source": "main",
+      "source_cells": [
+        [
+          827,
+          100,
+          935,
+          272
+        ],
+        [
+          939,
+          100,
+          1052,
+          272
+        ],
+        [
+          1056,
+          100,
+          1168,
+          272
+        ],
+        [
+          1172,
+          100,
+          1285,
+          272
+        ],
+        [
+          1289,
+          100,
+          1403,
+          272
+        ],
+        [
+          1407,
+          100,
+          1525,
+          272
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          137,
+          108,
+          172
+        ],
+        [
+          0,
+          137,
+          113,
+          172
+        ],
+        [
+          0,
+          137,
+          112,
+          172
+        ],
+        [
+          0,
+          137,
+          113,
+          172
+        ],
+        [
+          0,
+          137,
+          114,
+          172
+        ],
+        [
+          0,
+          137,
+          118,
+          172
+        ]
+      ]
+    },
+    "tiger_adult_run_left.webp": {
+      "age": "adult",
+      "action": "run_left",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_run_left.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "173209fb38debd678d77396bbcff114d2857920348edde6123e1ad5a6c0039b8",
+      "source": "main",
+      "source_cells": [
+        [
+          14,
+          313,
+          140,
+          450
+        ],
+        [
+          144,
+          313,
+          257,
+          450
+        ],
+        [
+          261,
+          313,
+          384,
+          450
+        ],
+        [
+          388,
+          313,
+          512,
+          450
+        ],
+        [
+          516,
+          313,
+          635,
+          450
+        ],
+        [
+          639,
+          313,
+          763,
+          450
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          92,
+          126,
+          137
+        ],
+        [
+          0,
+          92,
+          113,
+          137
+        ],
+        [
+          0,
+          92,
+          123,
+          137
+        ],
+        [
+          0,
+          92,
+          124,
+          137
+        ],
+        [
+          0,
+          92,
+          119,
+          137
+        ],
+        [
+          0,
+          92,
+          124,
+          137
+        ]
+      ]
+    },
+    "tiger_adult_run_right.webp": {
+      "age": "adult",
+      "action": "run_right",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_run_right.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "952e2a30371477c7e4cc2a87823e895d999565bed15409ef9518de225f8665d2",
+      "source": "main",
+      "source_cells": [
+        [
+          773,
+          313,
+          899,
+          450
+        ],
+        [
+          903,
+          313,
+          1022,
+          450
+        ],
+        [
+          1026,
+          313,
+          1147,
+          450
+        ],
+        [
+          1151,
+          313,
+          1269,
+          450
+        ],
+        [
+          1273,
+          313,
+          1393,
+          450
+        ],
+        [
+          1397,
+          313,
+          1524,
+          450
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          92,
+          126,
+          137
+        ],
+        [
+          0,
+          92,
+          119,
+          137
+        ],
+        [
+          0,
+          92,
+          121,
+          137
+        ],
+        [
+          0,
+          92,
+          118,
+          137
+        ],
+        [
+          0,
+          92,
+          120,
+          137
+        ],
+        [
+          0,
+          92,
+          127,
+          137
+        ]
+      ]
+    },
+    "tiger_adult_run_up.webp": {
+      "age": "adult",
+      "action": "run_up",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_run_up.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "d5239d9c01c9c3be9d1b722dcfb4dc101e4035fa5923e401a6563a57a5aeccb3",
+      "source": "main",
+      "source_cells": [
+        [
+          14,
+          492,
+          139,
+          653
+        ],
+        [
+          143,
+          492,
+          257,
+          653
+        ],
+        [
+          261,
+          492,
+          383,
+          653
+        ],
+        [
+          387,
+          492,
+          508,
+          653
+        ],
+        [
+          512,
+          492,
+          631,
+          653
+        ],
+        [
+          635,
+          492,
+          761,
+          653
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          119,
+          125,
+          161
+        ],
+        [
+          0,
+          119,
+          114,
+          161
+        ],
+        [
+          0,
+          119,
+          122,
+          161
+        ],
+        [
+          0,
+          119,
+          121,
+          161
+        ],
+        [
+          0,
+          119,
+          119,
+          161
+        ],
+        [
+          0,
+          119,
+          126,
+          161
+        ]
+      ]
+    },
+    "tiger_adult_comb.webp": {
+      "age": "adult",
+      "action": "comb",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_comb.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "f8bb029457d8c8acec209fe55b23d9b5414e9248407a43f635077d34b38644d8",
+      "source": "objects",
+      "source_cells": [
+        [
+          318,
+          95,
+          614,
+          323
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        188,
+        296,
+        228
+      ]
+    },
+    "tiger_adult_fetch_mouse.png": {
+      "age": "adult",
+      "action": "fetch_mouse",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_fetch_mouse.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "c48996a41cb75295b5b50c1ea9e19532ad5cb45cc24bf07253251f7b4e2d7a22",
+      "source": "objects",
+      "source_cells": [
+        [
+          924,
+          95,
+          1218,
+          323
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        171,
+        294,
+        228
+      ]
+    },
+    "tiger_adult_fetch_plush.png": {
+      "age": "adult",
+      "action": "fetch_plush",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_fetch_plush.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "4b135bd796a06336969e16b1c99c4151f43261a80e8bb3ab7acf696cbc0baf19",
+      "source": "objects",
+      "source_cells": [
+        [
+          1228,
+          95,
+          1523,
+          323
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        188,
+        295,
+        228
+      ]
+    },
+    "tiger_adult_fetch_ball.png": {
+      "age": "adult",
+      "action": "fetch_ball",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_fetch_ball.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "0805cdc28f392c690e3df8cbb40e0c6559658268da422cebc65c93196e78139e",
+      "source": "objects",
+      "source_cells": [
+        [
+          13,
+          365,
+          309,
+          601
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        177,
+        296,
+        236
+      ]
+    },
+    "tiger_adult_fetch_tennis.png": {
+      "age": "adult",
+      "action": "fetch_tennis",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_fetch_tennis.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "448b7f322a778b15bc5f993be66157cc72e8e1a4ea80f77037e67194e81c1870",
+      "source": "objects",
+      "source_cells": [
+        [
+          318,
+          365,
+          614,
+          601
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        177,
+        296,
+        236
+      ]
+    },
+    "tiger_adult_fetch_yarn.png": {
+      "age": "adult",
+      "action": "fetch_yarn",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_fetch_yarn.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "fb8f2e5be4c19e0e4d68b8921d55b81907b722bf3a6b1e90e316b7fb3ba053d3",
+      "source": "objects",
+      "source_cells": [
+        [
+          623,
+          365,
+          915,
+          601
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        177,
+        292,
+        236
+      ]
+    },
+    "tiger_adult_groom_foam.webp": {
+      "age": "adult",
+      "action": "groom_foam",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_groom_foam.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "0b4518e442c64807f1ce4889ad0bbbd17c2ff73e5118d019689db76b71b1a98d",
+      "source": "objects",
+      "source_cells": [
+        [
+          924,
+          359,
+          1218,
+          601
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        202,
+        294,
+        242
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          0,
+          0,
+          294,
+          242
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            116.8,
+            13.1,
+            10.7,
+            10.7
+          ],
+          [
+            89.4,
+            25.3,
+            7.0,
+            7.0
+          ],
+          [
+            79.0,
+            33.4,
+            3.2,
+            3.2
+          ],
+          [
+            61.9,
+            48.6,
+            8.7,
+            8.7
+          ],
+          [
+            64.3,
+            96.9,
+            13.4,
+            13.4
+          ],
+          [
+            77.0,
+            123.3,
+            3.7,
+            4.7
+          ],
+          [
+            230.2,
+            50.1,
+            5.8,
+            5.8
+          ],
+          [
+            230.4,
+            79.0,
+            11.9,
+            11.9
+          ],
+          [
+            242.2,
+            148.1,
+            11.3,
+            11.3
+          ],
+          [
+            253.0,
+            133.2,
+            3.2,
+            3.2
+          ],
+          [
+            257.6,
+            163.0,
+            3.5,
+            4.5
+          ],
+          [
+            267.6,
+            198.0,
+            7.3,
+            7.3
+          ]
+        ],
+        "protected_source_foam_polygons": [
+          [
+            [
+              109,
+              41
+            ],
+            [
+              112,
+              38
+            ],
+            [
+              112,
+              35
+            ],
+            [
+              116,
+              33
+            ],
+            [
+              116,
+              29
+            ],
+            [
+              121,
+              25
+            ],
+            [
+              127,
+              23
+            ],
+            [
+              133,
+              24
+            ],
+            [
+              139,
+              27
+            ],
+            [
+              144,
+              28
+            ],
+            [
+              147,
+              30
+            ],
+            [
+              152,
+              30
+            ],
+            [
+              156,
+              34
+            ],
+            [
+              157,
+              39
+            ],
+            [
+              154,
+              43
+            ],
+            [
+              150,
+              43
+            ],
+            [
+              145,
+              42
+            ],
+            [
+              140,
+              39
+            ],
+            [
+              137,
+              40
+            ],
+            [
+              138,
+              44
+            ],
+            [
+              135,
+              48
+            ],
+            [
+              130,
+              49
+            ],
+            [
+              126,
+              46
+            ],
+            [
+              122,
+              49
+            ],
+            [
+              119,
+              48
+            ],
+            [
+              119,
+              53
+            ],
+            [
+              121,
+              54
+            ],
+            [
+              120,
+              59
+            ],
+            [
+              116,
+              62
+            ],
+            [
+              112,
+              59
+            ],
+            [
+              111,
+              54
+            ],
+            [
+              108,
+              53
+            ],
+            [
+              104,
+              48
+            ],
+            [
+              105,
+              44
+            ]
+          ],
+          [
+            [
+              103,
+              149
+            ],
+            [
+              109,
+              148
+            ],
+            [
+              112,
+              153
+            ],
+            [
+              110,
+              157
+            ],
+            [
+              106,
+              158
+            ],
+            [
+              103,
+              154
+            ]
+          ],
+          [
+            [
+              96,
+              166
+            ],
+            [
+              100,
+              164
+            ],
+            [
+              103,
+              166
+            ],
+            [
+              105,
+              170
+            ],
+            [
+              110,
+              168
+            ],
+            [
+              117,
+              169
+            ],
+            [
+              119,
+              173
+            ],
+            [
+              117,
+              177
+            ],
+            [
+              114,
+              179
+            ],
+            [
+              116,
+              185
+            ],
+            [
+              115,
+              188
+            ],
+            [
+              111,
+              190
+            ],
+            [
+              105,
+              186
+            ],
+            [
+              105,
+              194
+            ],
+            [
+              101,
+              198
+            ],
+            [
+              96,
+              196
+            ],
+            [
+              94,
+              192
+            ],
+            [
+              90,
+              190
+            ],
+            [
+              91,
+              185
+            ],
+            [
+              92,
+              182
+            ],
+            [
+              87,
+              181
+            ],
+            [
+              85,
+              178
+            ],
+            [
+              85,
+              174
+            ],
+            [
+              90,
+              169
+            ]
+          ],
+          [
+            [
+              102,
+              201
+            ],
+            [
+              107,
+              200
+            ],
+            [
+              109,
+              203
+            ],
+            [
+              108,
+              207
+            ],
+            [
+              104,
+              210
+            ],
+            [
+              100,
+              208
+            ],
+            [
+              100,
+              204
+            ]
+          ],
+          [
+            [
+              231,
+              195
+            ],
+            [
+              231,
+              189
+            ],
+            [
+              234,
+              188
+            ],
+            [
+              237,
+              190
+            ],
+            [
+              239,
+              195
+            ],
+            [
+              237,
+              198
+            ],
+            [
+              235,
+              197
+            ],
+            [
+              235,
+              203
+            ],
+            [
+              232,
+              205
+            ],
+            [
+              229,
+              203
+            ],
+            [
+              228,
+              199
+            ]
+          ],
+          [
+            [
+              230,
+              163
+            ],
+            [
+              234,
+              163
+            ],
+            [
+              239,
+              164
+            ],
+            [
+              241,
+              168
+            ],
+            [
+              239,
+              171
+            ],
+            [
+              244,
+              173
+            ],
+            [
+              244,
+              176
+            ],
+            [
+              249,
+              178
+            ],
+            [
+              251,
+              182
+            ],
+            [
+              249,
+              187
+            ],
+            [
+              247,
+              188
+            ],
+            [
+              252,
+              190
+            ],
+            [
+              255,
+              193
+            ],
+            [
+              255,
+              199
+            ],
+            [
+              252,
+              202
+            ],
+            [
+              251,
+              207
+            ],
+            [
+              247,
+              209
+            ],
+            [
+              243,
+              205
+            ],
+            [
+              241,
+              197
+            ],
+            [
+              239,
+              193
+            ],
+            [
+              235,
+              191
+            ],
+            [
+              233,
+              185
+            ],
+            [
+              228,
+              182
+            ]
+          ],
+          [
+            [
+              243,
+              211
+            ],
+            [
+              247,
+              207
+            ],
+            [
+              250,
+              206
+            ],
+            [
+              253,
+              208
+            ],
+            [
+              254,
+              211
+            ],
+            [
+              258,
+              214
+            ],
+            [
+              261,
+              216
+            ],
+            [
+              264,
+              217
+            ],
+            [
+              265,
+              222
+            ],
+            [
+              262,
+              226
+            ],
+            [
+              259,
+              228
+            ],
+            [
+              256,
+              228
+            ],
+            [
+              255,
+              232
+            ],
+            [
+              251,
+              233
+            ],
+            [
+              247,
+              233
+            ],
+            [
+              248,
+              230
+            ],
+            [
+              246,
+              225
+            ],
+            [
+              246,
+              222
+            ],
+            [
+              241,
+              218
+            ]
+          ],
+          [
+            [
+              143,
+              17
+            ],
+            [
+              144,
+              14
+            ],
+            [
+              146,
+              13
+            ],
+            [
+              148,
+              14
+            ],
+            [
+              149,
+              16
+            ],
+            [
+              147,
+              19
+            ],
+            [
+              145,
+              20
+            ],
+            [
+              144,
+              21
+            ],
+            [
+              143,
+              21
+            ]
+          ]
+        ]
+      }
+    },
+    "tiger_adult_rope_play.png": {
+      "age": "adult",
+      "action": "rope_play",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_rope_play.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "b14c150a91302674ee067e8f08a3ca48a29587fc8c1137ebb42cd3cd4d6c13aa",
+      "source": "objects",
+      "source_cells": [
+        [
+          1228,
+          365,
+          1523,
+          601
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        177,
+        295,
+        236
+      ]
+    },
+    "tiger_adult_scratcher_play.webp": {
+      "age": "adult",
+      "action": "scratcher_play",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_scratcher_play.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "3b4406e426d0edabf49f8f284293f39ccd37f28a754d4cd8a5a7146f8745d24c",
+      "source": "objects",
+      "source_cells": [
+        [
+          178,
+          637,
+          563,
+          885
+        ]
+      ],
+      "derivation": "fixed scratcher removed; one supplied tiger pose",
+      "retained_source_silhouette": [
+        [
+          0,
+          0
+        ],
+        [
+          234,
+          0
+        ],
+        [
+          234,
+          48
+        ],
+        [
+          235,
+          51
+        ],
+        [
+          233,
+          55
+        ],
+        [
+          231,
+          59
+        ],
+        [
+          236,
+          58
+        ],
+        [
+          242,
+          59
+        ],
+        [
+          247,
+          62
+        ],
+        [
+          251,
+          66
+        ],
+        [
+          249,
+          69
+        ],
+        [
+          255,
+          71
+        ],
+        [
+          259,
+          76
+        ],
+        [
+          262,
+          82
+        ],
+        [
+          263,
+          88
+        ],
+        [
+          262,
+          94
+        ],
+        [
+          260,
+          99
+        ],
+        [
+          257,
+          104
+        ],
+        [
+          254,
+          109
+        ],
+        [
+          251,
+          114
+        ],
+        [
+          247,
+          119
+        ],
+        [
+          243,
+          125
+        ],
+        [
+          240,
+          132
+        ],
+        [
+          237,
+          139
+        ],
+        [
+          234,
+          145
+        ],
+        [
+          230,
+          150
+        ],
+        [
+          224,
+          155
+        ],
+        [
+          215,
+          159
+        ],
+        [
+          210,
+          162
+        ],
+        [
+          202,
+          161
+        ],
+        [
+          199,
+          166
+        ],
+        [
+          198,
+          174
+        ],
+        [
+          199,
+          184
+        ],
+        [
+          198,
+          198
+        ],
+        [
+          194,
+          206
+        ],
+        [
+          192,
+          210
+        ],
+        [
+          200,
+          214
+        ],
+        [
+          204,
+          220
+        ],
+        [
+          205,
+          230
+        ],
+        [
+          201,
+          234
+        ],
+        [
+          193,
+          237
+        ],
+        [
+          193,
+          248
+        ],
+        [
+          0,
+          248
+        ]
+      ],
+      "printed_header_cleanup_height": 10,
+      "protected_source_fur_polygons": [],
+      "audited_background_seeds": [
+        [
+          216,
+          182
+        ],
+        [
+          191,
+          210
+        ]
+      ],
+      "checker_shadow_cleanup_band": [
+        0,
+        203,
+        385,
+        248
+      ]
+    },
+    "tiger_adult_soap.webp": {
+      "age": "adult",
+      "action": "soap",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_soap.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "affd779761aa6eb9921bf173da653f57d48d3766d862fc3f6a229929930c0149",
+      "source": "objects",
+      "source_cells": [
+        [
+          573,
+          645,
+          962,
+          885
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        200,
+        389,
+        240
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          0,
+          0,
+          389,
+          240
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            268.8,
+            44.3,
+            6.4,
+            6.4
+          ],
+          [
+            266.2,
+            63.1,
+            3.1,
+            3.3
+          ],
+          [
+            281.8,
+            82.6,
+            11.9,
+            11.9
+          ],
+          [
+            284.3,
+            109.1,
+            5.7,
+            5.7
+          ],
+          [
+            301.6,
+            157.8,
+            11.2,
+            11.2
+          ],
+          [
+            291.5,
+            185.4,
+            9.0,
+            9.0
+          ]
+        ],
+        "protected_source_foam_polygons": []
+      }
+    },
+    "tiger_adult_towel.webp": {
+      "age": "adult",
+      "action": "towel",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_towel.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "66c1bb2e88f7d867c19935042116cff81d63bfb181caf34a4375174df5763bb2",
+      "source": "objects",
+      "source_cells": [
+        [
+          971,
+          645,
+          1358,
+          885
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        200,
+        387,
+        240
+      ]
+    },
+    "tiger_old_idle_down.png": {
+      "age": "old",
+      "action": "idle_down",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_idle_down.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "716b127f2b1e6fe8c8374de5cfe43630cf3a072a3637d48e3ae8bc38c939fb74",
+      "source": "main",
+      "source_cells": [
+        [
+          13,
+          99,
+          211,
+          269
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_old_idle_left.png": {
+      "age": "old",
+      "action": "idle_left",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_idle_left.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "85080fe625f0339906dfb1c89edbd9ac4605c927db0d85f0c09f39edc385cd51",
+      "source": "main",
+      "source_cells": [
+        [
+          220,
+          99,
+          413,
+          269
+        ]
+      ],
+      "derivation": "horizontal mirror of mislabeled source idle"
+    },
+    "tiger_old_idle_right.png": {
+      "age": "old",
+      "action": "idle_right",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_idle_right.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "7a9b716b8346adbfff5b40f41e73e20a2c20ac3a973bc2febebf6099c706a034",
+      "source": "main",
+      "source_cells": [
+        [
+          421,
+          99,
+          616,
+          269
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_old_idle_up.png": {
+      "age": "old",
+      "action": "idle_up",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_idle_up.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "c0ab6b60a85dd9e2b65a829b5a9042fda6c88e34329efb80eaf9618c51383778",
+      "source": "main",
+      "source_cells": [
+        [
+          624,
+          99,
+          811,
+          269
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_old_walk_down.webp": {
+      "age": "old",
+      "action": "walk_down",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_walk_down.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "8806c9bbe34365519a6425d258a32c109bde2f0e174de761c2a1615d69890a50",
+      "source": "main",
+      "source_cells": [
+        [
+          820,
+          99,
+          930,
+          269
+        ],
+        [
+          934,
+          99,
+          1043,
+          269
+        ],
+        [
+          1047,
+          99,
+          1163,
+          269
+        ],
+        [
+          1167,
+          99,
+          1280,
+          269
+        ],
+        [
+          1284,
+          99,
+          1401,
+          269
+        ],
+        [
+          1405,
+          99,
+          1525,
+          269
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          133,
+          110,
+          170
+        ],
+        [
+          0,
+          133,
+          109,
+          170
+        ],
+        [
+          0,
+          133,
+          116,
+          170
+        ],
+        [
+          0,
+          133,
+          113,
+          170
+        ],
+        [
+          0,
+          133,
+          117,
+          170
+        ],
+        [
+          0,
+          133,
+          120,
+          170
+        ]
+      ]
+    },
+    "tiger_old_walk_left.webp": {
+      "age": "old",
+      "action": "walk_left",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_walk_left.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "b40ca66683ac317b58cb35808585fa510a0d762194a375e467021e8f256ed22f",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          311,
+          141,
+          447
+        ],
+        [
+          145,
+          311,
+          266,
+          447
+        ],
+        [
+          270,
+          311,
+          389,
+          447
+        ],
+        [
+          393,
+          311,
+          512,
+          447
+        ],
+        [
+          516,
+          311,
+          637,
+          447
+        ],
+        [
+          641,
+          311,
+          764,
+          447
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          91,
+          126,
+          136
+        ],
+        [
+          0,
+          91,
+          121,
+          136
+        ],
+        [
+          0,
+          91,
+          119,
+          136
+        ],
+        [
+          0,
+          91,
+          119,
+          136
+        ],
+        [
+          0,
+          91,
+          121,
+          136
+        ],
+        [
+          0,
+          91,
+          123,
+          136
+        ]
+      ]
+    },
+    "tiger_old_walk_right.webp": {
+      "age": "old",
+      "action": "walk_right",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_walk_right.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "fbadc2476fdeba6058313add12a78544fa740c8f1a0e6bb1964003b03e97059f",
+      "source": "main",
+      "source_cells": [
+        [
+          774,
+          311,
+          898,
+          447
+        ],
+        [
+          902,
+          311,
+          1023,
+          447
+        ],
+        [
+          1027,
+          311,
+          1148,
+          447
+        ],
+        [
+          1152,
+          311,
+          1274,
+          447
+        ],
+        [
+          1278,
+          311,
+          1397,
+          447
+        ],
+        [
+          1401,
+          311,
+          1524,
+          447
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          91,
+          124,
+          136
+        ],
+        [
+          0,
+          91,
+          121,
+          136
+        ],
+        [
+          0,
+          91,
+          121,
+          136
+        ],
+        [
+          0,
+          91,
+          122,
+          136
+        ],
+        [
+          0,
+          91,
+          119,
+          136
+        ],
+        [
+          0,
+          91,
+          123,
+          136
+        ]
+      ]
+    },
+    "tiger_old_walk_up.webp": {
+      "age": "old",
+      "action": "walk_up",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_walk_up.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "2460f393ee3b507eec5bea72e5adebf958c9d29fac125f2c7818c83db908bb9a",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          488,
+          141,
+          644
+        ],
+        [
+          145,
+          488,
+          262,
+          644
+        ],
+        [
+          266,
+          488,
+          385,
+          644
+        ],
+        [
+          389,
+          488,
+          510,
+          644
+        ],
+        [
+          514,
+          488,
+          635,
+          644
+        ],
+        [
+          639,
+          488,
+          764,
+          644
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          115,
+          126,
+          156
+        ],
+        [
+          0,
+          115,
+          117,
+          156
+        ],
+        [
+          0,
+          115,
+          119,
+          156
+        ],
+        [
+          0,
+          115,
+          121,
+          156
+        ],
+        [
+          0,
+          115,
+          121,
+          156
+        ],
+        [
+          0,
+          115,
+          125,
+          156
+        ]
+      ]
+    },
+    "tiger_old_jump.webp": {
+      "age": "old",
+      "action": "jump",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_jump.webp",
+      "frames": 5,
+      "width": 1280,
+      "height": 256,
+      "sha256": "6c03223e6b00fe60a706447497c14ec1839acefab7e0bac62a627a6d9aaee6a5",
+      "source": "main",
+      "source_cells": [
+        [
+          775,
+          488,
+          916,
+          644
+        ],
+        [
+          920,
+          488,
+          1068,
+          644
+        ],
+        [
+          1072,
+          488,
+          1217,
+          644
+        ],
+        [
+          1221,
+          488,
+          1370,
+          644
+        ],
+        [
+          1374,
+          488,
+          1524,
+          644
+        ]
+      ],
+      "derivation": "source poses",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          122,
+          141,
+          156
+        ],
+        [
+          0,
+          122,
+          148,
+          156
+        ],
+        [
+          0,
+          122,
+          145,
+          156
+        ],
+        [
+          0,
+          122,
+          149,
+          156
+        ],
+        [
+          0,
+          122,
+          150,
+          156
+        ]
+      ]
+    },
+    "tiger_old_eat.webp": {
+      "age": "old",
+      "action": "eat",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_eat.webp",
+      "frames": 3,
+      "width": 768,
+      "height": 256,
+      "sha256": "e9c50a41886aac7895dd172da6e8697559e37110dd2f7fc277e015e78503ed81",
+      "source": "main",
+      "source_cells": [
+        [
+          16,
+          687,
+          128,
+          880
+        ],
+        [
+          132,
+          687,
+          253,
+          880
+        ],
+        [
+          257,
+          687,
+          377,
+          880
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_old_sleep.webp": {
+      "age": "old",
+      "action": "sleep",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_sleep.webp",
+      "frames": 3,
+      "width": 768,
+      "height": 256,
+      "sha256": "d5e53cc7081a922c6bdcb4f60370bf7d18e311b7c6ae5c887ade89f9f9c55733",
+      "source": "main",
+      "source_cells": [
+        [
+          388,
+          687,
+          507,
+          880
+        ],
+        [
+          511,
+          687,
+          644,
+          880
+        ],
+        [
+          648,
+          687,
+          782,
+          880
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_old_moods.webp": {
+      "age": "old",
+      "action": "moods",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_moods.webp",
+      "frames": 12,
+      "width": 3072,
+      "height": 256,
+      "sha256": "72f79f3286f3ba15c20aed59a4c84039deb16cb5da59499d78606e05a3e35fb8",
+      "source": "main",
+      "source_cells": [
+        [
+          792,
+          687,
+          907,
+          790
+        ],
+        [
+          911,
+          687,
+          1027,
+          790
+        ],
+        [
+          1031,
+          687,
+          1151,
+          790
+        ],
+        [
+          1155,
+          687,
+          1274,
+          790
+        ],
+        [
+          1278,
+          687,
+          1393,
+          790
+        ],
+        [
+          1397,
+          687,
+          1524,
+          790
+        ],
+        [
+          792,
+          809,
+          907,
+          915
+        ],
+        [
+          911,
+          809,
+          1027,
+          915
+        ],
+        [
+          1031,
+          809,
+          1151,
+          915
+        ],
+        [
+          1155,
+          809,
+          1274,
+          915
+        ],
+        [
+          1278,
+          809,
+          1393,
+          915
+        ],
+        [
+          1397,
+          809,
+          1524,
+          915
+        ]
+      ],
+      "derivation": "source poses"
+    },
+    "tiger_old_run_down.webp": {
+      "age": "old",
+      "action": "run_down",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_run_down.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "8806c9bbe34365519a6425d258a32c109bde2f0e174de761c2a1615d69890a50",
+      "source": "main",
+      "source_cells": [
+        [
+          820,
+          99,
+          930,
+          269
+        ],
+        [
+          934,
+          99,
+          1043,
+          269
+        ],
+        [
+          1047,
+          99,
+          1163,
+          269
+        ],
+        [
+          1167,
+          99,
+          1280,
+          269
+        ],
+        [
+          1284,
+          99,
+          1401,
+          269
+        ],
+        [
+          1405,
+          99,
+          1525,
+          269
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          133,
+          110,
+          170
+        ],
+        [
+          0,
+          133,
+          109,
+          170
+        ],
+        [
+          0,
+          133,
+          116,
+          170
+        ],
+        [
+          0,
+          133,
+          113,
+          170
+        ],
+        [
+          0,
+          133,
+          117,
+          170
+        ],
+        [
+          0,
+          133,
+          120,
+          170
+        ]
+      ]
+    },
+    "tiger_old_run_left.webp": {
+      "age": "old",
+      "action": "run_left",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_run_left.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "b40ca66683ac317b58cb35808585fa510a0d762194a375e467021e8f256ed22f",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          311,
+          141,
+          447
+        ],
+        [
+          145,
+          311,
+          266,
+          447
+        ],
+        [
+          270,
+          311,
+          389,
+          447
+        ],
+        [
+          393,
+          311,
+          512,
+          447
+        ],
+        [
+          516,
+          311,
+          637,
+          447
+        ],
+        [
+          641,
+          311,
+          764,
+          447
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          91,
+          126,
+          136
+        ],
+        [
+          0,
+          91,
+          121,
+          136
+        ],
+        [
+          0,
+          91,
+          119,
+          136
+        ],
+        [
+          0,
+          91,
+          119,
+          136
+        ],
+        [
+          0,
+          91,
+          121,
+          136
+        ],
+        [
+          0,
+          91,
+          123,
+          136
+        ]
+      ]
+    },
+    "tiger_old_run_right.webp": {
+      "age": "old",
+      "action": "run_right",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_run_right.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "fbadc2476fdeba6058313add12a78544fa740c8f1a0e6bb1964003b03e97059f",
+      "source": "main",
+      "source_cells": [
+        [
+          774,
+          311,
+          898,
+          447
+        ],
+        [
+          902,
+          311,
+          1023,
+          447
+        ],
+        [
+          1027,
+          311,
+          1148,
+          447
+        ],
+        [
+          1152,
+          311,
+          1274,
+          447
+        ],
+        [
+          1278,
+          311,
+          1397,
+          447
+        ],
+        [
+          1401,
+          311,
+          1524,
+          447
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          91,
+          124,
+          136
+        ],
+        [
+          0,
+          91,
+          121,
+          136
+        ],
+        [
+          0,
+          91,
+          121,
+          136
+        ],
+        [
+          0,
+          91,
+          122,
+          136
+        ],
+        [
+          0,
+          91,
+          119,
+          136
+        ],
+        [
+          0,
+          91,
+          123,
+          136
+        ]
+      ]
+    },
+    "tiger_old_run_up.webp": {
+      "age": "old",
+      "action": "run_up",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_run_up.webp",
+      "frames": 6,
+      "width": 1536,
+      "height": 256,
+      "sha256": "2460f393ee3b507eec5bea72e5adebf958c9d29fac125f2c7818c83db908bb9a",
+      "source": "main",
+      "source_cells": [
+        [
+          15,
+          488,
+          141,
+          644
+        ],
+        [
+          145,
+          488,
+          262,
+          644
+        ],
+        [
+          266,
+          488,
+          385,
+          644
+        ],
+        [
+          389,
+          488,
+          510,
+          644
+        ],
+        [
+          514,
+          488,
+          635,
+          644
+        ],
+        [
+          639,
+          488,
+          764,
+          644
+        ]
+      ],
+      "derivation": "supplied walk sequence played at run cadence",
+      "checker_shadow_cleanup_bands": [
+        [
+          0,
+          115,
+          126,
+          156
+        ],
+        [
+          0,
+          115,
+          117,
+          156
+        ],
+        [
+          0,
+          115,
+          119,
+          156
+        ],
+        [
+          0,
+          115,
+          121,
+          156
+        ],
+        [
+          0,
+          115,
+          121,
+          156
+        ],
+        [
+          0,
+          115,
+          125,
+          156
+        ]
+      ]
+    },
+    "tiger_old_comb.webp": {
+      "age": "old",
+      "action": "comb",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_comb.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "9da847c161f973e687af51979e199041131c02ccd71a2c394c9d33e2facd8c9c",
+      "source": "objects",
+      "source_cells": [
+        [
+          317,
+          99,
+          619,
+          328
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        189,
+        302,
+        229
+      ]
+    },
+    "tiger_old_fetch_mouse.png": {
+      "age": "old",
+      "action": "fetch_mouse",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_fetch_mouse.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "3812329677812726ca867add8f97b8642b6192621d6514b7fc0778337ad42f87",
+      "source": "objects",
+      "source_cells": [
+        [
+          919,
+          99,
+          1219,
+          328
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        172,
+        300,
+        229
+      ]
+    },
+    "tiger_old_fetch_plush.png": {
+      "age": "old",
+      "action": "fetch_plush",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_fetch_plush.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "e9cdb0293708c6bcb7eccf32a91c1d58fd4070952b45fdb2e1a94923ef38131a",
+      "source": "objects",
+      "source_cells": [
+        [
+          1230,
+          99,
+          1521,
+          328
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        189,
+        291,
+        229
+      ]
+    },
+    "tiger_old_fetch_ball.png": {
+      "age": "old",
+      "action": "fetch_ball",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_fetch_ball.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "eb8a922034979de5dcd4a5d5de0e34ad5a9e49f16e03d5ddadc51e9d1cd7d08c",
+      "source": "objects",
+      "source_cells": [
+        [
+          14,
+          374,
+          306,
+          618
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        183,
+        292,
+        244
+      ]
+    },
+    "tiger_old_fetch_tennis.png": {
+      "age": "old",
+      "action": "fetch_tennis",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_fetch_tennis.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "ef2deb4b6c5f6078d9ca19fcb44ae3fb7dfcb1ada1ba0c0b5f8ffa3bff7281b4",
+      "source": "objects",
+      "source_cells": [
+        [
+          317,
+          374,
+          617,
+          618
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        183,
+        300,
+        244
+      ]
+    },
+    "tiger_old_fetch_yarn.png": {
+      "age": "old",
+      "action": "fetch_yarn",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_fetch_yarn.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "bf72f3273ea561864367e0d5d084b51a7fd30a504d86a19bd2e6e25567314e97",
+      "source": "objects",
+      "source_cells": [
+        [
+          626,
+          374,
+          909,
+          618
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        183,
+        283,
+        244
+      ]
+    },
+    "tiger_old_groom_foam.webp": {
+      "age": "old",
+      "action": "groom_foam",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_groom_foam.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "0f95955753fc8b32ca5a17d52238dd739e3afe34064c5facdab64ee1c8024721",
+      "source": "objects",
+      "source_cells": [
+        [
+          919,
+          374,
+          1220,
+          618
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        204,
+        301,
+        244
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          0,
+          0,
+          301,
+          244
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            61.4,
+            27.1,
+            10.7,
+            10.7
+          ],
+          [
+            53.0,
+            44.3,
+            3.0,
+            3.0
+          ],
+          [
+            47.2,
+            90.0,
+            13.6,
+            13.6
+          ],
+          [
+            61.0,
+            114.9,
+            7.9,
+            7.9
+          ],
+          [
+            251.8,
+            65.8,
+            13.4,
+            13.4
+          ],
+          [
+            228.1,
+            80.8,
+            5.6,
+            5.6
+          ],
+          [
+            228.4,
+            100.2,
+            10.0,
+            10.0
+          ],
+          [
+            239.4,
+            143.2,
+            14.8,
+            14.8
+          ],
+          [
+            269.3,
+            190.7,
+            8.5,
+            8.5
+          ],
+          [
+            261.7,
+            212.8,
+            14.1,
+            14.1
+          ]
+        ],
+        "protected_source_foam_polygons": [
+          [
+            [
+              88,
+              35
+            ],
+            [
+              90,
+              32
+            ],
+            [
+              89,
+              28
+            ],
+            [
+              91,
+              24
+            ],
+            [
+              94,
+              23
+            ],
+            [
+              100,
+              23
+            ],
+            [
+              103,
+              19
+            ],
+            [
+              108,
+              17
+            ],
+            [
+              113,
+              19
+            ],
+            [
+              117,
+              24
+            ],
+            [
+              120,
+              24
+            ],
+            [
+              123,
+              27
+            ],
+            [
+              123,
+              29
+            ],
+            [
+              127,
+              29
+            ],
+            [
+              130,
+              32
+            ],
+            [
+              130,
+              36
+            ],
+            [
+              127,
+              40
+            ],
+            [
+              122,
+              41
+            ],
+            [
+              118,
+              40
+            ],
+            [
+              117,
+              45
+            ],
+            [
+              111,
+              47
+            ],
+            [
+              106,
+              45
+            ],
+            [
+              105,
+              48
+            ],
+            [
+              101,
+              48
+            ],
+            [
+              103,
+              56
+            ],
+            [
+              100,
+              61
+            ],
+            [
+              96,
+              62
+            ],
+            [
+              94,
+              65
+            ],
+            [
+              89,
+              65
+            ],
+            [
+              86,
+              61
+            ],
+            [
+              81,
+              62
+            ],
+            [
+              80,
+              59
+            ],
+            [
+              80,
+              55
+            ],
+            [
+              82,
+              51
+            ],
+            [
+              79,
+              48
+            ],
+            [
+              79,
+              43
+            ],
+            [
+              83,
+              39
+            ],
+            [
+              86,
+              38
+            ]
+          ],
+          [
+            [
+              78,
+              146
+            ],
+            [
+              83,
+              145
+            ],
+            [
+              83,
+              141
+            ],
+            [
+              87,
+              140
+            ],
+            [
+              91,
+              143
+            ],
+            [
+              92,
+              148
+            ],
+            [
+              94,
+              151
+            ],
+            [
+              98,
+              151
+            ],
+            [
+              100,
+              155
+            ],
+            [
+              97,
+              159
+            ],
+            [
+              95,
+              160
+            ],
+            [
+              96,
+              164
+            ],
+            [
+              93,
+              168
+            ],
+            [
+              89,
+              169
+            ],
+            [
+              86,
+              166
+            ],
+            [
+              84,
+              171
+            ],
+            [
+              80,
+              172
+            ],
+            [
+              77,
+              169
+            ],
+            [
+              77,
+              166
+            ],
+            [
+              73,
+              165
+            ],
+            [
+              71,
+              161
+            ],
+            [
+              72,
+              157
+            ],
+            [
+              77,
+              155
+            ],
+            [
+              76,
+              150
+            ]
+          ],
+          [
+            [
+              86,
+              199
+            ],
+            [
+              87,
+              195
+            ],
+            [
+              91,
+              196
+            ],
+            [
+              96,
+              194
+            ],
+            [
+              99,
+              198
+            ],
+            [
+              99,
+              203
+            ],
+            [
+              97,
+              208
+            ],
+            [
+              101,
+              210
+            ],
+            [
+              100,
+              217
+            ],
+            [
+              106,
+              221
+            ],
+            [
+              109,
+              225
+            ],
+            [
+              108,
+              233
+            ],
+            [
+              104,
+              235
+            ],
+            [
+              100,
+              235
+            ],
+            [
+              96,
+              231
+            ],
+            [
+              95,
+              235
+            ],
+            [
+              89,
+              235
+            ],
+            [
+              85,
+              233
+            ],
+            [
+              81,
+              236
+            ],
+            [
+              76,
+              236
+            ],
+            [
+              72,
+              233
+            ],
+            [
+              69,
+              233
+            ],
+            [
+              65,
+              230
+            ],
+            [
+              62,
+              232
+            ],
+            [
+              58,
+              231
+            ],
+            [
+              57,
+              227
+            ],
+            [
+              53,
+              226
+            ],
+            [
+              52,
+              223
+            ],
+            [
+              57,
+              220
+            ],
+            [
+              61,
+              218
+            ],
+            [
+              61,
+              214
+            ],
+            [
+              68,
+              212
+            ],
+            [
+              68,
+              208
+            ],
+            [
+              74,
+              206
+            ],
+            [
+              74,
+              202
+            ],
+            [
+              77,
+              199
+            ],
+            [
+              82,
+              199
+            ]
+          ],
+          [
+            [
+              217,
+              117
+            ],
+            [
+              224,
+              116
+            ],
+            [
+              229,
+              120
+            ],
+            [
+              231,
+              125
+            ],
+            [
+              230,
+              129
+            ],
+            [
+              234,
+              133
+            ],
+            [
+              234,
+              143
+            ],
+            [
+              231,
+              148
+            ],
+            [
+              232,
+              152
+            ],
+            [
+              231,
+              156
+            ],
+            [
+              236,
+              158
+            ],
+            [
+              237,
+              163
+            ],
+            [
+              244,
+              163
+            ],
+            [
+              249,
+              168
+            ],
+            [
+              250,
+              172
+            ],
+            [
+              247,
+              178
+            ],
+            [
+              243,
+              180
+            ],
+            [
+              247,
+              184
+            ],
+            [
+              247,
+              188
+            ],
+            [
+              244,
+              193
+            ],
+            [
+              250,
+              197
+            ],
+            [
+              249,
+              201
+            ],
+            [
+              245,
+              204
+            ],
+            [
+              249,
+              208
+            ],
+            [
+              251,
+              210
+            ],
+            [
+              250,
+              216
+            ],
+            [
+              254,
+              220
+            ],
+            [
+              255,
+              225
+            ],
+            [
+              252,
+              230
+            ],
+            [
+              248,
+              232
+            ],
+            [
+              243,
+              231
+            ],
+            [
+              239,
+              228
+            ],
+            [
+              236,
+              232
+            ],
+            [
+              231,
+              234
+            ],
+            [
+              236,
+              227
+            ],
+            [
+              235,
+              220
+            ],
+            [
+              231,
+              215
+            ],
+            [
+              220,
+              209
+            ],
+            [
+              218,
+              188
+            ],
+            [
+              218,
+              169
+            ],
+            [
+              213,
+              163
+            ],
+            [
+              211,
+              151
+            ],
+            [
+              216,
+              138
+            ]
+          ],
+          [
+            [
+              278,
+              215
+            ],
+            [
+              282,
+              219
+            ],
+            [
+              282,
+              223
+            ],
+            [
+              279,
+              227
+            ],
+            [
+              271,
+              230
+            ],
+            [
+              265,
+              228
+            ],
+            [
+              267,
+              219
+            ]
+          ],
+          [
+            [
+              190,
+              45
+            ],
+            [
+              197,
+              47
+            ],
+            [
+              201,
+              49
+            ],
+            [
+              199,
+              50
+            ],
+            [
+              202,
+              52
+            ],
+            [
+              206,
+              56
+            ],
+            [
+              202,
+              55
+            ],
+            [
+              207,
+              59
+            ],
+            [
+              211,
+              64
+            ],
+            [
+              208,
+              63
+            ],
+            [
+              211,
+              67
+            ],
+            [
+              213,
+              71
+            ],
+            [
+              211,
+              71
+            ],
+            [
+              212,
+              75
+            ],
+            [
+              213,
+              79
+            ],
+            [
+              210,
+              77
+            ],
+            [
+              211,
+              82
+            ],
+            [
+              211,
+              85
+            ],
+            [
+              209,
+              83
+            ],
+            [
+              209,
+              88
+            ],
+            [
+              207,
+              87
+            ],
+            [
+              206,
+              91
+            ],
+            [
+              204,
+              89
+            ],
+            [
+              202,
+              93
+            ],
+            [
+              199,
+              92
+            ],
+            [
+              196,
+              94
+            ],
+            [
+              192,
+              94
+            ],
+            [
+              195,
+              90
+            ],
+            [
+              197,
+              86
+            ],
+            [
+              197,
+              81
+            ],
+            [
+              198,
+              78
+            ],
+            [
+              197,
+              73
+            ],
+            [
+              197,
+              68
+            ],
+            [
+              193,
+              60
+            ]
+          ]
+        ]
+      }
+    },
+    "tiger_old_rope_play.png": {
+      "age": "old",
+      "action": "rope_play",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_rope_play.png",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "dd7f0f0f50daf5fd3b20ff599fb3c88006c3e7e86a6bb8b94773af83d704c1df",
+      "source": "objects",
+      "source_cells": [
+        [
+          1231,
+          374,
+          1521,
+          618
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        183,
+        290,
+        244
+      ]
+    },
+    "tiger_old_scratcher_play.webp": {
+      "age": "old",
+      "action": "scratcher_play",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_scratcher_play.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "f5aea396378ea308e10dacd3ba5bb97c7da62b9d40fac446504d10965f8146ac",
+      "source": "objects",
+      "source_cells": [
+        [
+          185,
+          657,
+          567,
+          898
+        ]
+      ],
+      "derivation": "fixed scratcher removed; one supplied tiger pose",
+      "retained_source_silhouette": [
+        [
+          0,
+          0
+        ],
+        [
+          228,
+          0
+        ],
+        [
+          228,
+          36
+        ],
+        [
+          229,
+          39
+        ],
+        [
+          231,
+          42
+        ],
+        [
+          231,
+          46
+        ],
+        [
+          232,
+          49
+        ],
+        [
+          233,
+          53
+        ],
+        [
+          233,
+          59
+        ],
+        [
+          232,
+          63
+        ],
+        [
+          231,
+          65
+        ],
+        [
+          234,
+          66
+        ],
+        [
+          241,
+          68
+        ],
+        [
+          247,
+          72
+        ],
+        [
+          250,
+          77
+        ],
+        [
+          253,
+          81
+        ],
+        [
+          255,
+          86
+        ],
+        [
+          253,
+          91
+        ],
+        [
+          253,
+          96
+        ],
+        [
+          252,
+          101
+        ],
+        [
+          250,
+          104
+        ],
+        [
+          247,
+          108
+        ],
+        [
+          243,
+          112
+        ],
+        [
+          240,
+          118
+        ],
+        [
+          237,
+          125
+        ],
+        [
+          233,
+          133
+        ],
+        [
+          230,
+          140
+        ],
+        [
+          225,
+          149
+        ],
+        [
+          219,
+          157
+        ],
+        [
+          213,
+          164
+        ],
+        [
+          209,
+          169
+        ],
+        [
+          213,
+          175
+        ],
+        [
+          216,
+          182
+        ],
+        [
+          216,
+          189
+        ],
+        [
+          214,
+          195
+        ],
+        [
+          211,
+          200
+        ],
+        [
+          207,
+          202
+        ],
+        [
+          205,
+          205
+        ],
+        [
+          204,
+          211
+        ],
+        [
+          203,
+          216
+        ],
+        [
+          202,
+          226
+        ],
+        [
+          197,
+          228
+        ],
+        [
+          192,
+          230
+        ],
+        [
+          192,
+          241
+        ],
+        [
+          0,
+          241
+        ]
+      ],
+      "printed_header_cleanup_height": 7,
+      "protected_source_fur_polygons": [
+        [
+          [
+            218,
+            38
+          ],
+          [
+            223,
+            39
+          ],
+          [
+            227,
+            41
+          ],
+          [
+            229,
+            44
+          ],
+          [
+            229,
+            48
+          ],
+          [
+            231,
+            51
+          ],
+          [
+            231,
+            56
+          ],
+          [
+            230,
+            60
+          ],
+          [
+            229,
+            64
+          ],
+          [
+            226,
+            67
+          ],
+          [
+            219,
+            67
+          ],
+          [
+            218,
+            61
+          ],
+          [
+            216,
+            56
+          ],
+          [
+            216,
+            47
+          ]
+        ]
+      ],
+      "audited_background_seeds": [
+        [
+          221,
+          167
+        ]
+      ],
+      "checker_shadow_cleanup_band": [
+        0,
+        196,
+        382,
+        241
+      ]
+    },
+    "tiger_old_soap.webp": {
+      "age": "old",
+      "action": "soap",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_soap.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "3df905afcd784332ddd195d0098e06ed800f0a2b9872bfdb147c364bebb0e955",
+      "source": "objects",
+      "source_cells": [
+        [
+          576,
+          662,
+          960,
+          898
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        196,
+        384,
+        236
+      ],
+      "blue_checker_cleanup": {
+        "zone": [
+          0,
+          0,
+          384,
+          236
+        ],
+        "protected_source_bubble_ellipses": [
+          [
+            274.1,
+            52.4,
+            9.1,
+            9.1
+          ],
+          [
+            280.5,
+            95.3,
+            16.9,
+            16.9
+          ],
+          [
+            270.9,
+            121.7,
+            5.0,
+            5.0
+          ],
+          [
+            294.7,
+            152.3,
+            8.9,
+            8.9
+          ],
+          [
+            286.8,
+            177.4,
+            6.1,
+            6.1
+          ],
+          [
+            315.3,
+            209.7,
+            12.2,
+            12.2
+          ]
+        ],
+        "protected_source_foam_polygons": [
+          [
+            [
+              268,
+              174
+            ],
+            [
+              269,
+              171
+            ],
+            [
+              274,
+              170
+            ],
+            [
+              279,
+              172
+            ],
+            [
+              281,
+              177
+            ],
+            [
+              280,
+              181
+            ],
+            [
+              284,
+              184
+            ],
+            [
+              289,
+              185
+            ],
+            [
+              293,
+              190
+            ],
+            [
+              291,
+              196
+            ],
+            [
+              287,
+              199
+            ],
+            [
+              289,
+              202
+            ],
+            [
+              289,
+              207
+            ],
+            [
+              293,
+              210
+            ],
+            [
+              294,
+              215
+            ],
+            [
+              291,
+              221
+            ],
+            [
+              285,
+              223
+            ],
+            [
+              280,
+              224
+            ],
+            [
+              275,
+              224
+            ],
+            [
+              272,
+              220
+            ],
+            [
+              270,
+              213
+            ],
+            [
+              267,
+              210
+            ],
+            [
+              265,
+              204
+            ],
+            [
+              260,
+              201
+            ],
+            [
+              260,
+              195
+            ],
+            [
+              264,
+              190
+            ],
+            [
+              261,
+              185
+            ],
+            [
+              261,
+              180
+            ],
+            [
+              264,
+              176
+            ]
+          ]
+        ]
+      }
+    },
+    "tiger_old_towel.webp": {
+      "age": "old",
+      "action": "towel",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_towel.webp",
+      "frames": 1,
+      "width": 256,
+      "height": 256,
+      "sha256": "536ade6b5705bd5583b14b72d72a83cf20c84991bccae9abe97636b9945a7e02",
+      "source": "objects",
+      "source_cells": [
+        [
+          969,
+          662,
+          1351,
+          898
+        ]
+      ],
+      "derivation": "one supplied object interaction pose",
+      "checker_shadow_cleanup_band": [
+        0,
+        196,
+        382,
+        236
+      ]
+    }
+  },
+  "portraits": {
+    "tiger_cub_promenade_token.png": {
+      "age": "cub",
+      "path": "app/src/main/res-tiger-cub/drawable-nodpi/tiger_cub_promenade_token.png",
+      "width": 256,
+      "height": 256,
+      "frames": 1,
+      "source": "main",
+      "source_cells": [
+        [
+          50,
+          103,
+          168,
+          202
+        ]
+      ],
+      "derivation": "head crop of same-age idle_down",
+      "retained_source_outline": null,
+      "sha256": "9de527f2165fa170ba152d2de759b88927829004991af9030e518bc56546b3db"
+    },
+    "tiger_teen_promenade_token.png": {
+      "age": "teen",
+      "path": "app/src/main/res-tiger-teen/drawable-nodpi/tiger_teen_promenade_token.png",
+      "width": 256,
+      "height": 256,
+      "frames": 1,
+      "source": "main",
+      "source_cells": [
+        [
+          69,
+          98,
+          157,
+          170
+        ]
+      ],
+      "derivation": "head crop of same-age idle_down",
+      "retained_source_outline": [
+        [
+          69,
+          98
+        ],
+        [
+          157,
+          98
+        ],
+        [
+          157,
+          151
+        ],
+        [
+          152,
+          155
+        ],
+        [
+          144,
+          160
+        ],
+        [
+          135,
+          162
+        ],
+        [
+          123,
+          168
+        ],
+        [
+          113,
+          169
+        ],
+        [
+          102,
+          167
+        ],
+        [
+          90,
+          163
+        ],
+        [
+          80,
+          159
+        ],
+        [
+          69,
+          152
+        ]
+      ],
+      "sha256": "5410f23a047ccb22b52528fe8c03c5bde226c93ca2a4563b0562997c6cdc79ce"
+    },
+    "tiger_adult_promenade_token.png": {
+      "age": "adult",
+      "path": "app/src/main/res-tiger-adult/drawable-nodpi/tiger_adult_promenade_token.png",
+      "width": 256,
+      "height": 256,
+      "frames": 1,
+      "source": "main",
+      "source_cells": [
+        [
+          70,
+          100,
+          160,
+          176
+        ]
+      ],
+      "derivation": "head crop of same-age idle_down",
+      "retained_source_outline": [
+        [
+          70,
+          100
+        ],
+        [
+          160,
+          100
+        ],
+        [
+          160,
+          154
+        ],
+        [
+          153,
+          158
+        ],
+        [
+          140,
+          163
+        ],
+        [
+          131,
+          168
+        ],
+        [
+          123,
+          173
+        ],
+        [
+          114,
+          175
+        ],
+        [
+          104,
+          172
+        ],
+        [
+          94,
+          166
+        ],
+        [
+          87,
+          163
+        ],
+        [
+          77,
+          159
+        ],
+        [
+          70,
+          155
+        ]
+      ],
+      "sha256": "5a51c098d4d079765b023f69598d6cb66419aedb6b10c221ca9f8e3505d43dd1"
+    },
+    "tiger_old_promenade_token.png": {
+      "age": "old",
+      "path": "app/src/main/res-tiger-old/drawable-nodpi/tiger_old_promenade_token.png",
+      "width": 256,
+      "height": 256,
+      "frames": 1,
+      "source": "main",
+      "source_cells": [
+        [
+          51,
+          102,
+          167,
+          186
+        ]
+      ],
+      "derivation": "head crop of same-age idle_down",
+      "retained_source_outline": [
+        [
+          51,
+          102
+        ],
+        [
+          167,
+          102
+        ],
+        [
+          167,
+          170
+        ],
+        [
+          158,
+          174
+        ],
+        [
+          146,
+          177
+        ],
+        [
+          133,
+          178
+        ],
+        [
+          121,
+          184
+        ],
+        [
+          110,
+          185
+        ],
+        [
+          99,
+          181
+        ],
+        [
+          92,
+          178
+        ],
+        [
+          80,
+          177
+        ],
+        [
+          70,
+          175
+        ],
+        [
+          59,
+          172
+        ],
+        [
+          51,
+          166
+        ]
+      ],
+      "sha256": "f7b20046a4e14e26aa3672ca9173faf878a044970270c2c940676ae13f44aca1"
+    }
+  },
+  "cutout_probes": [
+    {
+      "age": "cub",
+      "action": "jump",
+      "frame": 5,
+      "point": [
+        75,
+        140
+      ],
+      "expect": "transparent",
+      "description": "Printed numeral removed without the touching paw contour",
+      "space": "source_cell"
+    },
+    {
+      "age": "cub",
+      "action": "jump",
+      "frame": 5,
+      "point": [
+        86,
+        130
+      ],
+      "expect": "opaque",
+      "description": "Paw fur next to the removed printed numeral retained",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "walk_down",
+      "frame": 2,
+      "point": [
+        57,
+        143
+      ],
+      "expect": "transparent",
+      "description": "Printed numeral removed without the touching paw contour",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "walk_down",
+      "frame": 2,
+      "point": [
+        55,
+        131
+      ],
+      "expect": "opaque",
+      "description": "Paw fur next to the removed printed numeral retained",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "walk_down",
+      "frame": 5,
+      "point": [
+        53,
+        143
+      ],
+      "expect": "transparent",
+      "description": "Printed numeral removed without the touching paw contour",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "walk_down",
+      "frame": 5,
+      "point": [
+        65,
+        131
+      ],
+      "expect": "opaque",
+      "description": "Paw fur next to the removed printed numeral retained",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "walk_down",
+      "frame": 6,
+      "point": [
+        56,
+        144
+      ],
+      "expect": "transparent",
+      "description": "Printed numeral removed without the touching paw contour",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "walk_down",
+      "frame": 6,
+      "point": [
+        64,
+        130
+      ],
+      "expect": "opaque",
+      "description": "Paw fur next to the removed printed numeral retained",
+      "space": "source_cell"
+    },
+    {
+      "age": "cub",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        300,
+        100
+      ],
+      "expect": "transparent",
+      "description": "Fixed scratcher pole excluded from character sprite",
+      "space": "source_cell"
+    },
+    {
+      "age": "cub",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        235,
+        90
+      ],
+      "expect": "opaque",
+      "description": "Visible forepaw retained while fixed scratcher is excluded",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        300,
+        100
+      ],
+      "expect": "transparent",
+      "description": "Fixed scratcher pole excluded from character sprite",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        245,
+        90
+      ],
+      "expect": "opaque",
+      "description": "Visible forepaw retained while fixed scratcher is excluded",
+      "space": "source_cell"
+    },
+    {
+      "age": "adult",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        300,
+        100
+      ],
+      "expect": "transparent",
+      "description": "Fixed scratcher pole excluded from character sprite",
+      "space": "source_cell"
+    },
+    {
+      "age": "adult",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        248,
+        90
+      ],
+      "expect": "opaque",
+      "description": "Visible forepaw retained while fixed scratcher is excluded",
+      "space": "source_cell"
+    },
+    {
+      "age": "old",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        300,
+        100
+      ],
+      "expect": "transparent",
+      "description": "Fixed scratcher pole excluded from character sprite",
+      "space": "source_cell"
+    },
+    {
+      "age": "old",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        240,
+        90
+      ],
+      "expect": "opaque",
+      "description": "Visible forepaw retained while fixed scratcher is excluded",
+      "space": "source_cell"
+    },
+    {
+      "age": "old",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        230,
+        55
+      ],
+      "expect": "opaque",
+      "description": "Open pale cheek contour protected against an alpha flood",
+      "space": "source_cell"
+    },
+    {
+      "age": "old",
+      "action": "scratcher_play",
+      "frame": 1,
+      "point": [
+        221,
+        167
+      ],
+      "expect": "transparent",
+      "description": "Enclosed checkerboard behind the raised forepaw removed",
+      "space": "source_cell"
+    },
+    {
+      "age": "old",
+      "action": "groom_foam",
+      "frame": 1,
+      "point": [
+        204,
+        65
+      ],
+      "expect": "opaque",
+      "description": "White right cheek preserved through its open source outline",
+      "space": "source_cell"
+    },
+    {
+      "age": "old",
+      "action": "idle_up",
+      "frame": 1,
+      "point": [
+        151,
+        125
+      ],
+      "expect": "opaque",
+      "description": "White tail tip of the old tiger remains visible",
+      "space": "source_cell"
+    },
+    {
+      "age": "adult",
+      "action": "groom_foam",
+      "frame": 1,
+      "point": [
+        117,
+        4
+      ],
+      "expect": "opaque",
+      "description": "Complete upper soap bubble retained above the original panel border",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "soap",
+      "frame": 1,
+      "point": [
+        266,
+        166
+      ],
+      "expect": "opaque",
+      "description": "True white foam retained beneath the supplied soap pose",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "soap",
+      "frame": 1,
+      "point": [
+        255,
+        149
+      ],
+      "expect": "transparent",
+      "description": "Printed blue checkerboard under the right hand removed",
+      "space": "source_cell"
+    },
+    {
+      "age": "teen",
+      "action": "soap",
+      "frame": 1,
+      "point": [
+        266,
+        128
+      ],
+      "expect": "transparent",
+      "description": "Blue checkerboard between the right hand and bubbles removed",
+      "space": "source_cell"
+    },
+    {
+      "age": "cub",
+      "action": "groom_foam",
+      "frame": 1,
+      "point": [
+        210,
+        120
+      ],
+      "expect": "transparent",
+      "description": "Blue background at the right cheek removed",
+      "space": "source_cell"
+    },
+    {
+      "age": "adult",
+      "action": "groom_foam",
+      "frame": 1,
+      "point": [
+        225,
+        104
+      ],
+      "expect": "transparent",
+      "description": "Pale background between shoulder and bubbles removed",
+      "space": "source_cell"
+    }
+  ],
+  "notes": [
+    "Eight original user PNG files are preserved byte for byte.",
+    "All printed checkerboards, labels and borders are excluded with audited source-space masks.",
+    "LEFT idle is mirrored because every source labelled LEFT faces right.",
+    "Run uses the six supplied walking poses at the existing engine run cadence.",
+    "Rope and scratcher have one supplied interaction pose, animated by the existing engine.",
+    "The fixed scratcher is removed from the character pose, because the scene owns this prop.",
+    "Detached bubbles and mood symbols are retained and safely positioned after normalization.",
+    "Every runtime frame is 256px with a 16px safe margin and common visual mass within its age.",
+    "No drawing is shared across ages or species; original tiger sleeping poses each have one tail."
+  ],
+  "normalization": {
+    "cub": {
+      "largest_component_target_area": 18354,
+      "baseline": 240,
+      "method": "same largest-component visual mass for every pose, safe complete silhouette"
+    },
+    "teen": {
+      "largest_component_target_area": 15708,
+      "baseline": 240,
+      "method": "same largest-component visual mass for every pose, safe complete silhouette"
+    },
+    "adult": {
+      "largest_component_target_area": 16507,
+      "baseline": 240,
+      "method": "same largest-component visual mass for every pose, safe complete silhouette"
+    },
+    "old": {
+      "largest_component_target_area": 17937,
+      "baseline": 240,
+      "method": "same largest-component visual mass for every pose, safe complete silhouette"
+    }
+  }
+}
