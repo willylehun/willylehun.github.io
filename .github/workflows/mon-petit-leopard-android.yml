@@ -40,6 +40,8 @@ jobs:
           sdkmanager "platforms;android-35" "build-tools;35.0.0"
       - name: Install image test dependency
         run: python -m pip install Pillow==11.3.0 numpy==2.3.3
+      - name: Tiger asset writer regression tests
+        run: python mon-petit-leopard/tools/test_tiger_asset_save.py
       - name: Prepare sprite packs
         run: python mon-petit-leopard/tools/prepare_v061_sprite_assets.py
       - name: Prepare salon game assets

@@ -463,12 +463,21 @@ def save(im, path, check=False):
             im.save(temporary,"WEBP",lossless=True,method=6,exact=True)
         else:
             im.save(temporary,"PNG",optimize=False)
-        with Image.open(temporary) as check:
-            check.load()
-            if check.size != im.size or "A" not in check.getbands():
+        with Image.open(temporary) as encoded:
+            encoded.load()
+            if encoded.size != im.size or "A" not in encoded.getbands():
                 raise RuntimeError(f"Invalid encoded resource: {path}")
+            rebuilt_rgba = encoded.convert("RGBA").tobytes() if check else None
         if check:
-            if not path.is_file() or temporary.read_bytes() != path.read_bytes():
+            if not path.is_file():
+                raise RuntimeError(f"Missing resource for source rebuild check: {path}")
+            # Lossless codec versions may encode identical pixels differently.
+            # Compare every RGBA byte, including RGB under alpha=0, without
+            # tolerances; compressed bytes remain tracked by the manifest.
+            with Image.open(path) as existing:
+                identical = (existing.size == im.size
+                             and existing.convert("RGBA").tobytes() == rebuilt_rgba)
+            if not identical:
                 raise RuntimeError(f"Resource differs from deterministic source rebuild: {path}")
         else:
             temporary.replace(path)
@@ -481,7 +490,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--qa-dir",type=Path,help="Scratch previews for visual review")
     parser.add_argument("--check",action="store_true",
-                        help="Rebuild and compare all bytes without replacing runtime files")
+                        help="Rebuild and compare exact decoded RGBA without replacing runtime files")
     args = parser.parse_args()
     metadata = json.loads((SOURCE / "sources.json").read_text())
     manifest = {"version":"0.8.9","species":"tiger","frame_size":FRAME,

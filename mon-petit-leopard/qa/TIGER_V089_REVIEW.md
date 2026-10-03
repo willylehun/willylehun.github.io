@@ -36,10 +36,19 @@ du vieux tigre et conservation des bulles de soin. Les portraits ne gardent que
 la tête. Les poses de corde et de griffoir fournies sont uniques ; le moteur
 existant anime ces interactions comme pour le loup.
 
-`prepare_v089_tiger_assets.py --check` a reconstruit les 113 ressources et le
-manifeste sans les modifier : identité des octets confirmée. Les 26 sondes alpha
-du manifeste vérifient le retrait du fond et la préservation du pelage, des pattes
-et des objets aux points audités.
+`prepare_v089_tiger_assets.py --check` reconstruit les 113 ressources et vérifie
+leurs dimensions et tous leurs pixels RGBA décodés sans remplacer les fichiers.
+La compression PNG/WebP peut varier selon les versions de Pillow et du codec ;
+elle ne doit pas masquer une différence de couleur ou de transparence. Le
+manifeste conserve l'empreinte exacte des fichiers utilisés pour chaque build.
+Ses 26 sondes alpha vérifient le retrait du fond et la préservation du pelage,
+des pattes et des objets aux points audités.
+
+Six tests ciblés de `test_tiger_asset_save.py` couvrent la création et le
+remplacement normal des fichiers, le contrôle sans écriture, les encodages
+lossless différents et le refus des modifications de dimensions ou de chaque
+canal RGBA, y compris les couleurs sous un alpha nul. Ils sont exécutés en CI
+avant la préparation des ressources.
 
 ## Validation locale — 3 octobre 2026
 
