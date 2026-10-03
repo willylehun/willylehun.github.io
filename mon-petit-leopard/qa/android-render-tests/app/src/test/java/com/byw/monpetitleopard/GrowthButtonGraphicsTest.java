@@ -24,22 +24,31 @@ public class GrowthButtonGraphicsTest {
  @Test public void wolfGrowthDuringPromenade(){growth(PetSpecies.WOLF,true);}
  @Test public void tigerGrowthDuringPromenade(){growth(PetSpecies.TIGER,true);}
 
- void growth(String species,boolean trip){
+ @Test public void lionMaleGrowthButtonAndActions(){growth(PetSpecies.LION,"male",false);}
+ @Test public void lionFemaleGrowthButtonAndActions(){growth(PetSpecies.LION,"female",false);}
+ @Test public void lionMaleGrowthDuringPromenade(){growth(PetSpecies.LION,"male",true);}
+ @Test public void lionFemaleGrowthDuringPromenade(){growth(PetSpecies.LION,"female",true);}
+
+ void growth(String species,boolean trip){growth(species,"female",trip);}
+
+ void growth(String species,String chosenSex,boolean trip){
   Context app=RuntimeEnvironment.getApplication();
   for(String prefs:new String[]{"pet_profiles_v079","pet","pet_0"})app.getSharedPreferences(prefs,Context.MODE_PRIVATE).edit().clear().commit();
-  PetProfileStore.ensureMigrated(app);PetProfileStore.createAnimal(app,0,species,"female","Croissance QA");
+  PetProfileStore.ensureMigrated(app);PetProfileStore.createAnimal(app,0,species,chosenSex,"Croissance QA");
   Intent intent=new Intent(app,MainActivity.class).putExtra(PetProfileStore.EXTRA_SLOT,0);
   ActivityController<MainActivity> controller=Robolectric.buildActivity(MainActivity.class,intent).create().start().resume().visible();
   MainActivity main=controller.get();PromenadeLifecycleGraphicsTest.settle(main);
+  String capturePrefix=species+(PetSpecies.LION.equals(species)?"-"+chosenSex:"");
+  assertEquals(chosenSex,main.petSex);
   assertNotNull(main.devGrowthBtn);assertTrue(main.devGrowthBtn.isShown());assertTrue(main.devGrowthBtn.isEnabled());
   assertEquals(MainActivity.PetStage.CUB,main.petStage());
   if(trip){main.startPromenade(null);assertTrue(main.promenadeActive());assertEquals(View.INVISIBLE,main.petView.getVisibility());}
-  else capture(main,species+"-cub");
+  else capture(main,capturePrefix+"-cub");
   MainActivity.PetStage[] stages={MainActivity.PetStage.TEEN,MainActivity.PetStage.ADULT,MainActivity.PetStage.OLD};
   for(int i=0;i<stages.length;i++){
    long sleepDeadline=0;
    if(!trip){
-    if(i==0){main.startSpecialPose(CareSprites.forStage(species,main.petStage()).soap,6000L);assertNotEquals(0,main.specialPoseRes);}
+    if(i==0){main.startSpecialPose(CareSprites.forStage(species,chosenSex,main.petStage()).soap,6000L);assertNotEquals(0,main.specialPoseRes);}
     if(i==1){main.callLeopard();assertTrue(main.callingToForeground);assertTrue(main.walking);}
     if(i==2){main.beginAutoSleep();assertTrue(main.sleeping);sleepDeadline=main.sleepEndAt;assertEquals(MainActivity.ActionAnim.SLEEP,main.actionAnim);}
    }
@@ -52,7 +61,7 @@ public class GrowthButtonGraphicsTest {
    assertArrayEquals(needs,new float[]{main.hunger,main.thirst,main.clean,main.affection,main.happy,main.energy},0f);
    assertArrayEquals(skills,new float[]{main.skillClean,main.skillObedience,main.skillCare},0f);
    assertFalse(main.walking);assertFalse(main.callingToForeground);assertEquals(0,main.specialPoseRes);
-   assertTrue(main.subTitle.getText().toString().contains(PetSpecies.stageLabel(species,stages[i])));
+   assertTrue(main.subTitle.getText().toString().contains(PetSpecies.stageLabel(species,chosenSex,stages[i])));
    PromenadeLifecycleGraphicsTest.settle(main);
    if(trip){
     assertTrue(main.promenadeActive());assertEquals(View.INVISIBLE,main.petView.getVisibility());assertEquals(0,PromenadeLifecycleGraphicsTest.animalPixels(main));
@@ -61,22 +70,25 @@ public class GrowthButtonGraphicsTest {
     assertEquals(stages[i],main.displayedPetStage);assertEquals(View.VISIBLE,main.petView.getVisibility());
     PromenadeLifecycleGraphicsTest.alphaIsPreserved(main,"growth-"+stages[i]);
     assertTrue(PromenadeLifecycleGraphicsTest.animalPixels(main)>100);
-    capture(main,species+"-"+stages[i].name().toLowerCase());
+    if(PetSpecies.LION.equals(species))AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
+    capture(main,capturePrefix+"-"+stages[i].name().toLowerCase());
    }
   }
   assertFalse(main.devGrowthBtn.isEnabled());assertTrue(main.devGrowthBtn.getText().toString().contains("Âge maximum"));
   long oldBorn=main.born;main.devGrowthBtn.performClick();assertEquals(oldBorn,main.born);assertEquals(MainActivity.Stage.OLD,main.stage());
   if(trip){
-   capture(main,species+"-promenade-home-empty");
+   capture(main,capturePrefix+"-promenade-home-empty");
    main.sp.edit().putLong("promenadeStart",System.currentTimeMillis()-PromenadeActivity.DURATION_MS-1000L).commit();main.ticker.run();main.animateAuto();PromenadeLifecycleGraphicsTest.settle(main);
    assertEquals(View.VISIBLE,main.petView.getVisibility());assertEquals(MainActivity.PetStage.OLD,main.displayedPetStage);PromenadeLifecycleGraphicsTest.alphaIsPreserved(main,"grown-trip-return");
+   if(PetSpecies.LION.equals(species))AnimalActionGraphicsScenario.assertDisplayedCharacterFromOwnPack(main);
   }
   main.handler.removeCallbacksAndMessages(null);controller.pause().stop().destroy();
   controller=Robolectric.buildActivity(MainActivity.class,intent).create().start().resume().visible();main=controller.get();PromenadeLifecycleGraphicsTest.settle(main);
   assertEquals(MainActivity.PetStage.OLD,main.petStage());assertFalse(main.devGrowthBtn.isEnabled());assertEquals(oldBorn,main.born);
   assertEquals(species,main.petSpecies);assertEquals(species,PetProfileStore.species(main,0));
+  assertEquals(chosenSex,main.petSex);assertEquals(chosenSex,PetProfileStore.sex(main,0));
   main.handler.removeCallbacksAndMessages(null);controller.pause().stop().destroy();
-  System.out.println("NATIVE_DEV_GROWTH_OK species="+species+" promenade="+trip+" clicks=3 old-disabled=true restart-persisted=true");
+  System.out.println("NATIVE_DEV_GROWTH_OK species="+species+" sex="+chosenSex+" promenade="+trip+" clicks=3 old-disabled=true restart-persisted=true");
  }
  static void capture(MainActivity main,String name){
   try {

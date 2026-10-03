@@ -157,16 +157,21 @@ public class PetChooserActivity extends Activity {
             return;
         }
         resetRoot();
+        root.setPadding(dp(18),dp(16),dp(18),dp(16));
         root.addView(title("Choisis ton animal"));
-        root.addView(subtitle("Léopard, loup ou tigre : choisis ton nouveau compagnon."));
+        root.addView(subtitle("Choisis ton nouveau compagnon."));
 
-        LinearLayout choices=new LinearLayout(this);
-        choices.setOrientation(LinearLayout.VERTICAL);
+        GridLayout choices=new GridLayout(this);
+        choices.setColumnCount(2);
+        choices.setRowCount(2);
+        choices.setAlignmentMode(GridLayout.ALIGN_BOUNDS);
+        choices.setUseDefaultMargins(false);
         root.addView(choices,new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
-        addAnimalCard(choices,slot,PetSpecies.LEOPARD);
-        addAnimalCard(choices,slot,PetSpecies.WOLF);
-        addAnimalCard(choices,slot,PetSpecies.TIGER);
+        addAnimalCard(choices,slot,0,PetSpecies.LEOPARD);
+        addAnimalCard(choices,slot,1,PetSpecies.WOLF);
+        addAnimalCard(choices,slot,2,PetSpecies.TIGER);
+        addAnimalCard(choices,slot,3,PetSpecies.LION);
 
         if(PetProfileStore.count(this)>0){
             Button back=button("← Retour aux animaux");
@@ -176,42 +181,46 @@ public class PetChooserActivity extends Activity {
         }
     }
 
-    void addAnimalCard(LinearLayout choices,int slot,String species){
+    void addAnimalCard(GridLayout choices,int slot,int index,String species){
         LinearLayout card=new LinearLayout(this);
-        card.setOrientation(LinearLayout.HORIZONTAL);
-        card.setGravity(Gravity.CENTER_VERTICAL);
-        card.setPadding(dp(12),dp(8),dp(12),dp(8));
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setGravity(Gravity.CENTER);
+        card.setPadding(dp(8),dp(8),dp(8),dp(8));
         card.setBackground(cardBackground());
-        LinearLayout.LayoutParams cp=new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        GridLayout.LayoutParams cp=new GridLayout.LayoutParams();
+        cp.width=0;
+        cp.height=ViewGroup.LayoutParams.WRAP_CONTENT;
+        cp.columnSpec=GridLayout.spec(index%2,1f);
+        cp.rowSpec=GridLayout.spec(index/2);
         cp.setMargins(dp(5),0,dp(5),dp(10));
         choices.addView(card,cp);
 
         ImageView icon=new ImageView(this);
         icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        icon.setImageResource(PetSpecies.iconRes(species,0L));
-        card.addView(icon,new LinearLayout.LayoutParams(dp(96),dp(96)));
+        // The species card is only a preview; both lion sexes are shown on the next screen.
+        icon.setImageResource(PetSpecies.iconRes(species,"male",0L));
+        card.addView(icon,new LinearLayout.LayoutParams(dp(72),dp(72)));
 
         LinearLayout labels=new LinearLayout(this);
         labels.setOrientation(LinearLayout.VERTICAL);
-        labels.setGravity(Gravity.CENTER_VERTICAL);
-        labels.setPadding(dp(12),0,0,0);
+        labels.setGravity(Gravity.CENTER);
         card.addView(labels,new LinearLayout.LayoutParams(
-            0,ViewGroup.LayoutParams.WRAP_CONTENT,1f));
+            ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
 
         TextView name=new TextView(this);
         name.setText(PetSpecies.label(species));
         name.setTextColor(Color.rgb(61,49,36));
         name.setTextSize(22);
         name.setTypeface(Typeface.DEFAULT,Typeface.BOLD);
-        name.setGravity(Gravity.START);
+        name.setGravity(Gravity.CENTER);
         labels.addView(name);
 
         TextView ready=new TextView(this);
-        ready.setText(PetSpecies.stageLabel(species,MainActivity.PetStage.CUB));
+        ready.setText(PetSpecies.isLion(species)?"Lion ou lionne":
+            PetSpecies.stageLabel(species,MainActivity.PetStage.CUB));
         ready.setTextColor(Color.rgb(96,112,59));
         ready.setTextSize(13);
-        ready.setGravity(Gravity.START);
+        ready.setGravity(Gravity.CENTER);
         labels.addView(ready);
 
         card.setContentDescription("Adopter un "+PetSpecies.label(species).toLowerCase(Locale.FRANCE));
@@ -221,28 +230,65 @@ public class PetChooserActivity extends Activity {
     void showSexChoice(int slot,boolean creating,String species){
         resetRoot();
         root.addView(title("Choisis le sexe de l’animal"));
-        root.addView(subtitle("Ce choix sera affiché sur son profil."));
+        if(PetSpecies.isLion(species)){
+            root.addView(subtitle("Choisis un lion ou une lionne."));
+            long age=creating?0L:Math.max(0L,System.currentTimeMillis()-
+                getSharedPreferences(PetProfileStore.petPrefsName(slot),MODE_PRIVATE)
+                    .getLong("born",System.currentTimeMillis()));
+            LinearLayout choices=new LinearLayout(this);
+            choices.setOrientation(LinearLayout.HORIZONTAL);
+            root.addView(choices,new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+            addLionSexCard(choices,slot,creating,"male",age);
+            addLionSexCard(choices,slot,creating,"female",age);
+        }else{
+            root.addView(subtitle("Ce choix sera affiché sur son profil."));
+            ImageView icon=new ImageView(this);
+            icon.setImageResource(creating?PetSpecies.iconRes(species,0L):PetProfileStore.iconRes(this,slot));
+            icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            root.addView(icon,new LinearLayout.LayoutParams(dp(170),dp(170)));
 
-        ImageView icon=new ImageView(this);
-        icon.setImageResource(creating?PetSpecies.iconRes(species,0L):PetProfileStore.iconRes(this,slot));
-        icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        root.addView(icon,new LinearLayout.LayoutParams(dp(170),dp(170)));
+            Button male=button("♂  Mâle");
+            Button female=button("♀  Femelle");
+            LinearLayout.LayoutParams bp=new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,dp(58));
+            bp.setMargins(0,dp(8),0,dp(8));
+            root.addView(male,bp);
+            root.addView(female,bp);
 
-        Button male=button("♂  Mâle");
-        Button female=button("♀  Femelle");
-        LinearLayout.LayoutParams bp=new LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,dp(58));
-        bp.setMargins(0,dp(8),0,dp(8));
-        root.addView(male,bp);
-        root.addView(female,bp);
-
-        male.setOnClickListener(v->afterSex(slot,creating,species,"male"));
-        female.setOnClickListener(v->afterSex(slot,creating,species,"female"));
+            male.setOnClickListener(v->afterSex(slot,creating,species,"male"));
+            female.setOnClickListener(v->afterSex(slot,creating,species,"female"));
+        }
 
         Button back=button(creating?"← Choisir un autre animal":"← Retour aux animaux");
         back.setOnClickListener(v->{if(creating)showAnimalChoice(slot);else showProfiles();});
         root.addView(back,new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,dp(50)));
+    }
+
+    void addLionSexCard(LinearLayout choices,int slot,boolean creating,String sex,long age){
+        LinearLayout card=new LinearLayout(this);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setGravity(Gravity.CENTER);
+        card.setPadding(dp(6),dp(8),dp(6),dp(8));
+        card.setBackground(cardBackground());
+        LinearLayout.LayoutParams cp=new LinearLayout.LayoutParams(
+            0,ViewGroup.LayoutParams.WRAP_CONTENT,1f);
+        cp.setMargins(dp(4),0,dp(4),dp(14));
+        choices.addView(card,cp);
+
+        ImageView icon=new ImageView(this);
+        icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        icon.setImageResource(PetSpecies.iconRes(PetSpecies.LION,sex,age));
+        icon.setContentDescription(PetSpecies.label(PetSpecies.LION,sex));
+        card.addView(icon,new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,dp(118)));
+
+        Button choose=button("female".equals(sex)?"♀  Femelle":"♂  Mâle");
+        card.addView(choose,new LinearLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,dp(58)));
+        choose.setOnClickListener(v->afterSex(slot,creating,PetSpecies.LION,sex));
+        card.setOnClickListener(v->afterSex(slot,creating,PetSpecies.LION,sex));
     }
 
     void afterSex(int slot,boolean creating,String species,String sex){
@@ -259,13 +305,14 @@ public class PetChooserActivity extends Activity {
         root.addView(subtitle("Tu pourras retrouver ce nom dans la sélection des animaux."));
 
         ImageView icon=new ImageView(this);
-        icon.setImageResource(PetSpecies.iconRes(species,0L));
+        icon.setImageResource(PetSpecies.iconRes(species,sex,0L));
+        icon.setContentDescription(PetSpecies.label(species,sex));
         icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
         root.addView(icon,new LinearLayout.LayoutParams(dp(160),dp(160)));
 
         EditText input=new EditText(this);
         input.setSingleLine(true);
-        input.setHint(PetSpecies.defaultName(species));
+        input.setHint(PetSpecies.defaultName(species,sex));
         input.setTextSize(20);
         input.setInputType(InputType.TYPE_CLASS_TEXT|InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         LinearLayout.LayoutParams ip=new LinearLayout.LayoutParams(
@@ -273,7 +320,8 @@ public class PetChooserActivity extends Activity {
         ip.setMargins(0,dp(10),0,dp(14));
         root.addView(input,ip);
 
-        Button confirm=button("Adopter ce "+PetSpecies.label(species).toLowerCase(Locale.FRANCE));
+        String article=PetSpecies.isLion(species)&&"female".equals(sex)?"cette ":"ce ";
+        Button confirm=button("Adopter "+article+PetSpecies.label(species,sex).toLowerCase(Locale.FRANCE));
         root.addView(confirm,new LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,dp(58)));
         confirm.setOnClickListener(v->{
@@ -284,7 +332,7 @@ public class PetChooserActivity extends Activity {
             }
             confirm.setEnabled(false);
             String name=input.getText().toString().trim();
-            if(name.isEmpty())name=PetSpecies.defaultName(species);
+            if(name.isEmpty())name=PetSpecies.defaultName(species,sex);
             PetProfileStore.createAnimal(this,slot,species,sex,name);
             launchProfile(slot);
         });

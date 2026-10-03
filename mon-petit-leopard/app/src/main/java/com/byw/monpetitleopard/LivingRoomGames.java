@@ -393,12 +393,12 @@ final class LivingRoomGames {
 
     void showFetchPose(){
         if(activeItem==null)return;
-        int res=GameSprites.forStage(a.petSpecies,a.petStage()).fetch(activeItem.id);
+        int res=GameSprites.forStage(a.petSpecies,a.petSex,a.petStage()).fetch(activeItem.id);
         showGamePose(res);
     }
 
     void showRopePose(){
-        GameSprites.Pack pack=GameSprites.forStage(a.petSpecies,a.petStage());
+        GameSprites.Pack pack=GameSprites.forStage(a.petSpecies,a.petSex,a.petStage());
         int res=pack.ropePlay;
         if(res==0||a.invalidCharacterAssets.contains(res)){a.showAssetErrorOnce();return;}
         Bitmap strip=null;

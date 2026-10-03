@@ -196,7 +196,8 @@ public class PromenadeActivity extends Activity {
             progress=Math.max(0f,Math.min(1f,value));
             String species=PetProfileStore.species(PromenadeActivity.this,profileSlot);
             long age=Math.max(0L,System.currentTimeMillis()-sp.getLong("born",System.currentTimeMillis()));
-            int nextToken=PetSpecies.promenadeTokenRes(species,age);
+            String sex=PetProfileStore.sex(PromenadeActivity.this,profileSlot);
+            int nextToken=PetSpecies.promenadeTokenRes(species,sex,age);
             if(tokenRes!=nextToken){
                 token=BitmapFactory.decodeResource(getResources(),nextToken);
                 tokenRes=nextToken;

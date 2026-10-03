@@ -1,33 +1,39 @@
 # Packs de sprites — Mon Petit Léopard
 
-## Contrat actuel — v0.8.9
+## Contrat actuel — v0.8.10
 
-Les trois espèces utilisent le même moteur de jeu et des ressources indépendantes.
+Les quatre espèces utilisent le même moteur de jeu et des ressources indépendantes.
 Le nom `leopard` reste celui des sauvegardes historiques ; `wolf` identifie le loup
-et `tiger` le tigre. L'ajout du tigre ne migre ni n'efface les profils existants.
+et `tiger` le tigre. Le lion et la lionne appartiennent à la même espèce `lion` ;
+leur sexe enregistré (`male` ou `female`) sélectionne leur apparence. L'ajout du
+lion ne migre ni n'efface les profils existants.
 
-| Espèce | Petit | Ado | Adulte | Vieux |
+| Espèce / apparence | Petit | Ado | Adulte | Vieux |
 | --- | --- | --- | --- | --- |
 | Léopard | `res-cub` | `res-teen` | `res-adult` | `res-old` |
 | Loup | `res-wolf-cub` | `res-wolf-teen` | `res-wolf-adult` | `res-wolf-old` |
 | Tigre | `res-tiger-cub` | `res-tiger-teen` | `res-tiger-adult` | `res-tiger-old` |
+| Lion mâle | `res-lion-male-cub` | `res-lion-male-teen` | `res-lion-male-adult` | `res-lion-male-old` |
+| Lionne | `res-lion-female-cub` | `res-lion-female-teen` | `res-lion-female-adult` | `res-lion-female-old` |
 
 Chaque frame runtime fait **256 × 256 px**, avec des marges transparentes.
 Haut montre le dos, bas montre la face. Les marches gauche et droite utilisent
 leurs images distinctes. Les chargeurs refusent les espèces inconnues et ne
-substituent jamais une espèce ou un âge lorsqu'une ressource manque.
+substituent jamais une espèce, un sexe ou un âge lorsqu'une ressource manque.
+Les anciennes signatures sans sexe restent disponibles pour les trois espèces
+historiques ; une requête de sprites lion sans sexe valide est rejetée.
 
-| Animation | Léopard | Loup | Tigre |
-| --- | ---: | ---: | ---: |
-| Idle, par direction | 1 | 1 | 1 |
-| Marche et course, par direction | 6 | 6 | 6 |
-| Saut | 5 | 5 | 5 |
-| Mange / dort | 3 | 3 | 3 |
-| Humeurs | 12 | 12 | 12 |
-| Rapport d'objet / soin | 1 | 1 | 1 |
-| Corde | 5 | 1, traction animée par le moteur | 1, traction animée par le moteur |
-| Griffoir | 2 | 1, mouvement animé par le moteur | 1, mouvement animé par le moteur |
-| Biberon, petit uniquement | 1 | 1 | 1 |
+| Animation | Léopard | Loup | Tigre | Lion et lionne, chacun |
+| --- | ---: | ---: | ---: | ---: |
+| Idle, par direction | 1 | 1 | 1 | 1 |
+| Marche et course, par direction | 6 | 6 | 6 | 6 |
+| Saut | 5 | 5 | 5 | 5 |
+| Mange / dort | 3 | 3 | 3 | 3 |
+| Humeurs | 12 | 12 | 12 | 12 |
+| Rapport d'objet / soin | 1 | 1 | 1 | 1 |
+| Corde | 5 | 1 | 1 | 1 |
+| Griffoir | 2 | 1 | 1 | 1 |
+| Biberon, petit uniquement | 1 | 1 | 1 | 1 |
 
 Les huit planches loup originales sont conservées dans `source-assets/wolf-v086/`.
 `tools/prepare_v086_wolf_assets.py` prépare leurs découpes et la vraie transparence,
@@ -37,20 +43,58 @@ La course reprend les six poses de marche de la même espèce et du même âge, 
 uniques : le moteur fournit le mouvement sans inventer de nouvelles images.
 
 Le choix d'animal, l'en-tête, les étapes sexe/nom et le jeton de promenade suivent
-l'espèce et l'âge du profil. Les besoins, restrictions par âge, objets, récompenses,
-goûts, lassitude et durées restent communs aux trois espèces. Les activités visuelles
-en cours sont arrêtées au changement d'âge pour ne conserver aucun ancien sprite.
+l'espèce, le sexe et l'âge du profil. Les besoins, restrictions par âge, objets,
+récompenses, goûts, lassitude et durées restent communs aux quatre espèces. Les
+activités visuelles en cours sont arrêtées lorsque le pack change, y compris lors
+d'un changement de sexe du lion à âge identique, pour ne conserver aucun ancien sprite.
 
 Le test `test_wolf_behavior.py` conserve son nom historique et vérifie désormais
-les trois espèces. Les validateurs `validate_wolf_sprite_packs.py` et
-`validate_tiger_sprite_packs.py` complètent les contrats du léopard. Le workflow
-prépare les trois espèces avant les tests et le build. Les manifestes par espèce
+les quatre espèces et les deux sexes. Les validateurs `validate_wolf_sprite_packs.py`,
+`validate_tiger_sprite_packs.py` et `validate_lion_sprite_packs.py` complètent les
+contrats du léopard. Le workflow prépare les quatre espèces avant les tests et le
+build. Les manifestes par espèce
 décrivent la provenance des découpes.
+
+### Intégration du lion et de la lionne v0.8.10
+
+Le choix initial propose Léopard, Loup, Tigre et Lion. Le choix de sexe présente
+les deux apparences du lion, puis l'étape de nom affiche le portrait choisi et
+le libellé Lion ou Lionne. Les noms proposés sont Simba et Nala. Les six emplacements
+restent communs à toutes les espèces. Un lion et une lionne compatibles peuvent
+avoir des petits selon les règles existantes ; le sexe du petit est sauvegardé
+avec son profil et reste identique pendant sa croissance.
+
+Les seize PNG fournis sont conservés sans modification dans
+`source-assets/lion-v0810/`. Le fichier `sources.json` associe leurs noms d'origine,
+leur rôle et leur empreinte. `tools/prepare_v0810_lion_assets.py` et les deux modules
+de géométrie utilisent des découpes propres à chaque planche : les sources de la
+lionne petite et adulte font 1448 × 1086 px, les autres 1536 × 1024 px. La planche
+d'objets du lion adolescent concentre ses objets dans sa partie haute.
+
+Les huit packs contiennent **226 fichiers, soit 218 ressources de jeu et huit
+portraits de promenade**, pour **698 frames**. Chaque portrait est recadré sur la
+tête de son sexe et de son âge. `lion-sprite-manifest.json` conserve les découpes,
+orientations, masques de fond et empreintes des fichiers produits. Les poses idle
+gauche mal étiquetées sont orientées correctement ; les séquences de marche gauche
+et droite conservent leurs poses distinctes.
+
+Le damier imprimé, les cadres et les chiffres sont retirés des ressources runtime.
+Les masques locaux protègent les crinières claires, les pattes, les yeux, les objets
+et les bulles. La vieille lionne présente une différence dans les originaux : une
+longue mèche sur les mouvements et une mèche courte sur les objets. Chaque action
+conserve le dessin de sa planche source.
+
+Les registres reçoivent l'identité complète via `forStage(species, sex, stage)`.
+Les soins, jeux, biberons, griffoirs, humeurs, portraits et promenades utilisent
+toujours le pack du profil actif. Une ressource mâle ne remplace jamais une
+ressource femelle. Le lion utilise les mêmes chemins d'action que le léopard ;
+aucun coefficient de besoin, goût, durée, récompense ou restriction par âge ne
+change pour cette espèce ou pour son sexe.
 
 ### Intégration du tigre v0.8.9
 
-Le choix initial propose Léopard, Loup et Tigre, puis le sexe et le nom. Les six
-emplacements restent communs aux trois espèces. Le tigre utilise les quatre stades
+La v0.8.9 a ajouté le Tigre après le Léopard et le Loup, puis conservé le choix du
+sexe et du nom. Les six emplacements restent partagés. Le tigre utilise les quatre stades
 existants : Tigreau, Tigre ado, Tigre adulte et Vieux tigre. Les naissances entre
 deux tigres compatibles créent un tigreau avec son propre profil.
 
@@ -91,7 +135,8 @@ d'historique sont sauvegardés, puis les actions précédentes sont annulées et
 les packs ainsi que le portrait sont actualisés immédiatement.
 
 `tools/test_promenade_visibility.py` couvre les retours anticipés, les callbacks
-de rendu et la fin de promenade pour les trois espèces aux quatre âges.
+de rendu et la fin de promenade pour les quatre espèces aux quatre âges, ainsi
+que les changements d'apparence entre lion mâle et lionne à âge identique.
 `tools/test_dev_growth.py` couvre les frontières d'âge, les profils mixtes, la
 sauvegarde et l'inactivité du bouton au dernier stade. Ces tests font partie de
 la validation CI avant publication.

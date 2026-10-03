@@ -1,7 +1,7 @@
 """Execute the developer growth control, persistence and real click handler.
 
 Compiles production Java with recording UI stubs. Boundary cases use a fixed
-clock; profile cases exercise the actual six-slot store and all three species.
+clock; profile cases exercise the actual six-slot store and all four species, including both lion sexes.
 """
 
 import argparse
@@ -67,10 +67,10 @@ final class DevGrowthContract {
         MemoryContext context=new MemoryContext();
         PetProfileStore.ensureMigrated(context);
         long now=System.currentTimeMillis();
-        String[] species={"leopard","wolf","tiger"};
+        String[] species={"leopard","wolf","tiger","lion","lion","leopard"};
+        String[] sexes={"male","female","male","male","female","female"};
         for(int slot=0;slot<PetProfileStore.MAX_PROFILES;slot++){
-            PetProfileStore.createAnimal(context,slot,species[slot%species.length],
-                slot%2==0?"male":"female","Test "+slot);
+            PetProfileStore.createAnimal(context,slot,species[slot],sexes[slot],"Test "+slot);
             context.pet(slot).edit().putLong("born",now-1000L)
                 .putLong("last",now-1234L).putFloat("hunger",72f)
                 .putFloat("thirst",68f).putFloat("clean",91f)
@@ -91,7 +91,7 @@ final class DevGrowthContract {
                 Map<String,Map<String,?>> snapshot=context.snapshot();
                 activity.refreshDevGrowthButton();
                 check(activity.devGrowthBtn.enabled,"young animal has an enabled button");
-                check(activity.devGrowthBtn.label.contains(PetSpecies.stageLabel(activity.petSpecies,expected)),
+                check(activity.devGrowthBtn.label.contains(PetSpecies.stageLabel(activity.petSpecies,activity.petSex,expected)),
                     "button names the actual next age for the selected species");
                 int previousSync=activity.syncCalls,previousRefresh=activity.refreshCalls;
                 activity.advanceGrowthForTesting();
@@ -110,7 +110,7 @@ final class DevGrowthContract {
                 // Reopen the stored profile: the age and chooser portrait survive recreation.
                 MainActivity reopened=new MainActivity(new MemoryContext(context),slot);
                 equal(reopened.petStage(),expected,"saved age survives reopening");
-                int expectedIcon=PetSpecies.iconRes(activity.petSpecies,
+                int expectedIcon=PetSpecies.iconRes(activity.petSpecies,activity.petSex,
                     System.currentTimeMillis()-activity.born);
                 equal(PetProfileStore.iconRes(context,slot),expectedIcon,"chooser uses the grown portrait");
                 check(PetProfileStore.reproductionAgeEligible(context,slot),"grown profile unlocks normal age rules");
@@ -138,7 +138,7 @@ final class DevGrowthContract {
         ended.advanceGrowthForTesting();
         equal(context.snapshot(),snapshot,"completed profile is never revived");
         equal(ended.syncCalls,0,"completed profile is not visually restarted");
-        System.out.println("Growth clicks: six profiles across three species, 18 transitions, persistence/isolation and 120 bounded taps: PASS");
+        System.out.println("Growth clicks: six profiles across four species and both lion sexes, 18 transitions, persistence/isolation and 120 bounded taps: PASS");
     }
 
     static void disabledControl(){
@@ -179,7 +179,7 @@ class MainActivity extends Context {
     final DevGrowthContract.MemoryContext context;
     final SharedPreferences sp;
     final int profileSlot;
-    final String petSpecies,pet;
+    final String petSpecies,petSex,pet;
     String historyLog;
     long born;
     int syncCalls,refreshCalls;
@@ -189,7 +189,8 @@ class MainActivity extends Context {
         this.context=context;profileSlot=slot;
         sp=context.pet(slot);born=sp.getLong("born",0L);
         historyLog=sp.getString("historyLog","");
-        petSpecies=PetProfileStore.species(context,slot);pet=PetProfileStore.name(context,slot);
+        petSpecies=PetProfileStore.species(context,slot);petSex=PetProfileStore.sex(context,slot);
+        pet=PetProfileStore.name(context,slot);
     }
     public SharedPreferences getSharedPreferences(String name,int mode){return context.getSharedPreferences(name,mode);}
     void syncVisualStage(){syncCalls++;stageWhenSynced=petStage();}
