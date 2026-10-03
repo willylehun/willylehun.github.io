@@ -66,7 +66,7 @@ with tempfile.TemporaryDirectory() as temp:
     (p/'CareSprites.java').write_text(care_java)
     (p/'GardenSprites.java').write_text(garden_java)
     (p/'SpriteMotion.java').write_text((JAVA/'SpriteMotion.java').read_text())
-    names=sorted(set(re.findall(r'R.drawable.(leopard_\w+)',chars+games_java+care_java+garden_java)))
+    names=sorted(set(re.findall(r'R\.drawable\.((?:leopard|wolf)_\w+)',chars+games_java+care_java+garden_java)))
     (p/'R.java').write_text('package com.byw.monpetitleopard; final class R { static class drawable {'+
         ''.join('static final int '+n+'='+str(i+1)+';' for i,n in enumerate(names))+'}}')
     (p/'MainActivity.java').write_text(
@@ -347,8 +347,8 @@ assert 'games.fastRun()' in main
 assert '{.30f,.74f}' not in main
 assert '{.30f,.86f}' in main and '{.50f,.95f}' in main
 assert 'speed*=1.85f' in main
-assert 'CareSprites.forStage(petStage()).action(animation)' in main
-assert 'CareSprites.bottle(petStage())' in main
+assert 'CareSprites.forStage(petSpecies,petStage()).action(animation)' in main
+assert 'CareSprites.bottle(petSpecies,petStage())' in main
 assert 'startSpecialPose' in main
 
 print('Jeux salon v0.8.5: PASS')
@@ -361,7 +361,7 @@ assert 'v070-fetch-bundle' in prepare_game
 assert 'leopard_{age}_run_' in prepare_game
 assert 'leopard_{age}_fetch_' in prepare_game
 assert 'static Pack forStage' in game_registry
-assert 'GameSprites.forStage(stage)' in main
+assert 'GameSprites.forStage(petSpecies,stage)' in main
 assert 'games.fastRun()' in main
 assert 'showFetchPose()' in games
 assert 'showRopePose()' in games
@@ -431,7 +431,9 @@ for age in ['cub','teen','adult','old']:
 
 assert 'static final int NONE=0,APPROACH=1,PLAYING=2' in garden_games
 assert 'playUntil=now+4200L' in garden_games
-assert 'GardenSprites.forStage(a.petStage()).scratcherPlay' in garden_games
+assert 'GardenSprites.forStage(a.petSpecies,a.petStage())' in garden_games
+assert 'int count=pack.scratcherFrames;' in garden_games
+assert 'pack.scratcherPlay' in garden_games
 assert 'garden_scratcher' in garden_games
 assert 'state!=PLAYING?View.VISIBLE:View.GONE' not in garden_games
 assert 'scratcherView.setVisibility("jardin".equals(a.room)?View.VISIBLE:View.GONE);' in garden_games
@@ -449,12 +451,13 @@ assert 'add("feather"' not in objects
 assert 'add("hoop"' not in objects
 assert 'salon ou le jardin' in living
 assert 'v078-garden-scratcher' in prepare_garden
-assert 'GardenSprites.Pack garden=GardenSprites.forStage(age);' in main
+assert 'GardenSprites.Pack garden=GardenSprites.forStage(petSpecies,age);' in main
 print('Jardin griffoir et jouets v0.8.5: PASS')
 
 
 # Profils animaux v0.8.5 : onboarding, 6 sauvegardes et sélection à chaque lancement.
 profiles=(JAVA/'PetProfileStore.java').read_text()
+species=(JAVA/'PetSpecies.java').read_text()
 chooser=(JAVA/'PetChooserActivity.java').read_text()
 manifest=(ROOT/'app/src/main/AndroidManifest.xml').read_text()
 promenade=(JAVA/'PromenadeActivity.java').read_text()
@@ -466,10 +469,10 @@ assert 'ensureMigrated(Context context)' in profiles
 assert 'getSharedPreferences("pet",Context.MODE_PRIVATE)' in profiles
 assert 'copyAll(legacy,target)' in profiles
 assert 'createLeopard' in profiles
-assert 'R.drawable.leopard_cub_idle_down' in profiles
-assert 'R.drawable.leopard_teen_idle_down' in profiles
-assert 'R.drawable.leopard_adult_idle_down' in profiles
-assert 'R.drawable.leopard_old_idle_down' in profiles
+assert 'PetSpecies.iconRes(species(context,slot),age)' in profiles
+for animal in ['leopard','wolf']:
+    for age in ['cub','teen','adult','old']:
+        assert f'R.drawable.{animal}_{age}_idle_down' in species
 
 assert 'Choisis ton animal' in chooser
 assert 'Léopard' in chooser
@@ -567,7 +570,7 @@ main=(JAVA/'MainActivity.java').read_text()
 
 assert 'ImageView profileIcon,bgFill,bg,petView,waterBowlView;' in main
 assert 'profileIcon=new ImageView(this);' in main
-assert 'CharacterSprites.forStage(petStage()).idleDown' in main
+assert 'CharacterSprites.forStage(petSpecies,petStage()).idleDown' in main
 assert 'String sexSymbol()' in main
 assert 'int virtualAgeMonths()' in main
 assert 'elapsed/(5L*60L*1000L)' in main

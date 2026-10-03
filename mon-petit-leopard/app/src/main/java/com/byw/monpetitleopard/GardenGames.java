@@ -146,23 +146,26 @@ final class GardenGames {
     }
 
     boolean loadFrames(){
-        int res=GardenSprites.forStage(a.petStage()).scratcherPlay;
+        GardenSprites.Pack pack=GardenSprites.forStage(a.petSpecies,a.petStage());
+        int res=pack.scratcherPlay;
+        int count=pack.scratcherFrames;
+        int frame=GardenSprites.FRAME_SIZE;
         if(res==0||a.invalidCharacterAssets.contains(res)){
             a.showAssetErrorOnce();
             return false;
         }
         Bitmap strip=null;
         try{strip=BitmapFactory.decodeResource(a.getResources(),res);}catch(Throwable ignored){}
-        if(strip==null||strip.getWidth()!=512||strip.getHeight()!=256){
-            a.markCharacterAssetInvalid(res,"griffoir","strip 512x256 attendu");
+        if(strip==null||strip.getWidth()!=frame*count||strip.getHeight()!=frame){
+            a.markCharacterAssetInvalid(res,"griffoir","strip "+(frame*count)+"x"+frame+" attendu");
             a.showAssetErrorOnce();
             return false;
         }
         scratcherStrip=strip;
-        scratcherFrames=new Bitmap[2];
+        scratcherFrames=new Bitmap[count];
         try{
-            scratcherFrames[0]=Bitmap.createBitmap(strip,0,0,256,256);
-            scratcherFrames[1]=Bitmap.createBitmap(strip,256,0,256,256);
+            for(int i=0;i<count;i++)
+                scratcherFrames[i]=Bitmap.createBitmap(strip,i*frame,0,frame,frame);
         }catch(Throwable err){
             releaseFrames();
             a.markCharacterAssetInvalid(res,"griffoir","découpage impossible");
@@ -172,9 +175,10 @@ final class GardenGames {
     }
 
     void showFrame(long now){
-        if(scratcherFrames==null||scratcherFrames.length!=2)return;
+        if(scratcherFrames==null||scratcherFrames.length==0)return;
+        int count=scratcherFrames.length;
         if(frameAt==0||now>=frameAt){
-            frameIndex=(frameIndex+1)%2;
+            frameIndex=(frameIndex+1)%count;
             frameAt=now+260L;
         }
         a.petView.setImageBitmap(scratcherFrames[frameIndex]);
@@ -182,10 +186,12 @@ final class GardenGames {
         a.petView.setVisibility(View.VISIBLE);
         a.currentPetRes=0;
         a.updatePetPosition();
+        a.petView.setRotation(count==1?1.6f*(float)Math.sin(now/140.0):0f);
     }
 
     void finish(boolean reward){
         a.walking=false;
+        a.petView.setRotation(0f);
         state=NONE;
         if(reward && activeItem!=null){
             a.applyItemEffects(activeItem,1f);
@@ -208,6 +214,7 @@ final class GardenGames {
     }
 
     void cancelAnimationOnly(){
+        if(a.petView!=null)a.petView.setRotation(0f);
         state=NONE;
         activeItem=null;
         releaseFrames();

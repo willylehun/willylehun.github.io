@@ -5,6 +5,7 @@ final class CharacterSprites {
     static final int FRAME_SIZE=256;
 
     static final class Pack {
+        final String species;
         final MainActivity.PetStage stage;
         final String zone;
         final int idleDown,idleLeft,idleRight,idleUp;
@@ -15,6 +16,15 @@ final class CharacterSprites {
              int idleDown,int idleLeft,int idleRight,int idleUp,
              int walkDown,int walkLeft,int walkRight,int walkUp,
              int jump,int eat,int sleep,int moods){
+            this("leopard",stage,zone,idleDown,idleLeft,idleRight,idleUp,
+                walkDown,walkLeft,walkRight,walkUp,jump,eat,sleep,moods);
+        }
+
+        Pack(String species,MainActivity.PetStage stage,String zone,
+             int idleDown,int idleLeft,int idleRight,int idleUp,
+             int walkDown,int walkLeft,int walkRight,int walkUp,
+             int jump,int eat,int sleep,int moods){
+            this.species=species;
             this.stage=stage;this.zone=zone;
             this.idleDown=idleDown;this.idleLeft=idleLeft;this.idleRight=idleRight;this.idleUp=idleUp;
             this.walkDown=walkDown;this.walkLeft=walkLeft;this.walkRight=walkRight;this.walkUp=walkUp;
@@ -97,6 +107,51 @@ final class CharacterSprites {
         R.drawable.leopard_old_walk_right,R.drawable.leopard_old_walk_up,
         R.drawable.leopard_old_jump,R.drawable.leopard_old_eat,
         R.drawable.leopard_old_sleep,R.drawable.leopard_old_moods);
+
+    private static final Pack WOLF_CUB=new Pack("wolf",MainActivity.PetStage.CUB,"res-wolf-cub",
+        R.drawable.wolf_cub_idle_down,R.drawable.wolf_cub_idle_left,
+        R.drawable.wolf_cub_idle_right,R.drawable.wolf_cub_idle_up,
+        R.drawable.wolf_cub_walk_down,R.drawable.wolf_cub_walk_left,
+        R.drawable.wolf_cub_walk_right,R.drawable.wolf_cub_walk_up,
+        R.drawable.wolf_cub_jump,R.drawable.wolf_cub_eat,
+        R.drawable.wolf_cub_sleep,R.drawable.wolf_cub_moods);
+
+    private static final Pack WOLF_TEEN=new Pack("wolf",MainActivity.PetStage.TEEN,"res-wolf-teen",
+        R.drawable.wolf_teen_idle_down,R.drawable.wolf_teen_idle_left,
+        R.drawable.wolf_teen_idle_right,R.drawable.wolf_teen_idle_up,
+        R.drawable.wolf_teen_walk_down,R.drawable.wolf_teen_walk_left,
+        R.drawable.wolf_teen_walk_right,R.drawable.wolf_teen_walk_up,
+        R.drawable.wolf_teen_jump,R.drawable.wolf_teen_eat,
+        R.drawable.wolf_teen_sleep,R.drawable.wolf_teen_moods);
+
+    private static final Pack WOLF_ADULT=new Pack("wolf",MainActivity.PetStage.ADULT,"res-wolf-adult",
+        R.drawable.wolf_adult_idle_down,R.drawable.wolf_adult_idle_left,
+        R.drawable.wolf_adult_idle_right,R.drawable.wolf_adult_idle_up,
+        R.drawable.wolf_adult_walk_down,R.drawable.wolf_adult_walk_left,
+        R.drawable.wolf_adult_walk_right,R.drawable.wolf_adult_walk_up,
+        R.drawable.wolf_adult_jump,R.drawable.wolf_adult_eat,
+        R.drawable.wolf_adult_sleep,R.drawable.wolf_adult_moods);
+
+    private static final Pack WOLF_OLD=new Pack("wolf",MainActivity.PetStage.OLD,"res-wolf-old",
+        R.drawable.wolf_old_idle_down,R.drawable.wolf_old_idle_left,
+        R.drawable.wolf_old_idle_right,R.drawable.wolf_old_idle_up,
+        R.drawable.wolf_old_walk_down,R.drawable.wolf_old_walk_left,
+        R.drawable.wolf_old_walk_right,R.drawable.wolf_old_walk_up,
+        R.drawable.wolf_old_jump,R.drawable.wolf_old_eat,
+        R.drawable.wolf_old_sleep,R.drawable.wolf_old_moods);
+
+    static Pack forStage(String species,MainActivity.PetStage stage){
+        if("leopard".equals(species))return forStage(stage);
+        if(!"wolf".equals(species))
+            throw new IllegalArgumentException("Espèce inconnue : "+species);
+        switch(stage){
+            case CUB:return WOLF_CUB;
+            case TEEN:return WOLF_TEEN;
+            case ADULT:return WOLF_ADULT;
+            case OLD:return WOLF_OLD;
+        }
+        throw new IllegalStateException("Aucun pack loup pour l'âge "+stage);
+    }
 
     static Pack forStage(MainActivity.PetStage stage){
         switch(stage){

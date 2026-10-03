@@ -31,6 +31,7 @@ final class LivingRoomGames {
 
     final MainActivity a;
     ImageView toyView;
+    ValueAnimator toyFlight;
     ObjectSystem.Item activeItem;
     int state=NONE;
     int landingNode=-1;
@@ -70,6 +71,12 @@ final class LivingRoomGames {
     int walkFrameAdvance(){return fastRun()?2:1;}
 
     void cancel(){
+        if(toyFlight!=null){
+            toyFlight.removeAllUpdateListeners();
+            toyFlight.removeAllListeners();
+            toyFlight.cancel();
+            toyFlight=null;
+        }
         if(toyView!=null){
             toyView.animate().cancel();
             toyView.setVisibility(View.GONE);
@@ -85,6 +92,7 @@ final class LivingRoomGames {
             a.actionAnim=MainActivity.ActionAnim.NONE;
         }
         a.currentPetRes=0;
+        if(a.petView!=null)a.petView.setRotation(0f);
     }
 
     void preparePet(){
@@ -145,7 +153,7 @@ final class LivingRoomGames {
         toyNY=nodes[front][1];
         positionToy();
         movePetToNode(front,false);
-        a.toast("Le léopard arrive. Maintiens ensuite ton doigt sur la corde.");
+        a.toast(a.pet+" arrive. Maintiens ensuite ton doigt sur la corde.");
     }
 
     int foregroundCenterNode(){
@@ -246,6 +254,7 @@ final class LivingRoomGames {
         final float cy=Math.max(a.imageRect()[1],Math.min(sy,target[1])-a.dp(125));
 
         ValueAnimator flight=ValueAnimator.ofFloat(0f,1f);
+        toyFlight=flight;
         flight.setDuration(720L);
         flight.setInterpolator(new LinearInterpolator());
         flight.addUpdateListener(anim->{
@@ -256,6 +265,8 @@ final class LivingRoomGames {
         });
         flight.addListener(new android.animation.AnimatorListenerAdapter(){
             @Override public void onAnimationEnd(android.animation.Animator animation){
+                if(toyFlight!=animation||state!=TOY_FLYING||activeItem==null)return;
+                toyFlight=null;
                 toyView.setRotation(0f);
                 toyView.setX(target[0]);toyView.setY(target[1]);
                 state=RUN_TO_TOY;
@@ -382,21 +393,22 @@ final class LivingRoomGames {
 
     void showFetchPose(){
         if(activeItem==null)return;
-        int res=GameSprites.forStage(a.petStage()).fetch(activeItem.id);
+        int res=GameSprites.forStage(a.petSpecies,a.petStage()).fetch(activeItem.id);
         showGamePose(res);
     }
 
     void showRopePose(){
-        int res=GameSprites.forStage(a.petStage()).ropePlay;
+        GameSprites.Pack pack=GameSprites.forStage(a.petSpecies,a.petStage());
+        int res=pack.ropePlay;
         if(res==0||a.invalidCharacterAssets.contains(res)){a.showAssetErrorOnce();return;}
         Bitmap strip=null;
         try{strip=BitmapFactory.decodeResource(a.getResources(),res);}catch(Throwable ignored){}
         if(strip==null){a.markCharacterAssetInvalid(res,"corde","ressource illisible");return;}
         final int frame=GameSprites.FRAME_SIZE;
-        final int count=5;
+        final int count=pack.ropeFrames;
         if(strip.getWidth()!=frame*count||strip.getHeight()!=frame){
-            // Compatibilité avec une ancienne ressource pendant une migration.
-            showGamePose(res);
+            a.markCharacterAssetInvalid(res,"corde","dimensions incompatibles avec le pack");
+            a.showAssetErrorOnce();
             return;
         }
         long now=System.currentTimeMillis();
@@ -411,6 +423,8 @@ final class LivingRoomGames {
             a.petView.setVisibility(View.VISIBLE);
             a.currentPetRes=0;
             a.updatePetPosition();
+            // La planche du loup fournit une seule pose : la traction est animée au rendu.
+            a.petView.setRotation(count==1?2f*(float)Math.sin(now/120.0):0f);
         }catch(Throwable err){
             a.markCharacterAssetInvalid(res,"corde","découpage impossible");
         }
@@ -418,6 +432,7 @@ final class LivingRoomGames {
 
     void finishRopePlay(){
         a.walking=false;
+        a.petView.setRotation(0f);
         state=ROPE_READY;
         a.currentPetRes=0;
         toyView.setVisibility(View.VISIBLE);
@@ -454,7 +469,7 @@ final class LivingRoomGames {
         a.nextWalkAt=System.currentTimeMillis()+3500L;
         a.save();
         a.refresh();
-        a.toast("🐆 "+name+" rapporté !");
+        a.toast(a.petEmoji()+" "+name+" rapporté !");
     }
 
     void applyRewards(float factor){

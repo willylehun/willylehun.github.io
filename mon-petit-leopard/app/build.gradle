@@ -8,20 +8,24 @@ android {
         applicationId 'com.byw.monpetitleopard'
         minSdk 26
         targetSdk 35
-        versionCode 50
-        versionName '0.8.5'
+        versionCode 51
+        versionName '0.8.6'
     }
 
     sourceSets {
         main {
-            // Quatre zones physiques indépendantes : aucun sprite de personnage
+            // Une zone indépendante par espèce et par âge : aucun sprite de personnage
             // ne reste dans res/drawable-nodpi.
             res.srcDirs = [
                 'src/main/res',
                 'src/main/res-cub',
                 'src/main/res-teen',
                 'src/main/res-adult',
-                'src/main/res-old'
+                'src/main/res-old',
+                'src/main/res-wolf-cub',
+                'src/main/res-wolf-teen',
+                'src/main/res-wolf-adult',
+                'src/main/res-wolf-old'
             ]
         }
     }
@@ -32,4 +36,4 @@ android {
     }
 }
 
-// Character sprite packs physically separated; garden scratcher and v0.8.5 assets validated.
+// Both species use the same game rules and separate, validated sprite packs.
