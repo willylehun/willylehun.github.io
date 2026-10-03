@@ -1,0 +1,50 @@
+plugins { id 'com.android.application' }
+
+// This independent harness reads the application's source and generated assets.
+// It never writes into the production app's build files or resource directories.
+def qaSourceRoot = project.findProperty('qaSourceRoot')
+        ? file(project.property('qaSourceRoot')).canonicalPath
+        : rootProject.file('../..').canonicalPath
+
+android {
+    namespace 'com.byw.monpetitleopard'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.byw.monpetitleopard'
+        minSdk 26
+        targetSdk 35
+        versionCode 53
+        versionName '0.8.8-graphics-qa'
+    }
+    sourceSets {
+        main {
+            manifest.srcFile "${qaSourceRoot}/app/src/main/AndroidManifest.xml"
+            java.srcDirs = ["${qaSourceRoot}/app/src/main/java"]
+            res.srcDirs = ['res', 'res-cub', 'res-teen', 'res-adult', 'res-old',
+                    'res-wolf-cub', 'res-wolf-teen', 'res-wolf-adult', 'res-wolf-old']
+                    .collect { "${qaSourceRoot}/app/src/main/${it}" }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            maxHeapSize = '3g'
+            systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
+            systemProperty 'qa.captureDir', file("${buildDir}/native-captures").absolutePath
+            testLogging {
+                events 'passed', 'failed', 'skipped'
+                exceptionFormat 'full'
+                showStandardStreams true
+            }
+        }
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.14.1'
+}

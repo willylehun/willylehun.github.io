@@ -631,13 +631,13 @@
       "frames": 3,
       "width": 768,
       "height": 256,
-      "sha256": "5249bec648c64e9b3dd8914064f9c39aecd2e40d7b23ef7993e7519d5772ea90",
+      "sha256": "a68499ba88ccc19b6deff46446bc3d85d622affeeec9dc5ad3332f74896c6aad",
       "source": "main",
       "source_cells": [
         [
-          386,
+          647,
           668,
-          512,
+          780,
           859
         ],
         [
@@ -653,7 +653,22 @@
           859
         ]
       ],
-      "derivation": "source poses"
+      "derivation": "runtime frame 1 is an exact copy of normalized frame 3 from the same-age original sheet; the original frame 1 has two tails",
+      "runtime_frame_aliases": {
+        "1": 3
+      },
+      "excluded_source_cells": [
+        {
+          "frame": 1,
+          "box": [
+            386,
+            668,
+            512,
+            859
+          ],
+          "reason": "The original sleeping drawing contains two tails."
+        }
+      ]
     },
     "wolf_cub_moods.webp": {
       "age": "cub",
@@ -7023,6 +7038,7 @@
     "Detached bubbles and mood symbols are safely repositioned after body normalization.",
     "v0.8.7 cutout audit: printed borders/digits, annotated grey ground and blue checker gaps are excluded; closed white fur is preserved.",
     "Only the one-source-pixel exterior antialias ring is unmatted against adjacent checker colours; interior RGB is unchanged.",
+    "v0.8.8: the cub's first supplied sleeping pose has two tails; its runtime frame aliases the complete third pose from the same source sheet, including the sleep bubble.",
     "No drawing is shared across age packs or between species."
   ],
   "normalization": {

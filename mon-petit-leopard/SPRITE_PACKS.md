@@ -1,6 +1,6 @@
 # Packs de sprites — Mon Petit Léopard
 
-## Contrat actuel — v0.8.7
+## Contrat actuel — v0.8.8
 
 Les deux espèces utilisent le même moteur de jeu et des ressources indépendantes.
 Le nom `leopard` reste celui des sauvegardes historiques ; `wolf` identifie le loup.
@@ -42,6 +42,35 @@ en cours sont arrêtées au changement d'âge pour ne conserver aucun ancien spr
 Les tests `test_wolf_behavior.py` et `validate_wolf_sprite_packs.py` complètent les
 contrats existants. Le workflow prépare les deux espèces avant les tests et le
 build. Le manifeste `wolf-sprite-manifest.json` décrit la provenance des découpes.
+
+### Retour de promenade, sommeil et test de croissance v0.8.8
+
+La visibilité de l'animal à la maison est centralisée dans
+`MainActivity.updatePetVisibility()`. Les poses, les jeux et les callbacks de
+placement respectent tous l'absence du profil pendant une promenade active.
+Le départ annule les activités visuelles précédentes ; l'animation de la maison
+reste suspendue jusqu'à l'échéance réelle de la promenade. La reprise de
+l'activité applique cette règle avant la première image affichée.
+
+La première pose de sommeil du louveteau fournie sur la planche originale
+contient deux queues. La première frame runtime reprend donc intégralement la
+troisième pose de sommeil du même âge, bulle comprise, après normalisation.
+Les autres frames et les PNG sources restent inchangés. Le manifeste décrit
+cette provenance ; le validateur compare tous les pixels des frames 1 et 3.
+
+Un bouton temporaire **Dev · Grandir** permet de passer au début du stade suivant
+pour le seul profil actif : petit → ado → adulte → vieux. Il est désactivé pour
+un animal vieux ou un cycle terminé. `DevGrowth.ENABLED=false` masque le bouton
+et désactive la fonction. Le changement ne touche pas les besoins, le sommeil,
+les minuteries de promenade ou les autres profils ; l'âge et son entrée
+d'historique sont sauvegardés, puis les actions précédentes sont annulées et
+les packs ainsi que le portrait sont actualisés immédiatement.
+
+`tools/test_promenade_visibility.py` couvre les retours anticipés, les callbacks
+de rendu et la fin de promenade pour les deux espèces aux quatre âges.
+`tools/test_dev_growth.py` couvre les frontières d'âge, les profils mixtes, la
+sauvegarde et l'inactivité du bouton au dernier stade. Ces tests font partie de
+la validation CI avant publication.
 
 ### Corrections de découpe v0.8.7
 

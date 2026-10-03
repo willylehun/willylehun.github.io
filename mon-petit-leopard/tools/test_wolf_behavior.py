@@ -601,6 +601,8 @@ class MainActivity extends Context {
     void addHistory(String value){}
     void toast(String value){}
     void wakeForAction(){}
+    // Production rendering/cleanup is exercised by test_promenade_visibility.py.
+    void stopPetActivitiesForPromenade(){}
     void fatigueNotice(float value){}
     void refreshWaterBowl(){lastAction="water";}
     void showFaceMoodNow(int mood,long duration){lastMood=mood;}
