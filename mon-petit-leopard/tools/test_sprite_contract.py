@@ -1,8 +1,9 @@
 from pathlib import Path
-import re, subprocess, tempfile, hashlib
+import re, subprocess, tempfile, hashlib, json
 from collections import deque
 import numpy as np
 from PIL import Image
+from cutout_geometry import reconstruct_cutout_source
 
 ROOT=Path(__file__).resolve().parents[1]
 JAVA=ROOT/'app/src/main/java/com/byw/monpetitleopard'
@@ -154,6 +155,21 @@ for name in ['leopard_cub_walk_right.webp','leopard_cub_walk_up.webp']:
             assert b is not None,(name,i,'vide')
             assert b[0]>=16 and b[1]>=16 and b[2]<=240 and b[3]<=240,(name,i,b)
 
+# La suppression d'un fond peut séparer des composantes sans changer l'échelle
+# du dessin. La masse garde donc ses seuils historiques sur la source vérifiée
+# avant découpe ; dimensions et marges restent contrôlées sur le rendu final.
+cutout_manifest=json.loads((ROOT/'cutout-audit-manifest.json').read_text())
+assert cutout_manifest['frame_size']==256
+cutout_records={record['path']:record for record in cutout_manifest['files']}
+assert len(cutout_records)==len(cutout_manifest['files'])
+
+def normalization_source(path,image):
+    record=cutout_records.get(path.relative_to(ROOT).as_posix())
+    if record is None:
+        return image
+    assert hashlib.sha256(path.read_bytes()).hexdigest()==record['sha256'],path.name
+    return reconstruct_cutout_source(record,image)
+
 # Régression v0.7.1 : masse visuelle cohérente, âge par âge.
 def largest_component(frame,threshold=20):
     arr=np.array(frame.getchannel('A'))
@@ -198,20 +214,24 @@ for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
     idle_areas=[]
     for key in ['idle_down','idle_left','idle_right','idle_up']:
-        with Image.open(folder/f'leopard_{age}_{key}.png') as im:
-            area,b=largest_component(im.convert('RGBA'))
+        path=folder/f'leopard_{age}_{key}.png'
+        with Image.open(path) as im:
+            area,b=largest_component(normalization_source(path,im.convert('RGBA')))
             assert area>0 and b is not None
             idle_areas.append(area)
     target=float(np.median(idle_areas))
 
     for key,count in frame_counts.items():
         ext='png' if key.startswith('idle_') or key.startswith('fetch_') or key=='rope_play' else 'webp'
-        with Image.open(folder/f'leopard_{age}_{key}.{ext}') as strip:
+        path=folder/f'leopard_{age}_{key}.{ext}'
+        with Image.open(path) as strip:
             strip=strip.convert('RGBA')
             assert strip.size==(256*count,256),(age,key,strip.size)
+            normalized_strip=normalization_source(path,strip)
             for i in range(count):
                 frame=strip.crop((i*256,0,(i+1)*256,256))
-                area,b=largest_component(frame)
+                reference=normalized_strip.crop((i*256,0,(i+1)*256,256))
+                area,b=largest_component(reference)
                 assert area>0 and b is not None,(age,key,i,'vide')
                 ratio=area/target
                 if key.startswith('fetch_'):
@@ -224,24 +244,26 @@ for age in ['cub','teen','adult','old']:
                 assert full is not None
                 assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,i,full)
 
-print("Normalisation de masse visuelle v0.7.1: PASS")
+print("Normalisation de masse visuelle avant découpe v0.8.7 et marges finales: PASS")
 
 # Soins v0.8.5 : même canevas et masse visuelle propre à chaque tranche d'âge.
 for age in ['cub','teen','adult','old']:
     folder=ROOT/f'app/src/main/res-{age}/drawable-nodpi'
     idle_areas=[]
     for key in ['idle_down','idle_left','idle_right','idle_up']:
-        with Image.open(folder/f'leopard_{age}_{key}.png') as im:
-            area,b=largest_component(im.convert('RGBA'))
+        path=folder/f'leopard_{age}_{key}.png'
+        with Image.open(path) as im:
+            area,b=largest_component(normalization_source(path,im.convert('RGBA')))
             assert area>0 and b is not None
             idle_areas.append(area)
     target=float(np.median(idle_areas))
 
     for key in ['groom_foam','soap','comb','towel']:
-        with Image.open(folder/f'leopard_{age}_{key}.webp') as im:
+        path=folder/f'leopard_{age}_{key}.webp'
+        with Image.open(path) as im:
             frame=im.convert('RGBA')
             assert frame.size==(256,256),(age,key,frame.size)
-            area,b=largest_component(frame)
+            area,b=largest_component(normalization_source(path,frame))
             assert area>0 and b is not None,(age,key,'vide')
             ratio=area/target
             assert .95<=ratio<=1.10,(age,key,area,target,ratio,b)
@@ -249,17 +271,19 @@ for age in ['cub','teen','adult','old']:
             assert full is not None
             assert full[0]>=16 and full[1]>=16 and full[2]<=240 and full[3]<=240,(age,key,full)
 
-with Image.open(ROOT/'app/src/main/res-cub/drawable-nodpi/leopard_cub_bottle.webp') as im:
+bottle_path=ROOT/'app/src/main/res-cub/drawable-nodpi/leopard_cub_bottle.webp'
+with Image.open(bottle_path) as im:
     frame=im.convert('RGBA')
     assert frame.size==(256,256),frame.size
     cub_folder=ROOT/'app/src/main/res-cub/drawable-nodpi'
     cub_idle=[]
     for key in ['idle_down','idle_left','idle_right','idle_up']:
-        with Image.open(cub_folder/f'leopard_cub_{key}.png') as idle:
-            area,_=largest_component(idle.convert('RGBA'))
+        path=cub_folder/f'leopard_cub_{key}.png'
+        with Image.open(path) as idle:
+            area,_=largest_component(normalization_source(path,idle.convert('RGBA')))
             cub_idle.append(area)
     target=float(np.median(cub_idle))
-    area,b=largest_component(frame)
+    area,b=largest_component(normalization_source(bottle_path,frame))
     ratio=area/target
     assert .95<=ratio<=1.10,('cub','bottle',area,target,ratio,b)
     full=frame.getchannel('A').getbbox()

@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "frame_size": 256,
+  "probes": [
+    {
+      "resource": "leopard_old_jump.webp",
+      "species": "leopard",
+      "age": "old",
+      "frame": 2,
+      "point": [
+        178,
+        41
+      ],
+      "rgba": [
+        30,
+        27,
+        14,
+        159
+      ],
+      "tolerance": 3,
+      "reason": "Retain original dark detail in semi-transparent jump frame; old RGB propagation produced light mosaic here",
+      "previous_rgba": [
+        180,
+        169,
+        157,
+        159
+      ]
+    },
+    {
+      "resource": "leopard_old_jump.webp",
+      "species": "leopard",
+      "age": "old",
+      "frame": 2,
+      "point": [
+        68,
+        122
+      ],
+      "rgba": [
+        62,
+        32,
+        5,
+        217
+      ],
+      "tolerance": 3,
+      "reason": "Retain original dark detail in semi-transparent jump frame; old RGB propagation produced light mosaic here",
+      "previous_rgba": [
+        215,
+        157,
+        94,
+        217
+      ]
+    },
+    {
+      "resource": "leopard_old_jump.webp",
+      "species": "leopard",
+      "age": "old",
+      "frame": 2,
+      "point": [
+        186,
+        169
+      ],
+      "rgba": [
+        37,
+        25,
+        18,
+        108
+      ],
+      "tolerance": 3,
+      "reason": "Retain original dark detail in semi-transparent jump frame; old RGB propagation produced light mosaic here",
+      "previous_rgba": [
+        255,
+        255,
+        255,
+        108
+      ]
+    }
+  ]
+}

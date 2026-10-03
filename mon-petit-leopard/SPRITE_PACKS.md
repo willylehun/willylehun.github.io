@@ -1,6 +1,6 @@
 # Packs de sprites — Mon Petit Léopard
 
-## Contrat actuel — v0.8.6
+## Contrat actuel — v0.8.7
 
 Les deux espèces utilisent le même moteur de jeu et des ressources indépendantes.
 Le nom `leopard` reste celui des sauvegardes historiques ; `wolf` identifie le loup.
@@ -42,6 +42,48 @@ en cours sont arrêtées au changement d'âge pour ne conserver aucun ancien spr
 Les tests `test_wolf_behavior.py` et `validate_wolf_sprite_packs.py` complètent les
 contrats existants. Le workflow prépare les deux espèces avant les tests et le
 build. Le manifeste `wolf-sprite-manifest.json` décrit la provenance des découpes.
+
+### Corrections de découpe v0.8.7
+
+Les pixels semi-transparents des léopards conservent désormais leurs couleurs
+d'origine. L'ancienne propagation des RGB depuis l'intérieur des silhouettes
+éclaircissait les traits noirs et formait des halos gris, surtout chez le vieux.
+Seul l'alpha presque nul est nettoyé ; les noirs, les blancs du pelage et les
+couleurs des objets ne sont pas remplacés.
+
+Après la préparation habituelle, `tools/prepare_v087_cutout_assets.py` enlève les
+poches de fond confirmées par inspection dans les images des léopards. Les
+annotations `source-assets/cutout-v087/leopard-*.json` définissent, pour chaque
+âge, action et frame, un point de départ dans le fond, une petite zone de
+recherche et des points de pelage ou de symbole à préserver. Les boîtes servent
+uniquement à borner une sélection connectée : elles ne sont jamais effacées en
+entier. Les polygones de protection couvrent aussi les joues, les museaux et les
+contours des pattes. Aucun filtre global ne supprime les pixels blancs ou gris
+des animaux.
+
+Les cadres imprimés, chiffres et restes de damier des loups sont retirés par le
+générateur de leurs packs, en amont de la normalisation. Les huit planches sources
+restent intactes. Les queues et le pelage clair du vieux sont protégés contre les
+fausses détections de fond.
+
+L'anticrénelage du contour extérieur du loup est séparé du damier opaque dans un
+anneau d'un pixel source. Les pixels intérieurs, les pointes de queue claires et
+les bulles protégées conservent leurs RGBA. Les tests contrôlent cette limite sur
+des cas synthétiques et sur les poses originales.
+
+`tools/validate_cutout_assets.py` contrôle les couleurs semi-transparentes, les
+points devenus transparents et ceux qui doivent rester visibles. Le manifeste
+`cutout-audit-manifest.json` relie les annotations aux fichiers et pixels RGBA
+générés. Il conserve un delta compressé des seuls pixels retirés. Le validateur
+peut ainsi reconstruire exactement l'image normalisée avant détourage et vérifier
+son empreinte RGBA ; les tolérances historiques de masse restent inchangées.
+Les dimensions, marges et pixels conservés sont contrôlés sur l'image finale.
+Cette distinction évite de faire grossir un dessin parce qu'un fond opaque
+reliait auparavant le personnage à une bulle ou remplissait une boucle de queue.
+
+La chaîne CI impose ces vérifications après les validateurs des deux espèces et
+avant la compilation Android. Un [comparatif avant/après](qa/sprite-cutouts-v087.png)
+montre six cas représentatifs sur des fonds contrastés.
 
 ## Historique des contrats antérieurs
 
